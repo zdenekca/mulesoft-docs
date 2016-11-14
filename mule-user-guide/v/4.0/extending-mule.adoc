@@ -1,12 +1,13 @@
 = Extending Mule with SDK
 :keywords: connectors, devkit, open source, develop, extend, customize
+:imagesdir: _images
 
 Create extensions using the *Mule SDK*, the standard framework used to build components and extended functionality for Mule.
 
 The *Extensions API*, designed to work with Maven, allows Mule to register and interact with your SDK extension. The Extensions API has no dependency on Mule core.
 
 [NOTE]
-All components, connectors and pluggable functionality for Mule can generally be considered extensions in Mule terms. They are built using the SDK. The Extensions API, and more specifically the API's `ExtensionManager`, is the mechanism that components use to "discover" extensions for Mule.
+All components, connectors and pluggable functionality for Mule can generally be considered extensions in Mule terms. They are built using the SDK. The Extensions API, and more specifically the API's `ExtensionManager`, is the mechanism used to "discover" extensions for Mule.
 ////
 Mariano: validate ExtensionManager part.
 How about other extended packaged functionality? How built before?
@@ -45,9 +46,6 @@ Extensions are a set of operations whose behavior is affected by any number of c
 * Configurations and operations must be defined in different classes
 * If the extension provides several configurations, each one must be defined in its own class, although all of them will be required to belong to have a common ancestor class and/or implement the same interface when defined at the same level
 * Operations can be defined in a more flexible way. They can all be defined in the same class, be spread across several classes, or even have a one operation per class model.
-
-[NOTE]
-In DevKit’s traditional model, the configuration and operations were defined in the same class.
 
 == Configuration Model
 
