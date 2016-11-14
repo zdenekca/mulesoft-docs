@@ -1,7 +1,16 @@
-= Mule Concepts
+= Key Concepts
 :keywords: studio, server, components, connectors, elements, big picture, architecture
 
-Based on the concept of Event Driven Architecture (EDA), Mule works by responding to messages initiated by external resources (such as, events). At the simplest level, Mule applications accept and process events as *messages* through several message processors plugged together in a *flow*. Alternatively, large or streaming messages can be processed as *records* in a *batch job*. Understanding the basic flow architecture and batch job structure is key to understanding Mule. Essentially every Mule flow contains a series of *message processors* that accept, then process messages. Mule applications usually contain multiple linked flows and/or batch jobs, which, in combination, perform the integration required for your use case.
+
+== Messages and Events
+
+Based on the concept of Event Driven Architecture (EDA), Mule works by responding to events (such as receipt of a message) initiated by external resources. 
+
+* At the simplest level, Mule applications accept and process events as *messages* through several message processors.
+* Each processor is an element in a *flow*.
+* Alternatively, large or streaming messages can be processed as *records* in a *batch job*.
+
+Understanding the basic flow architecture and batch job structure is key to understanding Mule. Essentially every Mule flow contains a series of *message processors* that accept and process messages. Mule applications usually contain multiple linked flows and/or batch jobs, which, in combination, perform the integration required for your use case.
 
 == Flows
 
@@ -30,15 +39,17 @@ include::_sources/mule-concepts.xml[]
 ....
 ------
 
-== Batch Jobs
 
-A *batch job* is a top-level element in Mule that exists outside all Mule flows and provides record I/O for Mule message processing. Batch jobs split large messages into *records* which Mule processes asynchronously; just as flows process messages, batch jobs process records.
-
-image:batch_main1.png[batch_main1]
-
-A batch job contains one or more *batch steps* which, in turn, contain any number of message processors that act upon records as they move through the batch job. During batch processing, you can use *record-level variables* (`recordVars`) and MEL expressions to enrich, route or otherwise act upon records.
-
-A batch job executes when triggered by a *batch executor* in a Mule flow or a **message source **in a batch-accepting input; when triggered, Mule creates a new *batch job instance*. Once every record has passed through all batch steps, the batch job instance ends and the *batch job result* can be summarized in a report to indicate which records succeeded and which failed.
+// == Batch Jobs
+//
+// A *batch job* is a top-level element in Mule that exists outside all Mule flows and provides record I/O for Mule message processing. Batch jobs split large messages into *records* which Mule processes asynchronously; just as flows process messages, batch jobs process records.
+//
+// image:batch_main1.png[batch_main1]
+//
+// A batch job contains one or more *batch steps* which, in turn, contain any number of message processors that act upon records as they move through the batch job. During batch processing, you can use *record-level variables* (`recordVars`) and MEL expressions to enrich, route or otherwise act upon records.
+//
+// A batch job executes when triggered by a *batch executor* in a Mule flow or a **message source **in a batch-accepting input; when triggered, Mule creates a new *batch job instance*. Once every record has passed through all batch steps, the batch job instance ends and the *batch job result* can be summarized in a report to indicate which records succeeded and which failed.
+//
 
 == Message Sources
 
@@ -58,43 +69,32 @@ Flows and batch jobs can also include *filters*, *scopes*, and *routers*. For e
 
 When you configure the individual elements that link together to make your flow or batch job, you can use link:/mule-user-guide/v/3.8/mule-expression-language-mel[Mule Expression Language] to extract information about the message or its environment and instruct Mule to make processing decisions based on that information.
 
-== Mule Expression Language
-
-Mule Expression Language (MEL) is the primary language used for formulating expressions in Mule, allowing you to access, manipulate, and use information from the message and its environment. 
-
-At runtime, Mule evaluates expressions while executing a flow to:
-
-* Extract information that it can use to process the current message.
-* Set or manipulate a value in the message header or payload.
-* Perform an operation on information in the message, application, Mule instance, or server.
-
-[source]
-----
-#[message.inboundProperties.propertyName]
-----
-
-For more information on MEL, see:
-
-* link:/mule-user-guide/v/3.8/mule-expression-language-mel[Mule Expression Language]
-* link:/mule-user-guide/v/3.8/mule-expression-language-basic-syntax[Mule Expression Language Basic Syntax]
-
-== Batch Processing
-
-Anypoint Studio also supports *batch jobs* as an alternative to standard flows. A batch job is a block of code that splits messages into individual records, performs actions upon each record, then reports on the results and potentially pushes the processed output to other systems or queues. This functionality is particularly useful when working with streaming input or when engineering "near real-time" data integration between SaaS applications.
-
-
-For more information on batch processing, see:
-
-* link:/mule-user-guide/v/3.8/batch-processing[Batch Processing]
-* link:/mule-fundamentals/v/3.8/anypoint-exchange[Examples]
-
-
-
-== See Also
-
-* *NEXT STEP:* Learn more about the link:/mule-user-guide/v/3.8/elements-in-a-mule-flow[elements in a Mule flow].
-* Find out more about link:/mule-user-guide/v/3.8/batch-processing[Batch Processing]. +
-* link:http://training.mulesoft.com[MuleSoft Training]
-* link:https://www.mulesoft.com/webinars[MuleSoft Webinars]
-* link:http://blogs.mulesoft.com[MuleSoft Blogs]
-* link:http://forums.mulesoft.com[MuleSoft Forums]
+// == Mule Expression Language
+//
+// Mule Expression Language (MEL) is the primary language used for formulating expressions in Mule, allowing you to access, manipulate, and use information from the message and its environment. 
+//
+// At runtime, Mule evaluates expressions while executing a flow to:
+//
+// * Extract information that it can use to process the current message.
+// * Set or manipulate a value in the message header or payload.
+// * Perform an operation on information in the message, application, Mule instance, or server.
+//
+// [source]
+// ----
+// #[message.inboundProperties.propertyName]
+// ----
+//
+// For more information on MEL, see:
+//
+// * link:/mule-user-guide/v/3.8/mule-expression-language-mel[Mule Expression Language]
+// * link:/mule-user-guide/v/3.8/mule-expression-language-basic-syntax[Mule Expression Language Basic Syntax]
+//
+// == Batch Processing
+//
+// Anypoint Studio also supports *batch jobs* as an alternative to standard flows. A batch job is a block of code that splits messages into individual records, performs actions upon each record, then reports on the results and potentially pushes the processed output to other systems or queues. This functionality is particularly useful when working with streaming input or when engineering "near real-time" data integration between SaaS applications.
+//
+//
+// For more information on batch processing, see:
+//
+// * link:/mule-user-guide/v/3.8/batch-processing[Batch Processing]
+// * link:/mule-fundamentals/v/3.8/anypoint-exchange[Examples]
