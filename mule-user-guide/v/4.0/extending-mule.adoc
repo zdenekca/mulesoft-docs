@@ -2,9 +2,9 @@
 :keywords: connectors, devkit, open source, develop, extend, customize
 :imagesdir: _images
 
-Create extensions using the *Mule SDK*, the standard framework used to build components and extended functionality for Mule.
+Create extensions using the *Mule SDK*, the standard framework used to build all components, connectors and extended functionality for Mule.
 
-The *Extensions API*, designed to work with Maven, allows Mule to register and interact with your SDK extension. The Extensions API has no dependency on Mule core.
+The *Extensions API* decouples the extension from the Mule runtime environment. The API registers and interacts with the SDK extension and is designed to work with Maven. The Extensions API has no dependency on Mule core.
 
 [NOTE]
 All components, connectors and pluggable functionality for Mule can generally be considered extensions in Mule terms. They are built using the SDK. The Extensions API, and more specifically the API's `ExtensionManager`, is the mechanism used to "discover" extensions for Mule.
