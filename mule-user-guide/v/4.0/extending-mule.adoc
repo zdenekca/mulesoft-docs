@@ -1,22 +1,39 @@
-= Extending Mule with SDK
+= Mule SDK
 :keywords: connectors, devkit, open source, develop, extend, customize
 :imagesdir: _images
 
-Create extensions using the *Mule SDK*, the standard framework used to build all components, connectors and extended functionality for Mule.
+Create extensions using the *Mule SDK*, the standard framework used to build components, connectors and packaged functionality for use with Mule.
 
-The *Extensions API* decouples the extension from the Mule runtime environment. The API registers and interacts with the SDK extension and is designed to work with Maven. The Extensions API has no dependency on Mule core.
+*Extensions API* is a set of interfaces and classes that define a contract between an extension and the Mule 4 runtime environment. It is designed to handle communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core and works with Maven.
+//MG how designed to work with Maven?
 
 [NOTE]
-All components, connectors and pluggable functionality for Mule can generally be considered extensions in Mule terms. They are built using the SDK. The Extensions API, and more specifically the API's `ExtensionManager`, is the mechanism used to "discover" extensions for Mule.
+All components, connectors and pluggable functionality for Mule can generally be considered extensions in Mule terms. The Extensions API, and more specifically the API's `ExtensionManager`, is the mechanism used to "discover" extensions for Mule.
 ////
-Mariano: validate ExtensionManager part.
+Mariano: validate ExtensionManager part. When are extensions discovered? via Maven pom?
 How about other extended packaged functionality? How built before?
 ////
 
+== Anatomy of an Extension
 
-== SDK Concepts
+An extension has a standard representation based on the *Model API*, the canonical that is used to introspect an extension to ensure its structural requirements are met. All other APIs link to this abstract representation. A separate *metadata API* obtains the metadata structure of any given extension.
+//MG when is this metadata API called?
 
-The SDK framework is based on an *ExtensionModel*. All extensions are required to have at least one "configuration", which is the default configuration.
+
+
+[NOTE]
+All extensions are required to have at least one "configuration", based on a *Configuration Model* though not all sources and operations depend on a configuration or connection.
+//MG: any other required models that must be defined for an extension to work?
+
+Besides the `ExtensionModel` and `ConfigurationModel` models, other important ones to know are:
+
+* `SourceModel` - defines how the extension should generate messages
+* `OperationModel` - defines operations for the extension
+* `ConnectionProviderModel` - to create connections that describe the type of configuration they accept and the type of connection they construct
+* `ParameterModel` - configurable arguments for a parent entity like an operation, source or connection provider.
+
+Some extensions, for instance, an extension supporting XML language requires additional properties to indicate the namespace URI that the schema generator should use. For this, a custom model property can be used to add that information via the `EnrichableModel`, an interface that is defined and implemented in all the model types described above.
+//MG is this the mechanism that is used to map the extension to xml?
 
 ////
 
@@ -27,8 +44,8 @@ https://docs.google.com/document/d/14elYssySOmrOENK5jjrTh7OJo7LfUqc9bE0ffQhAyyQ/
 * Declaring Operations
 ** Using Annotations
 
-
 ////
+
 
 == Declaring an Extension
 
@@ -37,11 +54,12 @@ Declare an extension on your class or interface using the `@Extension` annotatio
 
 `@Extension(name = "heisenberg", description = ”heisenberg extension”)`
 
-This marks a discoverable entry point for a Describer, explained below.
+[NOTE]
+This marks a discoverable entry point for a `Describer`, which lets the Anypoint Platform kick off the process used to validate the extension.
 
 === Extension Code Organization
 
-Extensions are a set of operations whose behavior is affected by any number of configurations.
+Extensions are composed of at least one configuration and a set of operations, whose behavior is affected by any number of configurations.
 
 * Configurations and operations must be defined in different classes
 * If the extension provides several configurations, each one must be defined in its own class, although all of them will be required to belong to have a common ancestor class and/or implement the same interface when defined at the same level
@@ -219,7 +237,13 @@ The artifacts follow these simple rules:
 * `extensions-api` and extensions-api-annotations are to be versioned separately from the rest of the mule distribution but will always be versioned consistently in respect to each other
 * `extension-spring-support` depends on `extensions-support`, not the other way around
 
+== How an Extension is Validated
 
+A *Fluent API* is in charge of centralizing the validations of the model, along with its instantiation logic. The Fluent API acts as an abstraction layer to separate the concrete implementations of the extension from the validation of the extension model.
+
+The Fluent API produces an `ExtensionDeclaration` object, which is a raw instrospection of the extension without having been validated. As described in the last paragraph, this allows decoupling the model metadata from how the model is implemented.
+
+The `Describer` interface is the mechanism used by the Fluent API and the Anypoint Platform to build a `Descriptor`, a raw data model. The platform is in charge of translating the construct into an actual extension.
 
 
 ////
