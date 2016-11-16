@@ -5,13 +5,36 @@
 *** link:/mule-user-guide/v/4.0/mule-message-structure[Mule Message Structure]
 *** link:/mule-user-guide/v/4.0/message-state[Mule Message State]
 *** link:/mule-user-guide/v/4.0/using-flows-for-service-orchestration[Flows]
++
+////
+we should get rid of this and re-arrange this content somewhere else.
 **** link:/mule-user-guide/v/4.0/mule-application-architecture[Flow Architecture in a Mule Application]
+////
 *** link:/mule-user-guide/v/4.0/elements-in-a-mule-flow[Elements in a Flow]
++
+////
+This is going away in Mule4
 **** link:/mule-user-guide/v/4.0/mule-components[Components]
+
+Getting rid of transformers as a topic in Mule 4
 **** link:/mule-user-guide/v/4.0/mule-transformers[Transformers]
-**** link:/mule-user-guide/v/4.0/mule-filters-scopes-and-routers[Filters, Scopes, and Routers]
+////
++
+**** link:/mule-user-guide/v/4.0/mule-filters-scopes-and-routers[Scopes, and Routers]
+// Filters are not going to be part of Mule 4 (Part of the compatibility Module)
 **** link:/mule-user-guide/v/4.0/mule-connectors[Anypoint Connectors]
 *** link:/mule-user-guide/v/4.0/global-elements[Global Elements]
+*** link:/mule-user-guide/v/4.0/error-handling[Error Handling]
++
+////
+Exception strategies are different in Mule 4
+**** link:/mule-user-guide/v/4.0/catch-exception-strategy[Catch Exception Strategy]
+**** link:/mule-user-guide/v/4.0/choice-exception-strategy[Choice Exception Strategy]
+**** link:/mule-user-guide/v/4.0/reference-exception-strategy[Reference Exception Strategy]
+**** link:/mule-user-guide/v/4.0/rollback-exception-strategy[Rollback Exception Strategy]
+**** link:/mule-user-guide/v/4.0/exception-strategy-most-common-use-cases[Exception Strategy Most Common Use Cases]
+***** link:/mule-user-guide/v/4.0/mule-exception-strategies[Mule Exception Strategies]
+////
 *** link:/mule-user-guide/v/4.0/understanding-mule-configuration[Understanding Mule Configuration]
 +
 ////
@@ -27,8 +50,13 @@ remove or revamp connecting with transport and connectors
 **** link:/mule-user-guide/v/4.0/connecting-with-transports-and-connectors[Connecting with Transports and Connectors]
 ////
 +
+////
 **** link:/mule-user-guide/v/4.0/mule-versus-web-application-server[Mule versus Web Application Server]
 **** link:/mule-user-guide/v/4.0/creating-project-archetypes[Creating Project Archetypes]
+////
++
+////
+Move out of the Key concepts section
 *** link:/mule-user-guide/v/4.0/mule-security[Security in Mule]
 *** link:/mule-user-guide/v/4.0/debugging[Debugging]
 **** link:/mule-user-guide/v/4.0/configuring-mule-stacktraces[Configuring Mule Stacktraces]
@@ -40,10 +68,19 @@ remove or revamp connecting with transport and connectors
 **** link:/mule-user-guide/v/4.0/unit-testing[Unit Testing]
 **** link:/mule-user-guide/v/4.0/functional-testing[Functional Testing]
 **** link:/mule-user-guide/v/4.0/testing-strategies[Testing Strategies]
-*** link:/mule-user-guide/v/4.0/extending-mule[Extending Mule]
+////
++
+////
+Move
 *** link:/mule-user-guide/v/4.0/understanding-enterprise-integration-patterns-using-mule[Understanding Enterprise Integration Patterns Using Mule]
 **** link:/mule-user-guide/v/4.0/understanding-orchestration-using-mule[Understanding Orchestration Using Mule]
+////
 ** link:/mule-user-guide/v/4.0/installing[Installing and Deploying Mule]
+*** link:/mule-user-guide/v/4.0/extending-mule[Extending Mule]
++
+////
+Not Focusing on Installation instructions yet
+
 *** link:/mule-user-guide/v/4.0/hardware-and-software-requirements[Hardware and Software Requirements]
 *** link:/mule-user-guide/v/4.0/downloading-and-starting-mule-esb[Downloading and Starting Mule Runtime]
 *** link:/mule-user-guide/v/4.0/installing-an-enterprise-license[Installing an Enterprise License]
@@ -84,6 +121,10 @@ remove or revamp connecting with transport and connectors
 *** link:/mule-user-guide/v/4.0/mule-server-notifications[Mule Server Notifications]
 *** link:/mule-user-guide/v/4.0/profiling-mule[Profiling Mule]
 *** link:/mule-user-guide/v/4.0/hardening-your-mule-installation[Hardening your Mule Installation]
+////
++
+////
+Not Focusing on References Docs yet
 ** link:/mule-user-guide/v/4.0/reference[Reference]
 *** link:/mule-user-guide/v/4.0/flows-and-subflows[Flows and Subflows]
 **** link:/mule-user-guide/v/4.0/flow-references[Flow References and Properties]
@@ -322,10 +363,8 @@ remove or revamp connecting with transport and connectors
 **** link:/mule-user-guide/v/4.0/xa-transactions[XA Transactions]
 **** link:/mule-user-guide/v/4.0/using-bitronix-to-manage-transactions[Using Bitronix to Manage Transactions]
 +
-////
 Move to Studio
 *** link:/mule-user-guide/v/4.0/adding-and-removing-user-libraries[Adding and Removing User Libraries]
-////
 +
 *** link:/mule-user-guide/v/4.0/shared-resources[Shared Resources]
 **** link:/mule-user-guide/v/4.0/setting-environment-variables[Setting Environment Variables]
@@ -449,13 +488,6 @@ unify object info under Objects section
 **** link:/mule-user-guide/v/4.0/creating-example-archetypes[Creating Example Archetypes]
 **** link:/mule-user-guide/v/4.0/creating-a-custom-xml-namespace[Creating a Custom XML Namespace]
 **** link:/mule-user-guide/v/4.0/creating-module-archetypes[Creating Module Archetypes]
-*** link:/mule-user-guide/v/4.0/error-handling[Error Handling]
-**** link:/mule-user-guide/v/4.0/catch-exception-strategy[Catch Exception Strategy]
-**** link:/mule-user-guide/v/4.0/choice-exception-strategy[Choice Exception Strategy]
-**** link:/mule-user-guide/v/4.0/reference-exception-strategy[Reference Exception Strategy]
-**** link:/mule-user-guide/v/4.0/rollback-exception-strategy[Rollback Exception Strategy]
-**** link:/mule-user-guide/v/4.0/exception-strategy-most-common-use-cases[Exception Strategy Most Common Use Cases]
-***** link:/mule-user-guide/v/4.0/mule-exception-strategies[Mule Exception Strategies]
 *** link:/mule-user-guide/v/4.0/team-development-with-mule[Team Development with Mule]
 **** link:/mule-user-guide/v/4.0/modularizing-your-configuration-files-for-team-development[Modularizing Your Configuration Files for Team Development]
 **** link:/mule-user-guide/v/4.0/using-side-by-side-configuration-files[Using Side-by-Side Configuration Files]
@@ -510,3 +542,4 @@ remove *** link:/mule-user-guide/v/4.0/advanced-usage-of-mule-esb[Advanced Usage
 *** link:/mule-user-guide/v/4.0/using-non-mel-expressions[Using Non-MEL Expressions]
 **** link:/mule-user-guide/v/4.0/non-mel-expressions-configuration-reference[Non-MEL Expressions Configuration Reference]
 **** link:/mule-user-guide/v/4.0/creating-non-mel-expression-evaluators[Creating Non-MEL Expression Evaluators]
+////
