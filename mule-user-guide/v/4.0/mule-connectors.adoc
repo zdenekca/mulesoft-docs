@@ -1,35 +1,22 @@
-= Connectors
+= Anypoint Connectors
 :keywords: studio, connectors, elements, architecture
-:imagesdir: /_images
-:toc:
-:toc-levels: 3
 
-toc::[]
+image:connectors.png[image]
 
+link:/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors] receive or send messages between Mule and one or more external sources, such as files, databases, or Web services. Connectors can act as message sources by working as inbound endpoints, they can act as a message processor that performs an operation in the middle of a flow, or they can be at the end of a flow and act as the recipient of the final payload data.
 
-== What can a connector do?
+Connectors in Mule are either *endpoint-based* or *operation-based*:
 
-Connectors in Mule applications receive or send messages between Mule and one or more external sources, such as files, databases, or web services. A connector in a Mule flow can act as an:
+* Endpoint-based connectors follow either a one-way or request-response exchange pattern and are often (but not always) named and based around a standard data communication protocol, such as FTP and SMTP.
+* Operation-based connectors follow an information exchange pattern based on the operation that you select and are often (but not always) named and based around one or more specific third-party APIs.
 
-* inbound endpoint to produce a Mule message
-* message processor that performs an operation
-* recipient of the final Mule message payload data
-
-== What are the types of connectors?
-
-Connectors in Mule flows are either *endpoint-based* or *operation-based*.
-
-=== Endpoint-Based Connectors
-
-Endpoint-based connectors follow either a one-way or request-response exchange pattern and are often (but not always) named and based around a standard data communication protocol, such as FTP and SMTP.
+== Endpoint-Based Connectors
 
 Endpoint-based connectors are configured as either inbound or outbound endpoints in a flow. Inbound endpoints serve as a message source for a flow. Outbound endpoints can occur mid-flow or at the end of flows, and send information to external systems. 
 
 image:endpointbased.png[endpointbased]
 
-=== Operation-Based Connectors
-
-Operation-based connectors follow an information exchange pattern based on the operation that you select and are often (but not always) named and based around one or more specific third-party APIs.
+== Operation-Based Connectors
 
 When you add an operation-based connector to your flow, you immediately define a specific operation for that connector to perform.
 
@@ -37,19 +24,15 @@ image:operationbased.png[operationbased]
 
 The XML element of the connector differs according to the operation that you select, taking the form `<connectorName>:<operation>`. For example, `sfdc:query` or `sfdc:upsert-bulk`. The remaining configuration attributes or child elements are determined by the operation that you select.
 
-== How do I configure a connector?
+== Global Connector Configuration
 
-Some connectors require that connection information such as the username, password, and security tokens be stored in a simple container for this information, called the link:/mule-user-guide/v/latest[global element]. When you configure a connector's *connector configuration*, you are essentially creating a global element which is available to all instances of that connector. Many connectors of the same type in an application can *reference the global element from the connector configuration*.
+Some connectors require that connection information such as username, password, and security tokens be configured in a global element rather than at the level of the message processor within the flow. Many connectors of the same type in an application can reference the connector configuration at the global level. For operation-based connectors, the global connector configuration is mandatory, but for most endpoint-based connectors it is optional. 
 
-[NOTE]
-For operation-based connectors, connector configuration is mandatory, but for most endpoint-based connectors it is optional. 
+Note that the global element that you configure in Anypoint Studio is called a Connector Configuration. The corresponding XML tags are *<connectorName>:config* for operation-based connectors and *<connectorName>:connector* for endpoint-based connectors. See the examples below.
 
-Remember that the global element you configure in Anypoint Studio is called a *connector configuration*. The corresponding XML tags are `<connectorName>:config` for operation-based connectors and `<connectorName>:connector` for endpoint-based connectors.
-
-////
 == HTTP Connector Example
 
-This example shows an HTTP connector, which is operation-based. You can  configure this connector as both a listener for receiving inbound requests or as a request connector for making outbound requests. The HTTP connector requires a global connector configuration that specifies its connection attributes.
+This example shows how an HTTP connector, which is operation-based. You can  configure this connector as both a listener for receiving inbound requests or as a request connector for making outbound requests. The HTTP connector  requires a global connector configuration that specifies its connection attributes.
 
 [source, xml, linenums]
 ----
@@ -75,9 +58,12 @@ This example shows a Salesforce connector, which is operation-based. You can  co
 ----
 include::_sources/mule-connectors_3.xml[]
 ----
-////
 
 == See Also
 
-* Get familiar with the link:/mule-user-guide/v/latest/core-components[core connectors] for Mule 4.
-* Learn about the link:/mule-user-guide/v/latest/core-connectors[Mule message].
+* *NEXT STEP*: Read on about link:/mule-user-guide/v/3.8/mule-components[components].
+* Skip ahead to understand the structure of a link:/mule-user-guide/v/3.8/mule-message-structure[Mule message].
+* link:http://training.mulesoft.com[MuleSoft Training]
+* link:https://www.mulesoft.com/webinars[MuleSoft Webinars]
+* link:http://blogs.mulesoft.com[MuleSoft Blogs]
+* link:http://forums.mulesoft.com[MuleSoft Forums]
