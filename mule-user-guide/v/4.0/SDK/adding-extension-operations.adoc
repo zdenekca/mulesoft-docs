@@ -1,0 +1,186 @@
+= Adding Operations
+:toc: macro
+:toclevels: 2
+:toc-title:
+
+
+
+toc::[]
+
+
+
+After creating a configuration, add functionality to your extension by declaring its operations. In the previous version of SDK, called *DevKit*, operations were referred to in development terms as "message processors". Similarly, the operations discussed here can operate on Mule message data.
+
+== Declaring Operations
+
+Operations are declared in a similar way as configurations, with the additional restriction that a class that has been annotated to serve as an configuration cannot also contain configurations. You can use the `@Operations` annotation to point to the classes which hold the operations.
+//MG need to clarify configurations part
+
+[NOTE]
+`@Operation` annotated methods are scopes, whose execution implies the execution of child operations, receiving one or more arguments which are of either of type NestedProcessor or List<NestedProcessor>
+//when do you use @Operation or not?
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@Operations({HeisenbergOperations.class, MoneyLaunderingOperation.class})
+public class HeisenbergExtension
+{
+}
+----
+
+The two operation classes mentioned above contain a fairly complete array of operation examples. You can see them in the link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and the link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class].
+
+=== Key Takeaways
+
+* Every public method is assumed to be a valid operation, no need to use any annotation `@Operation`
+* If there is any public method you don’t want exposed as an operation, then annotate it with `@Ignore`
+* Each method argument is translated as a `ParameterModel`
+//MG need to mention ParameterModel?
+* Method arguments can be annotated with `@Optional` and with `@Expression`
+
+
+== Defining Operations at the Configuration Level
+
+Operations can also be defined at the configuration level by simply placing the `@Operations` annotation on a configuration class.
+
+[NOTE]
+This does not preclude the definition of operations at the _Extension_ level.
+//MG meaning operations defined within the Extension main class annotated with @Extension
+
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@Configurations({BlueHeisenbergConfig.class, PseudoEfedrinHeisenbergConfig.class})
+public interface HeisenbergExtension
+{
+}
+
+
+@Configuration(name = "blue")
+@Operations(BlueOperations.class)
+public class BlueHeisenberg implements HeisenbergExtension
+{
+}
+
+
+@Configuration(name = "pseudo")
+@Operations(PseudoOperations.class)
+public class PseudoEfedrinHeisenberg implements HeisenbergExtension
+{
+}
+----
+
+== Implementing Operations
+
+Below you can find some details about how to implement operations.
+
+=== Injecting @UseConfig into Operation Method
+
+You can access data defined in a `@Configuration` class by having the argument annotated with the `@UseConfig` annotation. This is a mechanism for injecting a configuration into an operation. See this link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L69-L69[example]
+
+In the examples above you can see operations which don’t require the configuration, while others do. Those operations implement part of their logic by having an argument annotated with @UseConfig.
+
+The reason why you might choose to receive the config as a method argument becomes clearer in the *operations lifecycle* section. For now we can just say that this is the mechanism to obtain a configuration inside an operation. Notice that:
+
+
+* If the operation receives many arguments, there’s no restriction as far as the position at which you provide the configuration as an argument. The framework uses the `@UseConfig` annotation
+* There is no restriction nor enforcement regarding the type of the configuration other than it actually matching the configuration’s actual type
+* The argument will not be translated into a `ParameterModel`
+
+=== Setting Return Values and Message Attributes
+
+An operation can return a single value of any type.
+
+Example:
+
+[source,java,linenums]
+----
+public String toUpperCase(String value) {
+	return value.toUpperCase();
+}
+----
+
+This operation is adapted into a `MessageProcessor`, which returns a copy of the input message, whose _payload_ has been set to the method's _return value_.
+
+=== Setting Payload and Attributes
+
+There are operations which set the output message *payload* and the *attributes* POJO. This is achieved by returning an `OperationResult` instance
+
+[source,java,linenums]
+----
+public OperationResult<InputStream, FileAttributes> read(String path) {
+	return ...
+}
+----
+
+`OperationResult` is defined here: https://github.com/mulesoft/mule-extensions-api/blob/1458edadff5d165503b4bf2b11b29eae07ac1cbd/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/runtime/operation/OperationResult.java#L32-L32
+
+This object can return a *payload*, an *attributes object* and a `DataType`. The Mule runtime takes this object and generates a new Mule message, which is then propagated through the pipeline.
+
+Although the object allows for returning those three pieces of information, it doesn’t require the user to actually provide all three of them. If any is not provided, then the value from the incoming `MuleMessage` will be used.
+
+=== Void Operations
+
+Void operations do not modify the Mule message in any way:
+
+.Example
+[source,java]
+----
+public void logger(String message) {
+}
+----
+
+In this case the message that enters the message processor is unchanged after exiting it.
+
+=== Accessing MuleEvent and MuleMessage
+
+In most cases you should avoid interacting with core Mule data such as the message and the event, however in some cases you may find accessing these objects useful.
+
+In regard to operations, a class containing operation methods can have attributes of type `MuleEvent` or `MuleMessage`. The runtime automatically provides them upon invocation of the method.
+//MG upon invoking the method they become available
+
+.Example
+
+[source,java,linenums]
+----
+public Object someOperation(MuleMessage message, String value) {
+	…
+}
+----
+
+== Operations Lifecycle
+
+Classes which define operations can have the following characteristics:
+
+* Can hold state, but must be thread safe
+* Part of that state can be made of dependencies injected through the `@Inject` annotation
+* Can implement Mule’s lifecycle annotations
+//MG how does developer ensure ops are thread safe
+
+
+An instance of each `@Operations` annotated class is created each time the operation is defined in a pipeline. For example:
+
+[source,xml,linenums]
+----
+<mule>
+	<heisenberg:config name="heisenberg" myName="#[name]" />
+
+
+<flow name="flow1">
+	<set-payload value="blah" />
+	<heisenberg:build-meth purity="100" />
+</flow>
+
+
+<flow name="flow2">
+<heisenberg:build-meth purity="100"/>
+<heisenberg:build-meth purity="90" />
+</flow>
+</mule>
+----
+
+For this sample configuration, three instances of the `BlueMethFactory` class are created. One for `flow1` and two for `flow2`.
+
+Notice however that the `heisenberg` configuration is dynamic, so potentially each execution of the method annotated with `@Operation` can receive a different instance of the configuration. At the same time, it should be possible for the `BlueMethFactory` class to keep state if, for example, it wanted to keep track of how many invocations it received. For that reason, it is not possible to keep the configuration as part of the instance state and must be passed by argument each time.

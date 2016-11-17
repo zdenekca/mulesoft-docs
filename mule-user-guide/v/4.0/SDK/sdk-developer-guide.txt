@@ -1,0 +1,17 @@
+Mule SDK Concepts (what extension is, what do i need to develop one, when to develop one, how?)
+	
+Creating a Configuration 
+
+what is a configuration? what does a configuration do? do i need one? How do I specify the required parameters for a configuration? where do I save this? How do I reference it?
+
+Adding Operations for the Extension
+
+what do the operations allow users of my extension to do?
+
+
+
+
+Extensions API
+
+How it works with SDK Extension
+How Mule discovers extension through API
