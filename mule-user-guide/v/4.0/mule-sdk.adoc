@@ -17,7 +17,7 @@ A module facilitates integration with SaaS, web services and other data sources.
 
 == How Does Mule Discover Extensions?
 
-*Extensions API* is the set of interfaces and classes that define the contract between an extension and the Mule 4 runtime environment. At deployment of a Mule application, the API handles communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
+*Extensions API* is the set of interfaces and classes that define a contract between an extension and the Mule 4 runtime environment. At deployment of a Mule application, the API handles communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
 
 == Dev Environment Requirements
 
@@ -48,43 +48,14 @@ See also link:/anypoint-connector-devkit/v/3.8/creating-a-soap-connector[Creatin
 
 SDK is an annotations-based framework allowing you as the developer to build features. For a complete list of SDK annotations, see the link:/annotation-reference[Annotation Reference].
 
-=== Declaring an Extension
+== Declaring an Extension
 
-Use the `@Extension`, `@Configurations`, and `@Configuration` annotation to declare your extension and its configurations.
+Use the `@Extension` annotation once to declare an entry point on for your extension.
 
-[source,java,linenums]
-----
-@Extension(name = "heisenberg", description = ”heisenberg extension”)
-public class HeisenbergExtension
-{
-----
-
-Or, you may choose to place the `@Configurations` annotation elsewhere.
-
-[source,java,linenums]
-----
-@Extension(name = "heisenberg", description = ”heisenberg extension”, version = "1.0")
-@Configurations({BlueHeisenbergConfig.class, PseudoEfedrinHeisenbergConfig.class})
-public class HeisenbergExtension
-{
-}
-
-@Configuration(name = "blue")
-public class BlueHeisenberg extends HeisenbergExtension
-{
-}
-
-
-@Configuration(name = "pseudo")
-public class PseudoEfedrinHeisenberg extends HeisenbergExtension
-{
-}
-----
+`@Extension(name = "heisenberg", description = ”heisenberg extension”)`
 
 [NOTE]
-`@Extension` marks a discoverable entry point for discovery and validation for use with Mule. Learn more about link/configurations[ways to create configurations].
-
-
+This marks a discoverable entry point for a `Describer`, which lets the Anypoint Platform kick off the process used to validate the extension.
 
 === Extension Code Organization
 
@@ -109,7 +80,9 @@ Features DevKit provides:
 ////
 
 
-////
+
+
+
 === Connector Architecture
 
 Connectors operate within Mule applications, which are built up from Mule Flows, and external resources, which are the targeted resources.
@@ -299,4 +272,3 @@ DevKit supports:
 ** link:/anypoint-connector-devkit/v/3.8/creating-a-connector-using-a-java-sdk[Creating a Connector Using a Java SDK]
 ** link:/anypoint-connector-devkit/v/3.8/creating-a-connector-for-a-soap-service-via-cxf-client[Creating a Connector for a SOAP Service Via CXF Client]
 ** link:/anypoint-connector-devkit/v/3.8/creating-a-connector-for-a-restful-api-using-jersey[Creating a Connector for a RESTful API Using Jersey]
-////

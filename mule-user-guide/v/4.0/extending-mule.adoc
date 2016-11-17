@@ -1,4 +1,4 @@
-= Extensions API
+= Mule SDK
 :keywords: connectors, devkit, open source, develop, extend, customize
 :imagesdir: _images
 
