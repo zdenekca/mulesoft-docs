@@ -11,7 +11,7 @@ what do the operations allow users of my extension to do?
 
 
 
-Extensions API
+Background reading: Extensions API
 
 How it works with SDK Extension
 How Mule discovers extension through API
