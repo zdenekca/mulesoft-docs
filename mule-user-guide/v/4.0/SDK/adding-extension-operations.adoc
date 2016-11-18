@@ -80,12 +80,13 @@ Below you can find some details about how to implement operations.
 
 You can access data defined in a `@Configuration` class by having the argument annotated with the `@UseConfig` annotation. This is a mechanism for injecting a configuration into an operation. See this link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L69-L69[example]
 
-In the examples above you can see operations which don’t require the configuration, while others do. Those operations implement part of their logic by having an argument annotated with @UseConfig.
+In the examples above you can see operations which don’t require the configuration, while others do. Those operations implement part of their logic by having an argument annotated with `@UseConfig`.
 
-The reason why you might choose to receive the config as a method argument becomes clearer in the *operations lifecycle* section. For now we can just say that this is the mechanism to obtain a configuration inside an operation. Notice that:
+The reason why you might choose to receive the configuration as a method argument becomes clearer in the *operations lifecycle* section. This is the mechanism available to obtain a configuration inside an operation, dynamically, at runtime. Notice that:
+//MG why receive a configuration as an argument? receive user-defined fields?
 
 
-* If the operation receives many arguments, there’s no restriction as far as the position at which you provide the configuration as an argument. The framework uses the `@UseConfig` annotation
+* If the operation receives many arguments, there’s no restriction as far as the position at which the injected configuration is provided as an argument. The framework uses the `@UseConfig` annotation to support an injected configuration as an argument
 * There is no restriction nor enforcement regarding the type of the configuration other than it actually matching the configuration’s actual type
 * The argument will not be translated into a `ParameterModel`
 
@@ -157,10 +158,10 @@ Classes which define operations can have the following characteristics:
 * Can hold state, but must be thread safe
 * Part of that state can be made of dependencies injected through the `@Inject` annotation
 * Can implement Mule’s lifecycle annotations
-//MG how does developer ensure ops are thread safe
+//MG how does developer ensure ops are thread safe? what are the Mule lifecycle annotations?
 
 
-An instance of each `@Operations` annotated class is created each time the operation is defined in a pipeline. For example:
+An instance of the `@Operations` annotated class is created each time the operation is defined in a pipeline. For example:
 
 [source,xml,linenums]
 ----
@@ -183,4 +184,63 @@ An instance of each `@Operations` annotated class is created each time the opera
 
 For this sample configuration, three instances of the `BlueMethFactory` class are created. One for `flow1` and two for `flow2`.
 
-Notice however that the `heisenberg` configuration is dynamic, so potentially each execution of the method annotated with `@Operation` can receive a different instance of the configuration. At the same time, it should be possible for the `BlueMethFactory` class to keep state if, for example, it wanted to keep track of how many invocations it received. For that reason, it is not possible to keep the configuration as part of the instance state and must be passed by argument each time.
+Notice however that the `heisenberg` configuration is dynamic, so potentially each execution of the method annotated with `@Operation` can receive a different instance of the configuration.
+//MG in what cases would the Configuration injected by @UseConfig be different?
+At the same time, it should be possible for the `BlueMethFactory` class to keep state if, for example, it wanted to keep track of how many invocations it received. For that reason, it is not possible to keep the configuration as part of the instance state and must be passed by argument each time.
+
+== Setting the DataType
+
+The MuleMessage uses the definition of a data type `DataType` to provide information about the message payload's format, specifically:
+
+* Encoding
+* MimeType
+
+Information in the DataType is used by Mule transformers to perform auto-transformation. An operation should be able to change the output `DataType`
+
+* the user should have the chance to cast the data type
+* the operation explicitly transforms the data type
+
+=== User-Forced DataType
+
+By annotating a method with `@DataTypeParameters`, the operation can add an `outputEncoding` and `outputMimeType` parameters, allowing the user to ensure the desired output data type.
+
+[source,java,linenums]
+----
+@DataTypeParameter
+public String read(String path, ContentType contentType) {
+	return read(path, contentType.getEncoding());
+}
+----
+
+That annotation instructs the SDK to automatically add the `outputEncoding` and `outputMimeType` parameters:
+
+[source,xml,linenums]
+----
+<file:read path="some/path" outputEncoding="UTF-8" outputMimeType="application/json" />
+----
+
+=== Operation Calculated DataType
+//how does the operation figure out the data type, from what part of the message?
+//why is this configured at the operation level and what is the annotation or example of doing this?
+
+Another case is an operation including code to determine the `DataType`.
+
+The solution for this is to simply have an operation which returns a MuleMessage with a handcrafted DataType. Notice however that if the operation returns a custom DataType but the user forced values on the XSD, the user’s settings will take precedence over the operation’s code.
+
+== Operation Scopes
+
+Some operations require sub-processes. In SDK, declare the operations that have sub-processes with the `@Operations` annotation. The annotated method should take one or more arguments of type `NestedProcessor` or `List<NestedProcessor>`. The platform can mask the child chain, but it's the responsibility of the extension implementation to invoke the child process.
+//unclear what was meant in spec, esp "besides" - "The platform provides support for masking the child chain besides the NestedProcessor, but it’s up to the implementation to actually invoke it."
+
+
+
+=== Single Nested Processor
+
+Receives a single nested processor
+
+=== Multiple Nested Processors
+
+Receives many nested processors
+
+In XML, the generated schema for the operation creates a nested structure for the sub-operations.
+Nested operations appear _inside_ a child element whose name corresponds to the name of the `NestedProcessor` attribute. This is to support situations in which you want to declare different sets of nested processors.
