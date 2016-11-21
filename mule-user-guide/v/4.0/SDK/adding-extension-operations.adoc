@@ -14,11 +14,11 @@ After creating a configuration, add functionality to your extension by declaring
 == Declaring Operations
 
 Operations are declared in a similar way as configurations, with the additional restriction that a class that has been annotated to serve as an configuration cannot also contain configurations. You can use the `@Operations` annotation to point to the classes which hold the operations.
-//MG need to clarify configurations part
+
 
 [NOTE]
 `@Operation` annotated methods are scopes, whose execution implies the execution of child operations, receiving one or more arguments which are of either of type NestedProcessor or List<NestedProcessor>
-//when do you use @Operation or not?
+
 
 [source,java,linenums]
 ----
