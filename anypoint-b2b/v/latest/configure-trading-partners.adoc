@@ -37,8 +37,6 @@ To edit settings for an existing trading partner, in the *Name* table, click the
 +
 The Company information page appears.
 
-
-
 [[img-company-information]]
 image::company-information.png[img-company-information,title="Company Information Page"]
 
