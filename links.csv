@@ -572,6 +572,204 @@ Mule Coding Conventions,Mule Contributors Guide,3.4,mule-coding-conventions.adoc
 Working with an IDE,Mule Contributors Guide,3.4,working-with-an-ide.adoc,/mule-contributors-guide/v/3.4/working-with-an-ide
 Working with Maven,Mule Contributors Guide,3.4,working-with-maven.adoc,/mule-contributors-guide/v/3.4/working-with-maven
 XML Coding Style Guide,Mule Contributors Guide,3.4,xml-coding-style-guide.adoc,/mule-contributors-guide/v/3.4/xml-coding-style-guide
+(??)About Mule Configuration,Mule Fundamentals,3.2,about-mule-configuration.adoc,/mule-fundamentals/v/3.2/about-mule-configuration
+(??)About SOA,Mule Fundamentals,3.2,about-soa.adoc,/mule-fundamentals/v/3.2/about-soa
+(??)Components - Processing the Data,Mule Fundamentals,3.2,components-processing-the-data.adoc,/mule-fundamentals/v/3.2/components-processing-the-data
+(??)Connecting with Transports and Cloud Connectors,Mule Fundamentals,3.2,connecting-with-transports-and-cloud-connectors.adoc,/mule-fundamentals/v/3.2/connecting-with-transports-and-cloud-connectors
+(??)Endpoints - Wiring Everything Together,Mule Fundamentals,3.2,endpoints-wiring-everything-together.adoc,/mule-fundamentals/v/3.2/endpoints-wiring-everything-together
+(??)===,Mule Fundamentals,3.2,how-mule-works.adoc,/mule-fundamentals/v/3.2/how-mule-works
+(??)Introducing Mule Concepts,Mule Fundamentals,3.2,index.adoc,/mule-fundamentals/v/3.2/index
+(??)Mediation - Separating Business Logic from Messaging,Mule Fundamentals,3.2,mediation-separating-business-logic-from-messaging.adoc,/mule-fundamentals/v/3.2/mediation-separating-business-logic-from-messaging
+(??)Mule DevKit,Mule Fundamentals,3.2,mule-devkit.adoc,/mule-fundamentals/v/3.2/mule-devkit
+(??)Mule ESB 3.2.X User Guide,Mule Fundamentals,3.2,mule-esb-3.2.x-user-guide.adoc,/mule-fundamentals/v/3.2/mule-esb-3.2.x-user-guide
+(??)Mule ESB 3 Examples,Mule Fundamentals,3.2,mule-examples-3.2.x.adoc,/mule-fundamentals/v/3.2/mule-examples-3.2.x
+(??)Mule Management Console Documentation,Mule Fundamentals,3.2,mule-management-console-3.2.x.adoc,/mule-fundamentals/v/3.2/mule-management-console-3.2.x
+(??)Mule Studio User's Guide,Mule Fundamentals,3.2,mule-studio-3.2.x.adoc,/mule-fundamentals/v/3.2/mule-studio-3.2.x
+(??)Getting Started with Mule Studio,Mule Fundamentals,3.2,mule-studio-tutorials.adoc,/mule-fundamentals/v/3.2/mule-studio-tutorials
+(??)Orchestration - Routing Messages Between Components,Mule Fundamentals,3.2,orchestration-routing-messages-between-service-components.adoc,/mule-fundamentals/v/3.2/orchestration-routing-messages-between-service-components
+(??)Policy Enforcement,Mule Fundamentals,3.2,policy-enforcement.adoc,/mule-fundamentals/v/3.2/policy-enforcement
+(??)Understanding Configuration Patterns Using Mule,Mule Fundamentals,3.2,understanding-configuration-patterns-using-mule.adoc,/mule-fundamentals/v/3.2/understanding-configuration-patterns-using-mule
+(??)Understanding Enterprise Integration Patterns Using Mule,Mule Fundamentals,3.2,understanding-enterprise-integration-patterns-using-mule.adoc,/mule-fundamentals/v/3.2/understanding-enterprise-integration-patterns-using-mule
+(??)Understanding Orchestration Using Mule,Mule Fundamentals,3.2,understanding-orchestration-using-mule.adoc,/mule-fundamentals/v/3.2/understanding-orchestration-using-mule
+(??)Understanding the Logical Data Flow,Mule Fundamentals,3.2,understanding-the-logical-data-flow.adoc,/mule-fundamentals/v/3.2/understanding-the-logical-data-flow
+(??)Understanding the Mule Architecture,Mule Fundamentals,3.2,understanding-the-mule-architecture.adoc,/mule-fundamentals/v/3.2/understanding-the-mule-architecture
+(??)Using Mule with Web Services,Mule Fundamentals,3.2,using-mule-with-web-services.adoc,/mule-fundamentals/v/3.2/using-mule-with-web-services
+(??)About Mule Configuration,Mule Fundamentals,3.3,about-mule-configuration.adoc,/mule-fundamentals/v/3.3/about-mule-configuration
+(??)About SOA,Mule Fundamentals,3.3,about-soa.adoc,/mule-fundamentals/v/3.3/about-soa
+(??)Components - Processing the Data,Mule Fundamentals,3.3,components-processing-the-data.adoc,/mule-fundamentals/v/3.3/components-processing-the-data
+(??)Connecting with Transports and Connectors,Mule Fundamentals,3.3,connecting-with-transports-and-connectors.adoc,/mule-fundamentals/v/3.3/connecting-with-transports-and-connectors
+(??)Endpoints - Wiring Everything Together,Mule Fundamentals,3.3,endpoints-wiring-everything-together.adoc,/mule-fundamentals/v/3.3/endpoints-wiring-everything-together
+(??)Mule ESB Concepts,Mule Fundamentals,3.3,index.adoc,/mule-fundamentals/v/3.3/index
+(??)Mediation - Separating Business Logic from Messaging,Mule Fundamentals,3.3,mediation-separating-business-logic-from-messaging.adoc,/mule-fundamentals/v/3.3/mediation-separating-business-logic-from-messaging
+(??)Orchestration - Routing Messages Between Components,Mule Fundamentals,3.3,orchestration-routing-messages-between-components.adoc,/mule-fundamentals/v/3.3/orchestration-routing-messages-between-components
+(??)Policy Enforcement,Mule Fundamentals,3.3,policy-enforcement.adoc,/mule-fundamentals/v/3.3/policy-enforcement
+(??)Understanding Configuration Patterns Using Mule,Mule Fundamentals,3.3,understanding-configuration-patterns-using-mule.adoc,/mule-fundamentals/v/3.3/understanding-configuration-patterns-using-mule
+(??)Understanding Enterprise Integration Patterns Using Mule,Mule Fundamentals,3.3,understanding-enterprise-integration-patterns-using-mule.adoc,/mule-fundamentals/v/3.3/understanding-enterprise-integration-patterns-using-mule
+(??)Understanding Orchestration Using Mule,Mule Fundamentals,3.3,understanding-orchestration-using-mule.adoc,/mule-fundamentals/v/3.3/understanding-orchestration-using-mule
+(??)Understanding the Logical Data Flow,Mule Fundamentals,3.3,understanding-the-logical-data-flow.adoc,/mule-fundamentals/v/3.3/understanding-the-logical-data-flow
+(??)Understanding the Mule Architecture,Mule Fundamentals,3.3,understanding-the-mule-architecture.adoc,/mule-fundamentals/v/3.3/understanding-the-mule-architecture
+(??)Using Mule with Web Services,Mule Fundamentals,3.3,using-mule-with-web-services.adoc,/mule-fundamentals/v/3.3/using-mule-with-web-services
+(??)Anypoint Connector Tutorial,Mule Fundamentals,3.4,anypoint-connector-tutorial.adoc,/mule-fundamentals/v/3.4/anypoint-connector-tutorial
+(??)Basic Studio Tutorial ,Mule Fundamentals,3.4,basic-studio-tutorial.adoc,/mule-fundamentals/v/3.4/basic-studio-tutorial
+(??)Begin with the Basics,Mule Fundamentals,3.4,begin-with-the-basics.adoc,/mule-fundamentals/v/3.4/begin-with-the-basics
+(??)Build a Hello World Application,Mule Fundamentals,3.4,build-a-hello-world-application.adoc,/mule-fundamentals/v/3.4/build-a-hello-world-application
+(??)Content-Based Routing Tutorial,Mule Fundamentals,3.4,content-based-routing-tutorial.adoc,/mule-fundamentals/v/3.4/content-based-routing-tutorial
+(??)Deploying Mule Applications ,Mule Fundamentals,3.4,deploying-mule-applications.adoc,/mule-fundamentals/v/3.4/deploying-mule-applications
+(??)Download and Launch Mule Studio,Mule Fundamentals,3.4,download-and-launch-mule-studio.adoc,/mule-fundamentals/v/3.4/download-and-launch-mule-studio
+(??)Elements in a Mule Flow,Mule Fundamentals,3.4,elements-in-a-mule-flow.adoc,/mule-fundamentals/v/3.4/elements-in-a-mule-flow
+(??)Extending Mule,Mule Fundamentals,3.4,extending-mule.adoc,/mule-fundamentals/v/3.4/extending-mule
+(??)First 30 Minutes with Mule,Mule Fundamentals,3.4,first-30-minutes-with-mule.adoc,/mule-fundamentals/v/3.4/first-30-minutes-with-mule
+(??)First Day with Mule,Mule Fundamentals,3.4,first-day-with-mule.adoc,/mule-fundamentals/v/3.4/first-day-with-mule
+(??)First Week with Mule,Mule Fundamentals,3.4,first-week-with-mule.adoc,/mule-fundamentals/v/3.4/first-week-with-mule
+(??)Flow Architecture Advanced Use Case,Mule Fundamentals,3.4,flow-architecture-advanced-use-case.adoc,/mule-fundamentals/v/3.4/flow-architecture-advanced-use-case
+(??)Flows and Subflows,Mule Fundamentals,3.4,flows-and-subflows.adoc,/mule-fundamentals/v/3.4/flows-and-subflows
+(??)Global Elements ,Mule Fundamentals,3.4,global-elements.adoc,/mule-fundamentals/v/3.4/global-elements
+(??)Mule Fundamentals,Mule Fundamentals,3.4,index.adoc,/mule-fundamentals/v/3.4/index
+(??)Meet Mule ,Mule Fundamentals,3.4,meet-mule.adoc,/mule-fundamentals/v/3.4/meet-mule
+(??)Message State,Mule Fundamentals,3.4,message-state.adoc,/mule-fundamentals/v/3.4/message-state
+(??)Mule Application Architecture,Mule Fundamentals,3.4,mule-application-architecture.adoc,/mule-fundamentals/v/3.4/mule-application-architecture
+(??)Mule Components,Mule Fundamentals,3.4,mule-components.adoc,/mule-fundamentals/v/3.4/mule-components
+(??)Mule Concepts,Mule Fundamentals,3.4,mule-concepts.adoc,/mule-fundamentals/v/3.4/mule-concepts
+(??)Mule Endpoints and Connectors,Mule Fundamentals,3.4,mule-endpoints-and-connectors.adoc,/mule-fundamentals/v/3.4/mule-endpoints-and-connectors
+(??)Mule Exception Strategies,Mule Fundamentals,3.4,mule-exception-strategies.adoc,/mule-fundamentals/v/3.4/mule-exception-strategies
+(??)Mule Filters Wrappers and Routers,Mule Fundamentals,3.4,mule-filters-wrappers-and-routers.adoc,/mule-fundamentals/v/3.4/mule-filters-wrappers-and-routers
+(??)Mule Message Structure,Mule Fundamentals,3.4,mule-message-structure.adoc,/mule-fundamentals/v/3.4/mule-message-structure
+(??)Security in Mule,Mule Fundamentals,3.4,mule-security.adoc,/mule-fundamentals/v/3.4/mule-security
+(??)Mule Studio Essentials,Mule Fundamentals,3.4,mule-studio-essentials.adoc,/mule-fundamentals/v/3.4/mule-studio-essentials
+(??)Mule Transformers,Mule Fundamentals,3.4,mule-transformers.adoc,/mule-fundamentals/v/3.4/mule-transformers
+(??)Mule versus Web Application Server,Mule Fundamentals,3.4,mule-versus-web-application-server.adoc,/mule-fundamentals/v/3.4/mule-versus-web-application-server
+(??)SaaS Integration Simple Mapping,Mule Fundamentals,3.4,saas-integration-simple-mapping.adoc,/mule-fundamentals/v/3.4/saas-integration-simple-mapping
+(??)Shortcuts to Success,Mule Fundamentals,3.4,shortcuts-to-success.adoc,/mule-fundamentals/v/3.4/shortcuts-to-success
+(??)Starting and Stopping Mule ESB,Mule Fundamentals,3.4,starting-and-stopping-mule-esb.adoc,/mule-fundamentals/v/3.4/starting-and-stopping-mule-esb
+(??)Anypoint Connector Tutorial,Mule Fundamentals,3.5,anypoint-connector-tutorial.adoc,/mule-fundamentals/v/3.5/anypoint-connector-tutorial
+(??)Anypoint Platform Primer,Mule Fundamentals,3.5,anypoint-platform-primer.adoc,/mule-fundamentals/v/3.5/anypoint-platform-primer
+(??)Anypoint Studio Essentials ,Mule Fundamentals,3.5,anypoint-studio-essentials.adoc,/mule-fundamentals/v/3.5/anypoint-studio-essentials
+(??)Basic Studio Tutorial,Mule Fundamentals,3.5,basic-studio-tutorial.adoc,/mule-fundamentals/v/3.5/basic-studio-tutorial
+(??)Begin with the Basics,Mule Fundamentals,3.5,begin-with-the-basics.adoc,/mule-fundamentals/v/3.5/begin-with-the-basics
+(??)Build a Hello World Application,Mule Fundamentals,3.5,build-a-hello-world-application.adoc,/mule-fundamentals/v/3.5/build-a-hello-world-application
+(??)Content-Based Routing Tutorial,Mule Fundamentals,3.5,content-based-routing-tutorial.adoc,/mule-fundamentals/v/3.5/content-based-routing-tutorial
+(??)Deploying Mule Applications ,Mule Fundamentals,3.5,deploying-mule-applications.adoc,/mule-fundamentals/v/3.5/deploying-mule-applications
+(??)Download and Launch Anypoint Studio,Mule Fundamentals,3.5,download-and-launch-anypoint-studio.adoc,/mule-fundamentals/v/3.5/download-and-launch-anypoint-studio
+(??)Elements in a Mule Flow,Mule Fundamentals,3.5,elements-in-a-mule-flow.adoc,/mule-fundamentals/v/3.5/elements-in-a-mule-flow
+(??)Extending Mule,Mule Fundamentals,3.5,extending-mule.adoc,/mule-fundamentals/v/3.5/extending-mule
+(??)First 30 Minutes with Mule,Mule Fundamentals,3.5,first-30-minutes-with-mule.adoc,/mule-fundamentals/v/3.5/first-30-minutes-with-mule
+(??)First Day with Mule,Mule Fundamentals,3.5,first-day-with-mule.adoc,/mule-fundamentals/v/3.5/first-day-with-mule
+(??)First Week with Mule,Mule Fundamentals,3.5,first-week-with-mule.adoc,/mule-fundamentals/v/3.5/first-week-with-mule
+(??)Flow Architecture Advanced Use Case,Mule Fundamentals,3.5,flow-architecture-advanced-use-case.adoc,/mule-fundamentals/v/3.5/flow-architecture-advanced-use-case
+(??)Flows and Subflows,Mule Fundamentals,3.5,flows-and-subflows.adoc,/mule-fundamentals/v/3.5/flows-and-subflows
+(??)Global Elements ,Mule Fundamentals,3.5,global-elements.adoc,/mule-fundamentals/v/3.5/global-elements
+(??)Mule Fundamentals,Mule Fundamentals,3.5,index.adoc,/mule-fundamentals/v/3.5/index
+(??)Keyboard Shortcuts in Studio,Mule Fundamentals,3.5,keyboard-shortcuts-in-studio.adoc,/mule-fundamentals/v/3.5/keyboard-shortcuts-in-studio
+(??)Message State,Mule Fundamentals,3.5,message-state.adoc,/mule-fundamentals/v/3.5/message-state
+(??)Mule Application Architecture,Mule Fundamentals,3.5,mule-application-architecture.adoc,/mule-fundamentals/v/3.5/mule-application-architecture
+(??)Mule Components,Mule Fundamentals,3.5,mule-components.adoc,/mule-fundamentals/v/3.5/mule-components
+(??)Mule Concepts,Mule Fundamentals,3.5,mule-concepts.adoc,/mule-fundamentals/v/3.5/mule-concepts
+(??)Mule Connectors,Mule Fundamentals,3.5,mule-connectors.adoc,/mule-fundamentals/v/3.5/mule-connectors
+(??)Mule Exception Strategies,Mule Fundamentals,3.5,mule-exception-strategies.adoc,/mule-fundamentals/v/3.5/mule-exception-strategies
+(??)Mule Filters Scopes and Routers,Mule Fundamentals,3.5,mule-filters-scopes-and-routers.adoc,/mule-fundamentals/v/3.5/mule-filters-scopes-and-routers
+(??)Mule Message Structure,Mule Fundamentals,3.5,mule-message-structure.adoc,/mule-fundamentals/v/3.5/mule-message-structure
+(??)Mule Message Tutorial,Mule Fundamentals,3.5,mule-message-tutorial.adoc,/mule-fundamentals/v/3.5/mule-message-tutorial
+(??)Security in Mule,Mule Fundamentals,3.5,mule-security.adoc,/mule-fundamentals/v/3.5/mule-security
+(??)Mule Transformers,Mule Fundamentals,3.5,mule-transformers.adoc,/mule-fundamentals/v/3.5/mule-transformers
+(??)Anypoint Connector Tutorial,Mule Fundamentals,3.6,anypoint-connector-tutorial.adoc,/mule-fundamentals/v/3.6/anypoint-connector-tutorial
+(??)Anypoint Exchange,Mule Fundamentals,3.6,anypoint-exchange.adoc,/mule-fundamentals/v/3.6/anypoint-exchange
+(??)Anypoint Platform Primer,Mule Fundamentals,3.6,anypoint-platform-primer.adoc,/mule-fundamentals/v/3.6/anypoint-platform-primer
+(??)Anypoint Studio Essentials ,Mule Fundamentals,3.6,anypoint-studio-essentials.adoc,/anypoint-platform/v/5/anypoint-studio-essentials
+(??)Basic Studio Tutorial,Mule Fundamentals,3.6,basic-studio-tutorial.adoc,/mule-fundamentals/v/3.6/basic-studio-tutorial
+(??)Begin with the Basics,Mule Fundamentals,3.6,begin-with-the-basics.adoc,/mule-fundamentals/v/3.6/begin-with-the-basics
+(??)Build a Hello World Application,Mule Fundamentals,3.6,build-a-hello-world-application.adoc,/mule-fundamentals/v/3.6/build-a-hello-world-application
+(??)Content-Based Routing Tutorial,Mule Fundamentals,3.6,content-based-routing-tutorial.adoc,/mule-fundamentals/v/3.6/content-based-routing-tutorial
+(??)Deploying Mule Applications ,Mule Fundamentals,3.6,deploying-mule-applications.adoc,/mule-fundamentals/v/3.6/deploying-mule-applications
+(??)Download and Launch Anypoint Studio,Mule Fundamentals,3.6,download-and-launch-anypoint-studio.adoc,/mule-fundamentals/v/3.6/download-and-launch-anypoint-studio
+(??)Elements in a Mule Flow,Mule Fundamentals,3.6,elements-in-a-mule-flow.adoc,/mule-fundamentals/v/3.6/elements-in-a-mule-flow
+(??)Extending Mule,Mule Fundamentals,3.6,extending-mule.adoc,/mule-fundamentals/v/3.6/extending-mule
+(??)First 30 Minutes with Mule,Mule Fundamentals,3.6,first-30-minutes-with-mule.adoc,/mule-fundamentals/v/3.6/first-30-minutes-with-mule
+(??)First Day with Mule,Mule Fundamentals,3.6,first-day-with-mule.adoc,/mule-fundamentals/v/3.6/first-day-with-mule
+(??)First Week with Mule,Mule Fundamentals,3.6,first-week-with-mule.adoc,/mule-fundamentals/v/3.6/first-week-with-mule
+(??)Flow Architecture Advanced Use Case,Mule Fundamentals,3.6,flow-architecture-advanced-use-case.adoc,/mule-fundamentals/v/3.6/flow-architecture-advanced-use-case
+(??)Flows and Subflows,Mule Fundamentals,3.6,flows-and-subflows.adoc,/mule-fundamentals/v/3.6/flows-and-subflows
+(??)Global Elements ,Mule Fundamentals,3.6,global-elements.adoc,/mule-fundamentals/v/3.6/global-elements
+(??)Mule Fundamentals,Mule Fundamentals,3.6,index.adoc,/mule-fundamentals/v/3.6/index
+(??)Keyboard Shortcuts in Studio,Mule Fundamentals,3.6,keyboard-shortcuts-in-studio.adoc,/mule-fundamentals/v/3.6/keyboard-shortcuts-in-studio
+(??)Message State,Mule Fundamentals,3.6,message-state.adoc,/mule-fundamentals/v/3.6/message-state
+(??)Mule Application Architecture,Mule Fundamentals,3.6,mule-application-architecture.adoc,/mule-fundamentals/v/3.6/mule-application-architecture
+(??)Mule Components,Mule Fundamentals,3.6,mule-components.adoc,/mule-fundamentals/v/3.6/mule-components
+(??)Mule Concepts,Mule Fundamentals,3.6,mule-concepts.adoc,/mule-fundamentals/v/3.6/mule-concepts
+(??)Mule Connectors,Mule Fundamentals,3.6,mule-connectors.adoc,/mule-fundamentals/v/3.6/mule-connectors
+(??)Mule Exception Strategies,Mule Fundamentals,3.6,mule-exception-strategies.adoc,/mule-fundamentals/v/3.6/mule-exception-strategies
+(??)Mule Filters Scopes and Routers,Mule Fundamentals,3.6,mule-filters-scopes-and-routers.adoc,/mule-fundamentals/v/3.6/mule-filters-scopes-and-routers
+(??)Mule Message Structure,Mule Fundamentals,3.6,mule-message-structure.adoc,/mule-fundamentals/v/3.6/mule-message-structure
+(??)Mule Message Tutorial,Mule Fundamentals,3.6,mule-message-tutorial.adoc,/mule-fundamentals/v/3.6/mule-message-tutorial
+(??)Security in Mule,Mule Fundamentals,3.6,mule-security.adoc,/mule-fundamentals/v/3.6/mule-security
+(??)Mule Transformers,Mule Fundamentals,3.6,mule-transformers.adoc,/mule-fundamentals/v/3.6/mule-transformers
+(??)Anypoint Connector Tutorial,Mule Fundamentals,3.7,anypoint-connector-tutorial.adoc,/mule-fundamentals/v/3.7/anypoint-connector-tutorial
+(??)Anypoint Exchange,Mule Fundamentals,3.7,anypoint-exchange.adoc,/mule-fundamentals/v/3.7/anypoint-exchange
+(??)Anypoint Platform Primer,Mule Fundamentals,3.7,anypoint-platform-primer.adoc,/mule-fundamentals/v/3.7/anypoint-platform-primer
+(??)Anypoint Studio Essentials ,Mule Fundamentals,3.7,anypoint-studio-essentials.adoc,/anypoint-studio/v/5/index
+(??)Basic Studio Tutorial,Mule Fundamentals,3.7,basic-studio-tutorial.adoc,/anypoint-studio/v/5/basic-studio-tutorial
+(??)Begin with the Basics,Mule Fundamentals,3.7,begin-with-the-basics.adoc,/mule-fundamentals/v/3.7/begin-with-the-basics
+(??)Build a Hello World Mule Application,Mule Fundamentals,3.7,build-a-hello-world-application.adoc,/mule-fundamentals/v/3.7/build-a-hello-world-application
+(??)Content-Based Routing Tutorial,Mule Fundamentals,3.7,content-based-routing-tutorial.adoc,/mule-fundamentals/v/3.7/content-based-routing-tutorial
+(??)Deploying Mule Applications ,Mule Fundamentals,3.7,deploying-mule-applications.adoc,/mule-fundamentals/v/3.7/deploying-mule-applications
+(??)Download and Launch Anypoint Studio,Mule Fundamentals,3.7,download-and-launch-anypoint-studio.adoc,/mule-fundamentals/v/3.7/download-and-launch-anypoint-studio
+(??)Elements in a Mule Flow,Mule Fundamentals,3.7,elements-in-a-mule-flow.adoc,/mule-fundamentals/v/3.7/elements-in-a-mule-flow
+(??)Extending Mule,Mule Fundamentals,3.7,extending-mule.adoc,/mule-fundamentals/v/3.7/extending-mule
+(??)First 30 Minutes with Mule,Mule Fundamentals,3.7,first-30-minutes-with-mule.adoc,/mule-fundamentals/v/3.7/first-30-minutes-with-mule
+(??)First Day with Mule,Mule Fundamentals,3.7,first-day-with-mule.adoc,/mule-fundamentals/v/3.7/first-day-with-mule
+(??)First Week with Mule,Mule Fundamentals,3.7,first-week-with-mule.adoc,/mule-fundamentals/v/3.7/first-week-with-mule
+(??)Flow Architecture Advanced Use Case,Mule Fundamentals,3.7,flow-architecture-advanced-use-case.adoc,/mule-fundamentals/v/3.7/flow-architecture-advanced-use-case
+(??)Flows and Subflows,Mule Fundamentals,3.7,flows-and-subflows.adoc,/mule-fundamentals/v/3.7/flows-and-subflows
+(??)Global Elements ,Mule Fundamentals,3.7,global-elements.adoc,/mule-fundamentals/v/3.7/global-elements
+(??)Glossary,Mule Fundamentals,3.7,glossary.adoc,/mule-fundamentals/v/3.7/glossary
+(??)Mule Fundamentals,Mule Fundamentals,3.7,index.adoc,/mule-fundamentals/v/3.7/index
+(??)Keyboard Shortcuts in Studio,Mule Fundamentals,3.7,keyboard-shortcuts-in-studio.adoc,/anypoint-studio/v/5/keyboard-shortcuts-in-studio
+(??)Message State,Mule Fundamentals,3.7,message-state.adoc,/mule-fundamentals/v/3.7/message-state
+(??)Mule Application Architecture,Mule Fundamentals,3.7,mule-application-architecture.adoc,/mule-fundamentals/v/3.7/mule-application-architecture
+(??)Mule Components,Mule Fundamentals,3.7,mule-components.adoc,/mule-fundamentals/v/3.7/mule-components
+(??)Mule Concepts,Mule Fundamentals,3.7,mule-concepts.adoc,/mule-fundamentals/v/3.7/mule-concepts
+(??)Anypoint Connectors,Mule Fundamentals,3.7,mule-connectors.adoc,/mule-fundamentals/v/3.7/mule-connectors
+(??)Mule Exception Strategies,Mule Fundamentals,3.7,mule-exception-strategies.adoc,/mule-fundamentals/v/3.7/mule-exception-strategies
+(??)Mule Filters Scopes and Routers,Mule Fundamentals,3.7,mule-filters-scopes-and-routers.adoc,/mule-fundamentals/v/3.7/mule-filters-scopes-and-routers
+(??)Mule Message Structure,Mule Fundamentals,3.7,mule-message-structure.adoc,/mule-fundamentals/v/3.7/mule-message-structure
+(??)Mule Message Tutorial,Mule Fundamentals,3.7,mule-message-tutorial.adoc,/mule-fundamentals/v/3.7/mule-message-tutorial
+(??)Security in Mule,Mule Fundamentals,3.7,mule-security.adoc,/mule-fundamentals/v/3.7/mule-security
+(??)Mule Transformers,Mule Fundamentals,3.7,mule-transformers.adoc,/mule-fundamentals/v/3.7/mule-transformers
+(??)Setting up your Development Environment,Mule Fundamentals,3.7,setting-up-your-development-environment.adoc,/anypoint-studio/v/5/setting-up-your-development-environment
+(??)Anypoint Connector Tutorial,Mule Fundamentals,3.8,anypoint-connector-tutorial.adoc,/mule-fundamentals/v/3.8/anypoint-connector-tutorial
+(??)Anypoint Exchange,Mule Fundamentals,3.8,anypoint-exchange.adoc,/mule-fundamentals/v/3.8/anypoint-exchange
+(??)Anypoint Exchange,Mule Fundamentals,3.8,anypoint-exchange2.adoc,/mule-fundamentals/v/3.8/anypoint-exchange2
+(??)Anypoint Platform Primer,Mule Fundamentals,3.8,anypoint-platform-primer.adoc,/mule-fundamentals/v/3.8/anypoint-platform-primer
+(??)Anypoint Studio Essentials ,Mule Fundamentals,3.8,anypoint-studio-essentials.adoc,/anypoint-platform/v/6/anypoint-studio-essentials
+(??)Basic Studio Tutorial,Mule Fundamentals,3.8,basic-studio-tutorial.adoc,/mule-fundamentals/v/3.8/basic-studio-tutorial
+(??)Begin with the Basics,Mule Fundamentals,3.8,begin-with-the-basics.adoc,/mule-fundamentals/v/3.8/begin-with-the-basics
+(??)Build a Hello World Mule Application,Mule Fundamentals,3.8,build-a-hello-world-application.adoc,/mule-fundamentals/v/3.8/build-a-hello-world-application
+(??)Content-Based Routing Tutorial,Mule Fundamentals,3.8,content-based-routing-tutorial.adoc,/mule-fundamentals/v/3.8/content-based-routing-tutorial
+(??)Deploying Mule Applications ,Mule Fundamentals,3.8,deploying-mule-applications.adoc,/mule-fundamentals/v/3.8/deploying-mule-applications
+(??)Download and Launch Anypoint Studio,Mule Fundamentals,3.8,download-and-launch-anypoint-studio.adoc,/mule-fundamentals/v/3.8/download-and-launch-anypoint-studio
+(??)Elements in a Mule Flow,Mule Fundamentals,3.8,elements-in-a-mule-flow.adoc,/mule-fundamentals/v/3.8/elements-in-a-mule-flow
+(??)Anypoint Exchange 3.8,Mule Fundamentals,3.8,exchange38.adoc,/mule-fundamentals/v/3.8/exchange38
+(??)Extending Mule,Mule Fundamentals,3.8,extending-mule.adoc,/mule-fundamentals/v/3.8/extending-mule
+(??)First 30 Minutes with Mule,Mule Fundamentals,3.8,first-30-minutes-with-mule.adoc,/mule-fundamentals/v/3.8/first-30-minutes-with-mule
+(??)First Day with Mule,Mule Fundamentals,3.8,first-day-with-mule.adoc,/mule-fundamentals/v/3.8/first-day-with-mule
+(??)First Week with Mule,Mule Fundamentals,3.8,first-week-with-mule.adoc,/mule-fundamentals/v/3.8/first-week-with-mule
+(??)Flow Architecture Advanced Use Case,Mule Fundamentals,3.8,flow-architecture-advanced-use-case.adoc,/mule-fundamentals/v/3.8/flow-architecture-advanced-use-case
+(??)Flows and Subflows,Mule Fundamentals,3.8,flows-and-subflows.adoc,/mule-fundamentals/v/3.8/flows-and-subflows
+(??)Global Elements ,Mule Fundamentals,3.8,global-elements.adoc,/mule-fundamentals/v/3.8/global-elements
+(??)Glossary,Mule Fundamentals,3.8,glossary.adoc,/mule-fundamentals/v/3.8/glossary
+(??)Mule Fundamentals,Mule Fundamentals,3.8,index.adoc,/mule-fundamentals/v/3.8/index
+(??)Keyboard Shortcuts in Studio,Mule Fundamentals,3.8,keyboard-shortcuts-in-studio.adoc,/mule-fundamentals/v/3.8/keyboard-shortcuts-in-studio
+(??)Message State,Mule Fundamentals,3.8,message-state.adoc,/mule-fundamentals/v/3.8/message-state
+(??)Mule Application Architecture,Mule Fundamentals,3.8,mule-application-architecture.adoc,/mule-fundamentals/v/3.8/mule-application-architecture
+(??)Mule Components,Mule Fundamentals,3.8,mule-components.adoc,/mule-fundamentals/v/3.8/mule-components
+(??)Mule Concepts,Mule Fundamentals,3.8,mule-concepts.adoc,/mule-fundamentals/v/3.8/mule-concepts
+(??)Anypoint Connectors,Mule Fundamentals,3.8,mule-connectors.adoc,/mule-fundamentals/v/3.8/mule-connectors
+(??)Mule Exception Strategies,Mule Fundamentals,3.8,mule-exception-strategies.adoc,/mule-fundamentals/v/3.8/mule-exception-strategies
+(??)Mule Filters Scopes and Routers,Mule Fundamentals,3.8,mule-filters-scopes-and-routers.adoc,/mule-fundamentals/v/3.8/mule-filters-scopes-and-routers
+(??)Mule Message Structure,Mule Fundamentals,3.8,mule-message-structure.adoc,/mule-fundamentals/v/3.8/mule-message-structure
+(??)Mule Message Tutorial,Mule Fundamentals,3.8,mule-message-tutorial.adoc,/mule-fundamentals/v/3.8/mule-message-tutorial
+(??)Security in Mule,Mule Fundamentals,3.8,mule-security.adoc,/mule-fundamentals/v/3.8/mule-security
+(??)Mule Transformers,Mule Fundamentals,3.8,mule-transformers.adoc,/mule-fundamentals/v/3.8/mule-transformers
+(??)Setting up your Development Environment,Mule Fundamentals,3.8,setting-up-your-development-environment.adoc,/mule-fundamentals/v/3.8/setting-up-your-development-environment
 HL7 ACK Component Reference,Mule Healthcare Toolkit,3.3,hl7-ack-component-reference.adoc,/mule-healthcare-toolkit/v/3.3/hl7-ack-component-reference
 HL7 Append Segment Component Reference,Mule Healthcare Toolkit,3.3,hl7-append-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.3/hl7-append-segment-component-reference
 HL7 Connector,Mule Healthcare Toolkit,3.3,hl7-connector.adoc,/mule-healthcare-toolkit/v/3.3/hl7-connector
