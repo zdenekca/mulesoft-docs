@@ -10,7 +10,7 @@ If your project is link:/anypoint-studio/v/6/enabling-maven-support-for-a-studio
 
 == Importing Projects into Studio
 
-To import a project, select *File* > *Import*. Studio presents several importing options.
+To import a project, select *File* > *Import*. Studio presents several importing options.
 
 image:import.png[import]
 
@@ -29,17 +29,17 @@ When you import a project that was developed in an older version of Studio, the 
 
 === Importing a Mule Deployable Archive
 
-When you export a *Mule Deployable Archive* from an instance of Studio, Studio stores the Studio-specific metadata in the archive so that it can be restored in another instance of Studio. Complete the following steps to import such a file into another instance of Anypoint Studio.
+When you export a *Mule Deployable Archive* from an instance of Studio, Studio stores the Studio-specific metadata in the archive so that it can be restored in another instance of Studio. Complete the following steps to import such a file into another instance of Anypoint Studio.
 
-. In the menu, select *Import* from the *File* menu. 
-. In the *Import* wizard, click to expand the Mule folder, select *Anypoint Studio generated Deployable Archive (.zip)*, then click *Next*. 
-. In the *Zip File* field, click the ellipses (...) button to explore your local drive to find, then select, the Mule Deployable Archive file (that is, the .`zip` file) you wish to import. 
+. In the menu, select *Import* from the *File* menu. 
+. In the *Import* wizard, click to expand the Mule folder, select *Anypoint Studio generated Deployable Archive (.zip)*, then click *Next*. 
+. In the *Zip File* field, click the ellipses (...) button to explore your local drive to find, then select, the Mule Deployable Archive file (that is, the .`zip` file) you wish to import. 
 . Change the *Project Name*, if you wish, then use the drop-down to select a *Server Runtime* from those you have downloaded locally.
 . Click *Finish*. Studio loads the archive file, then displays the project in the Package Explorer under the project name you specified.
 
 == Exporting Projects from Studio
 
-Right-click a project name in the *Package Explorer*, then select *Export* Studio presents several exporting options.
+Right-click a project name in the *Package Explorer*, then select *Export* Studio presents several exporting options.
 
 image:exporting.png[exporting]
 
@@ -52,13 +52,13 @@ image:exporting.png[exporting]
 
 === Exporting a Mule Deployable Archive
 
-You can export a *Mule Deployable Archive* from a Studio project, it can later be deployed on Mule or imported into Anypoint Studio on a different machine. Complete the following steps to export such a file:
+You can export a *Mule Deployable Archive* from a Studio project, it can later be deployed on Mule or imported into Anypoint Studio on a different machine. Complete the following steps to export such a file:
 
-. Right-click the *Package Explorer* pane, then select *Export*. Alternatively, select *Export* from the *File* menu. 
-. In the *Export* wizard, click to expand the *Mule* folder, then select *Anypoint Studio Project to Mule Deployable Archive (includes Studio metadata),* then click *Next*. 
-. In the *Zip File* field, click the ellipses (...) button to explore your local drive, then select the location to export your Mule Deployable Archive. 
+. Right-click the *Package Explorer* pane, then select *Export*. Alternatively, select *Export* from the *File* menu. 
+. In the *Export* wizard, click to expand the *Mule* folder, then select *Anypoint Studio Project to Mule Deployable Archive (includes Studio metadata),* then click *Next*. 
+. In the *Zip File* field, click the ellipses (...) button to explore your local drive, then select the location to export your Mule Deployable Archive. 
 . Select the *Project* you wish to export out of the list of existing projects in your workspace.
-. Click *Finish*.  Studio exports your project as a .zip file to the selected folder.
+. Click *Finish*.  Studio exports your project as a .zip file to the selected folder.
 
 The exported .zip package includes all information specific to your application, including flows, configuration files, Java classes, referenced HTML files, and more.
 
@@ -67,9 +67,9 @@ The exported .zip package includes all information specific to your application,
 To easily share your project as a .png image that presents your flow's diagram, use the *Export Diagram* feature.
 
 . In Studio, open the project for which you wish to export documentation.
-. Under the *File* menu, select *Export diagram to*.
-. Specify a location on your local drive to which you wish to export the project diagram, then click *Save*.
-. Studio saves a `.png` file to the location you specified.  The file contains the graphical representation of all the flows in your Studio project.
+. Under the *File* menu, select *Export diagram to*.
+. Specify a location on your local drive to which you wish to export the project diagram, then click *Save*.
+. Studio saves a `.png` file to the location you specified.  The file contains the graphical representation of all the flows in your Studio project.
 
 === Exporting Studio Documentation
 
@@ -95,8 +95,8 @@ image:exported+doc.png[exported+doc]
 == See Also
 
 * Explore a few link:/getting-started/anypoint-exchange[example applications] in Anypoint Studio.
-* Read about link:/anypoint-studio/v/6/importing-a-maven-project-into-studio[Importing a Maven Project into Studio].
-* Find out more about link:/anypoint-studio/v/6/enabling-maven-support-for-a-studio-project[Enabling Maven Support for a Studio Project].
+* Read about link:/anypoint-studio/v/6/importing-a-maven-project-into-studio[Importing a Maven Project into Studio].
+* Find out more about link:/anypoint-studio/v/6/enabling-maven-support-for-a-studio-project[Enabling Maven Support for a Studio Project].
 * Read more about subtle but cool features hidden in Anypoint Studio in our link:http://blogs.mulesoft.org/10-little-mule-studio-gems/[MuleSoft Blog].
 * link:http://training.mulesoft.com[MuleSoft Training]
 * link:https://www.mulesoft.com/webinars[MuleSoft Webinars]
