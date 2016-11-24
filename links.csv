@@ -149,12 +149,12 @@ Writing Extensions in IntelliJ,Anypoint Connector DevKit,3.3,writing-extensions-
 Writing Mule Extensions,Anypoint Connector DevKit,3.3,writing-mule-extensions.adoc,/anypoint-connector-devkit/v/3.3/writing-mule-extensions
 Your First Cloud Connector,Anypoint Connector DevKit,3.3,your-first-cloud-connector.adoc,/anypoint-connector-devkit/v/3.3/your-first-cloud-connector
 Anypoint Connector Concepts,Anypoint Connector DevKit,3.4,anypoint-connector-concepts.adoc,/anypoint-connector-devkit/v/3.4/anypoint-connector-concepts
-Architectural Considerations with Connectors and the Mule Container,Anypoint Connector DevKit,3.4,architectural-considerations-with-connectors-and-the-mule-container.adoc,/anypoint-connector-devkit/v/3.4/architectural-considerations-with-connectors-and-the-mule-container
+Architectural Considerations with Connectors and the Mule Container,Anypoint Connector DevKit,3.4,architectural-considerations-with-connectors-and-the-mule-container.adoc,/anypoint-connector-devkit/v/3.4/architectural-considerations-with-connectors-and-the-mule-container
 Authentication and Connection Management,Anypoint Connector DevKit,3.4,authentication-and-connection-management.adoc,/anypoint-connector-devkit/v/3.4/authentication-and-connection-management
 Authentication Methods,Anypoint Connector DevKit,3.4,authentication-methods.adoc,/anypoint-connector-devkit/v/3.4/authentication-methods
 Connector Attributes Operations and Data Model,Anypoint Connector DevKit,3.4,connector-attributes-operations-and-data-model.adoc,/anypoint-connector-devkit/v/3.4/connector-attributes-operations-and-data-model
 Connector to Java Client Library Example,Anypoint Connector DevKit,3.4,connector-to-java-client-library-example.adoc,/anypoint-connector-devkit/v/3.4/connector-to-java-client-library-example
-Connector to RESTful API with @RestCall Annotations Example,Anypoint Connector DevKit,3.4,connector-to-restful-api-with-restcall-annotations-example.adoc,/anypoint-connector-devkit/v/3.4/connector-to-restful-api-with-restcall-annotations-example
+Connector to RESTful API with @RestCall Annotations Example,Anypoint Connector DevKit,3.4,connector-to-restful-api-with-restcall-annotations-example.adoc,/anypoint-connector-devkit/v/3.4/connector-to-restful-api-with-restcall-annotations-example
 Connector to RESTful Service with Jersey Client Example,Anypoint Connector DevKit,3.4,connector-to-restful-service-with-jersey-client-example.adoc,/anypoint-connector-devkit/v/3.4/connector-to-restful-service-with-jersey-client-example
 Connector to a SOAP Service via CXF Client Example,Anypoint Connector DevKit,3.4,connector-to-soap-service-via-cxf-client-example.adoc,/anypoint-connector-devkit/v/3.4/connector-to-soap-service-via-cxf-client-example
 Creating a Connector Project,Anypoint Connector DevKit,3.4,creating-a-connector-project.adoc,/anypoint-connector-devkit/v/3.4/creating-a-connector-project
@@ -164,7 +164,7 @@ Defining @Configurable Attributes on Connectors,Anypoint Connector DevKit,3.4,de
 Developing DevKit Connector Tests,Anypoint Connector DevKit,3.4,developing-devkit-connector-tests.adoc,/anypoint-connector-devkit/v/3.4/developing-devkit-connector-tests
 DevKit Advanced Topics,Anypoint Connector DevKit,3.4,devkit-advanced-topics.adoc,/anypoint-connector-devkit/v/3.4/devkit-advanced-topics
 DevKit Connector Examples,Anypoint Connector DevKit,3.4,devkit-connector-examples.adoc,/anypoint-connector-devkit/v/3.4/devkit-connector-examples
-DevKit Shortcut to Success,Anypoint Connector DevKit,3.4,devkit-shortcut-to-success.adoc,/anypoint-connector-devkit/v/3.4/devkit-shortcut-to-success
+DevKit Shortcut to Success,Anypoint Connector DevKit,3.4,devkit-shortcut-to-success.adoc,/anypoint-connector-devkit/v/3.4/devkit-shortcut-to-success
 Examining the Generated Connector Project,Anypoint Connector DevKit,3.4,examining-the-generated-connector-project.adoc,/anypoint-connector-devkit/v/3.4/examining-the-generated-connector-project
 Handling Data Types for Configurable Properties,Anypoint Connector DevKit,3.4,handling-data-types-for-configurable-properties.adoc,/anypoint-connector-devkit/v/3.4/handling-data-types-for-configurable-properties
 HTTP Callbacks,Anypoint Connector DevKit,3.4,http-callbacks.adoc,/anypoint-connector-devkit/v/3.4/http-callbacks
@@ -179,7 +179,7 @@ Integrating Connectors with the Mule Lifecycle,Anypoint Connector DevKit,3.4,int
 Packaging Your Connector for Release,Anypoint Connector DevKit,3.4,packaging-your-connector-for-release.adoc,/anypoint-connector-devkit/v/3.4/packaging-your-connector-for-release
 Preparing API Access or a Sandbox Environment,Anypoint Connector DevKit,3.4,preparing-api-access-or-a-sandbox-environment.adoc,/anypoint-connector-devkit/v/3.4/preparing-api-access-or-a-sandbox-environment
 Setting Up a DevKit Development Environment,Anypoint Connector DevKit,3.4,setting-up-a-devkit-development-environment.adoc,/anypoint-connector-devkit/v/3.4/setting-up-a-devkit-development-environment
-Supporting DataSense with Dynamic Data Models,Anypoint Connector DevKit,3.4,supporting-datasense-with-dynamic-data-models.adoc,/anypoint-connector-devkit/v/3.4/supporting-datasense-with-dynamic-data-models
+Supporting DataSense with Dynamic Data Models,Anypoint Connector DevKit,3.4,supporting-datasense-with-dynamic-data-models.adoc,/anypoint-connector-devkit/v/3.4/supporting-datasense-with-dynamic-data-models
 Adding DataSense Query Language,Anypoint Connector DevKit,3.5,adding-datasense-query-language.adoc,/anypoint-connector-devkit/v/3.5/adding-datasense-query-language
 Adding DataSense,Anypoint Connector DevKit,3.5,adding-datasense.adoc,/anypoint-connector-devkit/v/3.5/adding-datasense
 Adding Query Pagination Support,Anypoint Connector DevKit,3.5,adding-query-pagination-support.adoc,/anypoint-connector-devkit/v/3.5/adding-query-pagination-support
@@ -194,14 +194,14 @@ Building a Batch Enabled Connector,Anypoint Connector DevKit,3.5,building-a-batc
 Complex Data Types Attributes,Anypoint Connector DevKit,3.5,complex-data-types-attributes.adoc,/anypoint-connector-devkit/v/3.5/complex-data-types-attributes
 Connector Project Structure,Anypoint Connector DevKit,3.5,connector-project-structure.adoc,/anypoint-connector-devkit/v/3.5/connector-project-structure
 Creating a Connector for a RESTful API Using Jersey,Anypoint Connector DevKit,3.5,creating-a-connector-for-a-restful-api-using-jersey.adoc,/anypoint-connector-devkit/v/3.5/creating-a-connector-for-a-restful-api-using-jersey
-Creating a Connector for a RESTful API using @RESTCall Annotations,Anypoint Connector DevKit,3.5,creating-a-connector-for-a-restful-api-using-restcall-annotations.adoc,/anypoint-connector-devkit/v/3.5/creating-a-connector-for-a-restful-api-using-restcall-annotations
+Creating a Connector for a RESTful API using @RESTCall Annotations,Anypoint Connector DevKit,3.5,creating-a-connector-for-a-restful-api-using-restcall-annotations.adoc,/anypoint-connector-devkit/v/3.5/creating-a-connector-for-a-restful-api-using-restcall-annotations
 Creating a Connector for a SOAP Service Via CXF Client,Anypoint Connector DevKit,3.5,creating-a-connector-for-a-soap-service-via-cxf-client.adoc,/anypoint-connector-devkit/v/3.5/creating-a-connector-for-a-soap-service-via-cxf-client
-Creating a Connector Using a Java Client Library ,Anypoint Connector DevKit,3.5,creating-a-connector-using-a-java-client-library.adoc,/anypoint-connector-devkit/v/3.5/creating-a-connector-using-a-java-client-library
+Creating a Connector Using a Java Client Library ,Anypoint Connector DevKit,3.5,creating-a-connector-using-a-java-client-library.adoc,/anypoint-connector-devkit/v/3.5/creating-a-connector-using-a-java-client-library
 Creating an Anypoint Connector Project,Anypoint Connector DevKit,3.5,creating-an-anypoint-connector-project.adoc,/anypoint-connector-devkit/v/3.5/creating-an-anypoint-connector-project
 Creating Message Processors,Anypoint Connector DevKit,3.5,creating-message-processors.adoc,/anypoint-connector-devkit/v/3.5/creating-message-processors
 Creating Reference Documentation,Anypoint Connector DevKit,3.5,creating-reference-documentation.adoc,/anypoint-connector-devkit/v/3.5/creating-reference-documentation
 Defining Attributes Operations and Data Model,Anypoint Connector DevKit,3.5,defining-attributes-operations-and-data-model.adoc,/anypoint-connector-devkit/v/3.5/defining-attributes-operations-and-data-model
-Defining Connector Attributes,Anypoint Connector DevKit,3.5,defining-connector-attributes.adoc,/anypoint-connector-devkit/v/3.5/defining-connector-attributes
+Defining Connector Attributes,Anypoint Connector DevKit,3.5,defining-connector-attributes.adoc,/anypoint-connector-devkit/v/3.5/defining-connector-attributes
 Defining Message Sources,Anypoint Connector DevKit,3.5,defining-message-sources.adoc,/anypoint-connector-devkit/v/3.5/defining-message-sources
 Developing DevKit Connector Tests,Anypoint Connector DevKit,3.5,developing-devkit-connector-tests.adoc,/anypoint-connector-devkit/v/3.5/developing-devkit-connector-tests
 Implementing a REST Connector,Anypoint Connector DevKit,3.5,implementing-a-rest-connector.adoc,/anypoint-connector-devkit/v/3.5/implementing-a-rest-connector
@@ -218,7 +218,7 @@ Adding DataSense,Anypoint Connector DevKit,3.6,adding-datasense.adoc,/anypoint-c
 Adding Query Pagination Support,Anypoint Connector DevKit,3.6,adding-query-pagination-support.adoc,/anypoint-connector-devkit/v/3.6/adding-query-pagination-support
 Annotation Reference,Anypoint Connector DevKit,3.6,annotation-reference.adoc,/anypoint-connector-devkit/v/3.6/annotation-reference
 Anypoint Connector Development,Anypoint Connector DevKit,3.6,anypoint-connector-development.adoc,/anypoint-connector-devkit/v/3.6/anypoint-connector-development
-Anypoint Connector Examples ,Anypoint Connector DevKit,3.6,anypoint-connector-examples.adoc,/anypoint-connector-devkit/v/3.6/anypoint-connector-examples
+Anypoint Connector Examples ,Anypoint Connector DevKit,3.6,anypoint-connector-examples.adoc,/anypoint-connector-devkit/v/3.6/anypoint-connector-examples
 Authentication Methods,Anypoint Connector DevKit,3.6,authentication-methods.adoc,/anypoint-connector-devkit/v/3.6/authentication-methods
 Authentication,Anypoint Connector DevKit,3.6,authentication.adoc,/anypoint-connector-devkit/v/3.6/authentication
 Building a Batch Enabled Connector,Anypoint Connector DevKit,3.6,building-a-batch-enabled-connector.adoc,/anypoint-connector-devkit/v/3.6/building-a-batch-enabled-connector
@@ -229,13 +229,13 @@ Connector Project Structure,Anypoint Connector DevKit,3.6,connector-project-stru
 Connector Reference Documentation,Anypoint Connector DevKit,3.6,connector-reference-documentation.adoc,/anypoint-connector-devkit/v/3.6/connector-reference-documentation
 Connector Testing Framework,Anypoint Connector DevKit,3.6,connector-testing-framework.adoc,/anypoint-connector-devkit/v/3.6/connector-testing-framework
 Creating a Connector for a RESTful API Using Jersey,Anypoint Connector DevKit,3.6,creating-a-connector-for-a-restful-api-using-jersey.adoc,/anypoint-connector-devkit/v/3.6/creating-a-connector-for-a-restful-api-using-jersey
-Creating a Connector for a RESTful API using @RestCall Annotations,Anypoint Connector DevKit,3.6,creating-a-connector-for-a-restful-api-using-restcall-annotations.adoc,/anypoint-connector-devkit/v/3.6/creating-a-connector-for-a-restful-api-using-restcall-annotations
+Creating a Connector for a RESTful API using @RestCall Annotations,Anypoint Connector DevKit,3.6,creating-a-connector-for-a-restful-api-using-restcall-annotations.adoc,/anypoint-connector-devkit/v/3.6/creating-a-connector-for-a-restful-api-using-restcall-annotations
 Creating a Connector for a SOAP Service Via the CXF Client,Anypoint Connector DevKit,3.6,creating-a-connector-for-a-soap-service-via-cxf-client.adoc,/anypoint-connector-devkit/v/3.6/creating-a-connector-for-a-soap-service-via-cxf-client
 Creating a Connector Using a Java SDK,Anypoint Connector DevKit,3.6,creating-a-connector-using-a-java-sdk.adoc,/anypoint-connector-devkit/v/3.6/creating-a-connector-using-a-java-sdk
 Creating an Anypoint Connector Project,Anypoint Connector DevKit,3.6,creating-an-anypoint-connector-project.adoc,/anypoint-connector-devkit/v/3.6/creating-an-anypoint-connector-project
 Creating Message Processors,Anypoint Connector DevKit,3.6,creating-message-processors.adoc,/anypoint-connector-devkit/v/3.6/creating-message-processors
 Defining Attributes Operations and Data Model,Anypoint Connector DevKit,3.6,defining-attributes-operations-and-data-model.adoc,/anypoint-connector-devkit/v/3.6/defining-attributes-operations-and-data-model
-Defining Connector Attributes,Anypoint Connector DevKit,3.6,defining-connector-attributes.adoc,/anypoint-connector-devkit/v/3.6/defining-connector-attributes
+Defining Connector Attributes,Anypoint Connector DevKit,3.6,defining-connector-attributes.adoc,/anypoint-connector-devkit/v/3.6/defining-connector-attributes
 Defining Message Sources,Anypoint Connector DevKit,3.6,defining-message-sources.adoc,/anypoint-connector-devkit/v/3.6/defining-message-sources
 Developing DevKit Connector Tests,Anypoint Connector DevKit,3.6,developing-devkit-connector-tests.adoc,/anypoint-connector-devkit/v/3.6/developing-devkit-connector-tests
 HTTP Basic Authentication,Anypoint Connector DevKit,3.6,http-basic-authentication.adoc,/anypoint-connector-devkit/v/3.6/http-basic-authentication
@@ -255,7 +255,7 @@ Adding DataSense,Anypoint Connector DevKit,3.7,adding-datasense.adoc,/anypoint-c
 Adding Query Pagination Support,Anypoint Connector DevKit,3.7,adding-query-pagination-support.adoc,/anypoint-connector-devkit/v/3.7/adding-query-pagination-support
 Annotation Reference,Anypoint Connector DevKit,3.7,annotation-reference.adoc,/anypoint-connector-devkit/v/3.7/annotation-reference
 Anypoint Connector Development,Anypoint Connector DevKit,3.7,anypoint-connector-development.adoc,/anypoint-connector-devkit/v/3.7/anypoint-connector-development
-Anypoint Connector Examples ,Anypoint Connector DevKit,3.7,anypoint-connector-examples.adoc,/anypoint-connector-devkit/v/3.7/anypoint-connector-examples
+Anypoint Connector Examples ,Anypoint Connector DevKit,3.7,anypoint-connector-examples.adoc,/anypoint-connector-devkit/v/3.7/anypoint-connector-examples
 Authentication Methods,Anypoint Connector DevKit,3.7,authentication-methods.adoc,/anypoint-connector-devkit/v/3.7/authentication-methods
 Authentication,Anypoint Connector DevKit,3.7,authentication.adoc,/anypoint-connector-devkit/v/3.7/authentication
 Building a Batch Enabled Connector,Anypoint Connector DevKit,3.7,building-a-batch-enabled-connector.adoc,/anypoint-connector-devkit/v/3.7/building-a-batch-enabled-connector
@@ -268,7 +268,7 @@ Connector Project Structure,Anypoint Connector DevKit,3.7,connector-project-stru
 Connector Reference Documentation,Anypoint Connector DevKit,3.7,connector-reference-documentation.adoc,/anypoint-connector-devkit/v/3.7/connector-reference-documentation
 Connector Testing Framework,Anypoint Connector DevKit,3.7,connector-testing-framework.adoc,/anypoint-connector-devkit/v/3.7/connector-testing-framework
 Creating a Connector for a RESTful API Using Jersey,Anypoint Connector DevKit,3.7,creating-a-connector-for-a-restful-api-using-jersey.adoc,/anypoint-connector-devkit/v/3.7/creating-a-connector-for-a-restful-api-using-jersey
-Creating a Connector for a RESTful API using @RestCall Annotations,Anypoint Connector DevKit,3.7,creating-a-connector-for-a-restful-api-using-restcall-annotations.adoc,/anypoint-connector-devkit/v/3.7/creating-a-connector-for-a-restful-api-using-restcall-annotations
+Creating a Connector for a RESTful API using @RestCall Annotations,Anypoint Connector DevKit,3.7,creating-a-connector-for-a-restful-api-using-restcall-annotations.adoc,/anypoint-connector-devkit/v/3.7/creating-a-connector-for-a-restful-api-using-restcall-annotations
 Creating a Connector for a SOAP Service Via the CXF Client,Anypoint Connector DevKit,3.7,creating-a-connector-for-a-soap-service-via-cxf-client.adoc,/anypoint-connector-devkit/v/3.7/creating-a-connector-for-a-soap-service-via-cxf-client
 Creating a Connector Using a Java SDK,Anypoint Connector DevKit,3.7,creating-a-connector-using-a-java-sdk.adoc,/anypoint-connector-devkit/v/3.7/creating-a-connector-using-a-java-sdk
 Creating a Java SDK-Based Connector,Anypoint Connector DevKit,3.7,creating-a-java-sdk-based-connector.adoc,/anypoint-connector-devkit/v/3.7/creating-a-java-sdk-based-connector
@@ -301,7 +301,7 @@ Adding Native Libraries and JARs to a Connector Build,Anypoint Connector DevKit,
 Adding Query Pagination Support,Anypoint Connector DevKit,3.8,adding-query-pagination-support.adoc,/anypoint-connector-devkit/v/3.8/adding-query-pagination-support
 Annotation Reference,Anypoint Connector DevKit,3.8,annotation-reference.adoc,/anypoint-connector-devkit/v/3.8/annotation-reference
 Anypoint Connector Development,Anypoint Connector DevKit,3.8,anypoint-connector-development.adoc,/anypoint-connector-devkit/v/3.8/anypoint-connector-development
-Anypoint Connector Examples ,Anypoint Connector DevKit,3.8,anypoint-connector-examples.adoc,/anypoint-connector-devkit/v/3.8/anypoint-connector-examples
+Anypoint Connector Examples ,Anypoint Connector DevKit,3.8,anypoint-connector-examples.adoc,/anypoint-connector-devkit/v/3.8/anypoint-connector-examples
 Authentication Methods,Anypoint Connector DevKit,3.8,authentication-methods.adoc,/anypoint-connector-devkit/v/3.8/authentication-methods
 Authentication,Anypoint Connector DevKit,3.8,authentication.adoc,/anypoint-connector-devkit/v/3.8/authentication
 Building a Batch Enabled Connector,Anypoint Connector DevKit,3.8,building-a-batch-enabled-connector.adoc,/anypoint-connector-devkit/v/3.8/building-a-batch-enabled-connector
@@ -321,7 +321,7 @@ Creating a Java SDK-Based Connector,Anypoint Connector DevKit,3.8,creating-a-jav
 Creating a SOAP Connector,Anypoint Connector DevKit,3.8,creating-a-soap-connector.adoc,/anypoint-connector-devkit/v/3.8/creating-a-soap-connector
 Creating an Anypoint Connector Project,Anypoint Connector DevKit,3.8,creating-an-anypoint-connector-project.adoc,/anypoint-connector-devkit/v/3.8/creating-an-anypoint-connector-project
 Creating Message Processors,Anypoint Connector DevKit,3.8,creating-message-processors.adoc,/anypoint-connector-devkit/v/3.8/creating-message-processors
-Defining Connector Attributes,Anypoint Connector DevKit,3.8,defining-connector-attributes.adoc,/anypoint-connector-devkit/v/3.8/defining-connector-attributes
+Defining Connector Attributes,Anypoint Connector DevKit,3.8,defining-connector-attributes.adoc,/anypoint-connector-devkit/v/3.8/defining-connector-attributes
 Defining Message Sources,Anypoint Connector DevKit,3.8,defining-message-sources.adoc,/anypoint-connector-devkit/v/3.8/defining-message-sources
 Developing DevKit Connector Tests,Anypoint Connector DevKit,3.8,developing-devkit-connector-tests.adoc,/anypoint-connector-devkit/v/3.8/developing-devkit-connector-tests
 Anypoint Connector DevKit Tutorial,Anypoint Connector DevKit,3.8,devkit-tutorial.adoc,/anypoint-connector-devkit/v/3.8/devkit-tutorial
@@ -376,8 +376,8 @@ Installing Anypoint Platform On Premises Edition,Anypoint Platform On-Premises,1
 VMWare OVA Guide for Installing the Anypoint Platform On-premises Edition,Anypoint Platform On-Premises,1.5.0,vmware-ova-guide.adoc,/anypoint-platform-on-premises/v/1.5.0/vmware-ova-guide
 Adding Community Runtime,Anypoint Studio,5,adding-community-runtime.adoc,/anypoint-studio/v/5/adding-community-runtime
 Adding Source Attachments to Studio,Anypoint Studio,5,adding-source-attachments-to-studio.adoc,/anypoint-studio/v/5/adding-source-attachments-to-studio
-Anypoint Studio Essentials ,Anypoint Studio,5,anypoint-studio-essentials.adoc,/anypoint-studio/v/5/anypoint-studio-essentials
-Anypoint Studio Features ,Anypoint Studio,5,anypoint-studio-features.adoc,/anypoint-studio/v/5/anypoint-studio-features
+Anypoint Studio Essentials ,Anypoint Studio,5,anypoint-studio-essentials.adoc,/anypoint-studio/v/5/anypoint-studio-essentials
+Anypoint Studio Features ,Anypoint Studio,5,anypoint-studio-features.adoc,/anypoint-studio/v/5/anypoint-studio-features
 API Sync,Anypoint Studio,5,api-sync-reference.adoc,/anypoint-studio/v/5/api-sync-reference
 Basic Studio Tutorial,Anypoint Studio,5,basic-studio-tutorial.adoc,/anypoint-studio/v/5/basic-studio-tutorial
 Building a Mapping Flow in the Graphical Mapping Editor,Anypoint Studio,5,building-a-mapping-flow-in-the-graphical-mapping-editor.adoc,/anypoint-studio/v/5/building-a-mapping-flow-in-the-graphical-mapping-editor
@@ -392,16 +392,16 @@ DataMapper Input Error Policy for Bad Input Data,Anypoint Studio,5,datamapper-in
 DataMapper: Supplemental Topics,Anypoint Studio,5,datamapper-supplemental-topics.adoc,/anypoint-studio/v/5/datamapper-supplemental-topics
 Anypoint DataMapper User Guide and Reference,Anypoint Studio,5,datamapper-user-guide-and-reference.adoc,/anypoint-studio/v/5/datamapper-user-guide-and-reference
 Anypoint DataMapper Visual Reference,Anypoint Studio,5,datamapper-visual-reference.adoc,/anypoint-studio/v/5/datamapper-visual-reference
-DataSense-enabled Connectors ,Anypoint Studio,5,datasense-enabled-connectors.adoc,/anypoint-studio/v/5/datasense-enabled-connectors
+DataSense-enabled Connectors ,Anypoint Studio,5,datasense-enabled-connectors.adoc,/anypoint-studio/v/5/datasense-enabled-connectors
 DataSense Query Editor,Anypoint Studio,5,datasense-query-editor.adoc,/anypoint-studio/v/5/datasense-query-editor
 DataSense Query Language,Anypoint Studio,5,datasense-query-language.adoc,/anypoint-studio/v/5/datasense-query-language
 DataSense,Anypoint Studio,5,datasense.adoc,/anypoint-studio/v/5/datasense
-Defining a Data Mapping Flow with Input and Output Metadata,Anypoint Studio,5,defining-datamapper-input-and-output-metadata.adoc,/anypoint-studio/v/5/defining-datamapper-input-and-output-metadata
+Defining a Data Mapping Flow with Input and Output Metadata,Anypoint Studio,5,defining-datamapper-input-and-output-metadata.adoc,/anypoint-studio/v/5/defining-datamapper-input-and-output-metadata
 Defining Metadata Using Edit Fields,Anypoint Studio,5,defining-metadata-using-edit-fields.adoc,/anypoint-studio/v/5/defining-metadata-using-edit-fields
 Download and Launch Anypoint Studio,Anypoint Studio,5,download-and-launch-anypoint-studio.adoc,/anypoint-studio/v/5/download-and-launch-anypoint-studio
 Enabling Maven Support for a Studio Project,Anypoint Studio,5,enabling-maven-support-for-a-studio-project.adoc,/anypoint-studio/v/5/enabling-maven-support-for-a-studio-project
 Hardware and Software Requirements,Anypoint Studio,5,hardware-and-software-requirements.adoc,/anypoint-studio/v/5/hardware-and-software-requirements
-Importing a Maven Project into Studio ,Anypoint Studio,5,importing-a-maven-project-into-studio.adoc,/anypoint-studio/v/5/importing-a-maven-project-into-studio
+Importing a Maven Project into Studio ,Anypoint Studio,5,importing-a-maven-project-into-studio.adoc,/anypoint-studio/v/5/importing-a-maven-project-into-studio
 Importing and Exporting in Studio,Anypoint Studio,5,importing-and-exporting-in-studio.adoc,/anypoint-studio/v/5/importing-and-exporting-in-studio
 Including the DataMapper Plugin,Anypoint Studio,5,including-the-datamapper-plugin.adoc,/anypoint-studio/v/5/including-the-datamapper-plugin
 Anypoint Studio,Anypoint Studio,5,index.adoc,/anypoint-studio/v/5/index
@@ -419,7 +419,7 @@ Streaming Data Processing with DataMapper,Anypoint Studio,5,streaming-data-proce
 Studio in Eclipse,Anypoint Studio,5,studio-in-eclipse.adoc,/anypoint-studio/v/5/studio-in-eclipse
 Studio Update Sites,Anypoint Studio,5,studio-update-sites.adoc,/anypoint-studio/v/5/studio-update-sites
 Studio Visual Debugger,Anypoint Studio,5,studio-visual-debugger.adoc,/anypoint-studio/v/5/studio-visual-debugger
-Testing Connections ,Anypoint Studio,5,testing-connections.adoc,/anypoint-studio/v/5/testing-connections
+Testing Connections ,Anypoint Studio,5,testing-connections.adoc,/anypoint-studio/v/5/testing-connections
 Updating Metadata in an Existing Mapping,Anypoint Studio,5,updating-metadata-in-an-existing-mapping.adoc,/anypoint-studio/v/5/updating-metadata-in-an-existing-mapping
 Using DataMapper Lookup Tables,Anypoint Studio,5,using-datamapper-lookup-tables.adoc,/anypoint-studio/v/5/using-datamapper-lookup-tables
 Using DataWeave in Studio,Anypoint Studio,5,using-dataweave-in-studio.adoc,/anypoint-studio/v/5/using-dataweave-in-studio
@@ -429,7 +429,7 @@ Using Subversion with Studio,Anypoint Studio,5,using-subversion-with-studio.adoc
 Using the DataSense Explorer,Anypoint Studio,5,using-the-datasense-explorer.adoc,/anypoint-studio/v/5/using-the-datasense-explorer
 Installing Community Edition of Mule Runtime,Anypoint Studio,6,adding-community-runtime.adoc,/anypoint-studio/v/6/adding-community-runtime
 Adding Source Attachments to Studio,Anypoint Studio,6,adding-source-attachments-to-studio.adoc,/anypoint-studio/v/6/adding-source-attachments-to-studio
-Anypoint Studio Features ,Anypoint Studio,6,anypoint-studio-features.adoc,/anypoint-studio/v/6/anypoint-studio-features
+Anypoint Studio Features ,Anypoint Studio,6,anypoint-studio-features.adoc,/anypoint-studio/v/6/anypoint-studio-features
 API Sync,Anypoint Studio,6,api-sync-reference.adoc,/anypoint-studio/v/6/api-sync-reference
 Basic Studio Tutorial,Anypoint Studio,6,basic-studio-tutorial.adoc,/anypoint-studio/v/6/basic-studio-tutorial
 Building a Mapping Flow in the Graphical Mapping Editor,Anypoint Studio,6,building-a-mapping-flow-in-the-graphical-mapping-editor.adoc,/anypoint-studio/v/6/building-a-mapping-flow-in-the-graphical-mapping-editor
@@ -444,17 +444,17 @@ DataMapper Input Error Policy for Bad Input Data,Anypoint Studio,6,datamapper-in
 DataMapper: Supplemental Topics,Anypoint Studio,6,datamapper-supplemental-topics.adoc,/anypoint-studio/v/6/datamapper-supplemental-topics
 Anypoint DataMapper User Guide and Reference,Anypoint Studio,6,datamapper-user-guide-and-reference.adoc,/anypoint-studio/v/6/datamapper-user-guide-and-reference
 Anypoint DataMapper Visual Reference,Anypoint Studio,6,datamapper-visual-reference.adoc,/anypoint-studio/v/6/datamapper-visual-reference
-DataSense-enabled Connectors ,Anypoint Studio,6,datasense-enabled-connectors.adoc,/anypoint-studio/v/6/datasense-enabled-connectors
+DataSense-enabled Connectors ,Anypoint Studio,6,datasense-enabled-connectors.adoc,/anypoint-studio/v/6/datasense-enabled-connectors
 DataSense Query Editor,Anypoint Studio,6,datasense-query-editor.adoc,/anypoint-studio/v/6/datasense-query-editor
 DataSense Query Language,Anypoint Studio,6,datasense-query-language.adoc,/anypoint-studio/v/6/datasense-query-language
 DataSense,Anypoint Studio,6,datasense.adoc,/anypoint-studio/v/6/datasense
-Defining a Data Mapping Flow with Input and Output Metadata,Anypoint Studio,6,defining-datamapper-input-and-output-metadata.adoc,/anypoint-studio/v/6/defining-datamapper-input-and-output-metadata
+Defining a Data Mapping Flow with Input and Output Metadata,Anypoint Studio,6,defining-datamapper-input-and-output-metadata.adoc,/anypoint-studio/v/6/defining-datamapper-input-and-output-metadata
 Defining Metadata Using Edit Fields,Anypoint Studio,6,defining-metadata-using-edit-fields.adoc,/anypoint-studio/v/6/defining-metadata-using-edit-fields
 Defining Metadata,Anypoint Studio,6,defining-metadata.adoc,/anypoint-studio/v/6/defining-metadata
 Download and Launch Anypoint Studio,Anypoint Studio,6,download-and-launch-anypoint-studio.adoc,/anypoint-studio/v/6/download-and-launch-anypoint-studio
 Enabling Maven Support for a Studio Project,Anypoint Studio,6,enabling-maven-support-for-a-studio-project.adoc,/anypoint-studio/v/6/enabling-maven-support-for-a-studio-project
 Hardware and Software Requirements,Anypoint Studio,6,hardware-and-software-requirements.adoc,/anypoint-studio/v/6/hardware-and-software-requirements
-Importing a Maven Project into Studio ,Anypoint Studio,6,importing-a-maven-project-into-studio.adoc,/anypoint-studio/v/6/importing-a-maven-project-into-studio
+Importing a Maven Project into Studio ,Anypoint Studio,6,importing-a-maven-project-into-studio.adoc,/anypoint-studio/v/6/importing-a-maven-project-into-studio
 Importing and Exporting in Studio,Anypoint Studio,6,importing-and-exporting-in-studio.adoc,/anypoint-studio/v/6/importing-and-exporting-in-studio
 Including the DataMapper Plugin,Anypoint Studio,6,including-the-datamapper-plugin.adoc,/anypoint-studio/v/6/including-the-datamapper-plugin
 Anypoint Studio,Anypoint Studio,6,index.adoc,/anypoint-studio/v/6/index
@@ -475,7 +475,7 @@ Studio in Eclipse,Anypoint Studio,6,studio-in-eclipse.adoc,/anypoint-studio/v/6/
 Studio Custom Policy Editor (Beta),Anypoint Studio,6,studio-policy-editor.adoc,/anypoint-studio/v/6/studio-policy-editor
 Studio Update Sites,Anypoint Studio,6,studio-update-sites.adoc,/anypoint-studio/v/6/studio-update-sites
 Studio Visual Debugger,Anypoint Studio,6,studio-visual-debugger.adoc,/anypoint-studio/v/6/studio-visual-debugger
-Testing Connections ,Anypoint Studio,6,testing-connections.adoc,/anypoint-studio/v/6/testing-connections
+Testing Connections ,Anypoint Studio,6,testing-connections.adoc,/anypoint-studio/v/6/testing-connections
 Updating Metadata in an Existing Mapping,Anypoint Studio,6,updating-metadata-in-an-existing-mapping.adoc,/anypoint-studio/v/6/updating-metadata-in-an-existing-mapping
 Using DataMapper Lookup Tables,Anypoint Studio,6,using-datamapper-lookup-tables.adoc,/anypoint-studio/v/6/using-datamapper-lookup-tables
 Using DataWeave in Studio,Anypoint Studio,6,using-dataweave-in-studio.adoc,/anypoint-studio/v/6/using-dataweave-in-studio
@@ -560,13 +560,13 @@ How to Implement and Test an API,Getting Started,latest,implement-and-test.adoc,
 Getting Started with Anypoint Platform,Getting Started,latest,index.adoc,/getting-started/index
 How to Work with a Mule Message,Getting Started,latest,mule-message.adoc,/getting-started/mule-message
 How to Sync an API,Getting Started,latest,sync-api-apisync.adoc,/getting-started/sync-api-apisync
-Mule Contributors Guide ,Mule Contributors Guide,3.3,index.adoc,/mule-contributors-guide/v/3.3/index
+Mule Contributors Guide ,Mule Contributors Guide,3.3,index.adoc,/mule-contributors-guide/v/3.3/index
 Internationalization Guidelines,Mule Contributors Guide,3.3,internationalization-guidelines.adoc,/mule-contributors-guide/v/3.3/internationalization-guidelines
 Mule Coding Conventions,Mule Contributors Guide,3.3,mule-coding-conventions.adoc,/mule-contributors-guide/v/3.3/mule-coding-conventions
 Working with an IDE,Mule Contributors Guide,3.3,working-with-an-ide.adoc,/mule-contributors-guide/v/3.3/working-with-an-ide
 Working with Maven,Mule Contributors Guide,3.3,working-with-maven.adoc,/mule-contributors-guide/v/3.3/working-with-maven
 XML Coding Style Guide,Mule Contributors Guide,3.3,xml-coding-style-guide.adoc,/mule-contributors-guide/v/3.3/xml-coding-style-guide
-Mule Contributors Guide ,Mule Contributors Guide,3.4,index.adoc,/mule-contributors-guide/v/3.4/index
+Mule Contributors Guide ,Mule Contributors Guide,3.4,index.adoc,/mule-contributors-guide/v/3.4/index
 Internationalization Guidelines,Mule Contributors Guide,3.4,internationalization-guidelines.adoc,/mule-contributors-guide/v/3.4/internationalization-guidelines
 Mule Coding Conventions,Mule Contributors Guide,3.4,mule-coding-conventions.adoc,/mule-contributors-guide/v/3.4/mule-coding-conventions
 Working with an IDE,Mule Contributors Guide,3.4,working-with-an-ide.adoc,/mule-contributors-guide/v/3.4/working-with-an-ide
@@ -585,7 +585,7 @@ HL7 Message Validation,Mule Healthcare Toolkit,3.3,hl7-message-validation.adoc,/
 HL7 Mule Expression Language Support,Mule Healthcare Toolkit,3.3,hl7-mule-expression-language-support.adoc,/mule-healthcare-toolkit/v/3.3/hl7-mule-expression-language-support
 HL7 Profile Validator Filter,Mule Healthcare Toolkit,3.3,hl7-profile-validator-filter.adoc,/mule-healthcare-toolkit/v/3.3/hl7-profile-validator-filter
 Mule Healthcare Toolkit,Mule Healthcare Toolkit,3.3,index.adoc,/mule-healthcare-toolkit/v/3.3/index
-Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.3,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.3/testing-with-hapi-testpanel
+Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.3,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.3/testing-with-hapi-testpanel
 HL7 ACK Component Reference,Mule Healthcare Toolkit,3.4,hl7-ack-component-reference.adoc,/mule-healthcare-toolkit/v/3.4/hl7-ack-component-reference
 HL7 Append Segment Component Reference,Mule Healthcare Toolkit,3.4,hl7-append-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.4/hl7-append-segment-component-reference
 HL7 Connector,Mule Healthcare Toolkit,3.4,hl7-connector.adoc,/mule-healthcare-toolkit/v/3.4/hl7-connector
@@ -598,7 +598,7 @@ HL7 Message Validation,Mule Healthcare Toolkit,3.4,hl7-message-validation.adoc,/
 HL7 Mule Expression Language Support,Mule Healthcare Toolkit,3.4,hl7-mule-expression-language-support.adoc,/mule-healthcare-toolkit/v/3.4/hl7-mule-expression-language-support
 HL7 Profile Validator Filter,Mule Healthcare Toolkit,3.4,hl7-profile-validator-filter.adoc,/mule-healthcare-toolkit/v/3.4/hl7-profile-validator-filter
 Mule Healthcare Toolkit,Mule Healthcare Toolkit,3.4,index.adoc,/mule-healthcare-toolkit/v/3.4/index
-Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.4,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.4/testing-with-hapi-testpanel
+Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.4,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.4/testing-with-hapi-testpanel
 HL7 ACK Component Reference,Mule Healthcare Toolkit,3.5,hl7-ack-component-reference.adoc,/mule-healthcare-toolkit/v/3.5/hl7-ack-component-reference
 HL7 Append Segment Component Reference,Mule Healthcare Toolkit,3.5,hl7-append-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.5/hl7-append-segment-component-reference
 HL7 Delete Segment Component Reference,Mule Healthcare Toolkit,3.5,hl7-delete-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.5/hl7-delete-segment-component-reference
@@ -611,7 +611,7 @@ HL7 Message Validation,Mule Healthcare Toolkit,3.5,hl7-message-validation.adoc,/
 HL7 Mule Expression Language Support,Mule Healthcare Toolkit,3.5,hl7-mule-expression-language-support.adoc,/mule-healthcare-toolkit/v/3.5/hl7-mule-expression-language-support
 HL7 Profile Validator Filter,Mule Healthcare Toolkit,3.5,hl7-profile-validator-filter.adoc,/mule-healthcare-toolkit/v/3.5/hl7-profile-validator-filter
 Mule Healthcare Toolkit,Mule Healthcare Toolkit,3.5,index.adoc,/mule-healthcare-toolkit/v/3.5/index
-Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.5,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.5/testing-with-hapi-testpanel
+Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.5,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.5/testing-with-hapi-testpanel
 HL7 ACK Component Reference,Mule Healthcare Toolkit,3.6,hl7-ack-component-reference.adoc,/mule-healthcare-toolkit/v/3.6/hl7-ack-component-reference
 HL7 Append Segment Component Reference,Mule Healthcare Toolkit,3.6,hl7-append-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.6/hl7-append-segment-component-reference
 HL7 Delete Segment Component Reference,Mule Healthcare Toolkit,3.6,hl7-delete-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.6/hl7-delete-segment-component-reference
@@ -624,7 +624,7 @@ HL7 Message Validation,Mule Healthcare Toolkit,3.6,hl7-message-validation.adoc,/
 HL7 Mule Expression Language Support,Mule Healthcare Toolkit,3.6,hl7-mule-expression-language-support.adoc,/mule-healthcare-toolkit/v/3.6/hl7-mule-expression-language-support
 HL7 Profile Validator Filter,Mule Healthcare Toolkit,3.6,hl7-profile-validator-filter.adoc,/mule-healthcare-toolkit/v/3.6/hl7-profile-validator-filter
 Mule Healthcare Toolkit,Mule Healthcare Toolkit,3.6,index.adoc,/mule-healthcare-toolkit/v/3.6/index
-Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.6,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.6/testing-with-hapi-testpanel
+Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.6,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.6/testing-with-hapi-testpanel
 HL7 ACK Component Reference,Mule Healthcare Toolkit,3.7,hl7-ack-component-reference.adoc,/mule-healthcare-toolkit/v/3.7/hl7-ack-component-reference
 HL7 Append Segment Component Reference,Mule Healthcare Toolkit,3.7,hl7-append-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.7/hl7-append-segment-component-reference
 HL7 Delete Segment Component Reference,Mule Healthcare Toolkit,3.7,hl7-delete-segment-component-reference.adoc,/mule-healthcare-toolkit/v/3.7/hl7-delete-segment-component-reference
@@ -637,7 +637,7 @@ HL7 Message Validation,Mule Healthcare Toolkit,3.7,hl7-message-validation.adoc,/
 HL7 Mule Expression Language Support,Mule Healthcare Toolkit,3.7,hl7-mule-expression-language-support.adoc,/mule-healthcare-toolkit/v/3.7/hl7-mule-expression-language-support
 HL7 Profile Validator Filter,Mule Healthcare Toolkit,3.7,hl7-profile-validator-filter.adoc,/mule-healthcare-toolkit/v/3.7/hl7-profile-validator-filter
 Mule Healthcare Toolkit,Mule Healthcare Toolkit,3.7,index.adoc,/mule-healthcare-toolkit/v/3.7/index
-Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.7,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.7/testing-with-hapi-testpanel
+Testing with HAPI TestPanel,Mule Healthcare Toolkit,3.7,testing-with-hapi-testpanel.adoc,/mule-healthcare-toolkit/v/3.7/testing-with-hapi-testpanel
 Accessing Server Logs,Mule Management Console,3.2,accessing-server-logs.adoc,/mule-management-console/v/3.2/accessing-server-logs
 Adding and Managing Alerts and SLAs,Mule Management Console,3.2,adding-and-managing-alerts-and-slas.adoc,/mule-management-console/v/3.2/adding-and-managing-alerts-and-slas
 Analyzing Business Events,Mule Management Console,3.2,analyzing-business-events.adoc,/mule-management-console/v/3.2/analyzing-business-events
@@ -1656,7 +1656,7 @@ Async Scope Reference,Mule User Guide,3.3,async-scope-reference.adoc,/mule-user-
 Atom Module Reference,Mule User Guide,3.3,atom-module-reference.adoc,/mule-user-guide/v/3.3/atom-module-reference
 Attachment Transformer Reference,Mule User Guide,3.3,attachment-transformer-reference.adoc,/mule-user-guide/v/3.3/attachment-transformer-reference
 Authorization Grant Types,Mule User Guide,3.3,authorization-grant-types.adoc,/mule-user-guide/v/3.3/authorization-grant-types
-Basic Studio Tutorial ,Mule User Guide,3.3,basic-studio-tutorial.adoc,/mule-user-guide/v/3.3/basic-studio-tutorial
+Basic Studio Tutorial ,Mule User Guide,3.3,basic-studio-tutorial.adoc,/mule-user-guide/v/3.3/basic-studio-tutorial
 Bookstore Example,Mule User Guide,3.3,bookstore-example.adoc,/mule-user-guide/v/3.3/bookstore-example
 Bootstrapping the Registry,Mule User Guide,3.3,bootstrapping-the-registry.adoc,/mule-user-guide/v/3.3/bootstrapping-the-registry
 BPM Configuration Reference,Mule User Guide,3.3,bpm-configuration-reference.adoc,/mule-user-guide/v/3.3/bpm-configuration-reference
@@ -1700,13 +1700,13 @@ Consuming Web Services with CXF,Mule User Guide,3.3,consuming-web-services-with-
 Continuous Integration,Mule User Guide,3.3,continuous-integration.adoc,/mule-user-guide/v/3.3/continuous-integration
 Controlling Mule From Startup,Mule User Guide,3.3,controlling-mule-from-startup.adoc,/mule-user-guide/v/3.3/controlling-mule-from-startup
 Creating a Custom XML Namespace,Mule User Guide,3.3,creating-a-custom-xml-namespace.adoc,/mule-user-guide/v/3.3/creating-a-custom-xml-namespace
-Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.3,creating-an-oauth-2.0a-web-service-provider.adoc,/mule-user-guide/v/3.3/creating-an-oauth-2.0a-web-service-provider
+Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.3,creating-an-oauth-2.0-web-service-provider.adoc,/mule-user-guide/v/3.3/creating-an-oauth-2.0-web-service-provider
 Creating Catalog Archetypes,Mule User Guide,3.3,creating-catalog-archetypes.adoc,/mule-user-guide/v/3.3/creating-catalog-archetypes
 Creating Custom Routers,Mule User Guide,3.3,creating-custom-routers.adoc,/mule-user-guide/v/3.3/creating-custom-routers
 Creating Custom Transformer Classes,Mule User Guide,3.3,creating-custom-transformer-classes.adoc,/mule-user-guide/v/3.3/creating-custom-transformer-classes
 Creating Custom Transformers,Mule User Guide,3.3,creating-custom-transformers.adoc,/mule-user-guide/v/3.3/creating-custom-transformers
 Creating Example Archetypes,Mule User Guide,3.3,creating-example-archetypes.adoc,/mule-user-guide/v/3.3/creating-example-archetypes
-Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.3,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.3/creating-flow-objects-and-transformers-using-annotations
+Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.3,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.3/creating-flow-objects-and-transformers-using-annotations
 Creating Module Archetypes,Mule User Guide,3.3,creating-module-archetypes.adoc,/mule-user-guide/v/3.3/creating-module-archetypes
 Creating Non-MEL Expression Evaluators,Mule User Guide,3.3,creating-non-mel-expression-evaluators.adoc,/mule-user-guide/v/3.3/creating-non-mel-expression-evaluators
 Creating Project Archetypes,Mule User Guide,3.3,creating-project-archetypes.adoc,/mule-user-guide/v/3.3/creating-project-archetypes
@@ -1724,7 +1724,7 @@ Deploying Mule ESB 3,Mule User Guide,3.3,deploying-mule-esb-3.adoc,/mule-user-gu
 Deploying Mule to JBoss,Mule User Guide,3.3,deploying-mule-to-jboss.adoc,/mule-user-guide/v/3.3/deploying-mule-to-jboss
 Deploying Mule to WebLogic,Mule User Guide,3.3,deploying-mule-to-weblogic.adoc,/mule-user-guide/v/3.3/deploying-mule-to-weblogic
 Deploying Mule to WebSphere,Mule User Guide,3.3,deploying-mule-to-websphere.adoc,/mule-user-guide/v/3.3/deploying-mule-to-websphere
-Deploying Studio Applications ,Mule User Guide,3.3,deploying-studio-applications.adoc,/mule-user-guide/v/3.3/deploying-studio-applications
+Deploying Studio Applications ,Mule User Guide,3.3,deploying-studio-applications.adoc,/mule-user-guide/v/3.3/deploying-studio-applications
 Deployment Descriptor,Mule User Guide,3.3,deployment-descriptor.adoc,/mule-user-guide/v/3.3/deployment-descriptor
 Deployment Scenarios,Mule User Guide,3.3,deployment-scenarios.adoc,/mule-user-guide/v/3.3/deployment-scenarios
 Developing Components,Mule User Guide,3.3,developing-components.adoc,/mule-user-guide/v/3.3/developing-components
@@ -1782,14 +1782,14 @@ Hardening your Mule Installation,Mule User Guide,3.3,hardening-your-mule-install
 Hardware and Software Requirements,Mule User Guide,3.3,hardware-and-software-requirements.adoc,/mule-user-guide/v/3.3/hardware-and-software-requirements
 HornetQ integration,Mule User Guide,3.3,hornetq-integration.adoc,/mule-user-guide/v/3.3/hornetq-integration
 Hot Deployment,Mule User Guide,3.3,hot-deployment.adoc,/mule-user-guide/v/3.3/hot-deployment
-How Mule Works ,Mule User Guide,3.3,how-mule-works.adoc,/mule-user-guide/v/3.3/how-mule-works
+How Mule Works ,Mule User Guide,3.3,how-mule-works.adoc,/mule-user-guide/v/3.3/how-mule-works
 HTTP Endpoint Reference,Mule User Guide,3.3,http-endpoint-reference.adoc,/mule-user-guide/v/3.3/http-endpoint-reference
 HTTP Proxy Pattern,Mule User Guide,3.3,http-proxy-pattern.adoc,/mule-user-guide/v/3.3/http-proxy-pattern
 HTTP Transport Reference,Mule User Guide,3.3,http-transport-reference.adoc,/mule-user-guide/v/3.3/http-transport-reference
 HTTPS Transport Reference,Mule User Guide,3.3,https-transport-reference.adoc,/mule-user-guide/v/3.3/https-transport-reference
 IMAP Endpoint Reference,Mule User Guide,3.3,imap-endpoint-reference.adoc,/mule-user-guide/v/3.3/imap-endpoint-reference
 IMAP Transport Reference,Mule User Guide,3.3,imap-transport-reference.adoc,/mule-user-guide/v/3.3/imap-transport-reference
-Converting Maven into Studio ,Mule User Guide,3.3,importing-maven-into-studio.adoc,/mule-user-guide/v/3.3/importing-maven-into-studio
+Converting Maven into Studio ,Mule User Guide,3.3,importing-maven-into-studio.adoc,/mule-user-guide/v/3.3/importing-maven-into-studio
 @InboundAttachments Annotation,Mule User Guide,3.3,inboundattachments-annotation.adoc,/mule-user-guide/v/3.3/inboundattachments-annotation
 @InboundHeaders Annotation,Mule User Guide,3.3,inboundheaders-annotation.adoc,/mule-user-guide/v/3.3/inboundheaders-annotation
 Mule Runtime documentation,Mule User Guide,3.3,index.adoc,/mule-user-guide/v/3.3/index
@@ -1799,7 +1799,7 @@ Installing Anypoint Enterprise Security,Mule User Guide,3.3,installing-anypoint-
 Installing Connectors,Mule User Guide,3.3,installing-connectors.adoc,/mule-user-guide/v/3.3/installing-connectors
 Installing Mule ESB 3 and the Mule IDE,Mule User Guide,3.3,installing-mule-esb-3-and-the-mule-ide.adoc,/mule-user-guide/v/3.3/installing-mule-esb-3-and-the-mule-ide
 Installing Mule ESB 3 Infrastructure,Mule User Guide,3.3,installing-mule-esb-3-infrastructure.adoc,/mule-user-guide/v/3.3/installing-mule-esb-3-infrastructure
-Installing Mule Studio ,Mule User Guide,3.3,installing-mule-studio.adoc,/mule-user-guide/v/3.3/installing-mule-studio
+Installing Mule Studio ,Mule User Guide,3.3,installing-mule-studio.adoc,/mule-user-guide/v/3.3/installing-mule-studio
 Content-Based Routing Tutorial,Mule User Guide,3.3,intermediate-studio-tutorial.adoc,/mule-user-guide/v/3.3/intermediate-studio-tutorial
 Internationalizing Strings,Mule User Guide,3.3,internationalizing-strings.adoc,/mule-user-guide/v/3.3/internationalizing-strings
 Introduction to Testing Mule,Mule User Guide,3.3,introduction-to-testing-mule.adoc,/mule-user-guide/v/3.3/introduction-to-testing-mule
@@ -1859,10 +1859,10 @@ Mule Message Encryption Processor,Mule User Guide,3.3,mule-message-encryption-pr
 Mule Object Stores,Mule User Guide,3.3,mule-object-stores.adoc,/mule-user-guide/v/3.3/mule-object-stores
 Mule Secure Token Service Oauth 2.0 Provider,Mule User Guide,3.3,mule-secure-token-service.adoc,/mule-user-guide/v/3.3/mule-secure-token-service
 Mule Server Notifications,Mule User Guide,3.3,mule-server-notifications.adoc,/mule-user-guide/v/3.3/mule-server-notifications
-Mule STS Oauth 2.0 Example Application,Mule User Guide,3.3,mule-sts-oauth-2.0a-example-application.adoc,/mule-user-guide/v/3.3/mule-sts-oauth-2.0a-example-application
+Mule STS Oauth 2.0 Example Application,Mule User Guide,3.3,mule-sts-oauth-2.0-example-application.adoc,/mule-user-guide/v/3.3/mule-sts-oauth-2.0-example-application
 Mule Studio Essentials,Mule User Guide,3.3,mule-studio-essentials.adoc,/mule-user-guide/v/3.3/mule-studio-essentials
 Mule Studio User Guide,Mule User Guide,3.3,mule-studio.adoc,/mule-user-guide/v/3.3/mule-studio
-Mule WMQ Transport Reference ,Mule User Guide,3.3,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.3/mule-wmq-transport-reference
+Mule WMQ Transport Reference ,Mule User Guide,3.3,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.3/mule-wmq-transport-reference
 MuleSoft Enterprise Java Connector for SAP,Mule User Guide,3.3,mulesoft-enterprise-java-connector-for-sap-reference.adoc,/mule-user-guide/v/3.3/mulesoft-enterprise-java-connector-for-sap-reference
 MuleSoft Security Update Policy,Mule User Guide,3.3,mulesoft-security-update-policy.adoc,/mule-user-guide/v/3.3/mulesoft-security-update-policy
 Multicast Transport Reference,Mule User Guide,3.3,multicast-transport-reference.adoc,/mule-user-guide/v/3.3/multicast-transport-reference
@@ -1956,7 +1956,7 @@ Stopping Mule ESB 3,Mule User Guide,3.3,stopping-mule-esb-3.adoc,/mule-user-guid
 Storing Objects in the Registry,Mule User Guide,3.3,storing-objects-in-the-registry.adoc,/mule-user-guide/v/3.3/storing-objects-in-the-registry
 Streaming,Mule User Guide,3.3,streaming.adoc,/mule-user-guide/v/3.3/streaming
 Studio Basics Walkthrough,Mule User Guide,3.3,studio-basics-walkthrough.adoc,/mule-user-guide/v/3.3/studio-basics-walkthrough
-Studio Building Blocks ,Mule User Guide,3.3,studio-building-blocks.adoc,/mule-user-guide/v/3.3/studio-building-blocks
+Studio Building Blocks ,Mule User Guide,3.3,studio-building-blocks.adoc,/mule-user-guide/v/3.3/studio-building-blocks
 Mule Components,Mule User Guide,3.3,studio-components.adoc,/mule-user-guide/v/3.3/studio-components
 Studio Endpoints,Mule User Guide,3.3,studio-endpoints.adoc,/mule-user-guide/v/3.3/studio-endpoints
 Studio Filters,Mule User Guide,3.3,studio-filters.adoc,/mule-user-guide/v/3.3/studio-filters
@@ -1987,7 +1987,7 @@ Travel Agent Example,Mule User Guide,3.3,travel-agent-example.adoc,/mule-user-gu
 Troubleshooting,Mule User Guide,3.3,troubleshooting-mule.adoc,/mule-user-guide/v/3.3/troubleshooting-mule
 Tuning Performance,Mule User Guide,3.3,tuning-performance.adoc,/mule-user-guide/v/3.3/tuning-performance
 UDP Transport Reference,Mule User Guide,3.3,udp-transport-reference.adoc,/mule-user-guide/v/3.3/udp-transport-reference
-Understanding Global Elements ,Mule User Guide,3.3,understand-global-mule-elements.adoc,/mule-user-guide/v/3.3/understand-global-mule-elements
+Understanding Global Elements ,Mule User Guide,3.3,understand-global-mule-elements.adoc,/mule-user-guide/v/3.3/understand-global-mule-elements
 Understanding Enterprise Integration Patterns Using Mule,Mule User Guide,3.3,understanding-enterprise-integration-patterns-using-mule.adoc,/mule-user-guide/v/3.3/understanding-enterprise-integration-patterns-using-mule
 Understanding Mule Configuration,Mule User Guide,3.3,understanding-mule-configuration.adoc,/mule-user-guide/v/3.3/understanding-mule-configuration
 Understanding Mule Interaction with Exchange Patterns,Mule User Guide,3.3,understanding-mule-interaction-with-exchange-patterns.adoc,/mule-user-guide/v/3.3/understanding-mule-interaction-with-exchange-patterns
@@ -2027,7 +2027,7 @@ Web Service Proxy Pattern,Mule User Guide,3.3,web-service-proxy-pattern.adoc,/mu
 Using the Web Service Wrapper,Mule User Guide,3.3,web-service-wrapper.adoc,/mule-user-guide/v/3.3/web-service-wrapper
 WebLogic JMS Integration,Mule User Guide,3.3,weblogic-jms-integration.adoc,/mule-user-guide/v/3.3/weblogic-jms-integration
 WebSphere MQ Example,Mule User Guide,3.3,websphere-mq-example.adoc,/mule-user-guide/v/3.3/websphere-mq-example
-What Mule Can Do ,Mule User Guide,3.3,what-mule-can-do.adoc,/mule-user-guide/v/3.3/what-mule-can-do
+What Mule Can Do ,Mule User Guide,3.3,what-mule-can-do.adoc,/mule-user-guide/v/3.3/what-mule-can-do
 Wildcard Filter,Mule User Guide,3.3,wildcard-filter.adoc,/mule-user-guide/v/3.3/wildcard-filter
 WMQ Endpoint Reference,Mule User Guide,3.3,wmq-endpoint-reference.adoc,/mule-user-guide/v/3.3/wmq-endpoint-reference
 WS-Security Example,Mule User Guide,3.3,ws-security-example.adoc,/mule-user-guide/v/3.3/ws-security-example
@@ -2120,13 +2120,13 @@ Continuous Integration,Mule User Guide,3.4,continuous-integration.adoc,/mule-use
 Converting Maven into Studio,Mule User Guide,3.4,converting-maven-into-studio.adoc,/mule-user-guide/v/3.4/converting-maven-into-studio
 Converting Studio into Maven,Mule User Guide,3.4,converting-studio-into-maven.adoc,/mule-user-guide/v/3.4/converting-studio-into-maven
 Creating a Custom XML Namespace,Mule User Guide,3.4,creating-a-custom-xml-namespace.adoc,/mule-user-guide/v/3.4/creating-a-custom-xml-namespace
-Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.4,creating-an-oauth-2.0a-web-service-provider.adoc,/mule-user-guide/v/3.4/creating-an-oauth-2.0a-web-service-provider
+Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.4,creating-an-oauth-2.0-web-service-provider.adoc,/mule-user-guide/v/3.4/creating-an-oauth-2.0-web-service-provider
 Creating Catalog Archetypes,Mule User Guide,3.4,creating-catalog-archetypes.adoc,/mule-user-guide/v/3.4/creating-catalog-archetypes
 Creating Custom Routers,Mule User Guide,3.4,creating-custom-routers.adoc,/mule-user-guide/v/3.4/creating-custom-routers
 Creating Custom Transformer Classes,Mule User Guide,3.4,creating-custom-transformer-classes.adoc,/mule-user-guide/v/3.4/creating-custom-transformer-classes
 Creating Custom Transformers,Mule User Guide,3.4,creating-custom-transformers.adoc,/mule-user-guide/v/3.4/creating-custom-transformers
 Creating Example Archetypes,Mule User Guide,3.4,creating-example-archetypes.adoc,/mule-user-guide/v/3.4/creating-example-archetypes
-Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.4,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.4/creating-flow-objects-and-transformers-using-annotations
+Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.4,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.4/creating-flow-objects-and-transformers-using-annotations
 Creating Module Archetypes,Mule User Guide,3.4,creating-module-archetypes.adoc,/mule-user-guide/v/3.4/creating-module-archetypes
 Creating Non-MEL Expression Evaluators,Mule User Guide,3.4,creating-non-mel-expression-evaluators.adoc,/mule-user-guide/v/3.4/creating-non-mel-expression-evaluators
 Creating Project Archetypes,Mule User Guide,3.4,creating-project-archetypes.adoc,/mule-user-guide/v/3.4/creating-project-archetypes
@@ -2140,7 +2140,7 @@ CXF Module Reference,Mule User Guide,3.4,cxf-module-reference.adoc,/mule-user-gu
 Data Bindings Reference,Mule User Guide,3.4,data-bindings-reference.adoc,/mule-user-guide/v/3.4/data-bindings-reference
 Database (JBDC) Endpoint Reference,Mule User Guide,3.4,database-jdbc-endpoint-reference.adoc,/mule-user-guide/v/3.4/database-jdbc-endpoint-reference
 Debugging,Mule User Guide,3.4,debugging.adoc,/mule-user-guide/v/3.4/debugging
-Defining a Data Mapping Flow with Input and Output Metadata,Mule User Guide,3.4,defining-datamapper-input-and-output-metadata.adoc,/mule-user-guide/v/3.4/defining-datamapper-input-and-output-metadata
+Defining a Data Mapping Flow with Input and Output Metadata,Mule User Guide,3.4,defining-datamapper-input-and-output-metadata.adoc,/mule-user-guide/v/3.4/defining-datamapper-input-and-output-metadata
 Defining Metadata Using Edit Fields,Mule User Guide,3.4,defining-metadata-using-edit-fields.adoc,/mule-user-guide/v/3.4/defining-metadata-using-edit-fields
 Deploying Mule as a Service to Tomcat,Mule User Guide,3.4,deploying-mule-as-a-service-to-tomcat.adoc,/mule-user-guide/v/3.4/deploying-mule-as-a-service-to-tomcat
 Deploying Mule to JBoss,Mule User Guide,3.4,deploying-mule-to-jboss.adoc,/mule-user-guide/v/3.4/deploying-mule-to-jboss
@@ -2192,7 +2192,7 @@ FTP Transport Reference,Mule User Guide,3.4,ftp-transport-reference.adoc,/mule-u
 Functional Testing,Mule User Guide,3.4,functional-testing.adoc,/mule-user-guide/v/3.4/functional-testing
 General Configuration Reference,Mule User Guide,3.4,general-configuration-reference.adoc,/mule-user-guide/v/3.4/general-configuration-reference
 Generic Endpoint Reference,Mule User Guide,3.4,generic-endpoint-reference.adoc,/mule-user-guide/v/3.4/generic-endpoint-reference
-Global Elements ,Mule User Guide,3.4,global-elements.adoc,/mule-user-guide/v/3.4/global-elements
+Global Elements ,Mule User Guide,3.4,global-elements.adoc,/mule-user-guide/v/3.4/global-elements
 Global Settings Configuration Reference,Mule User Guide,3.4,global-settings-configuration-reference.adoc,/mule-user-guide/v/3.4/global-settings-configuration-reference
 @Groovy Annotation,Mule User Guide,3.4,groovy-annotation.adoc,/mule-user-guide/v/3.4/groovy-annotation
 Groovy Component Reference,Mule User Guide,3.4,groovy-component-reference.adoc,/mule-user-guide/v/3.4/groovy-component-reference
@@ -2285,9 +2285,9 @@ Mule Object Stores,Mule User Guide,3.4,mule-object-stores.adoc,/mule-user-guide/
 Mule Secure Token Service Oauth 2.0 Provider,Mule User Guide,3.4,mule-secure-token-service.adoc,/mule-user-guide/v/3.4/mule-secure-token-service
 Security in Mule,Mule User Guide,3.4,mule-security.adoc,/mule-user-guide/v/3.4/mule-security
 Mule Server Notifications,Mule User Guide,3.4,mule-server-notifications.adoc,/mule-user-guide/v/3.4/mule-server-notifications
-Mule STS Oauth 2.0 Example Application,Mule User Guide,3.4,mule-sts-oauth-2.0a-example-application.adoc,/mule-user-guide/v/3.4/mule-sts-oauth-2.0a-example-application
+Mule STS Oauth 2.0 Example Application,Mule User Guide,3.4,mule-sts-oauth-2.0-example-application.adoc,/mule-user-guide/v/3.4/mule-sts-oauth-2.0-example-application
 Mule Transformers,Mule User Guide,3.4,mule-transformers.adoc,/mule-user-guide/v/3.4/mule-transformers
-Mule WMQ Transport Reference ,Mule User Guide,3.4,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.4/mule-wmq-transport-reference
+Mule WMQ Transport Reference ,Mule User Guide,3.4,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.4/mule-wmq-transport-reference
 MuleSoft Enterprise Java Connector for SAP,Mule User Guide,3.4,mulesoft-enterprise-java-connector-for-sap-reference.adoc,/mule-user-guide/v/3.4/mulesoft-enterprise-java-connector-for-sap-reference
 MuleSoft Security Update Policy,Mule User Guide,3.4,mulesoft-security-update-policy.adoc,/mule-user-guide/v/3.4/mulesoft-security-update-policy
 Multicast Transport Reference,Mule User Guide,3.4,multicast-transport-reference.adoc,/mule-user-guide/v/3.4/multicast-transport-reference
@@ -2321,7 +2321,7 @@ Python Component Reference,Mule User Guide,3.4,python-component-reference.adoc,/
 Quartz Endpoint Reference,Mule User Guide,3.4,quartz-endpoint-reference.adoc,/mule-user-guide/v/3.4/quartz-endpoint-reference
 Quartz Transport Reference,Mule User Guide,3.4,quartz-transport-reference.adoc,/mule-user-guide/v/3.4/quartz-transport-reference
 Reference Exception Strategy,Mule User Guide,3.4,reference-exception-strategy.adoc,/mule-user-guide/v/3.4/reference-exception-strategy
-Reference ,Mule User Guide,3.4,reference.adoc,/mule-user-guide/v/3.4/reference
+Reference ,Mule User Guide,3.4,reference.adoc,/mule-user-guide/v/3.4/reference
 Regex Filter,Mule User Guide,3.4,regex-filter.adoc,/mule-user-guide/v/3.4/regex-filter
 Reliability Patterns,Mule User Guide,3.4,reliability-patterns.adoc,/mule-user-guide/v/3.4/reliability-patterns
 Reproducible Builds,Mule User Guide,3.4,reproducible-builds.adoc,/mule-user-guide/v/3.4/reproducible-builds
@@ -2384,7 +2384,7 @@ Sustainable Software Development Practices with Mule,Mule User Guide,3.4,sustain
 SXC Module Reference,Mule User Guide,3.4,sxc-module-reference.adoc,/mule-user-guide/v/3.4/sxc-module-reference
 TCP Transport Reference,Mule User Guide,3.4,tcp-transport-reference.adoc,/mule-user-guide/v/3.4/tcp-transport-reference
 Team Development with Mule,Mule User Guide,3.4,team-development-with-mule.adoc,/mule-user-guide/v/3.4/team-development-with-mule
-Testing Connections ,Mule User Guide,3.4,testing-connections.adoc,/mule-user-guide/v/3.4/testing-connections
+Testing Connections ,Mule User Guide,3.4,testing-connections.adoc,/mule-user-guide/v/3.4/testing-connections
 Testing Strategies,Mule User Guide,3.4,testing-strategies.adoc,/mule-user-guide/v/3.4/testing-strategies
 Testing,Mule User Guide,3.4,testing.adoc,/mule-user-guide/v/3.4/testing
 TIBCO EMS Integration,Mule User Guide,3.4,tibco-ems-integration.adoc,/mule-user-guide/v/3.4/tibco-ems-integration
@@ -2492,7 +2492,7 @@ Auto-Paging in Anypoint Connectors,Mule User Guide,3.5,auto-paging-in-anypoint-c
 Batch Filters and Batch Commit,Mule User Guide,3.5,batch-filters-and-batch-commit.adoc,/mule-user-guide/v/3.5/batch-filters-and-batch-commit
 Batch Processing Reference,Mule User Guide,3.5,batch-processing-reference.adoc,/mule-user-guide/v/3.5/batch-processing-reference
 Batch Processing,Mule User Guide,3.5,batch-processing.adoc,/mule-user-guide/v/3.5/batch-processing
-Batch Streaming and Job Execution,Mule User Guide,3.5,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.5/batch-streaming-and-job-execution
+Batch Streaming and Job Execution,Mule User Guide,3.5,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.5/batch-streaming-and-job-execution
 Bootstrapping the Registry,Mule User Guide,3.5,bootstrapping-the-registry.adoc,/mule-user-guide/v/3.5/bootstrapping-the-registry
 BPM Configuration Reference,Mule User Guide,3.5,bpm-configuration-reference.adoc,/mule-user-guide/v/3.5/bpm-configuration-reference
 BPM Module Reference,Mule User Guide,3.5,bpm-module-reference.adoc,/mule-user-guide/v/3.5/bpm-module-reference
@@ -2545,14 +2545,14 @@ Consuming a SOAP API,Mule User Guide,3.5,consuming-a-soap-api.adoc,/mule-user-gu
 Consuming Web Services with CXF,Mule User Guide,3.5,consuming-web-services-with-cxf.adoc,/mule-user-guide/v/3.5/consuming-web-services-with-cxf
 Continuous Integration,Mule User Guide,3.5,continuous-integration.adoc,/mule-user-guide/v/3.5/continuous-integration
 Creating a Custom XML Namespace,Mule User Guide,3.5,creating-a-custom-xml-namespace.adoc,/mule-user-guide/v/3.5/creating-a-custom-xml-namespace
-Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.5,creating-an-oauth-2.0a-web-service-provider.adoc,/mule-user-guide/v/3.5/creating-an-oauth-2.0a-web-service-provider
+Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.5,creating-an-oauth-2.0-web-service-provider.adoc,/mule-user-guide/v/3.5/creating-an-oauth-2.0-web-service-provider
 Creating and Managing a Cluster Manually,Mule User Guide,3.5,creating-and-managing-a-cluster-manually.adoc,/mule-user-guide/v/3.5/creating-and-managing-a-cluster-manually
 Creating Catalog Archetypes,Mule User Guide,3.5,creating-catalog-archetypes.adoc,/mule-user-guide/v/3.5/creating-catalog-archetypes
 Creating Custom Routers,Mule User Guide,3.5,creating-custom-routers.adoc,/mule-user-guide/v/3.5/creating-custom-routers
 Creating Custom Transformer Classes,Mule User Guide,3.5,creating-custom-transformer-classes.adoc,/mule-user-guide/v/3.5/creating-custom-transformer-classes
 Creating Custom Transformers,Mule User Guide,3.5,creating-custom-transformers.adoc,/mule-user-guide/v/3.5/creating-custom-transformers
 Creating Example Archetypes,Mule User Guide,3.5,creating-example-archetypes.adoc,/mule-user-guide/v/3.5/creating-example-archetypes
-Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.5,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.5/creating-flow-objects-and-transformers-using-annotations
+Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.5,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.5/creating-flow-objects-and-transformers-using-annotations
 Creating Module Archetypes,Mule User Guide,3.5,creating-module-archetypes.adoc,/mule-user-guide/v/3.5/creating-module-archetypes
 Creating Non-MEL Expression Evaluators,Mule User Guide,3.5,creating-non-mel-expression-evaluators.adoc,/mule-user-guide/v/3.5/creating-non-mel-expression-evaluators
 Creating Project Archetypes,Mule User Guide,3.5,creating-project-archetypes.adoc,/mule-user-guide/v/3.5/creating-project-archetypes
@@ -2568,12 +2568,12 @@ Data Bindings Reference,Mule User Guide,3.5,data-bindings-reference.adoc,/mule-u
 Database Connector Examples,Mule User Guide,3.5,database-connector-examples.adoc,/mule-user-guide/v/3.5/database-connector-examples
 Database Connector Reference,Mule User Guide,3.5,database-connector-reference.adoc,/mule-user-guide/v/3.5/database-connector-reference
 Database Connector,Mule User Guide,3.5,database-connector.adoc,/mule-user-guide/v/3.5/database-connector
-DataSense-enabled Connectors ,Mule User Guide,3.5,datasense-enabled-connectors.adoc,/mule-user-guide/v/3.5/datasense-enabled-connectors
+DataSense-enabled Connectors ,Mule User Guide,3.5,datasense-enabled-connectors.adoc,/mule-user-guide/v/3.5/datasense-enabled-connectors
 DataSense Query Editor,Mule User Guide,3.5,datasense-query-editor.adoc,/mule-user-guide/v/3.5/datasense-query-editor
 DataSense Query Language,Mule User Guide,3.5,datasense-query-language.adoc,/mule-user-guide/v/3.5/datasense-query-language
 DataSense,Mule User Guide,3.5,datasense.adoc,/mule-user-guide/v/3.5/datasense
 Debugging,Mule User Guide,3.5,debugging.adoc,/mule-user-guide/v/3.5/debugging
-Defining a Data Mapping Flow with Input and Output Metadata,Mule User Guide,3.5,defining-datamapper-input-and-output-metadata.adoc,/mule-user-guide/v/3.5/defining-datamapper-input-and-output-metadata
+Defining a Data Mapping Flow with Input and Output Metadata,Mule User Guide,3.5,defining-datamapper-input-and-output-metadata.adoc,/mule-user-guide/v/3.5/defining-datamapper-input-and-output-metadata
 Defining Metadata Using Edit Fields,Mule User Guide,3.5,defining-metadata-using-edit-fields.adoc,/mule-user-guide/v/3.5/defining-metadata-using-edit-fields
 Deploying Mule as a Service to Tomcat,Mule User Guide,3.5,deploying-mule-as-a-service-to-tomcat.adoc,/mule-user-guide/v/3.5/deploying-mule-as-a-service-to-tomcat
 Deploying Mule to JBoss,Mule User Guide,3.5,deploying-mule-to-jboss.adoc,/mule-user-guide/v/3.5/deploying-mule-to-jboss
@@ -2633,7 +2633,7 @@ FTP Transport Reference,Mule User Guide,3.5,ftp-transport-reference.adoc,/mule-u
 Functional Testing,Mule User Guide,3.5,functional-testing.adoc,/mule-user-guide/v/3.5/functional-testing
 General Configuration Reference,Mule User Guide,3.5,general-configuration-reference.adoc,/mule-user-guide/v/3.5/general-configuration-reference
 Generic Connector,Mule User Guide,3.5,generic-connector.adoc,/mule-user-guide/v/3.5/generic-connector
-Global Elements ,Mule User Guide,3.5,global-elements.adoc,/mule-user-guide/v/3.5/global-elements
+Global Elements ,Mule User Guide,3.5,global-elements.adoc,/mule-user-guide/v/3.5/global-elements
 Global Settings Configuration Reference,Mule User Guide,3.5,global-settings-configuration-reference.adoc,/mule-user-guide/v/3.5/global-settings-configuration-reference
 @Groovy Annotation,Mule User Guide,3.5,groovy-annotation.adoc,/mule-user-guide/v/3.5/groovy-annotation
 Groovy Component Reference,Mule User Guide,3.5,groovy-component-reference.adoc,/mule-user-guide/v/3.5/groovy-component-reference
@@ -2651,7 +2651,7 @@ HTTP Transport Reference,Mule User Guide,3.5,http-transport-reference.adoc,/mule
 HTTPS Transport Reference,Mule User Guide,3.5,https-transport-reference.adoc,/mule-user-guide/v/3.5/https-transport-reference
 IMAP Connector,Mule User Guide,3.5,imap-connector.adoc,/mule-user-guide/v/3.5/imap-connector
 IMAP Transport Reference,Mule User Guide,3.5,imap-transport-reference.adoc,/mule-user-guide/v/3.5/imap-transport-reference
-Importing a Maven Project into Studio ,Mule User Guide,3.5,importing-a-maven-project-into-studio.adoc,/mule-user-guide/v/3.5/importing-a-maven-project-into-studio
+Importing a Maven Project into Studio ,Mule User Guide,3.5,importing-a-maven-project-into-studio.adoc,/mule-user-guide/v/3.5/importing-a-maven-project-into-studio
 Importing and Exporting in Studio,Mule User Guide,3.5,importing-and-exporting-in-studio.adoc,/mule-user-guide/v/3.5/importing-and-exporting-in-studio
 @InboundAttachments Annotation,Mule User Guide,3.5,inboundattachments-annotation.adoc,/mule-user-guide/v/3.5/inboundattachments-annotation
 @InboundHeaders Annotation,Mule User Guide,3.5,inboundheaders-annotation.adoc,/mule-user-guide/v/3.5/inboundheaders-annotation
@@ -2734,10 +2734,10 @@ Mule Object Stores,Mule User Guide,3.5,mule-object-stores.adoc,/mule-user-guide/
 Mule Secure Token Service Oauth 2.0 Provider,Mule User Guide,3.5,mule-secure-token-service.adoc,/mule-user-guide/v/3.5/mule-secure-token-service
 Security in Mule,Mule User Guide,3.5,mule-security.adoc,/mule-user-guide/v/3.5/mule-security
 Mule Server Notifications,Mule User Guide,3.5,mule-server-notifications.adoc,/mule-user-guide/v/3.5/mule-server-notifications
-Mule STS Oauth 2.0 Example Application,Mule User Guide,3.5,mule-sts-oauth-2.0a-example-application.adoc,/mule-user-guide/v/3.5/mule-sts-oauth-2.0a-example-application
+Mule STS Oauth 2.0 Example Application,Mule User Guide,3.5,mule-sts-oauth-2.0-example-application.adoc,/mule-user-guide/v/3.5/mule-sts-oauth-2.0-example-application
 Mule Transformers,Mule User Guide,3.5,mule-transformers.adoc,/mule-user-guide/v/3.5/mule-transformers
 Mule versus Web Application Server,Mule User Guide,3.5,mule-versus-web-application-server.adoc,/mule-user-guide/v/3.5/mule-versus-web-application-server
-Mule WMQ Transport Reference ,Mule User Guide,3.5,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.5/mule-wmq-transport-reference
+Mule WMQ Transport Reference ,Mule User Guide,3.5,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.5/mule-wmq-transport-reference
 MuleSoft Enterprise Java Connector for SAP,Mule User Guide,3.5,mulesoft-enterprise-java-connector-for-sap-reference.adoc,/mule-user-guide/v/3.5/mulesoft-enterprise-java-connector-for-sap-reference
 MuleSoft Security Update Policy,Mule User Guide,3.5,mulesoft-security-update-policy.adoc,/mule-user-guide/v/3.5/mulesoft-security-update-policy
 Multicast Transport Reference,Mule User Guide,3.5,multicast-transport-reference.adoc,/mule-user-guide/v/3.5/multicast-transport-reference
@@ -2779,7 +2779,7 @@ Quartz Connector,Mule User Guide,3.5,quartz-connector.adoc,/mule-user-guide/v/3.
 Quartz Transport Reference,Mule User Guide,3.5,quartz-transport-reference.adoc,/mule-user-guide/v/3.5/quartz-transport-reference
 Record Variable,Mule User Guide,3.5,record-variable.adoc,/mule-user-guide/v/3.5/record-variable
 Reference Exception Strategy,Mule User Guide,3.5,reference-exception-strategy.adoc,/mule-user-guide/v/3.5/reference-exception-strategy
-Reference ,Mule User Guide,3.5,reference.adoc,/mule-user-guide/v/3.5/reference
+Reference ,Mule User Guide,3.5,reference.adoc,/mule-user-guide/v/3.5/reference
 Regex Filter,Mule User Guide,3.5,regex-filter.adoc,/mule-user-guide/v/3.5/regex-filter
 Reliability Patterns,Mule User Guide,3.5,reliability-patterns.adoc,/mule-user-guide/v/3.5/reliability-patterns
 Reproducible Builds,Mule User Guide,3.5,reproducible-builds.adoc,/mule-user-guide/v/3.5/reproducible-builds
@@ -2853,14 +2853,14 @@ Sustainable Software Development Practices with Mule,Mule User Guide,3.5,sustain
 SXC Module Reference,Mule User Guide,3.5,sxc-module-reference.adoc,/mule-user-guide/v/3.5/sxc-module-reference
 TCP Transport Reference,Mule User Guide,3.5,tcp-transport-reference.adoc,/mule-user-guide/v/3.5/tcp-transport-reference
 Team Development with Mule,Mule User Guide,3.5,team-development-with-mule.adoc,/mule-user-guide/v/3.5/team-development-with-mule
-Testing Connections ,Mule User Guide,3.5,testing-connections.adoc,/mule-user-guide/v/3.5/testing-connections
+Testing Connections ,Mule User Guide,3.5,testing-connections.adoc,/mule-user-guide/v/3.5/testing-connections
 Testing Strategies,Mule User Guide,3.5,testing-strategies.adoc,/mule-user-guide/v/3.5/testing-strategies
 Testing,Mule User Guide,3.5,testing.adoc,/mule-user-guide/v/3.5/testing
 The Properties Editor,Mule User Guide,3.5,the-properties-editor.adoc,/mule-user-guide/v/3.5/the-properties-editor
 The Template library,Mule User Guide,3.5,the-template-library.adoc,/mule-user-guide/v/3.5/the-template-library
 TIBCO EMS Integration,Mule User Guide,3.5,tibco-ems-integration.adoc,/mule-user-guide/v/3.5/tibco-ems-integration
 Transaction Management,Mule User Guide,3.5,transaction-management.adoc,/mule-user-guide/v/3.5/transaction-management
-Transactional ,Mule User Guide,3.5,transactional.adoc,/mule-user-guide/v/3.5/transactional
+Transactional ,Mule User Guide,3.5,transactional.adoc,/mule-user-guide/v/3.5/transactional
 Transactions Configuration Reference,Mule User Guide,3.5,transactions-configuration-reference.adoc,/mule-user-guide/v/3.5/transactions-configuration-reference
 @Transformer Annotation,Mule User Guide,3.5,transformer-annotation.adoc,/mule-user-guide/v/3.5/transformer-annotation
 Transformers Configuration Reference,Mule User Guide,3.5,transformers-configuration-reference.adoc,/mule-user-guide/v/3.5/transformers-configuration-reference
@@ -2971,7 +2971,7 @@ Auto-Paging in Anypoint Connectors,Mule User Guide,3.6,auto-paging-in-anypoint-c
 Batch Filters and Batch Commit,Mule User Guide,3.6,batch-filters-and-batch-commit.adoc,/mule-user-guide/v/3.6/batch-filters-and-batch-commit
 Batch Processing Reference,Mule User Guide,3.6,batch-processing-reference.adoc,/mule-user-guide/v/3.6/batch-processing-reference
 Batch Processing,Mule User Guide,3.6,batch-processing.adoc,/mule-user-guide/v/3.6/batch-processing
-Batch Streaming and Job Execution,Mule User Guide,3.6,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.6/batch-streaming-and-job-execution
+Batch Streaming and Job Execution,Mule User Guide,3.6,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.6/batch-streaming-and-job-execution
 Bootstrapping the Registry,Mule User Guide,3.6,bootstrapping-the-registry.adoc,/mule-user-guide/v/3.6/bootstrapping-the-registry
 BPM Configuration Reference,Mule User Guide,3.6,bpm-configuration-reference.adoc,/mule-user-guide/v/3.6/bpm-configuration-reference
 BPM Module Reference,Mule User Guide,3.6,bpm-module-reference.adoc,/mule-user-guide/v/3.6/bpm-module-reference
@@ -3019,13 +3019,13 @@ Consuming a SOAP API,Mule User Guide,3.6,consuming-a-soap-api.adoc,/mule-user-gu
 Consuming Web Services with CXF,Mule User Guide,3.6,consuming-web-services-with-cxf.adoc,/mule-user-guide/v/3.6/consuming-web-services-with-cxf
 Continuous Integration,Mule User Guide,3.6,continuous-integration.adoc,/mule-user-guide/v/3.6/continuous-integration
 Creating a Custom XML Namespace,Mule User Guide,3.6,creating-a-custom-xml-namespace.adoc,/mule-user-guide/v/3.6/creating-a-custom-xml-namespace
-Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.6,creating-an-oauth-2.0a-web-service-provider.adoc,/mule-user-guide/v/3.6/creating-an-oauth-2.0a-web-service-provider
+Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.6,creating-an-oauth-2.0-web-service-provider.adoc,/mule-user-guide/v/3.6/creating-an-oauth-2.0-web-service-provider
 Creating and Managing a Cluster Manually,Mule User Guide,3.6,creating-and-managing-a-cluster-manually.adoc,/mule-user-guide/v/3.6/creating-and-managing-a-cluster-manually
 Creating Custom Routers,Mule User Guide,3.6,creating-custom-routers.adoc,/mule-user-guide/v/3.6/creating-custom-routers
 Creating Custom Transformer Classes,Mule User Guide,3.6,creating-custom-transformer-classes.adoc,/mule-user-guide/v/3.6/creating-custom-transformer-classes
 Creating Custom Transformers,Mule User Guide,3.6,creating-custom-transformers.adoc,/mule-user-guide/v/3.6/creating-custom-transformers
 Creating Example Archetypes,Mule User Guide,3.6,creating-example-archetypes.adoc,/mule-user-guide/v/3.6/creating-example-archetypes
-Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.6,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.6/creating-flow-objects-and-transformers-using-annotations
+Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.6,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.6/creating-flow-objects-and-transformers-using-annotations
 Creating Module Archetypes,Mule User Guide,3.6,creating-module-archetypes.adoc,/mule-user-guide/v/3.6/creating-module-archetypes
 Creating Non-MEL Expression Evaluators,Mule User Guide,3.6,creating-non-mel-expression-evaluators.adoc,/mule-user-guide/v/3.6/creating-non-mel-expression-evaluators
 Creating Project Archetypes,Mule User Guide,3.6,creating-project-archetypes.adoc,/mule-user-guide/v/3.6/creating-project-archetypes
@@ -3041,13 +3041,13 @@ Data Bindings Reference,Mule User Guide,3.6,data-bindings-reference.adoc,/mule-u
 Database Connector Examples,Mule User Guide,3.6,database-connector-examples.adoc,/mule-user-guide/v/3.6/database-connector-examples
 Database Connector Reference,Mule User Guide,3.6,database-connector-reference.adoc,/mule-user-guide/v/3.6/database-connector-reference
 Database Connector,Mule User Guide,3.6,database-connector.adoc,/mule-user-guide/v/3.6/database-connector
-DataSense-enabled Connectors ,Mule User Guide,3.6,datasense-enabled-connectors.adoc,/mule-user-guide/v/3.6/datasense-enabled-connectors
+DataSense-enabled Connectors ,Mule User Guide,3.6,datasense-enabled-connectors.adoc,/mule-user-guide/v/3.6/datasense-enabled-connectors
 DataSense Query Editor,Mule User Guide,3.6,datasense-query-editor.adoc,/mule-user-guide/v/3.6/datasense-query-editor
 DataSense Query Language,Mule User Guide,3.6,datasense-query-language.adoc,/mule-user-guide/v/3.6/datasense-query-language
 DataSense,Mule User Guide,3.6,datasense.adoc,/mule-user-guide/v/3.6/datasense
 Debugging Outside Studio,Mule User Guide,3.6,debugging-outside-studio.adoc,/mule-user-guide/v/3.6/debugging-outside-studio
 Debugging,Mule User Guide,3.6,debugging.adoc,/mule-user-guide/v/3.6/debugging
-Defining a Data Mapping Flow with Input and Output Metadata,Mule User Guide,3.6,defining-datamapper-input-and-output-metadata.adoc,/mule-user-guide/v/3.6/defining-datamapper-input-and-output-metadata
+Defining a Data Mapping Flow with Input and Output Metadata,Mule User Guide,3.6,defining-datamapper-input-and-output-metadata.adoc,/mule-user-guide/v/3.6/defining-datamapper-input-and-output-metadata
 Defining Metadata Using Edit Fields,Mule User Guide,3.6,defining-metadata-using-edit-fields.adoc,/mule-user-guide/v/3.6/defining-metadata-using-edit-fields
 Deploying Mule as a Service to Tomcat,Mule User Guide,3.6,deploying-mule-as-a-service-to-tomcat.adoc,/mule-user-guide/v/3.6/deploying-mule-as-a-service-to-tomcat
 Deploying Mule to JBoss,Mule User Guide,3.6,deploying-mule-to-jboss.adoc,/mule-user-guide/v/3.6/deploying-mule-to-jboss
@@ -3108,7 +3108,7 @@ FTP Transport Reference,Mule User Guide,3.6,ftp-transport-reference.adoc,/mule-u
 Functional Testing,Mule User Guide,3.6,functional-testing.adoc,/mule-user-guide/v/3.6/functional-testing
 General Configuration Reference,Mule User Guide,3.6,general-configuration-reference.adoc,/mule-user-guide/v/3.6/general-configuration-reference
 Generic Connector,Mule User Guide,3.6,generic-connector.adoc,/mule-user-guide/v/3.6/generic-connector
-Global Elements ,Mule User Guide,3.6,global-elements.adoc,/mule-user-guide/v/3.6/global-elements
+Global Elements ,Mule User Guide,3.6,global-elements.adoc,/mule-user-guide/v/3.6/global-elements
 Global Settings Configuration Reference,Mule User Guide,3.6,global-settings-configuration-reference.adoc,/mule-user-guide/v/3.6/global-settings-configuration-reference
 @Groovy Annotation,Mule User Guide,3.6,groovy-annotation.adoc,/mule-user-guide/v/3.6/groovy-annotation
 Groovy Component Reference,Mule User Guide,3.6,groovy-component-reference.adoc,/mule-user-guide/v/3.6/groovy-component-reference
@@ -3128,7 +3128,7 @@ HTTPS Transport Reference,Mule User Guide,3.6,https-transport-reference.adoc,/mu
 Idempotent Filter,Mule User Guide,3.6,idempotent-filter.adoc,/mule-user-guide/v/3.6/idempotent-filter
 IMAP Connector,Mule User Guide,3.6,imap-connector.adoc,/mule-user-guide/v/3.6/imap-connector
 IMAP Transport Reference,Mule User Guide,3.6,imap-transport-reference.adoc,/mule-user-guide/v/3.6/imap-transport-reference
-Importing a Maven Project into Studio ,Mule User Guide,3.6,importing-a-maven-project-into-studio.adoc,/mule-user-guide/v/3.6/importing-a-maven-project-into-studio
+Importing a Maven Project into Studio ,Mule User Guide,3.6,importing-a-maven-project-into-studio.adoc,/mule-user-guide/v/3.6/importing-a-maven-project-into-studio
 Importing and Exporting in Studio,Mule User Guide,3.6,importing-and-exporting-in-studio.adoc,/mule-user-guide/v/3.6/importing-and-exporting-in-studio
 @InboundAttachments Annotation,Mule User Guide,3.6,inboundattachments-annotation.adoc,/mule-user-guide/v/3.6/inboundattachments-annotation
 @InboundHeaders Annotation,Mule User Guide,3.6,inboundheaders-annotation.adoc,/mule-user-guide/v/3.6/inboundheaders-annotation
@@ -3219,10 +3219,10 @@ Mule Plugin Format,Mule User Guide,3.6,mule-plugin-format.adoc,/mule-user-guide/
 Mule Secure Token Service Oauth 2.0 Provider,Mule User Guide,3.6,mule-secure-token-service.adoc,/mule-user-guide/v/3.6/mule-secure-token-service
 Security in Mule,Mule User Guide,3.6,mule-security.adoc,/mule-user-guide/v/3.6/mule-security
 Mule Server Notifications,Mule User Guide,3.6,mule-server-notifications.adoc,/mule-user-guide/v/3.6/mule-server-notifications
-Mule STS Oauth 2.0 Example Application,Mule User Guide,3.6,mule-sts-oauth-2.0a-example-application.adoc,/mule-user-guide/v/3.6/mule-sts-oauth-2.0a-example-application
+Mule STS Oauth 2.0 Example Application,Mule User Guide,3.6,mule-sts-oauth-2.0-example-application.adoc,/mule-user-guide/v/3.6/mule-sts-oauth-2.0-example-application
 Mule Transformers,Mule User Guide,3.6,mule-transformers.adoc,/mule-user-guide/v/3.6/mule-transformers
 Mule versus Web Application Server,Mule User Guide,3.6,mule-versus-web-application-server.adoc,/mule-user-guide/v/3.6/mule-versus-web-application-server
-Mule WMQ Transport Reference ,Mule User Guide,3.6,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.6/mule-wmq-transport-reference
+Mule WMQ Transport Reference ,Mule User Guide,3.6,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.6/mule-wmq-transport-reference
 MuleSoft Enterprise Java Connector for SAP,Mule User Guide,3.6,mulesoft-enterprise-java-connector-for-sap-reference.adoc,/mule-user-guide/v/3.6/mulesoft-enterprise-java-connector-for-sap-reference
 MuleSoft Security Update Policy,Mule User Guide,3.6,mulesoft-security-update-policy.adoc,/mule-user-guide/v/3.6/mulesoft-security-update-policy
 Multicast Transport Reference,Mule User Guide,3.6,multicast-transport-reference.adoc,/mule-user-guide/v/3.6/multicast-transport-reference
@@ -3266,7 +3266,7 @@ Quartz Connector,Mule User Guide,3.6,quartz-connector.adoc,/mule-user-guide/v/3.
 Quartz Transport Reference,Mule User Guide,3.6,quartz-transport-reference.adoc,/mule-user-guide/v/3.6/quartz-transport-reference
 Record Variable,Mule User Guide,3.6,record-variable.adoc,/mule-user-guide/v/3.6/record-variable
 Reference Exception Strategy,Mule User Guide,3.6,reference-exception-strategy.adoc,/mule-user-guide/v/3.6/reference-exception-strategy
-Reference ,Mule User Guide,3.6,reference.adoc,/mule-user-guide/v/3.6/reference
+Reference ,Mule User Guide,3.6,reference.adoc,/mule-user-guide/v/3.6/reference
 Regex Filter,Mule User Guide,3.6,regex-filter.adoc,/mule-user-guide/v/3.6/regex-filter
 Reliability Patterns,Mule User Guide,3.6,reliability-patterns.adoc,/mule-user-guide/v/3.6/reliability-patterns
 Reproducible Builds,Mule User Guide,3.6,reproducible-builds.adoc,/mule-user-guide/v/3.6/reproducible-builds
@@ -3334,14 +3334,14 @@ Sustainable Software Development Practices with Mule,Mule User Guide,3.6,sustain
 SXC Module Reference,Mule User Guide,3.6,sxc-module-reference.adoc,/mule-user-guide/v/3.6/sxc-module-reference
 TCP Transport Reference,Mule User Guide,3.6,tcp-transport-reference.adoc,/mule-user-guide/v/3.6/tcp-transport-reference
 Team Development with Mule,Mule User Guide,3.6,team-development-with-mule.adoc,/mule-user-guide/v/3.6/team-development-with-mule
-Testing Connections ,Mule User Guide,3.6,testing-connections.adoc,/mule-user-guide/v/3.6/testing-connections
+Testing Connections ,Mule User Guide,3.6,testing-connections.adoc,/mule-user-guide/v/3.6/testing-connections
 Testing Strategies,Mule User Guide,3.6,testing-strategies.adoc,/mule-user-guide/v/3.6/testing-strategies
 Testing,Mule User Guide,3.6,testing.adoc,/mule-user-guide/v/3.6/testing
 The Properties Editor,Mule User Guide,3.6,the-properties-editor.adoc,/mule-user-guide/v/3.6/the-properties-editor
 TIBCO EMS Integration,Mule User Guide,3.6,tibco-ems-integration.adoc,/mule-user-guide/v/3.6/tibco-ems-integration
 TLS Configuration,Mule User Guide,3.6,tls-configuration.adoc,/mule-user-guide/v/3.6/tls-configuration
 Transaction Management,Mule User Guide,3.6,transaction-management.adoc,/mule-user-guide/v/3.6/transaction-management
-Transactional ,Mule User Guide,3.6,transactional.adoc,/mule-user-guide/v/3.6/transactional
+Transactional ,Mule User Guide,3.6,transactional.adoc,/mule-user-guide/v/3.6/transactional
 Transactions Configuration Reference,Mule User Guide,3.6,transactions-configuration-reference.adoc,/mule-user-guide/v/3.6/transactions-configuration-reference
 @Transformer Annotation,Mule User Guide,3.6,transformer-annotation.adoc,/mule-user-guide/v/3.6/transformer-annotation
 Transformers Configuration Reference,Mule User Guide,3.6,transformers-configuration-reference.adoc,/mule-user-guide/v/3.6/transformers-configuration-reference
@@ -3454,14 +3454,14 @@ Batch Filters and Batch Commit,Mule User Guide,3.7,batch-filters-and-batch-commi
 Batch Job Instance ID,Mule User Guide,3.7,batch-job-instance-id.adoc,/mule-user-guide/v/3.7/batch-job-instance-id
 Batch Processing Reference,Mule User Guide,3.7,batch-processing-reference.adoc,/mule-user-guide/v/3.7/batch-processing-reference
 Batch Processing,Mule User Guide,3.7,batch-processing.adoc,/mule-user-guide/v/3.7/batch-processing
-Batch Streaming and Job Execution,Mule User Guide,3.7,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.7/batch-streaming-and-job-execution
+Batch Streaming and Job Execution,Mule User Guide,3.7,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.7/batch-streaming-and-job-execution
 Bootstrapping the Registry,Mule User Guide,3.7,bootstrapping-the-registry.adoc,/mule-user-guide/v/3.7/bootstrapping-the-registry
 BPM Configuration Reference,Mule User Guide,3.7,bpm-configuration-reference.adoc,/mule-user-guide/v/3.7/bpm-configuration-reference
 BPM Module Reference,Mule User Guide,3.7,bpm-module-reference.adoc,/mule-user-guide/v/3.7/bpm-module-reference
 Build a Hello World Mule Application,Mule User Guide,3.7,build-a-hello-world-application.adoc,/mule-user-guide/v/3.7/build-a-hello-world-application
 Building a Custom Validator,Mule User Guide,3.7,building-a-custom-validator.adoc,/mule-user-guide/v/3.7/building-a-custom-validator
 Building Web Services with CXF,Mule User Guide,3.7,building-web-services-with-cxf.adoc,/mule-user-guide/v/3.7/building-web-services-with-cxf
-Business Events ,Mule User Guide,3.7,business-events.adoc,/mule-user-guide/v/3.7/business-events
+Business Events ,Mule User Guide,3.7,business-events.adoc,/mule-user-guide/v/3.7/business-events
 Cache Scope,Mule User Guide,3.7,cache-scope.adoc,/mule-user-guide/v/3.7/cache-scope
 Catch Exception Strategy,Mule User Guide,3.7,catch-exception-strategy.adoc,/mule-user-guide/v/3.7/catch-exception-strategy
 Choice Exception Strategy,Mule User Guide,3.7,choice-exception-strategy.adoc,/mule-user-guide/v/3.7/choice-exception-strategy
@@ -3498,13 +3498,13 @@ Consuming a SOAP API,Mule User Guide,3.7,consuming-a-soap-api.adoc,/mule-user-gu
 Consuming Web Services with CXF,Mule User Guide,3.7,consuming-web-services-with-cxf.adoc,/mule-user-guide/v/3.7/consuming-web-services-with-cxf
 Continuous Integration,Mule User Guide,3.7,continuous-integration.adoc,/mule-user-guide/v/3.7/continuous-integration
 Creating a Custom XML Namespace,Mule User Guide,3.7,creating-a-custom-xml-namespace.adoc,/mule-user-guide/v/3.7/creating-a-custom-xml-namespace
-Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.7,creating-an-oauth-2.0a-web-service-provider.adoc,/mule-user-guide/v/3.7/creating-an-oauth-2.0a-web-service-provider
+Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.7,creating-an-oauth-2.0-web-service-provider.adoc,/mule-user-guide/v/3.7/creating-an-oauth-2.0-web-service-provider
 Creating and Managing a Cluster Manually,Mule User Guide,3.7,creating-and-managing-a-cluster-manually.adoc,/mule-user-guide/v/3.7/creating-and-managing-a-cluster-manually
 Creating Custom Routers,Mule User Guide,3.7,creating-custom-routers.adoc,/mule-user-guide/v/3.7/creating-custom-routers
 Creating Custom Transformer Classes,Mule User Guide,3.7,creating-custom-transformer-classes.adoc,/mule-user-guide/v/3.7/creating-custom-transformer-classes
 Creating Custom Transformers,Mule User Guide,3.7,creating-custom-transformers.adoc,/mule-user-guide/v/3.7/creating-custom-transformers
 Creating Example Archetypes,Mule User Guide,3.7,creating-example-archetypes.adoc,/mule-user-guide/v/3.7/creating-example-archetypes
-Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.7,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.7/creating-flow-objects-and-transformers-using-annotations
+Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.7,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.7/creating-flow-objects-and-transformers-using-annotations
 Creating Module Archetypes,Mule User Guide,3.7,creating-module-archetypes.adoc,/mule-user-guide/v/3.7/creating-module-archetypes
 Creating Non-MEL Expression Evaluators,Mule User Guide,3.7,creating-non-mel-expression-evaluators.adoc,/mule-user-guide/v/3.7/creating-non-mel-expression-evaluators
 Creating Project Archetypes,Mule User Guide,3.7,creating-project-archetypes.adoc,/mule-user-guide/v/3.7/creating-project-archetypes
@@ -3521,7 +3521,7 @@ Data Bindings Reference,Mule User Guide,3.7,data-bindings-reference.adoc,/mule-u
 Database Connector Examples,Mule User Guide,3.7,database-connector-examples.adoc,/mule-user-guide/v/3.7/database-connector-examples
 Database Connector Reference,Mule User Guide,3.7,database-connector-reference.adoc,/mule-user-guide/v/3.7/database-connector-reference
 Database Connector,Mule User Guide,3.7,database-connector.adoc,/mule-user-guide/v/3.7/database-connector
-DataWeave Examples,Mule User Guide,3.7,dataweave-examples.adoc,/mule-user-guide/v/3.7/dataweave-examples
+DataWeave Examples,Mule User Guide,3.7,dataweave-examples.adoc,/mule-user-guide/v/3.7/dataweave-examples
 DataWeave Migrator Tool,Mule User Guide,3.7,dataweave-migrator.adoc,/mule-user-guide/v/3.7/dataweave-migrator
 DataWeave Reference Documentation,Mule User Guide,3.7,dataweave-reference-documentation.adoc,/mule-user-guide/v/3.7/dataweave-reference-documentation
 DataWeave Streaming,Mule User Guide,3.7,dataweave-streaming.adoc,/mule-user-guide/v/3.7/dataweave-streaming
@@ -3590,7 +3590,7 @@ FTP Transport Reference,Mule User Guide,3.7,ftp-transport-reference.adoc,/mule-u
 Functional Testing,Mule User Guide,3.7,functional-testing.adoc,/mule-user-guide/v/3.7/functional-testing
 General Configuration Reference,Mule User Guide,3.7,general-configuration-reference.adoc,/mule-user-guide/v/3.7/general-configuration-reference
 Generic Connector,Mule User Guide,3.7,generic-connector.adoc,/mule-user-guide/v/3.7/generic-connector
-Global Elements ,Mule User Guide,3.7,global-elements.adoc,/mule-user-guide/v/3.7/global-elements
+Global Elements ,Mule User Guide,3.7,global-elements.adoc,/mule-user-guide/v/3.7/global-elements
 Global Settings Configuration Reference,Mule User Guide,3.7,global-settings-configuration-reference.adoc,/mule-user-guide/v/3.7/global-settings-configuration-reference
 @Groovy Annotation,Mule User Guide,3.7,groovy-annotation.adoc,/mule-user-guide/v/3.7/groovy-annotation
 Groovy Component Reference,Mule User Guide,3.7,groovy-component-reference.adoc,/mule-user-guide/v/3.7/groovy-component-reference
@@ -3703,10 +3703,10 @@ Mule Plugin Format,Mule User Guide,3.7,mule-plugin-format.adoc,/mule-user-guide/
 Mule Secure Token Service Oauth 2.0 Provider,Mule User Guide,3.7,mule-secure-token-service.adoc,/mule-user-guide/v/3.7/mule-secure-token-service
 Security in Mule,Mule User Guide,3.7,mule-security.adoc,/mule-user-guide/v/3.7/mule-security
 Mule Server Notifications,Mule User Guide,3.7,mule-server-notifications.adoc,/mule-user-guide/v/3.7/mule-server-notifications
-Mule STS Oauth 2.0 Example Application,Mule User Guide,3.7,mule-sts-oauth-2.0a-example-application.adoc,/mule-user-guide/v/3.7/mule-sts-oauth-2.0a-example-application
+Mule STS Oauth 2.0 Example Application,Mule User Guide,3.7,mule-sts-oauth-2.0-example-application.adoc,/mule-user-guide/v/3.7/mule-sts-oauth-2.0-example-application
 Mule Transformers,Mule User Guide,3.7,mule-transformers.adoc,/mule-user-guide/v/3.7/mule-transformers
 Mule versus Web Application Server,Mule User Guide,3.7,mule-versus-web-application-server.adoc,/mule-user-guide/v/3.7/mule-versus-web-application-server
-Mule WMQ Transport Reference ,Mule User Guide,3.7,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.7/mule-wmq-transport-reference
+Mule WMQ Transport Reference ,Mule User Guide,3.7,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.7/mule-wmq-transport-reference
 MuleSoft Enterprise Java Connector for SAP,Mule User Guide,3.7,mulesoft-enterprise-java-connector-for-sap-reference.adoc,/mule-user-guide/v/3.7/mulesoft-enterprise-java-connector-for-sap-reference
 MuleSoft Security Update Policy,Mule User Guide,3.7,mulesoft-security-update-policy.adoc,/mule-user-guide/v/3.7/mulesoft-security-update-policy
 Multicast Transport Reference,Mule User Guide,3.7,multicast-transport-reference.adoc,/mule-user-guide/v/3.7/multicast-transport-reference
@@ -3749,7 +3749,7 @@ Quartz Connector,Mule User Guide,3.7,quartz-connector.adoc,/mule-user-guide/v/3.
 Quartz Transport Reference,Mule User Guide,3.7,quartz-transport-reference.adoc,/mule-user-guide/v/3.7/quartz-transport-reference
 Record Variable,Mule User Guide,3.7,record-variable.adoc,/mule-user-guide/v/3.7/record-variable
 Reference Exception Strategy,Mule User Guide,3.7,reference-exception-strategy.adoc,/mule-user-guide/v/3.7/reference-exception-strategy
-Reference ,Mule User Guide,3.7,reference.adoc,/mule-user-guide/v/3.7/reference
+Reference ,Mule User Guide,3.7,reference.adoc,/mule-user-guide/v/3.7/reference
 Regex Filter,Mule User Guide,3.7,regex-filter.adoc,/mule-user-guide/v/3.7/regex-filter
 Reliability Patterns,Mule User Guide,3.7,reliability-patterns.adoc,/mule-user-guide/v/3.7/reliability-patterns
 Reproducible Builds,Mule User Guide,3.7,reproducible-builds.adoc,/mule-user-guide/v/3.7/reproducible-builds
@@ -3825,7 +3825,7 @@ TIBCO EMS Integration,Mule User Guide,3.7,tibco-ems-integration.adoc,/mule-user-
 TLS Configuration,Mule User Guide,3.7,tls-configuration.adoc,/mule-user-guide/v/3.7/tls-configuration
 Migrate From TLS 1.0,Mule User Guide,3.7,tls1-0-migration.adoc,/mule-user-guide/v/3.7/tls1-0-migration
 Transaction Management,Mule User Guide,3.7,transaction-management.adoc,/mule-user-guide/v/3.7/transaction-management
-Transactional ,Mule User Guide,3.7,transactional.adoc,/mule-user-guide/v/3.7/transactional
+Transactional ,Mule User Guide,3.7,transactional.adoc,/mule-user-guide/v/3.7/transactional
 Transactions Configuration Reference,Mule User Guide,3.7,transactions-configuration-reference.adoc,/mule-user-guide/v/3.7/transactions-configuration-reference
 @Transformer Annotation,Mule User Guide,3.7,transformer-annotation.adoc,/mule-user-guide/v/3.7/transformer-annotation
 Transformers Configuration Reference,Mule User Guide,3.7,transformers-configuration-reference.adoc,/mule-user-guide/v/3.7/transformers-configuration-reference
@@ -3940,14 +3940,14 @@ Batch Filters and Batch Commit,Mule User Guide,3.8,batch-filters-and-batch-commi
 Batch Job Instance ID,Mule User Guide,3.8,batch-job-instance-id.adoc,/mule-user-guide/v/3.8/batch-job-instance-id
 Batch Processing Reference,Mule User Guide,3.8,batch-processing-reference.adoc,/mule-user-guide/v/3.8/batch-processing-reference
 Batch Processing,Mule User Guide,3.8,batch-processing.adoc,/mule-user-guide/v/3.8/batch-processing
-Batch Streaming and Job Execution,Mule User Guide,3.8,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.8/batch-streaming-and-job-execution
+Batch Streaming and Job Execution,Mule User Guide,3.8,batch-streaming-and-job-execution.adoc,/mule-user-guide/v/3.8/batch-streaming-and-job-execution
 Bootstrapping the Registry,Mule User Guide,3.8,bootstrapping-the-registry.adoc,/mule-user-guide/v/3.8/bootstrapping-the-registry
 Box Connector,Mule User Guide,3.8,box-connector.adoc,/mule-user-guide/v/3.8/box-connector
 BPM Configuration Reference,Mule User Guide,3.8,bpm-configuration-reference.adoc,/mule-user-guide/v/3.8/bpm-configuration-reference
 BPM Module Reference,Mule User Guide,3.8,bpm-module-reference.adoc,/mule-user-guide/v/3.8/bpm-module-reference
 Building a Custom Validator,Mule User Guide,3.8,building-a-custom-validator.adoc,/mule-user-guide/v/3.8/building-a-custom-validator
 Building Web Services with CXF,Mule User Guide,3.8,building-web-services-with-cxf.adoc,/mule-user-guide/v/3.8/building-web-services-with-cxf
-Business Events ,Mule User Guide,3.8,business-events.adoc,/mule-user-guide/v/3.8/business-events
+Business Events ,Mule User Guide,3.8,business-events.adoc,/mule-user-guide/v/3.8/business-events
 Cache Scope,Mule User Guide,3.8,cache-scope.adoc,/mule-user-guide/v/3.8/cache-scope
 Catch Exception Strategy,Mule User Guide,3.8,catch-exception-strategy.adoc,/mule-user-guide/v/3.8/catch-exception-strategy
 Choice Exception Strategy,Mule User Guide,3.8,choice-exception-strategy.adoc,/mule-user-guide/v/3.8/choice-exception-strategy
@@ -3985,13 +3985,13 @@ Consuming a SOAP API,Mule User Guide,3.8,consuming-a-soap-api.adoc,/mule-user-gu
 Consuming Web Services with CXF,Mule User Guide,3.8,consuming-web-services-with-cxf.adoc,/mule-user-guide/v/3.8/consuming-web-services-with-cxf
 Continuous Integration,Mule User Guide,3.8,continuous-integration.adoc,/mule-user-guide/v/3.8/continuous-integration
 Creating a Custom XML Namespace,Mule User Guide,3.8,creating-a-custom-xml-namespace.adoc,/mule-user-guide/v/3.8/creating-a-custom-xml-namespace
-Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.8,creating-an-oauth-2.0a-web-service-provider.adoc,/mule-user-guide/v/3.8/creating-an-oauth-2.0a-web-service-provider
+Creating an Oauth 2.0 Web Service Provider,Mule User Guide,3.8,creating-an-oauth-2.0-web-service-provider.adoc,/mule-user-guide/v/3.8/creating-an-oauth-2.0-web-service-provider
 Creating and Managing a Cluster Manually,Mule User Guide,3.8,creating-and-managing-a-cluster-manually.adoc,/mule-user-guide/v/3.8/creating-and-managing-a-cluster-manually
 Creating Custom Routers,Mule User Guide,3.8,creating-custom-routers.adoc,/mule-user-guide/v/3.8/creating-custom-routers
 Creating Custom Transformer Classes,Mule User Guide,3.8,creating-custom-transformer-classes.adoc,/mule-user-guide/v/3.8/creating-custom-transformer-classes
 Creating Custom Transformers,Mule User Guide,3.8,creating-custom-transformers.adoc,/mule-user-guide/v/3.8/creating-custom-transformers
 Creating Example Archetypes,Mule User Guide,3.8,creating-example-archetypes.adoc,/mule-user-guide/v/3.8/creating-example-archetypes
-Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.8,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.8/creating-flow-objects-and-transformers-using-annotations
+Creating Flow Objects and Transformers Using Annotations,Mule User Guide,3.8,creating-flow-objects-and-transformers-using-annotations.adoc,/mule-user-guide/v/3.8/creating-flow-objects-and-transformers-using-annotations
 Creating Module Archetypes,Mule User Guide,3.8,creating-module-archetypes.adoc,/mule-user-guide/v/3.8/creating-module-archetypes
 Creating Non-MEL Expression Evaluators,Mule User Guide,3.8,creating-non-mel-expression-evaluators.adoc,/mule-user-guide/v/3.8/creating-non-mel-expression-evaluators
 Creating Project Archetypes,Mule User Guide,3.8,creating-project-archetypes.adoc,/mule-user-guide/v/3.8/creating-project-archetypes
@@ -4007,7 +4007,7 @@ Data Bindings Reference,Mule User Guide,3.8,data-bindings-reference.adoc,/mule-u
 Database Connector Examples,Mule User Guide,3.8,database-connector-examples.adoc,/mule-user-guide/v/3.8/database-connector-examples
 Database Connector Reference,Mule User Guide,3.8,database-connector-reference.adoc,/mule-user-guide/v/3.8/database-connector-reference
 Database Connector,Mule User Guide,3.8,database-connector.adoc,/mule-user-guide/v/3.8/database-connector
-DataWeave Examples,Mule User Guide,3.8,dataweave-examples.adoc,/mule-user-guide/v/3.8/dataweave-examples
+DataWeave Examples,Mule User Guide,3.8,dataweave-examples.adoc,/mule-user-guide/v/3.8/dataweave-examples
 DataWeave Flatfile Schemas,Mule User Guide,3.8,dataweave-flat-file-schemas.adoc,/mule-user-guide/v/3.8/dataweave-flat-file-schemas
 Formats,Mule User Guide,3.8,dataweave-formats.adoc,/mule-user-guide/v/3.8/dataweave-formats
 DataWeave Language,Mule User Guide,3.8,dataweave-language-introduction.adoc,/mule-user-guide/v/3.8/dataweave-language-introduction
@@ -4083,7 +4083,7 @@ FTP Transport Reference,Mule User Guide,3.8,ftp-transport-reference.adoc,/mule-u
 Functional Testing,Mule User Guide,3.8,functional-testing.adoc,/mule-user-guide/v/3.8/functional-testing
 General Configuration Reference,Mule User Guide,3.8,general-configuration-reference.adoc,/mule-user-guide/v/3.8/general-configuration-reference
 Generic Connector,Mule User Guide,3.8,generic-connector.adoc,/mule-user-guide/v/3.8/generic-connector
-Global Elements ,Mule User Guide,3.8,global-elements.adoc,/mule-user-guide/v/3.8/global-elements
+Global Elements ,Mule User Guide,3.8,global-elements.adoc,/mule-user-guide/v/3.8/global-elements
 Global Settings Configuration Reference,Mule User Guide,3.8,global-settings-configuration-reference.adoc,/mule-user-guide/v/3.8/global-settings-configuration-reference
 @Groovy Annotation,Mule User Guide,3.8,groovy-annotation.adoc,/mule-user-guide/v/3.8/groovy-annotation
 Groovy Component Reference,Mule User Guide,3.8,groovy-component-reference.adoc,/mule-user-guide/v/3.8/groovy-component-reference
@@ -4199,10 +4199,10 @@ Mule Plugin Format,Mule User Guide,3.8,mule-plugin-format.adoc,/mule-user-guide/
 Mule Secure Token Service Oauth 2.0 Provider,Mule User Guide,3.8,mule-secure-token-service.adoc,/mule-user-guide/v/3.8/mule-secure-token-service
 Security in Mule,Mule User Guide,3.8,mule-security.adoc,/mule-user-guide/v/3.8/mule-security
 Mule Server Notifications,Mule User Guide,3.8,mule-server-notifications.adoc,/mule-user-guide/v/3.8/mule-server-notifications
-Mule STS Oauth 2.0 Example Application,Mule User Guide,3.8,mule-sts-oauth-2.0a-example-application.adoc,/mule-user-guide/v/3.8/mule-sts-oauth-2.0a-example-application
+Mule STS Oauth 2.0 Example Application,Mule User Guide,3.8,mule-sts-oauth-2.0-example-application.adoc,/mule-user-guide/v/3.8/mule-sts-oauth-2.0-example-application
 Transformers,Mule User Guide,3.8,mule-transformers.adoc,/mule-user-guide/v/3.8/mule-transformers
 Mule versus Web Application Server,Mule User Guide,3.8,mule-versus-web-application-server.adoc,/mule-user-guide/v/3.8/mule-versus-web-application-server
-Mule WMQ Transport Reference ,Mule User Guide,3.8,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.8/mule-wmq-transport-reference
+Mule WMQ Transport Reference ,Mule User Guide,3.8,mule-wmq-transport-reference.adoc,/mule-user-guide/v/3.8/mule-wmq-transport-reference
 MuleSoft Enterprise Java Connector for SAP,Mule User Guide,3.8,mulesoft-enterprise-java-connector-for-sap-reference.adoc,/mule-user-guide/v/3.8/mulesoft-enterprise-java-connector-for-sap-reference
 MuleSoft Security Update Policy,Mule User Guide,3.8,mulesoft-security-update-policy.adoc,/mule-user-guide/v/3.8/mulesoft-security-update-policy
 Multicast Transport Reference,Mule User Guide,3.8,multicast-transport-reference.adoc,/mule-user-guide/v/3.8/multicast-transport-reference
@@ -4248,7 +4248,7 @@ Quartz Transport Reference,Mule User Guide,3.8,quartz-transport-reference.adoc,/
 Record Variable,Mule User Guide,3.8,record-variable.adoc,/mule-user-guide/v/3.8/record-variable
 Redis Connector,Mule User Guide,3.8,redis-connector.adoc,/mule-user-guide/v/3.8/redis-connector
 Reference Exception Strategy,Mule User Guide,3.8,reference-exception-strategy.adoc,/mule-user-guide/v/3.8/reference-exception-strategy
-Reference ,Mule User Guide,3.8,reference.adoc,/mule-user-guide/v/3.8/reference
+Reference ,Mule User Guide,3.8,reference.adoc,/mule-user-guide/v/3.8/reference
 Regex Filter,Mule User Guide,3.8,regex-filter.adoc,/mule-user-guide/v/3.8/regex-filter
 Reliability Patterns,Mule User Guide,3.8,reliability-patterns.adoc,/mule-user-guide/v/3.8/reliability-patterns
 BMC Remedy Connector,Mule User Guide,3.8,remedy-connector.adoc,/mule-user-guide/v/3.8/remedy-connector
@@ -4331,7 +4331,7 @@ TIBCO EMS Integration,Mule User Guide,3.8,tibco-ems-integration.adoc,/mule-user-
 TLS Configuration,Mule User Guide,3.8,tls-configuration.adoc,/mule-user-guide/v/3.8/tls-configuration
 Migrate From TLS 1.0,Mule User Guide,3.8,tls1-0-migration.adoc,/mule-user-guide/v/3.8/tls1-0-migration
 Transaction Management,Mule User Guide,3.8,transaction-management.adoc,/mule-user-guide/v/3.8/transaction-management
-Transactional ,Mule User Guide,3.8,transactional.adoc,/mule-user-guide/v/3.8/transactional
+Transactional ,Mule User Guide,3.8,transactional.adoc,/mule-user-guide/v/3.8/transactional
 Transactions Configuration Reference,Mule User Guide,3.8,transactions-configuration-reference.adoc,/mule-user-guide/v/3.8/transactions-configuration-reference
 @Transformer Annotation,Mule User Guide,3.8,transformer-annotation.adoc,/mule-user-guide/v/3.8/transformer-annotation
 Transformers Configuration Reference,Mule User Guide,3.8,transformers-configuration-reference.adoc,/mule-user-guide/v/3.8/transformers-configuration-reference
@@ -4527,8 +4527,8 @@ Anypoint Connector DevKit Studio Plugin 1.1.1 Release Notes,Release Notes,latest
 Anypoint Connector DevKit Studio Plugin Release Notes,Release Notes,latest,anypoint-connector-devkit-studio-plugin-release-notes.adoc,/release-notes/anypoint-connector-devkit-studio-plugin-release-notes
 Anypoint Connector Release Notes,Release Notes,latest,anypoint-connector-release-notes.adoc,/release-notes/anypoint-connector-release-notes
 Anypoint Data Gateway Release Notes,Release Notes,latest,anypoint-data-gateway-release-notes.adoc,/release-notes/anypoint-data-gateway-release-notes
-Anypoint Enterprise Security 1.2 Release Notes ,Release Notes,latest,anypoint-enterprise-security-1.2-release-notes.adoc,/release-notes/anypoint-enterprise-security-1.2-release-notes
-Anypoint Enterprise Security Release Notes ,Release Notes,latest,anypoint-enterprise-security-release-notes.adoc,/release-notes/anypoint-enterprise-security-release-notes
+Anypoint Enterprise Security 1.2 Release Notes ,Release Notes,latest,anypoint-enterprise-security-1.2-release-notes.adoc,/release-notes/anypoint-enterprise-security-1.2-release-notes
+Anypoint Enterprise Security Release Notes ,Release Notes,latest,anypoint-enterprise-security-release-notes.adoc,/release-notes/anypoint-enterprise-security-release-notes
 Anypoint Exchange Release Notes,Release Notes,latest,anypoint-exchange-release-notes.adoc,/release-notes/anypoint-exchange-release-notes
 Anypoint MQ Release Notes,Release Notes,latest,anypoint-mq-release-notes.adoc,/release-notes/anypoint-mq-release-notes
 Anypoint Platform On-Premise Edition 1.1.0 Release Notes,Release Notes,latest,anypoint-on-premise-1.1.0-release-notes.adoc,/release-notes/anypoint-on-premise-1.1.0-release-notes
@@ -4543,7 +4543,7 @@ Anypoint Service Registry 3.0.0 Release Notes,Release Notes,latest,anypoint-serv
 Anypoint Service Registry 4.0.0 Release Notes,Release Notes,latest,anypoint-service-registry-4.0.0-release-notes.adoc,/release-notes/anypoint-service-registry-4.0.0-release-notes
 Anypoint Service Registry R1 Release Notes,Release Notes,latest,anypoint-service-registry-r1-release-notes.adoc,/release-notes/anypoint-service-registry-r1-release-notes
 Anypoint Service Registry R2 Release Notes,Release Notes,latest,anypoint-service-registry-r2-release-notes.adoc,/release-notes/anypoint-service-registry-r2-release-notes
-Anypoint Service Registry Release Notes,Release Notes,latest,anypoint-service-registry-release-notes.adoc,/release-notes/anypoint-service-registry-release-notes
+Anypoint Service Registry Release Notes,Release Notes,latest,anypoint-service-registry-release-notes.adoc,/release-notes/anypoint-service-registry-release-notes
 Anypoint Studio 5.3.0 With Mule Runtime 3.7.2 Release Notes,Release Notes,latest,anypoint-studio-5.3-with-3.7.2-runtime-release-notes.adoc,/release-notes/anypoint-studio-5.3-with-3.7.2-runtime-release-notes
 Anypoint Studio 5.3 with 3.7.2 Runtime Update Site 1 Release Notes,Release Notes,latest,anypoint-studio-5.3-with-3.7.2-runtime-update-site-1-release-notes.adoc,/release-notes/anypoint-studio-5.3-with-3.7.2-runtime-update-site-1-release-notes
 Anypoint Studio 5.3 with 3.7.2 Runtime Update Site 2 Release Notes,Release Notes,latest,anypoint-studio-5.3-with-3.7.2-runtime-update-site-2-release-notes.adoc,/release-notes/anypoint-studio-5.3-with-3.7.2-runtime-update-site-2-release-notes
@@ -4626,7 +4626,7 @@ Microsoft Dynamics AX 2012 Connector Release Notes,Release Notes,latest,microsof
 Microsoft Dynamics CRM Connector Release Notes,Release Notes,latest,microsoft-dynamics-crm-connector-release-notes.adoc,/release-notes/microsoft-dynamics-crm-connector-release-notes
 Microsoft Dynamics NAV Connector Release Notes,Release Notes,latest,microsoft-dynamics-nav-connector-release-notes.adoc,/release-notes/microsoft-dynamics-nav-connector-release-notes
 Microsoft Service Bus Connector Release Notes,Release Notes,latest,microsoft-service-bus-connector-release-notes.adoc,/release-notes/microsoft-service-bus-connector-release-notes
-Microsoft SharePoint 2010 Connector Release Notes,Release Notes,latest,microsoft-sharepoint-2010-connector-release-notes.adoc,/release-notes/microsoft-sharepoint-2010-connector-release-notes
+Microsoft SharePoint 2010 Connector Release Notes,Release Notes,latest,microsoft-sharepoint-2010-connector-release-notes.adoc,/release-notes/microsoft-sharepoint-2010-connector-release-notes
 Microsoft SharePoint 2013 Connector Release Notes,Release Notes,latest,microsoft-sharepoint-2013-connector-release-notes.adoc,/release-notes/microsoft-sharepoint-2013-connector-release-notes
 Migrating Mule 1.x to 2.0,Release Notes,latest,migrating-mule-1.x-to-2.0.adoc,/release-notes/migrating-mule-1.x-to-2.0
 Migrating Mule 2.0 to 2.1,Release Notes,latest,migrating-mule-2.0-to-2.1.adoc,/release-notes/migrating-mule-2.0-to-2.1
@@ -4693,7 +4693,7 @@ Mule ESB 3.3.0 Release Notes,Release Notes,latest,mule-esb-3.3.0-release-notes.a
 Mule ESB 3.3.1 Release Notes,Release Notes,latest,mule-esb-3.3.1-release-notes.adoc,/release-notes/mule-esb-3.3.1-release-notes
 Mule ESB 3.3.2 Release Notes,Release Notes,latest,mule-esb-3.3.2-release-notes.adoc,/release-notes/mule-esb-3.3.2-release-notes
 Mule ESB 3.3.3 Release Notes,Release Notes,latest,mule-esb-3.3.3-release-notes.adoc,/release-notes/mule-esb-3.3.3-release-notes
-Mule ESB 3.4.0 Release Notes ,Release Notes,latest,mule-esb-3.4.0-release-notes.adoc,/release-notes/mule-esb-3.4.0-release-notes
+Mule ESB 3.4.0 Release Notes ,Release Notes,latest,mule-esb-3.4.0-release-notes.adoc,/release-notes/mule-esb-3.4.0-release-notes
 Mule ESB 3.4.1 Release Notes,Release Notes,latest,mule-esb-3.4.1-release-notes.adoc,/release-notes/mule-esb-3.4.1-release-notes
 Mule ESB 3.4.2 Release Notes,Release Notes,latest,mule-esb-3.4.2-release-notes.adoc,/release-notes/mule-esb-3.4.2-release-notes
 Mule ESB 3.4.3 Release Notes,Release Notes,latest,mule-esb-3.4.3-release-notes.adoc,/release-notes/mule-esb-3.4.3-release-notes
@@ -4729,8 +4729,8 @@ Mule Maven Plugin 2.1.1 Release Notes,Release Notes,latest,mule-maven-plugin-2.1
 Mule Maven Plugin Release Notes,Release Notes,latest,mule-maven-plugin-release-notes.adoc,/release-notes/mule-maven-plugin-release-notes
 Paypal Connector Release Notes,Release Notes,latest,mule-paypal-anypoint-connector-release-notes.adoc,/release-notes/mule-paypal-anypoint-connector-release-notes
 Mule Runtime 3.8.0-M1 Release Notes,Release Notes,latest,mule-runtime-3.8.0-m1-release-notes.adoc,/release-notes/mule-runtime-3.8.0-m1-release-notes
-Mule Studio December 2013 Release Notes ,Release Notes,latest,mule-studio-december-2013-release-notes.adoc,/release-notes/mule-studio-december-2013-release-notes
-Mule Studio October 2013 Release Notes ,Release Notes,latest,mule-studio-october-2013-release-notes.adoc,/release-notes/mule-studio-october-2013-release-notes
+Mule Studio December 2013 Release Notes ,Release Notes,latest,mule-studio-december-2013-release-notes.adoc,/release-notes/mule-studio-december-2013-release-notes
+Mule Studio October 2013 Release Notes ,Release Notes,latest,mule-studio-october-2013-release-notes.adoc,/release-notes/mule-studio-october-2013-release-notes
 Mule Studio Release Notes - January 24 2012,Release Notes,latest,mule-studio-release-notes-january-24-2012.adoc,/release-notes/mule-studio-release-notes-january-24-2012
 Mule Studio Release Notes - March 21 2012,Release Notes,latest,mule-studio-release-notes-march-21-2012.adoc,/release-notes/mule-studio-release-notes-march-21-2012
 MUnit 1.0.0 Release Notes,Release Notes,latest,munit-1.0.0-release-notes.adoc,/release-notes/munit-1.0.0-release-notes
@@ -4740,7 +4740,7 @@ MUnit 1.2.0 Release Notes,Release Notes,latest,munit-1.2.0-release-notes.adoc,/r
 MUnit 1.2.1 Release Notes,Release Notes,latest,munit-1.2.1-release-notes.adoc,/release-notes/munit-1.2.1-release-notes
 MUnit 1.3.0 Release Notes,Release Notes,latest,munit-1.3.0-release-notes.adoc,/release-notes/munit-1.3.0-release-notes
 MUnit Release Notes,Release Notes,latest,munit-release-notes.adoc,/release-notes/munit-release-notes
-NetSuite Connector Release Notes ,Release Notes,latest,netsuite-connector-release-notes.adoc,/release-notes/netsuite-connector-release-notes
+NetSuite Connector Release Notes ,Release Notes,latest,netsuite-connector-release-notes.adoc,/release-notes/netsuite-connector-release-notes
 Netsuite OpenAir Connector Release Notes,Release Notes,latest,netsuite-openair-connector-release-notes.adoc,/release-notes/netsuite-openair-connector-release-notes
 Object Store v2 Release Notes,Release Notes,latest,object-store-v2-release-notes.adoc,/release-notes/object-store-v2-release-notes
 Object Store Connector Release Notes,Release Notes,latest,objectstore-connector-release-notes.adoc,/release-notes/objectstore-connector-release-notes
@@ -4831,7 +4831,7 @@ Event Tracking,Runtime Manager,latest,event-tracking.adoc,/runtime-manager/event
 Extending the Runtime Manager Agent,Runtime Manager,latest,extending-the-runtime-manager-agent.adoc,/runtime-manager/extending-the-runtime-manager-agent
 Flow Management,Runtime Manager,latest,flow-management.adoc,/runtime-manager/flow-management
 Get an Application,Runtime Manager,latest,get-application.adoc,/runtime-manager/get-application
-Hello World on CloudHub,Runtime Manager,latest,hello-world-on-cloudhub.adoc,/runtime-manager/hello-world-on-cloudhub
+Hello World on CloudHub,Runtime Manager,latest,hello-world-on-cloudhub.adoc,/getting-started/deploy-to-cloudhub
 Runtime Manager,Runtime Manager,latest,index.adoc,/runtime-manager/index
 Insight,Runtime Manager,latest,insight.adoc,/runtime-manager/insight
 Installing the Runtime Manager Agent,Runtime Manager,latest,installing-and-configuring-runtime-manager-agent.adoc,/runtime-manager/installing-and-configuring-runtime-manager-agent
