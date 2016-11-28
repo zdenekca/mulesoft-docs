@@ -1,0 +1,260 @@
+= DataWeave
+:keywords: studio, anypoint, transform, transformer, format, aggregate, rename, split, filter convert, xml, json, csv, pojo, java object, metadata, dataweave, data weave, datawave, datamapper, dwl, dfl, dw, output structure, input structure, map, mapping
+
+image:dw-logo.png[dw]
+
+
+== Overview
+
+The link:/mule-user-guide/v/4.0/dataweave-language-introduction[DataWeave Language] is a powerful, Mule-specific language that you can use to access, evaluate and transform the data in a Mule message. Tightly integrated to the Mule Runtime and Anypoint Studio, and usable from within virtually every message processor in Mule, DataWeave enables you to quickly and elegantly filter, route, or otherwise act upon the different parts of the Mule message object. It can be used lightly as an expression language to simply reference values or invoke methods, or it can also be used as a fully fledged scripting language to construct complex data transformations that include functions and recursion.
+
+
+
+
+DataWeave supports a variety of transformations: simple *one-to-one*, *one-to-many* or *many-to-one* mappings from an assortment of data structures, and can complete more elaborate mappings including normalization, grouping, joins, partitioning, pivoting and filtering. With DataWeave and Mule Expression Language (MEL), you can take your application's data transformation ability to the next level.
+
+[TIP]
+====
+DataWeave replaces the link:/mule-user-guide/v/3.8/mule-expression-language[Mule Expression Language (MEL)]. In Mule runtime versions 3.x, MEL is the _de facto_ expression language whilst, DataWeave is available as a specialized tool that can be used within the Transform Message component or via a specific link:/mule-user-guide/v/3.8/mel-dataweave-functions[MEL functions].
+
+For the simple use case of extracting a value from the Mule message, DataWeave syntax remains identical to that of MEL, so you might find that scripts from older versions will work in Mule 4 without any changes, even though they're technically being processed via a different language engine.
+
+If you still need to use MEL, you can include it to your projects by adding the compatibility package.
+====
+
+[INFO]
+DataWeave supports link:/anypoint-studio/v/7/datasense[DataSense], which allows you to leverage metadata from connectors, schemas and sample documents in order to design your transformations more easily. DataSense assists you in design time by providing a live stream of content types while you are coding, scaffolding your mappings to help make writing transformations fast and easy.
+
+
+
+== The Transform Message Component
+
+Use the *Transform Message* component, which allows you to use the language to query and transform data through DataWeave. Any mappings you perform through the graphical interface will be expressed in DataWeave code in real-time.
+
+* link:link:/anypoint-studio/v/7/using-dataweave-in-studio[Graphically map] fields by dragging one attribute to another, just like you were able to with the now deprecated DataMapper
+* Implement this component through link:/mule-user-guide/v/4.0/dataweave-xml-reference[XML]
+
+[TIP]
+====
+The Transform Message component replaces link:/anypoint-studio/v/7/datamapper-user-guide-and-reference[DataMapper]. MuleSoft recommends you use DataWeave, if possible, to avoid future obsolescence.
+
+If you have projects that employ the deprecated DataMapper, a migration tool is now included in Studio, which assists in converting a DataMapper map to DataWeave: Right click on a DataMapper, select *Migrate to DataWeave*, and follow the instructions.
+
+See link:/mule-user-guide/v/4.0/dataweave-migrator[DataWeave Migrator].
+====
+
+
+== Benefits of Using DataWeave
+
+Use DataWeave instead of a scripting language such as Groovy, or a programming language such as Java, to manipulate the contents of a message object. Using DataWeave makes your application more consistent, and provides an efficient and standardized method for evaluating expressions in Mule applications.
+
+* DataWeave is an expression language that provides a consistent, standardized way for developers to work with a Mule message’s payload, properties and variables.
+
+* DataWeave makes use of Mule-specific context objects, you can code it with the help of auto-complete
+
+* Great tool for evaluating expressions in your flows
+
+* Most importantly, DataWeave enforces consistency when accessing information in the Mule message: rather than using multiple expression evaluators, you can use DataWeave, the default expression evaluator, to consistently access and manipulate information.
+
+* DataWeave expressions work within message processors to modify the way the processors act upon the message such as routing or filtering.
+
+The example below demonstrates how you can use DataWeave to log the value of a flow variable at runtime.
+
+----
+<logger message="The value in my first variable is #[flowVars.myVar1]" level="INFO"/>
+----
+
+
+== Using DataWeave
+
+Based on information Mule extracts from the message or its environment at runtime, Mule evaluates expressions to complete different types of tasks:
+
+* *Extract* information that it can use to process the current message; this can be useful when set inside an expression component or expression transformer: 
+** `#[payload]`
+** `#[message.inboundProperties.'propertyName']`
+** `#[payload.methodCall(parameters)]`
+** `#[xpath3('//root/element1')]` 
+* *Evaluate conditions* using the contents of the current message; this can be extremely useful to filter messages from being processed:
+** `#[payload.age > 21]`
+** `#[message.inboundProperties.'locale'  ==  'en_us']`
+* *Define a target*, other than the message payload, in which to store the result of an expression evaluation; typically, this is helpful when set inside a message enricher
+** `#[flowVars.output]`
+* *Transform the message*. Here's where you leverage DataWeave's full power. Through these you can change the payload's format, regroup rename or filter fields, etc.
+**
++
+[source,DataWeave, linenums]
+----
+%dw 1.0
+%output application/json
+---
+{
+
+}
+----
+**
++
+[source,DataWeave, linenums]
+----
+%dw 1.0
+%output application/json
+---
+{
+
+}
+----
+**
++
+[source,DataWeave, linenums]
+----
+%dw 1.0
+%output application/json
+---
+{
+
+}
+----
+
+
+[TIP]
+====
+*Shortcut*
+
+Mule accepts the expression `\#[payload]` as a shortcut for `#[message.payload]`. This shortcut only applies to the payload field.
+====
+
+
+The following examples illustrate a few ways in which you can use DataWeave.
+
+. Use an expression to *extract data* to decide on a course of action based on the contents, properties, or properties of a message. For example, a router (a.k.a. flow control) can route purchase orders for different types of products to different JMS queues. In the example below, a message carries information about purchases from an online store which can be either a hardcopy book or an mp3 file. The following code classifies the messages into different queues based on the type of purchase.
++
+[source, xml, linenums]
+----
+<choice>
+   <when expression="#[payload.getPurchaseType() == 'book']">
+        <jms:outbound-endpoint queue="bookPurchases" />
+    </when>
+   <when expression="#[payload.getPurchaseType() == 'mp3']">
+        <jms:outbound-endpoint queue="songPurchases" />
+    </when>
+ </choice>
+----
++
+. Use an expression to *extract* a value from the payload, properties, or context of a message and its variables or attachments. For example, a connector might extract a specific piece of information from the the current message to use as an argument. In the example below, expressions extract information from a message and pass each piece to the SMTP endpoint.
++
+[source, xml, linenums]
+----
+<smtp:outbound-endpoint from="#[flowVars.from]" to="#[flowVars.to]" subject="#[payload.subjectLine]" responseTimeout="10000" doc:name="SMTP"/>
+----
++
+. Use an expression to *extract* information, then use it to replace a token with an actual value. For example, a logger can extract information from the payload contents and place it into a logging message, as shown below.
++
+[source, xml]
+----
+<logger message="#[payload]" />
+----
+
++
+[TIP]
+====
+If the payload is an object and you can call a method to extract information, the expression to extract may appear as follows.
+
+[source, xml]
+----
+<logger message="#[payload.getLoggingInformation()]" />
+----
+====
+
+
+. Carry out a simple transform
+
++
+[source,DataWeave, linenums]
+----
+%dw 1.0
+%output application/json
+---
+{
+
+}
+----
+
+. Carry out a complex transform
+
++
+[source,DataWeave, linenums]
+----
+%dw 1.0
+%output application/json
+---
+{
+
+}
+----
+
+== Expressions in Mule
+
+It's important to know that DataWeave has not always been the _de facto_ expression language Mule uses. Prior to version 4.0.0, the link:/mule-user-guide/v/3.8/mule-expression-language[Mule Expression Language (MEL)] was mostly used for most needs, whilst DataWeave was reserved for only carrying out transformations. Thus, although these expressions supported a wide variety of functionality, the variation in syntax rules was time-consuming to learn.
+
+Mule 4.0.0 put DataWeave front and center, implementing a single set of syntax rules. DataWeave expressions are written according to the following format: `#[expression]`.
+
+
+The DataWeave header is optional, it allows you to specify properties of the output, or define variables and functions that can then be referenced in the body.
+
+
+
+== Learning DataWeave
+
+If you're already familiar with Java, learning DataWeave is not difficult. That said, it's important to comprehend some Mule-specific details _before_ you learn how to apply DataWeave expressions in your application.
+
+. *Understand the Mule message structure.* Because you use DataWeave to act upon the contents of a Mule message object (payload, properties and variables), you first need to understand the basic structure of the message. If you are not already familiar with it, read about the link:/mule-user-guide/v/3.8/mule-message-structure[Mule message structure].
+
+. *Understand how to see the contents of the Mule message.* To be able to act upon it, you need to be able to figure out what type of data the message contains. Is the payload an array? Does the message contain a flow variable? What inbound properties exist? The link:/getting-started/mule-message[Mule Message Tutorial] describes the tools you can use to see inside the message, so that you know how to use DataWeave expressions to manipulate the data. Note that as of Mule 4.0.0, the Mule message structure is radically different, making it a lot simpler.
+
+After having absorbed this material, you are ready to begin learning about DataWeave basic syntax, and start using expressions in your application. 
+
+== Auto-Complete
+
+If you are configuring a field that supports expressions and need help with syntax, you can access DataWeave suggestions by one of two methods.
+
+* Place your cursor inside the brackets in a field that has `#[]` pre-populated for you, then press Ctrl + Space Bar.
+* Enter `#[` to open a new DataWeave expression and display suggestions, as shown below.
++
+image:auto_complete.png[auto_complete]
++
+[WARNING]
+Note that the autocomplete functionality described here works in the *Visual Editor only*. Although Studio's XML tab does offer some autocomplete options, the suggestions there are limited by Eclipse and are not based on DataSense or DataWeave.
+
+== Tips
+
+* DataWeave performs link:http://en.wikipedia.org/wiki/Type_coercion[type coercion] at runtime. 
+* When writing in Studio's XML editor, you cannot use double quotes to express String literals, because DataWeave expressions already appear enclosed in double quotes in configuration files. Instead, you can either: +
+** use single quotes                   `('expression')`
+** escape quotes with &quot;      `(&quot;expression&quot;)`
+** escape quotes with \u0027      `(\u0027expression\u0027)`
++
+If you're writing on Studio's visual editor, Studio transforms double quotes into escaped quotes `(&quot;) `in the XML view.
+
+
+== DataWeave Reference Material
+
+* link:/mule-user-guide/v/4.0/dataweave-quickstart[DataWeave Quickstart Guide]
+* link:/mule-user-guide/v/4.0/dataweave-language-introduction[DataWeave Language Introduction]
+* link:/mule-user-guide/v/4.0/dataweave-xml-reference[DataWeave XML Reference]
+* link:/mule-user-guide/v/4.0/dataweave-examples[DataWeave Examples]
+* link:/mule-user-guide/v/4.0/dataweave-operators[DataWeave Operators]
+* link:/mule-user-guide/v/4.0/dataweave-types[DataWeave Types]
+* link:/mule-user-guide/v/4.0/dataweave-formats[DataWeave Formats]
+* link:/mule-user-guide/v/4.0/dataweave-selectors[DataWeave Selectors]
+* link:/mule-user-guide/v/4.0/dataweave-memory-management[DataWeave Memory Management]
+* link:/mule-user-guide/v/4.0/dataweave-migrator[DataWeave Migrator Tool]
+* link:/mule-user-guide/v/4.0/dataweave-flat-file-schemas[DataWeave Flat File Schemas]
+* link:/mule-user-guide/v/4.0/dataweave-troubleshooting[Troubleshooting Dataweave]
+
+== General MuleSoft Resources
+
+* link:http://training.mulesoft.com[MuleSoft Training]
+* link:https://www.mulesoft.com/webinars[MuleSoft Webinars]
+* link:http://blogs.mulesoft.com[MuleSoft Blogs]
+* link:http://forums.mulesoft.com[MuleSoft Forums]
+* link:https://www.mulesoft.com/support-and-services/mule-esb-support-license-subscription[Mule Support License]
+* mailto:support@mulesoft.com[MuleSoft Support]

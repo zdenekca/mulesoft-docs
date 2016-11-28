@@ -1,0 +1,697 @@
+= JMS Connector
+:keywords: jms, transport, connector, pub-sub, queue
+:toc:
+:toc-title: Page Contents
+:toc-levels: 3
+
+
+toc::[]
+
+
+
+[[what-is]]
+== What is the JMS Connector?
+
+The JMS connector is a Mule extension that implements the JMS API. Using the connector you can listen for and receive messages from a queue, or publish messages to a queue. Pub-sub and point-to-point messaging models are supported.
+
+////
+//MG review spec to see which of these supported
+== Mule 3 JMS Transport Features
+
+ * _JNDI connection factory lookup_
+ * _Spring bean connection factory definition_
+ * Specific connector for most common brokers (AMQ, WMQ, Weblogic, )
+ * JMS connection attributes: _redeliveryHandlerFactory-ref_, _acknowledgementMode_, _clientId_, _durable_, noLocal, _persistentDelivery_, _honorQosHeaders_, _maxRedelivery_, cacheJmsSessions, _eagerConsumer_, _specification_, _username_, _password_, _numberOfConsumers_, _jndiInitialFactory_, _jndiProviderUrl_, _jndiProviderProperties-ref_, _connectionFactoryJndiName_, _jndiDestinations_, _forceJndiDestinations_, disableTemporaryReplyToDestinations, _embeddedMode_
+ * _Transactions support: Session transacted, client transaction (using client ack)._
+ * _Acknowledgment mode: auto, client_
+ * Endpoint attributes: responseTimeout, encoding, transformer-ref, response-transformer-ref, filter, _durableName_ (for topic subscriptions), _xaPollingTimeout_, global endpoints, _disableTemporaryReplyToDestinations_, _jms selectors._
+ * _Polling JMS subscriber._
+ * _Connection factory pool and caching_
+
+
+JMS transport feature set must be supported in the new JMS connector. Some features will be under discussion to define if they must be supported in the new connector.
+////
+
+////
+
+*Connector attribute **honorQosHeaders*
+
+This attribute indicates, if the source message was a JMS message from an inbound endpoint, if the message to be sent must have the same QOS headers as the received message. +
+Considering the new Message API, if the message was transformed to something else will probably be a new MuleMessage without the same Metadata as the previous one. So there would be no automatic way to resolve the QOS headers values. +
+The other scenario would be a bridge use case, where the same message received is sent to a different destination. In that case we need to define if the same incoming message attribute should be sent with the outgoing message.
+
+This will be replaced with _persistentDelivery_ and _priority _attributes in the publish operation. If the same attributes as the incoming message are required, then they should be mapped from JmsAttributes#Headers.
+
+*Connector attribute **eagerConsumer*
+
+Only used by WebsphereTransactedJmsMessageReceiver. It’s used to decide if during connect() the XaTransactedJmsMessageReceiver must create the consumer or not. Would not start consuming messages since XaTransactedJmsMessageReceiver does polling. Seems it’s used to trigger reconnection in case it was not possible to connect since the queue may not be defined in WMQ. See if there’s a better way to solve this problem.
+
+*Connector attribute numberOfConsumers*
+
+This configuration attribute applies only to consumers using callbacks with JMS API. It’s the provider client API the one responsible for allocating threads to process the messages. We need to figure out how to improve thread handling in this scenario.
+//MG what to do with these attributes above?
+////
+
+== How to Configure
+
+The JMS connector requires a configuration that provides the connection details.
+
+
+[source,xml,linenums]
+----
+<jms:config name="config">
+   <jms:generic-connection connectionFactory="MyConnectionFactory"
+                           username="user" password="pass"
+                           specification="JMS_2_0" />
+   <jms:consumer-config ackMode="AUTO" maxRedelivery="2">
+       <jms:consumer-type>
+           <jms:queue-consumer/>
+       </jms:consumer-type>
+   </jms:consumer-config>
+   <jms:producer-config persistentDelivery="true"
+                        disableMessageId="true" disableMessageTimestamp="true"
+                        priority="8"/>
+</jms:config>
+----
+
+[NOTE]
+After creating the configuration, select an operation to perform in accordance with the role the connector serves in your Mule flow.
+
+=== Configuration Element Attributes
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|name|y||n|The name of the config so it can be referenced from operations
+|encoding|n|Mule default encoding|n|the encoding of the Message body
+|contentType|n|* / *|n|the content type of the Message body
+|consumerConfig|n|default JmsConsumerConfig|n|Configuration parameters for consuming Messages
+|producerConfig|n|default JmsProducerConfig|n|Configuration parameters for producing Messages
+|===
+
+=== Consumer Configuration Element Attributes
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|maxRedelivery|n|0|n|No redelivery. -1 mean infinite redeliveries accepted.
+|ackMode|n|AUTO|n|AUTO. Mule acks the message only if the flow is finished successfully.
+|consumerType|n|QueueConsumer|n|The ConsumerType to be used by default when consuming a Message
+|selector|n||n|Default selector to be used for filtering when consuming a Message
+|===
+
+
+
+
+=== Producer Configuration Element Attributes
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|persistentDelivery|n|true|n|If set, the message must be sent using persistency mode.
+|priority|n|4|n|Defines the default message priority to use when sending messages
+|timeToLive|n|0|n|Defines the default time the message will be in the broker before being discarded. This is use when sending messages with mule.
+|timeToLiveUnit|n|MILLISECONDS|n|A TimeUnit which qualifies the timeToLive
+|disableMessageId|n|false|n|Defines the default value to use, when producing messages, for disable message id generation in the broker. Depending on the provider it may or may not have effect.
+|disableMessageTimestamp|n|false|n|Defines the default value to use, when producing messages, for disable message timestamp generation in the broker. Depending on the provider it may or may not have effect.
+|deliveryDelay|n||n|This is used to determine the Message delivery delay time which is
+|deliveryDelayUnit|n|MILLISECONDS|n|A TimeUnit which qualifies the deliveryDelay
+|jmsType|n||n|A message JMSType identifier supplied by a client when a message is sent
+|===
+===
+
+== JMS Providers
+
+All the attributes of the generic JMS provider apply to every other specific provider available through the connector, but `ConnectionFactory` is optional for any provider that can provide a default factory.
+
+=== Generic Provider
+
+
+<*jms:**generic-connection **connectionFactory=**"customConnectionFactory"* +
+*                        **username=**"user" **password=**"pass" **clientId=**"myclient"* +
+*                        **specification=**"JMS_1_1" **disableValidation=**"false"*> +
+   <*jms:**caching-strategy*> +
+       <*jms:**no-caching*/> +
+   </*jms:**caching-strategy*> +
+</*jms:**generic-connection*>
+
+
+=== Generic Provider Element Attributes
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|connectionFactory|y|-|n|A reference to the ConnectionFactory instance to connect to the broker.
+|username|n||y|Username to use when asking for a connection to the ConnectionFactory.
+|password|n||y|Password to use when asking for a connection to the ConnectionFactory.
+|specification|n|1.1|n|JMS specification to use to connect to the broker.
+|clientId|n|-|y|Client id to use for the JMS connection. Identifies the client with an unique id against the broker. Mainly used for durable subscriptions.
+|cachingStrategy|n|DefaultCachingStrategy|y|Defines the strategy to be used for caching of Sessions and Connections
+|===
+
+
+
+
+=== ActiveMQ
+
+
+==== Default Configuration
+
+
+<*jms**:active-mq-connection*/>
+
+==== Custom Configuration
+
+
+<*jms:**active-mq-connection **clientId=**"myConsumerClient" **username=**"user" * +
+*password=**"pass"*> +
+   <*jms:**factory-configuration **brokerUrl=**"vm://localhost?broker.useJmx=false"* +
+*                           		    **maxRedelivery=**"3" **initialRedeliveryDelay=**"10"* +
+*                       			    **redeliveryDelay=**"20" **enable-xa=**"false"*/> +
+   <*jms:**caching-strategy*> +
+       <*jms:**no-caching*/> +
+   </*jms:**caching-strategy*> +
+</*jms:**active-mq-connection*>
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|redeliveryDelay|no, exclusive optional with *brokerUrl*|-|n|reference to a connection factory for ActiveMQ.
+|redeliveryDelay|no, exclusive optional with *connectionFactory*||n|parameters used to configure a default ActiveMQ ConnectionFactory
+|===
+
+*ActiveMQ ConnectionFactory Configuration*
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|brokerUrl|no, exclusive optional with *connectionFactory*|"vm://localhost?broker.useJmx=false"|n|ActiveMQ broker url to use for the ActiveMQ connection factory creation.
+|enableXA|n|false|n|Should be true if the connection needs to handle XA transactions.
+|initialRedeliveryDelay|n|1000||configuration for the ActiveMQ RedeliveryPolicy intialRedeliveryDelay
+|redeliveryDelay|n|1000||configuration for the ActiveMQ RedeliveryPolicy redeliveryDelay
+|maxRedelivery|n|0||configuration for the ActiveMQ RedeliveryPolicy maxRedelivery.
+|===
+
+If no _connectionFactory _is provided then an `_org.apache.activemq.ActiveMQConnectionFactory_` will be created. (or an _‘org.apache.activemq.ActiveMQXAConnectionFactory_’ if _enableXa_ is *true.*
+
+=== WeblogicMQ
+
+
+*<jms:config name=”jmsConfig”>* +
+**	***<jms:weblogic***-***connection connectionFactory=”myBeanConnectionFactory”/>* +
+*</jms:config>*
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|*connectionFactory*|n|-|n|reference to a connection factory for WebLogicMQ.
+|===
+
+
+=== WebsphereMQ
+
+
+*<jms:config name=”jmsConfig”>* +
+*	<jms:websphere***-***connection** connectionFactory=”myBeanConnectionFactory”*https://anypointmq.mulesoft.com”/[https://anypointmq.mulesoft.com”/[**/]]****>** +
+*</jms:config>*
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|*connectionFactory*|n|-|n|reference to a connection factory for WebsphereMQ
+|===
+
+//MG: what are the configurations
+Take into account that custom headers can be set for WMQ.
+
+////
+==== Subscribe/Consume returns Message structure
+
+
+The payload will be the JMS message content. Same behaviour as the transport today.
+
++++<s>+++*Option 1*+++</s>+++ +
+The Attributes object will contain:
+ * Map<String, Object> getProperties()
+ * String getJMSMessageID()
+ * long getJMSTimestamp()
+ * String getJMSCorrelationID()
+ * Destination getJMSReplyTo()
+ * Destination getJMSDestination()
+ * int getJMSDeliveryMode()
+ * boolean getJMSRedelivered()
+ * String getJMSType()
+ * long getJMSExpiration()
+ * int getJMSPriority()
+ * void acknowledge() //Present only when client ack is configured.
+
+*Option 2* +
+The Attributes object will contain:
+ * JmsMessageProperties getProperties()
+ ** Map<String, Object> JmsMessageProperties#asMap
+returns all properties
+ ** JmsxProperties JmsMessageProperties#getJmsxProperties()
+returns the JmsxProperties set for this message
+ ** Map<String, Object> JmsMessageProperties#getJmsProperties()
+returns all JMS provider specific properties - not including JMSX nor User
+ ** Map<String, Object> JmsMessageProperties#getUserProperties()
+returns all user properties - not including JMSX nor JMS provider properties
+ ** String getAckId()** **
+
+
+ * Headers getHeaders();
+ ** String getJMSMessageID()
+ ** long getJMSTimestamp()
+ ** String getJMSCorrelationID()
+ ** String getJMSReplyTo()
+ ** String getJMSDestination()
+ ** int getJMSDeliveryMode()
+ ** long getJMSDeliveryTime() 	>  (JMS 2.0 Only)
+ ** boolean getJMSRedelivered()
+ ** String getJMSType()
+ ** long getJMSExpiration()
+ ** int getJMSPriority()
+
+*JmsxProperties*
+
+*	<jms:jmsx-properties userId=”” appId=”” groupId=”” deliveryCount=””* +
+*groupSeq=”” producerTxid=”” consumerTxid=””* +
+*rcvTimestamp=”” state=””/>*
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|*userId*|n||y|The identity of the user sending the message
+|*appId*|n||y|The identity of the application sending the message
+|*groupId*|n||y|The identity of the message group this message is part of
+|*deliveryCount*|n|1|y|The number of message delivery attempts
+|*groupSeq*|n|1|y|The sequence number of this message within the group
+|*producerTxid*|n||y|The transaction identifier of the transaction within which this message was produced
+|*consumerTxid*|n||y|The transaction identifier of the transaction within which this message was consumed
+|*rcvTimestamp*|n||y|The time JMS delivered the message to the consumer
+|===
+
+
+*JMS Headers*
+
+|===
+|*Name*|*Required*|*Default value*|*Doc*
+
+|*correlationID*|y||Field to link one message with
+|*deliveryMode*|y|persistent|the delivery mode specified when the message was sent.
+|*deliveryTime*|n (JMS 2.0 only)|deliveryDelay + time the message was sent|the earliest time when a provider may make the message visible on the target destination and available for delivery to consumers
+|*destination*|y||contains the destination to which the message is being sent.
+|*expiration*|y|time-to-live + the time the message was sent|When an undelivered message’s expiration time is reached, the message should be destroyed.
+If the *time-to-live* is specified as *0, expiration header is set to 0 *(NO_EXPIRATION)
+|*messageID*|no if *_disableMessageId _*is set to _true_||Contains a value that uniquely identifies each
+|*priority*|y|4| 0-4 are considered normal priority and priorities 5-9 are considered expedited priority
+|*redelivered*|y|false|it is an indication to the consuming application that the message may have been delivered in the past, but not acknowledged
+|*replyTo*|n||the destination where a reply to the message should be sent.
+|*timestamp*|no if *_disableTimestamp _*is set to _true_||the time a message was handed off to a provider to be sent. It is not the time the message was actually transmitted
+|*type*|y||type identifier supplied by a client when a message is sent.
+|===
+
+
+*JMSReplyTo*
+
+The subscribe message source will always return the result of the flow if there’s a JMSReplyTo property set in the incoming message.
+
+*Maximum redelivery exceeded*
+
+When the maximum redelivery times is exceeded the flow will fail with a org.mule.api.exception.MessageRedeliveryException exception and the message will have the incoming message content.
+
+*AckId*
+
+For every message received, the connector will provide an AckId. When the JMSMessageId is present, the AckId will contain the same value, otherwise this value will be autogenerated. +
+The purpose of this property is to allow the AckMode.MANUAL, since it will be used as the identifier parameter for the _ack _operation.  +
+Its name refers to “session” because performing an ACK on any message of the session will automatically ack the consumption of all the messages
+===
+////
+
+== JMS Connector Operations
+
+The available connector operations are:
+
+* *Publish*
+* *Consume*
+* *Publish-Consume*
+* *Acknowledge*
+
+=== Publish
+
+
+**<***jms:publish **config-ref=**"config" **destination=**"#[dw:finalDestination]"***>**
+
+*   ***<***jms:**message-builder **jmsxProperties=**"#[dw:attributes.properties.jmsxProperties]"***>** +
+*       ***<***jms:**body***>***#[dw:”_bridged” ++ payload]**</**jms:**body***>** +
+*       ***<***jms:**properties***>***#[dw:attributes.properties.userProperties]**</**jms:**properties***>** +
+*   **</**jms:**message-builder***>**
+
+*</**jms:publish***>**
+
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|config-ref|n||n|config reference
+|destination|y||y|name of destination where to publish to
+|destinationType|n|QUEUE|y|enum that indicates the type of the destination
+|messageBuilder|n||y|builder element for the Message to be published
+|priority|n|Inherited from config|y|Defines the default message priority to use when sending messages
+|timeToLive|n|Inherited from config|y|Defines the default time in millis the message will be in the broker before being discarded. This is use when sending messages with mule.
+|timeToLiveUnit|n|MILLISECONDS|y|A TimeUnit which qualifies the timeToLive
+|deliveryDelay|n |0|y|Defines the delay for deliverying the messge.
+|deliveryDelayUnit|n|MILLISECONDS|y|A TimeUnit which qualifies the deliveryDelay
+|disableMessageId|n|Inherited from config|y|if true, no messageId will be generated for the Message
+|disableMessageTimestamp|n|Inherited from config|y|if true, no Timestamp will be generated for the Message
+|persistentDelivery|n|Inherited from config|y|If set, the message must be sent using persistency mode.
+|transactionAction|n|See transactionAction default behaviour in transaction document.|y|
+|===
+
+==== Message Builder
+
+
+To customize the message to be published we define a message builder element:
+
+Mule messages has an associated content type, by default it will be sent as a property in the outgoing message, but you can avoid it by setting the sendContentType attribute to false. +
+If it's sent the header name is: MM_MESSAGE_CONTENT_TYPE.
+
+*Sample 1* +
+**<***jms:**message-builder* +
+** ***jmsxProperties=**"#[dw:attributes.properties.jmsxProperties]"***>** +
+*   ***<***jms:**body***>***#[dw:customData ++ payload]**</**jms:**body***>** +
+*   ***<***jms:**properties***>***#[dw:attributes.properties.userProperties]**</**jms:**properties***>** +
+*</**jms:**message-builder***>**
+
+*Sample 2* +
+<*jms:**message-builder **contentType=**"application/json" **correlationId=**"sampleId"* +
+*                     **jmsType=**"UserPayload" **encoding=**"UTF-8"* +
+*                     **sendContentType=**"true" **sendEncoding=**"true" *> +
+   <*jms:**reply-to **destination=**"myReplyQueue"*/> +
+   <*jms:**properties*>*#[dw:{'key': 'value', 'key2': 'value2'}]*</*jms:**properties*> +
+   <*jms:**jmsx-properties **jmsxGroupID=**"group01" **jmsxAppID=**"sampleApp"* +
+*                         **jmsxRcvTimestamp=**"#[dw:attributes.headers.JMSTimestamp]"*/> +
+</*jms:**message-builder*>
+
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|*body*|n|#[payload]|y|the Content of the Message to publish
+|*properties*|n|empty|y|Defines a new property to be sent.
+|*jmsx-properties*|n||y|Defines the common JMSX properties to be sent.
+|*replyTo*|n|null if used in a _publish_ operation, or a temporary destination if used in _publishConsume_|y|the JMSReplyTo header information of the Destination where the Message should be replied to
+|*correlationId*|n||y|value to set in the JMSCorrelationID header of the
+|*jmsType*|n||y|value to set in the JMSType header of the
+|*contentType*|n|inherit from config|y|the content type of the body
+|*sendContentType*|n|true|y|Defines if a ‘*MM_MESSAGE_CONTENT_TYPE*’ property must be added to the Message
+|===
+
+=== Consume
+
+
+In some cases it is necessary to consume a message in the middle of a flow. For that use case perform the *Consume* message processor should be used:
+
+<*jms:consume **config-ref=**"config" **destination=**"#[dw:finalDestination]"* +
+*   **maximumWaitTime=**"1000" **ackMode=**"AUTO"* +
+*  **contentType=**"application/json" **selector=**"" **encoding=**"UTF-8"* +
+*  **waitTimeUnit=**"MILLISECONDS" * +
+* target=**"vars['myVar]"*/>
+
+
+|===
+|*Name*|*Required*|*Default value*||*Doc*
+|*config-ref*|y||n|config reference
+|*destination*|y||y|queue or topic to consume from
+|*consumerType*|n|QueueConsumer|y|the kind of consumer to used. Relates to the _destination_ type and provides further configurations for the particular consumer if required
+|*contentType*|n|inherit from config|y|the content type of the incoming message body
+|*encoding*|n|inherit from config|y|the encoding of the incoming message body
+|*ackMode*|n|Inherited from config|n|AUTO. Mule acks the message only if the flow is finished successfully.
+|*selector*|n|-|y|Defines a JMS selector expression to be used when doing the subscription. Messages will be filtered by the broker so the subscriber only receives the messages that matches the selector expression.
+|*target*|n|payload|y|where to place the received message
+|*maximumWaitTime*|n|10000|y|Maximum time to wait for a message to be available.
+|*waitTimeUnit*|n|MILLISECONDS|y|the unit for the *maximumWaitTime*
+|===
+
+=== Publish-Consume
+
+
+Configure the operation with an explicit destination for the reply:
+
+**<***jms:publish-consume **config-ref=**"config" * +
+*destination=**"#[dw:requestDestination]"* +
+*maximumWaitTime=**"1000" **ackMode=**"AUTO"* +
+*deliveryDelay=**"100" **persistentDelivery=**"true" **priority=**"8"* +
+*timeToLive=**"1000"***>** +
+*   ***<***jms:**message-builder***>** +
+*       ***<***jms:**reply-to **destination=**"#[dw:replyToDestination]"* +
+* 	**destinationType=**"TOPIC"**/>* +
+*   **</**jms:**message-builder***>** +
+*</**jms:publish-consume***>**
+
+To configure the operation with a temporary reply destination:
+
+**<***jms:publish-consume **config-ref=**"config" * +
+*destination=**"#[dw:requestDestination]"* +
+*maximumWaitTime=**"1000" **ackMode=**"AUTO"* +
+*deliveryDelay=**"100" **persistentDelivery=**"true" **priority=**"8"* +
+*timeToLive=**"1000"***>** +
+*   ***<***jms:**message-builder***>** +
+**<***jms:**properties***>***#[dw:{***'***myProperty***'***: 'value'}]**</**jms:**properties***>** +
+*   **</**jms:**message-builder***>** +
+*</**jms:publish-consume***>**
+
+Publish-Consume generates temporary *queue* destination if `replyTo` is not set.  +
+This operation is blocking, since it waits for a message to arrive to the destination of the reply, during a set period defined by `maximumWaitTime`.
+
+
+=== Acknowledge
+
+
+To perform a manual "ack", the module provides an operation that receives the session `ackId`, and tries to execute the ack over the last message consumed by the session. +
+
+This operation relays in the fact that _the same_ module Connection is being used for consuming and acking the message.
+
+*<jms:ack config-ref=”jmsConfig” ackId=”#[message.getAttributes().getAckId()]”/>*
+
+Acknowledging a consumed message automatically acknowledges the consumption of all messages that have been delivered by the session that provided the message.
+
+
+
+== Message Sources
+
+
+
+=== Subscriber
+
+
+*<jms:subscribe destination=”myQueue” config-ref=”jmsConfig” * +
+*ackMode=”AUTO|MANUAL|DUPS_OK” maxRedelivery=”2”* +
+* transactionType=”NONE|LOCAL|MULTI|XA”* +
+*selector=”JMSType == ‘Object’” * +
+*destinationType=”INFERRED|QUEUE|TOPIC”* +
+*subscribeOn=”PRIMARY_NODE|ALL”>*
+
+*</jms:subscribe>*
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|destination|y||y|Destination to consume from. Can be a topic or a queue.
+|ackMode|n|Inherits value from config.|n|See config attribute description.
+|maxRedelivery|n|Inherits value from config.|y|See config attribute description.
+|selector|n|-|y|Defines a JMS selector expression to be used when doing the subscription. Messages will be filtered by the broker so the subscriber only receives the messages that matches the selector expression.
+|transactionType|n|NONE|n|NONE. No transaction.
+|consumerType|n|QueueConsumer|y|The consumer type and configuration:  QueueConsumer or TopicConsumer.
+|subscribeOn|n|PRIMARY_NODE|n|chooses the behaviour when subscribing in a cluster.
+|===
+
+
+*Note: *Would be great to build autocompletion for selector field or at least provide some help from Studio.
+
+==== Consumer Type Element
+
+
+The `consumer-type` element allows the user to configure only the parameters that apply to the type of destination being consumed.
+
+*Queue Consumer type*
+
+*	<!-- Since this QueueConsumer is already the default, no need for extra config-->* +
+**<***jms:subscribe **destination=**”myQueue” config-ref=”jmsConfig”/>*
+**	**
+
+*Topic destination type*
+
+**<***jms:subscribe **destination=**”myTopic” config-ref=”jmsConfig”>* +
+*   ***<***jms:consumer-type***>** +
+*       ***<***jms:topic-consumer **isDurable=**"true" **isShared=**"false"* +
+** ***subscriptionName=**"mySub" **noLocal=**"true"**/>* +
+*   **</**jms:consumer-type***>** +
+*</**jms:subscribe***>**
+
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expression*|*Doc*
+
+|*isDurable*|n|false|y|Allows an application to receive all the messages published on a topic,including the ones published when there is no consumer associated with it.
+|*isShared*|n|false|y|Only for JMS 2.0: Allows the processing of messages from at topic subscription by multiple threads, connections or JVMs.
+|*subscriptionName*|only if the consumer is either durable or shared||y|This is the durable name required for topic durable or shared subscriptions.
+|*noLocal*|n|false|y|Specifies that messages published to the topic by its own connection must not be added to the subscription
+|===
+
+
+== Custom Connection Factories
+
+
+=== JNDI Connection Factory
+
+
+*<jms:config name=”jmsConfig”>* +
+*	<jms:**generic-provider** connectionFactory=”*myJndiConnectionFactory**”**https://anypointmq.mulesoft.com”/[https://anypointmq.mulesoft.com”/[**/]]****>** +
+*</jms:config>*
+
+*<!-- JNDI Connection Factory with custom jndi name resolver-->* +
+**<***jms:**jndi-connection-factory **customJndiNameResolver=**"myJndiNameResolverBean"* +
+*       **connectionFactoryJndiName=**"ConnectionFactory"* +
+*                             **lookupDestination=**"ALWAYS" **/>*
+
+
+*<!-- JNDI Connection Factory with configured SimpleJndiNameResolver-->* +
+**<***jms:**jndi-connection-factory **connectionFactoryJndiName=**"ConnectionFactory"* +
+*                           		   **lookupDestination=**"ALWAYS"***>**
+
+*   ***<***jms:**name-resolver-builder* +
+*          **jndiInitialContextFactory=**"org.apache.activemq.jndi.ActiveMQInitialContextFactory"* +
+*          **jndiProviderUrl=**"vm://localhost?broker.persistent=false"***>** +
+*       ***<***jms:**provider-properties***>** +
+*           ***<***jms:**provider-property **key=**"queue.jndi-queue-in" **value=**"in.queue"**/>* +
+*           ***<***jms:**provider-property **key=**"topic.jndi-topic-in" **value=**"in.topic"**/>* +
+*       **</**jms:**provider-properties***>** +
+*   **</**jms:**name-resolver-builder***>**
+
+*</**jms:**jndi-connection-factory***>**
+
+
+
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|lookupJndiDestinations|n|NEVER|n|NEVER. Will never lookup for jndi destinations.
+|connectionFactoryJndiName|n|-|y|the name used to resolve the ConnectionFactory
+|customJndiNameResolver|exclusive optional with *nameResolverBuilder*** **|-|n|Defines a strategy for lookup objects by name using JNDI
+|nameResolverBuilder|exclusive optional with |-|n|Provides a way to configure a
+_SimpleJndiNameResolver_
+|===
+
+
+Properties of *Name Resolver Builder*:
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|*jdniProviderUrl*|n|-|y|the _java.naming.provider.url_
+|*providerProperties (k,v)*|n||y|initial context properties for the Jndi name resolver
+|*jndiInitialFactory*|y|-|n|fully qualified class name of the factory class that will create an initial context for the JNDI Environment
+|*initialContextFactory*|n|-|n|_InitialContextFactory_ implementation for the creation of the JNDI _InitialContext._
+|===
+
+
+=== Caching Connection Factory
+
+
+*Custom Caching Configuration*
+
+**<***jms:**config **name=**"config"***>** +
+*   ***<***jms:**active-mq-connection***>** +
+*       ***<***jms:**caching-strategy***>** +
+*           ***<***jms:**default-caching **cacheConsumers=**"true" **cacheProducers=**"true"* +
+*                                 **sessionCacheSize=**"1"**/>* +
+*       **</**jms:**caching-strategy***>** +
+*   **</**jms:**active-mq-connection***>** +
+*</**jms:**config***>**
+
+*Disabled Caching Configuration*
+
+*<!-- Disabled caching-->* +
+**<***jms:**config **name=**"config"***>** +
+*   ***<***jms:**active-mq-connection***>** +
+*       ***<***jms:**caching-strategy***>** +
+*           ***<***jms:**no-caching**/>* +
+*       **</**jms:**caching-strategy***>** +
+*   **</**jms:**active-mq-connection***>** +
+*</**jms:**config***>**
+
+*Caching Configuration*
+
+|===
+|*Name*|*Required*|*Default value*|*Expressions*|*Doc*
+
+|*name*|y|-|n|name to reference the connection factory
+|*sessionCacheSize*|n|1|n|Defines the maximum amount of sessions that can be in the pool.
+|*cacheProducers*|n|true|n|Default is true.
+|*cacheConsumers*|n|true|n|Default is true.
+|===
+
+
+
+=== Use Cases
+
+
+==== Polling messages
+
+
+*<poll frequency=”5000”/>* +
+*<jms:consume destination=”myQueue” />*
+
+==== Polling Messages within Transaction
+
+
+*<poll frequency=”5000”/>* +
+*<transactional>* +
+*<jms:consume destination=”myQueue”/>* +
+*...* +
+*</transactional>*
+
+==== Bridge
+
+
+**<***jms:subscribe **config-ref=**"config" **destination=**"originTopic"***>** +
+*   ***<***jms:**consumer-type***>** +
+*       ***<***jms:**topic-consumer **isShared=**"true" **subscriptionName=**"subsName"**/>* +
+*   **</**jms:**consumer-type***>** +
+*</**jms:subscribe***>** +
+**<***jms:publish **config-ref=**"config" **destination=**"#[dw:finalQueueDestination]"***>** +
+*   ***<***jms:**message-builder **jmsxProperties=**"#[dw:attributes.properties.jmsxProperties]"***>** +
+*       ***<***jms:**body***>***#[dw:bridgePrefix ++ payload]**</**jms:**body***>** +
+*       ***<***jms:**properties***>** +
+*#[dw:attributes.properties.userProperties ++ {'MULE_JMS_BRIDGED': true}]* +
+*       </**jms:**properties***>** +
+*   **</**jms:**message-builder***>** +
+*</**jms:publish***>**
+
+
+////
+=== General considerations
+
+
+ * JMS spec defines Session instances as not thread safe object. That implies that when there’s a JMS transaction in progress there can’t be a different thread using the same Session. Ideally we should allow asynchronous processing of messaging within a flow with transactional JMS session if there’s only one branch using the transactional JMS Session.
+===
+
+=== Pending tasks/desicions
+
+
+ * Threading model for JMS. Simplify numberOfConsumers and transactedNumberOfConsumers
+ * Should we support Weblogic provider in CE?
+ * Verify that poll element supports no MP to work so we can implement message polling with JMS.
+ * Try to implement XA subscriber using listener.
+ * Define if a provider for WebshereMQ must be defined or users should pay for an EE WebsphereMQ connector.
+ * Consider implementing dynamic pub/sub and how does that affect the experience of the message source, since the same flow could potentially be invoked for messages of different queues/topics
+ * Define how to configure “subscribe on all nodes” or “subscribe on primary node only” when subscribing to topics in a cluster that don’t have durableConsumer.
+//MG: please advise on considerations and final decisions described above
+ ////

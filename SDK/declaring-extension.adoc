@@ -1,0 +1,25 @@
+= Declaring an Extension
+
+Declare an extension using the `@Extension` annotation on a Java class or interface.
+
+[source,java]
+----
+@Extension(name = "my-extension", description = my very own Mule extension”)
+----
+
+[NOTE]
+This marks a discoverable entry point for a `Describer`, which allows your module to be validated against the model for SDK modules.
+
+== Next Steps
+
+Extensions are composed of at least one configuration with parameters and one or many classes defining operations.
+
+. Define the parameters governing your module's functionality
+and define whether these are required or optional.
+. link:/creating-configurations[Create Configurations] and
+. link:/adding-operations[Add Operations]
+
+
+
+[NOTE]
+Consider the default, required and configuration details and define these in a global configuration in the `@Extension` class, or in a configuration class. .

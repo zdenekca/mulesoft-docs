@@ -1,0 +1,3 @@
+// Core Connectors 4.0 TOC File
+
+* link:/mule-user-guide/v/latest/core-connectors[Core Connectors]
