@@ -1,6 +1,6 @@
 = Content-Based Routing Tutorial
 
-image:mulestudio%281%29.png[mulestudio%281%29]
+
 
 In the link:/mule-user-guide/v/3.3/basic-studio-tutorial[Basic Studio Tutorial], you got to know Mule Studio and built a simple "Hello, World" application.
 
@@ -130,7 +130,7 @@ Configure the HTTP inbound endpoint as follows:
 |*exchange-pattern* |`request-response`
 |*host* |`localhost`
 |*port* |`8081`
-|*http://docname[doc:name]* |`HTTP`
+|*doc:name* |`HTTP`
 |===
 ....
 ------
@@ -167,7 +167,7 @@ Configure the expression filter as follows:
 |===
 |Attribute |Value
 |*expression* |`#[message.payload != '/favicon.ico'] `
-|*http://docname[doc:name]* |`Expression`
+|*doc:name* |`Expression`
 |===
 ....
 ------
@@ -214,7 +214,7 @@ Change the `variable-transformer` placeholder element to the element **`set-vari
 |Field |Value
 |*variableName* |`language`
 |*value* |`#[message.inboundProperties['language']]`
-|*http://docname[doc:name]* |`Set Language Variable`
+|*doc:name* |`Set Language Variable`
 |===
 ....
 ------
@@ -352,7 +352,7 @@ Configure the logger as follows:
 |Field |Value
 |*message* |`The reply "#[message.payload]" means "hello" in #[flowVars['language']].`
 |*level* |`INFO `
-|*http://docname[doc:name]* |`Logger`
+|*doc:name* |`Logger`
 |===
 
 Note that Studio automatically escapes the quotes, as per the following:
@@ -467,7 +467,7 @@ Configure the logger as follows:
 |Field |Value
 |*message* |`No language specified. Using English as a default.`
 |*level* |`INFO `
-|*http://docname[doc:name]* |`Logger`
+|*doc:name* |`Logger`
 |===
 
 The full code of the choice scope now appears as follows:
@@ -670,7 +670,7 @@ Save your project, and watch the console as it redeploys your changed applicatio
 
 Repeat the steps in <<Using the Application>>, above.
 
-Note that the behavior doesn't change at all – organizing those three message processors into a subflow and then invoking that flow using a flow-ref has no affect on the functionality of the application. However, as you'll see in the <<Extra Credit>> section below, separating out chunks of processing into subflows can help keep your application code (and its visual representation on the Studio canvas) organized and easy to read. For some realistic use case examples of how you might use multiple flows or subflows to organize your applications, take a look at some of the medium- and high-complexity link:/mule-user-guide/v/3.4/mule-examples[Mule Examples], such as the link:/mule-user-guide/v/3.4/foreach-processing-and-choice-routing-example[Foreach Processing and Choice Routing Example].
+Note that the behavior doesn't change at all – organizing those three message processors into a subflow and then invoking that flow using a flow-ref has no affect on the functionality of the application. However, as you'll see in the <<Extra Credit>> section below, separating out chunks of processing into subflows can help keep your application code (and its visual representation on the Studio canvas) organized and easy to read. For some realistic use case examples of how you might use multiple flows or subflows to organize your applications, take a look at some of the medium- and high-complexity link:/mule-user-guide/v/3.3/mule-examples[Mule Examples], such as the link:/mule-user-guide/v/3.4/foreach-processing-and-choice-routing-example[Foreach Processing and Choice Routing Example].
 
 == Extra Credit
 

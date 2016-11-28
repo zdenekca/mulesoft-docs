@@ -79,7 +79,7 @@ http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd"
 |Application/Service|Version
 |Mule Runtime|Mule Enterprise Edition 3.5.2 and newer
 |Anypoint Studio|Only works with Studio 5.4.0 and newer
-|Salesforce|v37.0
+|Salesforce|v37.0, v38.0
 |===
 
 [IMPORTANT]
@@ -87,7 +87,7 @@ Starting with v.7.0.0, the Salesforce connector is licensed commercially with An
 
 == Installing and Configuring
 
-You can install the connector in Anypoint Studio using the instructions in link:/mule-fundamentals/v/3.8/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
+You can install the connector in Anypoint Studio using the instructions in link:/getting-started/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
 
 === Configuring Maven Dependencies
 
@@ -172,7 +172,7 @@ image:new-proj.png[Create new project dialog box]
 
 === Configuring the Salesforce Global Element
 
-To use the Salesforce connector in your Mule application, you must configure a global Salesforce connector element that can be used by all the Salesforce connectors in the application (read more about link:/mule-fundamentals/v/3.8/global-elements[Global Elements]).
+To use the Salesforce connector in your Mule application, you must configure a global Salesforce connector element that can be used by all the Salesforce connectors in the application (read more about link:link:/mule-user-guide/v/3.8/global-elements[Global Elements]).
 
 Here are the options to choose from when you create a global element for this product:
 
@@ -390,6 +390,7 @@ Salesforce exposes operations that address these integration patterns via severa
 *** OwnerChangeOptions
 *** QueryOptions
 *** UserTerritoryDeleteHeader
+*** DuplicateRuleHeader
 
 * link:https://www.salesforce.com/us/developer/docs/api_asynch/[Bulk API ]– Offers the ability to quickly and securely load batches of your organization's data into Salesforce. 
 * link:http://www.salesforce.com/us/developer/docs/api_streaming/[Streaming API] – Securely receive notifications for changes to your organization's information in Salesforce.
@@ -477,8 +478,7 @@ Studio automatically converts the connector to *Salesforce (Streaming)* mode. Te
 
 image:sfdc-streaming-inbound.png[sfdc-streaming-inbound]
 
-. *Poll scope* - regularly polls for data to extract.
-. *Salesforce connector* - connects with Salesforce, and performs an operation to extract data.
+*Salesforce connector* - listens to notifications on a topic and feeds the data into the flow. link:https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm[Streaming API]
 
 === Use Cases
 
@@ -596,22 +596,26 @@ See Salesforce link:https://developer.salesforce.com/docs/atlas.en-us.api_stream
 
 ==== Replay Events from a Topic
 
-A subscriber can choose which events to receive, such as all events within the retention window or starting after a particular event. The default is to receive only the new events sent after subscribing.
-Events outside the 24-hour retention period are discarded.
+A subscriber can choose which events to receive, such as all events within the retention window or starting after a particular event. The default is to receive only the new events sent after subscribing. Events outside the 24-hour retention period are discarded.
 
 Replay options:
 
 
-. Replay ID	Subscriber receives all events after the event specified by its replayId value.
+. Replay ID	Subscriber receives all events after the event specified by its `replayId` value.
 . -1	- Subscriber receives new events that are broadcast after the client subscribes.
 . -2	- Subscriber receives all events, including past events that are within the 24-hour retention window and new events sent after subscription.
 
-The replay options values are encapsulated in the connector in a more easy to use manner :
+The replay options values are encapsulated in the connector in a more easy to use manner:
 
 
-. ALL: -2.
-. ONLY_NEW: -1.
-. FROM_REPLAY_ID: replayId.
+. ALL: -2
+. ONLY_NEW: -1
+. FROM_REPLAY_ID: replayId
+
+The connector also supports automatic replay of stored events, based on the replay id of the last event that has been processed by the connector. This has proved useful in cases when the connector stopped listening for some reason (server shutdown, connection dropped).
+
+By having the flag "Resume from the Last Replay Id" set to true, upon starting, the connector will replay all the events starting with the last processed event's replay id.
+Considering that Salesforce stores events for only 24 hours, if the stored replay id is out of this time frame, then the replay option selected by the user will determine what events will be replayed.
 
 The `replay-topic` acts like an inbound endpoint and it can be used as such:
 
@@ -619,13 +623,13 @@ The `replay-topic` acts like an inbound endpoint and it can be used as such:
 ----
 <flow name="accountUpdatesReplay">
     <!-- INBOUND ENDPOINT -->
-    <sfdc:replay-topic topic="AccountUpdates" replayId="1" replayOption="ALL"/>
+    <sfdc:replay-topic topic="AccountUpdates" replayId="1" replayOption="ALL" autoReplay="true"/>
     <!-- REST OF YOUR FLOW -->
     <logger level="INFO" message="Replayed events: #[payload]"/>
 </flow>
 ----
 
-If ALL or ONLY_NEW replay option is selected, then the replayId value is ignored.
+If ALL or ONLY_NEW replay option is selected, then the `replayId` value is ignored.
 
 ==== Generic Streaming
 

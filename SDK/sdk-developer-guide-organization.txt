@@ -1,0 +1,120 @@
+Mule SDK Concepts (what extension is, what do i need to develop one, when to develop one, how?)
+
+What is the “SDK”?
+
+The Mule SDK is a tool to develop functional modules for use in Mule runtime integration apps. You should be an experienced Java developer and understand the architecture of the service or system that your module exposes to the user in an intelligible UI provided by Anypoint Studio, or other IDEs. Additionally, you should be experienced with Mule. (Note: the end user can write a Mule application in XML without the use of an IDE.)
+
+What is a module in SDK terms?
+
+A module is the sum total of the Java classes that compose it. The module class is the entry point that Mule interacts with and references these classes normally:
+- Extension main class - Contains generic information such as the name, description, version, etc. It also contains the list of available configuration models plus the operations, sources and connection providers which are globally available all across the extension.
+- Configuration
+- Operations
+- 
+
+
+What do I need to develop a module with SDK?
+
+JDK 8
+Maven
+Mule 4
+See how to set up Development Environment.
+
+What are the prerequisites I need to have in mind?
+Anypoint Connector knowledge
+Learn code organization best practices for modules
+
+What basic development steps do I follow?
+Module/Ext main class
+Configuration class
+Operations Class
+Error Type Definitions Class
+
+What is the module code structure and the required annotations?
+
+
+After coding the basic structure of my module, what should I do?
+Understand how static and dynamic metadata retrieval are required to provide the user with the DataSense feature. It is important your module support DataSense
+static - known at compile time
+dynamic - based on connection configuration, resolved at user design time. All complex types must be defined as dynamic and must have a TypeResolver associated
+
+How does my module work in a running Mule application?
+Mule stores a ConfigurationProvider
+
+
+
+Creating a @Configuration Class
+
+
+what is a configuration? what does a configuration do? do i need one? How do I specify the required parameters for a configuration? where do I save this? How do I reference it?
+
+@ConnectionManagement
+
+Handle connections, set up authentication here
+
+@Operations for the Extension
+
+Error Handling
+
+block 
+each error has a namespace within the connector
+can say an operation throws these types of errors
+way to add custom errors
+
+ErrorTypes must implement ErrorTypeDefinition
+This must be implemented in the extension code
+
+@Throws can be put at many levels to throw an error, lowest level will output
+ErrorTypeProvider must return a set of possible errors
+ExceptionEnricher can add more information to Exception through @OnException
+
+Can output a Mule message
+
+Background reading: Extensions API 
+
+How it works with SDK Extension
+How Mule discovers extension through API
+
+Sources
+
+one event, similar to req-rep / however, exchange patterns do not exist anymore
+With the event that comes back from the source,
+onSuccess and onError can be provided if the flow succeeds
+You can fetch the error type that Mule throws
+In Mule 3, there are start and stop methods in source class,
+Now, onSource, and source callback, onStop receives nothing, but throws exception
+What happens if source fails to start > onSourceException?
+How to propagate state through source? Reference to connection and get it back on success and on error
+How do you know on which connection to reply?
+SourceCallbackContext
+Cannot send a response to a source without onSuccess
+Tell Studio you emit a response for your source using @EmitsResponse
+It will be discarded if ???
+
+Parameters
+
+@NullSafe can be used on a POJO that is an object for optional parameters
+Has to be list, map or pojo
+
+Group parameters that are logically stored together.
+ParameterGroup is not recursive in Mule 4
+Each must have a name
+Order and Placement, how is it different from Mule 3
+
+DataWeave
+
+Core data language in Mule
+Access payload this way?
+
+Operations
+
+differentiate content from configuration
+Use @Content to distinguish, but always mark the primary content with @Content(primary=true)
+The primary content must always accept an exception
+Default content is the payload
+Non-primary content might be required and have their own defaults
+When a parameter is content, it is in the element, you can embed it in the parameter
+Instead of having to use two connectors to transform and write content, you can use dataweave as part of the runtime.
+
+DataWeave does not change the payload because of the mapping. The operation, however, may change the payload
+

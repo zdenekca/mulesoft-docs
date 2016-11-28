@@ -1,0 +1,1202 @@
+= Adding Operations
+:toc: macro
+:toclevels: 3
+:toc-title:
+
+
+Declare the operations at the extension if they are global or declare them at the configuration level. Define operations in one or several classes. Mark operation classes with `@Operations`.
+
+
+
+toc::[]
+
+
+== Before Proceeding
+
+Since operations frequently make use of configuration parameters, make sure you have already:
+
+* Created the Extension class
+* Added any global attributes
+* Created a configuration with its specific configurable attributes
++
+[TIP]
+====
+Did you mark each attribute with `@Parameter`? Specify if:
+
+* `@Optional`,
+* `@NullSafe`, i.e. can be populated with default if found null
+* Supports Mule expressions via `@Expression`(REQUIRED) or `@Expression`(NOT_SUPPORTED)
+* Uses `@DefaultEncoding` for optional parameters of `String` type should use Mule runtime encoding
+====
+
+== Declaring Operations
+
+Operations are declared in a similar way as configurations, with the additional restriction that a class that has been annotated to serve as one configuration *cannot* contain its own configurations. Use the `@Operations` annotation to point to a class which holds the operations.
+
+* Every _public_ method of the `@Operations` class is assumed to be a valid operation, therefore there is no need to use any annotation.
+* Any public method you do not want exposed as an operation should be annotated with `@Ignore`
+* Every method argument is translated as a `ParameterModel`
+//MG need to mention ParameterModel? What does this model allow Extensions API to do?
+* Arguments of each operation (`@Operations` class method) can be annotated with `@Optional` and with `@Expression`
+
+////
+The two operation classes link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class] contain many operation examples.
+////
+
+See how you can declare available operations from the `@Extension` annotated class.
+
+[source,java,linenums]
+----
+@Extension(name = "my-extension", description = my very own Mule extension”)
+@Operations({MyOperations.class, NeatOperation.class})
+public class MyExtension
+{
+}
+----
+
+
+
+=== Configuration Level Operations
+
+Operations can also be defined at the configuration level by simply placing the `@Operations` annotation on a configuration class.
+
+
+[source,java,linenums]
+----
+@Extension(name = "myextension", description = "my very own extension")
+@Configurations({ImportantConfig.class, AnotherImportantConfig.class})
+public interface MyExtension
+{
+}
+
+
+@Configuration(name = "important")
+@Operations(ImportantOperations.class)
+public class ImportantConfig implements MyExtension
+{
+}
+
+
+@Configuration(name = "another-important")
+@Operations(OtherImportantOperations.class)
+public class AnotherImportantConfig implements MyExtension
+{
+}
+----
+
+== Implementing Operations
+
+Below you can find some details about how to implement operations.
+
+=== Injecting @UseConfig into Operation
+
+An operation can access a `@Configuration` class at runtime if any of the operation's arguments are annotated with `@UseConfig`. This injection allows operation access to the configuration when executed, that is, dynamically. See this link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L69-L69[example].
+
+In the examples above you can see operations which don’t require configuration data, while others do. Those operations implement part of their logic by having an argument annotated with `@UseConfig`.
+
+The reason why you might choose to receive the configuration as a method argument becomes clearer in the *operations lifecycle* section. Note that:
+
+* If the operation receives many arguments, there is no restriction on the position of the argument supporting configuration injection.
+* There is no restriction or enforcement regarding the type of the configuration passed as an argument, as long as the type is the same as the configuration
+* The argument will _not_ be translated into a `ParameterModel`
+
+=== Operations that Return One Value
+
+An operation can return a single value of any type.
+
+Example:
+
+[source,java,linenums]
+----
+public String toUpperCase(String value) {
+	return value.toUpperCase();
+}
+----
+
+This operation is adapted into a `MessageProcessor`, which returns a copy of the input message, whose _payload_ has been set to the method's _return value_.
+
+=== Operations that Set Payload and Attributes
+
+When the *payload* and the *attributes* of message must be manipulated and returned by the operation, return an `OperationResult`.
+
+[source,java,linenums]
+----
+public OperationResult<InputStream, FileAttributes> read(String path) {
+	return ...
+}
+----
+
+`OperationResult` is defined link:https://github.com/mulesoft/mule-extensions-api/blob/1458edadff5d165503b4bf2b11b29eae07ac1cbd/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/runtime/operation/OperationResult.java#L32-L32[here].
+
+This object can return a *payload*, an *attributes object* and a `DataType`. The Mule runtime takes this object and generates a new Mule message, which is then propagated through the pipeline.
+//MG: pipeline?
+
+Although the object permits returning a *payload*, an *attributes object* and a `DataType`, it doesn’t require the user to actually provide all three. If none are provided, then the value from the incoming `MuleMessage` will be used.
+
+== Operations that Return List of Messages
+
+//MG placeholder for new section in spec
+
+=== Void Operations Do Not Operate on Mule Message
+
+Void operations do not modify the Mule message in any way:
+
+.Example
+[source,java]
+----
+public void logger(String message) {
+}
+----
+
+In this case the message that enters the message processor is unchanged after exiting it.
+
+=== Accessing MuleEvent and MuleMessage
+
+In most cases you should avoid interacting with core Mule data such as the message and the event, however in some cases you may find accessing these objects useful.
+
+In regard to operations, a class containing operation methods can have attributes of type `MuleEvent` or `MuleMessage`. The runtime automatically provides them upon invocation of the method.
+//MG upon invoking the method they become available
+
+.Example
+
+[source,java,linenums]
+----
+public Object someOperation(MuleMessage message, String value) {
+	…
+}
+----
+
+== Operations Lifecycle
+
+Classes which define operations can have the following characteristics:
+
+* Can hold state, but must be thread safe
+* Part of that state can be made of dependencies injected through the `@Inject` annotation
+* Can implement Mule’s lifecycle annotations
+//MG how does developer ensure ops are thread safe? what are the Mule lifecycle annotations?
+
+
+An instance of the `@Operations` annotated class is created each time an operation is defined in a pipeline. For example, the `create` operation is called three times, thus creating three instances of the `@Operations` annotated class:
+
+[source,xml,linenums]
+----
+<mule>
+	<my-extension:config name="my-extension" myName="#[name]" />
+
+
+<flow name="flow1">
+	<set-payload value="blah" />
+	<my-extension:create purity="100" />
+</flow>
+
+
+<flow name="flow2">
+<my-extension:create purity="100"/>
+<my-extension:create purity="90" />
+</flow>
+</mule>
+----
+
+For this sample configuration, three instances of the operations class are created. One for `flow1` and two for `flow2`.
+
+Notice however that the `my-extension` configuration is dynamic, so potentially each execution of the operation can receive a different instance of the configuration.
+
+At the same time, it should be possible for the operations class to keep state if, for example, it wanted to keep track of how many invocations it received. For that reason, it is not possible to keep the configuration as part of the operations instance state and must be passed by argument each time.
+
+== Setting the DataType
+
+The `MuleMessage` has the concept of `DataType` to provide information about the Mule message payload format, specifically:
+
+* Encoding
+* MimeType
+
+Information in the `DataType` is used by Mule transformers to perform automatic transformation. An operation should be able to change the output `DataType` two ways:
+
+* the user should have the chance to cast the data type
+* the operation explicitly transforms the data type
+
+=== Forcing a DataType
+
+By annotating a method with `@DataTypeParameters`, the operation can add an `outputEncoding` and `outputMimeType` parameters, allowing the user to ensure the desired output data type when in the application XML code.
+
+[source,java,linenums]
+----
+@DataTypeParameter
+public String read(String path, ContentType contentType) {
+	return read(path, contentType.getEncoding());
+}
+----
+
+That annotation instructs the SDK to automatically add the `outputEncoding` and `outputMimeType` parameters:
+
+[source,xml,linenums]
+----
+<file:read path="some/path" outputEncoding="UTF-8" outputMimeType="application/json" />
+----
+
+=== Operation-calculated DataType
+
+An operation on its own can determine the `DataType`.
+
+The solution for this is to simply have an operation which returns a `MuleMessage` with a handcrafted `DataType`. Notice however that if the operation returns a custom DataType but the user forced values on the XSD, the user’s settings will take precedence over the operation’s code.
+
+== Content and Behavior Parameters
+
+Consider the following example operation (pseudo code):
+
+`<file:write path="hello.txt" overwrite="true" content="#[payload]" />`
+
+Notice that the parameters that compose them often play different roles.
+
+=== Behavior Parameters
+
+These are parameters which manage settings regarding how the operation is going to behave. In the example above the `overwrite` parameter configures what to do if the file already exists. The `path` parameter configures where the content is going to be written. They configure the behavior of the `write` operation. They do not represent the data to be written.
+
+There are also examples of operations which are exclusively formed by behavior parameters. For example:
+
+`<file:copy from="somePath" to="anotherPath" />`
+
+Both of these parameters are behavior oriented since this operation doesn’t take any `content` parameter. The content is in the file being copied.
+
+
+=== Content Parameter Characteristics
+
+Considering the explained above, the definition of content parameter is at this point obvious. In the `file:write` example, the content is a content parameter.
+
+Content parameters have the following characteristics:
+
+* They must accept expressions. Both SUPPORTS_EXPRESSIONS and EXPRESSION_REQUIRED are supported, but compilation will fail if @Expression(NOT_SUPPORTED) is used.
+* Each content parameter allows embedding it’s very own DW script to generate it. Therefore, inline definition of content parameters is not allowed
+* Content parameters always translate to the DSL as a text element, precisely to enable the embedded DW script
+
+Consider the `file:write` operation without using pseudocode. Suppose that you’re using this operation in a flow and by the time you’re using this operation the message payload is JSON and you want to store it as XML.
+
+[source,xml,linenums]
+----
+<file:copy from="somePath" to="anotherPath">
+	<file:content>
+		<![CDATA[
+		#[dw:{
+			// your DW transformation
+}
+]]>
+	</file:content>
+</file:copy>
+----
+
+On the connector’s code side, the content parameter is marked using the `@Content` annotation:
+
+[source,java,linenums]
+----
+public void write(String path, boolean overwrite, @Content Object content) {
+}
+----
+
+Noteif you try to combine `@Content` with `@Expression(NOT_SUPPORTED)` on the same argument, it will result in an error.
+
+=== Primary Content Parameter
+
+That explained above works fine when the operation has only one content parameter, but there are cases in which the operation has many content parameters. For example:
+
+[source,xml,linenums]
+----
+<http:request path="/my/api">
+	<http:request-builder>
+		<http:body>
+			#[dw:body..]
+		</http:body>
+		<http:uri-params>
+			#[dw:uri-params …]
+		</http:uri-params>
+		<http:headers>
+			#[dw:you get the picture..]
+		</http:headers>
+	</http:request-builder>
+</http:request>
+----
+
+As you can see, you can have as many content parameters as you want (which means, that the `@Content` annotation can be used on more than one method argument). However, consider i nthe example that the body parameter is more important than the rest of the parameters. Although headers are part of the content being sent in the HTTP request, the headers are complementary to the actual body being sent. *When an operation has more than one content parameter, one of them must be marked as primary content.* Do this by setting `@Content`(primary = true).
+
+The primary content parameter has all of the same characteristics as the regular content parameters, plus two additional criteria:
+
+* Primary content is automatically designated as "optional"
+* Its default is `#[payload]`
+
+These two criteria are automatically added to the parameter by the runtime and you configure otherwise. If you try to explicitly set a primary content parameter to a different default, compilation will fail.
+
+[NOTE]
+====
+*Gotcha*
+
+Going back to the `file:write` example, in which there was only one content parameter, is it primary? YES. When an operation has only one content parameter, the runtime will automatically consider it as primary even if the user explicitly said so. That means that the content parameter in the file:write operation is automatically made optional and defaults to #[payload]. This helps enforcing consistency across modules.
+====
+
+=== Changing the Default of Primary Content
+
+There are edge cases in which primary content should default to something else than the payload. This tends to happen when the operation has only one content parameter and that parameter is not always needed. For example consider the Database connector. The `inputParameters` of a query are primary content, but not all queries require input parameters. So the real default here should be an empty Map
+
+You can do that by combining the `@Content` and `@Optional` annotations:
+
+[source,java,linenums]
+----
+public List<Map> select(String sql, @Optional(defaultValue="bleh()") @Content Map<String, Object> inputParameters) {
+	….
+}
+----
+
+=== Embedding Content Parameters in Complex Objects
+
+Looking closely at the `http:request` operation, you see that the content parameters are contained in an element called `request-builder`. For the purpose of usability, the author of the connector chose to group all the request-related attributes into an enclosing object. This is supported by the SDK in the following manner:
+
+[source,java,linenums]
+----
+public void request(String path, HttpRequestBuilder requestBuilder) {
+}
+----
+
+As you can see, there are no content parameters here. However, if we look inside the `HttpRequestBuilder` class, you see them:
+
+[source,java,linenums]
+----
+public class HttpRequestBuilder {
+
+@Parameter
+@Content(primary = true)
+private Object body;
+
+@Parameter
+@Content
+private Map<String, String> uriParams;
+
+@Parameter
+@Content
+private Map<String, String> uriParams;
+}
+----
+
+
+////
+== Operation Sub-processors
+
+Some operations require sub-processes. The annotated method should take one or more arguments of type `NestedProcessor` or `List<NestedProcessor>`. The platform can mask the child chain, but it's the responsibility of the extension implementation to invoke the child process.
+//MG how are these annotated? unclear what was meant in spec, esp "besides" - > "The platform provides support for masking the child chain besides the NestedProcessor, but it’s up to the implementation to actually invoke it."
+
+
+=== Single Nested Processor for an Operation
+
+Receives a single nested processor:
+
+[source,java,linenums]
+----
+public String killOne(NestedProcessor killOperation, String reason) throws Exception
+{
+   StringBuilder builder = new StringBuilder("Killed the following because " + reason + ":\n");
+   builder.append(killOperation.process()).append("\n");
+
+
+   return builder.toString();
+}
+----
+
+=== Multiple Nested Processors for an Operation
+
+Receives many nested processors:
+
+[source,java,linenums]
+----
+public String killMany(List<NestedProcessor> killOperations, String reason) throws Exception
+{
+   StringBuilder builder = new StringBuilder("Killed the following because " + reason + ":\n");
+   for (NestedProcessor processor : killOperations)
+   {
+       builder.append(processor.process()).append("\n");
+   }
+
+
+   return builder.toString();
+}
+----
+
+
+=== XML Representation of Nested Operations
+
+In XML, the generated schema for the operation creates a nested structure for the sub-processors.
+
+[NOTE]
+These sub-processors appear _inside_ a child element whose name corresponds to the name of the `NestedProcessor` attribute. This is to support situations in which you want to declare different sets of nested processors.
+
+[source,xml,linenums]
+----
+<flow name="killMany">
+   <heisenberg:kill-many config-ref="heisenberg" reason="I'm the one who knocks">
+       <heisenberg:kill-operations>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Gustavo Fring" goodbyeMessage="bye bye"/>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Frank" goodbyeMessage="bye bye"/>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Nazi dudes" goodbyeMessage="bye bye"/>
+       </heisenberg:kill-operations>
+   </heisenberg:kill-many>
+</flow>
+
+<flow name="killOne">
+   <heisenberg:kill-one config-ref="heisenberg" reason="I'm the one who knocks">
+       <heisenberg:kill-operation>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Gustavo Fring" goodbyeMessage="bye bye"/>
+       </heisenberg:kill-operation>
+   </heisenberg:kill-one>
+</flow>
+----
+
+== Supporting a Callback
+
+An operation at a position *N* that returns a callback `InterceptingCallback` can wrap all processors in a flow from *N+M*, that is, it processes the previous operation in the chain.
+//MG: processes M and then N processors?
+
+=== Considerations for Operation with Callback
+
+
+* All the considerations in the callback’s javadocs
+* The generic is not optional. It MUST be provided
+If an operation operates on items other than the payload (attributes, mediaType, etc), then it must return `InterceptingCallback<OperationResult<Payload, Attributes>>`
+* The callback can prevent the intercepted chain from being executed through the `shouldProcessNext()` method
+* The callback can intercept errors and the resulting `MuleMessage` from the intercepted chain, but it cannot change their values.
+
+Example:
+
+[source,java,linenums]
+----
+public InterceptingCallback<InputStream> interceptingRead(String path) {
+	return new InterceptingCallback<InputStream>() {
+		public InputStream getResult() {
+			Return read(path);
+		}
+
+
+		public boolean shouldProcessNext() {
+			return true;
+		}
+
+
+		public void onSuccess(MuleMessage message) {
+			….
+		}
+
+
+		public void onException(Exception e) {
+			….
+		}
+
+
+		public void onComplete() {
+			cleanUp();
+		}
+};
+}
+----
+//MG nested processor implementation not yet final?
+////
+
+== Paged Operations
+
+Paging lets you avoid out-of-memory issues when processing a large quantity of records. Use SDK's `PagingProvider` interface to process records in chunks.
+
+.Example implementation of paged operation
+[source,java,linenums]
+----
+public PagingProvider<ConnectionImpl, Account> getPagedPersonalInfo(int fetchSize) {
+
+
+ return new PagingProvider<ConnectionImpl, Account>() {
+
+
+   @Override
+   public List<Account> getPage(ConnectionImpl conn) {
+     return conn.getAccounts(fetchSize);
+   }
+
+
+   @Override
+   public Optional<Integer> getTotalResults(ConnectionImpl conn) {
+     return conn.getTotalPagesForSize(fetchSize);
+   }
+
+
+   @Override
+   public void close() throws IOException {
+     conn.close()
+   }
+ };
+}
+----
+
+[NOTE]
+* `getPage()` returns the next "page" of items
+* `getPage()` returns an empty list when there are no more items to process
+* in some cases, it may not be desirable to retrieve the total quantity of results, in which case force the `getTotalResults()` method to return an `Optional.empty()` value
+//MG: is Optional.empty() standard Java expression?
+
+== Non-Blocking Operations
+
+Mule 4 has a brand new execution engine based on reactive streams. That means there’s top level support for non blocking operations. By default, all operations are blocking. As you probably noticed, the semantics of all the operation examples we’ve seen above are inherently blocking: the runtime invokes a method and gets a value in response. And that’s fine, since in real life most operations will be blocking (there aren’t much non blocking API’s/protocols out there, APIs such as JMS and DB don’t support non blocking and chances are they never will).
+
+One of the few protocols for which does support this is http. Being able to perform non blocking http request is key for scalability of gateway proxies. Any connector consuming a REST API can also benefit from this.
+
+Let’s see how the SDK allows you to develop non-blocking operations looking at an overly simplified http request operation
+
+public void request(String url, @Connection HttpClient client, @Content String body, CompletionCallback<InputStream, HttpAttributes> callback) {
+ client.send(url, body, new HttpResponseCallback() {
+   void onResponse(HttpResponse response) {
+     callback.success(Result.builder().output(response.getBody())
+                          .attributes(toAttributes(response))
+                          .build());
+   }
+
+   void onError(Exception e) {
+     callback.error(e);
+   }
+ });
+}
+
+Let’s dig into the example:
+
+An operation becomes non blocking when it has an argument of type CompletionCallback
+Just like configurations and connections, this argument is synthetic and won’t be visible to the user.
+Unlike blocking operations, the return type is not specified through the method’s return type:
+Non blocking operations always need to be specified through void methods
+The return value is passed through the success(Result) method of the CompletionCallback
+The declaration of the operation’s output type is done through the callback generics. Those generics are mandatory and cannot be skipped
+Non Blocking operations should not throw exceptions. Any errors should be channeled through the error() method in the callback
+Notice that in this example, the CompletionCallback is being consumed from between an HttpResponseCallback. This second callback is provided by an httpClient which supports asynchronous responses itself. As stated before, in order to do non blocking, you need to be consuming an API which allows that.
+
+So the result of this code, is a non blocking operation which returns an InputStream as payload and a HttpAttributes object as message attributes.
+
+=== Void operations
+
+It’s also possible to have a void non blocking operation. The use case for that is an IO operation which doesn’t return anything, such as writing to a file:
+
+public void write(String path, @Content byte[] bytes, CompletionCallback<Void, NullAttributes> callback) {
+ ...
+}
+
+As you can see here, you can use void and NullAttributes to represent an operation which is void.
+
+== Execution Types
+
+As explained in the non-blocking operations section, Mule 4 now has a reactive execution engine. That means that unlike in Mule 3.x where each flow had its own thread pool, SEDA queues, etc, now the runtime has a few global executors through which all tasks are run.
+
+In order to schedule those tasks correctly, the runtime needs to know which kind of processing each application is going to perform. The different processing types are listed in this enum: <<insert link when merged>>
+
+=== Specifying Execution Types
+
+In order to specify an operation’s execution type, the @Execution annotation is used:
+
+@Execution(CPU_INTENSIVE)
+public void computeFlightPlan() { .. }
+
+Inferring execution types automatically
+
+For usability purposes, it is not mandatory to always specify the execution type. If not provided, the SDK will automatically perform a best guess.
+
+Operation requires connection and is blocking: BLOCKING
+Operation requires connection and is non blocking: CPU_LITE
+None of the above: CPU_LITE
+
+
+Notice that as educated as this guess might be, it’s still a guess. You should always pay attention to which execution type your operation corresponds with, and if it doesn’t match with the best guess then you should specify the correct one. Failing to do that will negatively impact the performance of any application using your module.
+
+Also note that the runtime will never guess a CPU_INTENSIVE type. For those kind of operations, it is mandatory for the developer to specify it.
+
+== Declaring Parameters
+
+The basics of parameter declaration have already been covered on the sections on link:/creating-configuration[Creating Configurations]. However, there are more details to consider.
+
+=== POJO Introspection
+
+POJO type parameters are introspected in order to determine which parameters they contain. There are two mechanisms by which that can be done.
+
+==== Annotated Fields (Default and Recommended)
+
+The default and recommended approach is to annotate the fields of such pojo with the same set of annotations as a config would. This provides the greatest level of control, is consistent with the rest of the extension development model and works with field level injection.
+
+== Introspection of Extension Parameters
+
+We recommend you annotate the parameters of your extension configurations and operations as per the guidance on setting configuration attributes with `@Parameter`, whenever possible.
+
+==== Getters and Setters
+
+In cases where your extension must access a POJO that is defined in another .jar stored elsewhere, is shared with other projects or which cannot depend on extension annotates, the POJO is introspected using the JDK's "Introspector" class getters and setters to obtain its properties. Those properties are then turned into parameters. The downsides to this are:
+
+* the parameters are assumed to be optional. There is no support for UI placement via `@Placement`, nor expression support via `@Expression`--defaults are always assumed
+//MG: please explain above sentence--esp. "always assuming defaults" - see spec plz
+* Value injection occurs through the setter instead of the field itself, as there is no mechanism to verify the setter and the corresponding field have matching names or even exist.
+//MG the setter of the JDK operates on the parameter, not the Extensions API?
+
+
+=== Parameter Groups
+
+Groups of parameters which have a logical dependency on one another can be grouped; for example, connection parameters like "host", "port", "username" and "password" could be grouped in a single class using `@ParameterGroup`.
+
+[source,java,linenums]
+----
+@Parameter
+private String id;
+
+
+@ParameterGroup(name = "Connection")
+private ConnectionParameters connectionParameters;
+
+
+final class ConnectionParameters
+{
+
+
+   @Parameter
+   private String host;
+
+
+	 @Parameter
+	 private String port;
+…
+}
+----
+
+When it comes to writing the code itself for the extension, you can handle related items inside their own class.
+//MG: was this untrue before, could you not write params inside their own class?
+From the model point of view, the `ConnectionParameters` class written above would be flattened and added to the component that declares it. The corresponding `ConfigurationModel` would list three parameters: `id`, `host` and `port`, without any reference to the `ConnectionParameters` object.
+
+The same goes for operations:
+
+[source,java,linenums]
+----
+public void sendMessage(@Content payload, @ParameterGroup(name = "Connection) connectionParameters) {
+}
+----
+
+[NOTE]
+You may not use the `@ParameterGroup` annotation inside a complex object which is being used as a parameter group.
+//MG: does this mean: you cannot use nested parameter groups?
+
+==== Exclusive Parameter Groups
+
+When imposing restrictions on which parameters cannot be set at the same time as others, use `@ExclusiveOptionals` on the parameter group class. Notice how the `@Optional` is used to indicate the specific parameter to exclude.
+//MG: in spec the example does not have the @ParameterGroup annotation, is this correct?
+//MG: in addition to making the params optional, they also cannot be set by extension user at same time?
+
+[source,java,linenums]
+----
+@ExclusiveOptionals(isOneRequired = true)
+public class MyParameterGroup {
+
+
+	@Parameter
+	private Pojo notAffectedByExclusiveness;
+
+
+	@Parameter
+	@Optional
+	private String name;
+
+
+	@Parameter
+	@Optional
+	private Integer ID;
+}
+----
+
+== Defining Infrastructure Parameters
+
+At the "configurable" and "connection provider" levels of an extension are several types that can be leveraged using the Mule core infrastructure:
+
+* `PoolingProfile`
+* `RetryPolicyTemplate`
+* `TlsContextFactory`
+
+Declare a parameter as one of these types for any configuration or connection provider that needs one.
+
+[source,java,linenums]
+----
+public class MyExtension {
+
+
+	@Parameter
+	private PoolingProfile poolingProfile;
+
+
+	@Parameter
+private RetryPolicyTemplate retryPolicy;
+
+
+@Parameter
+private TlsContextFactory tlsContext;
+}
+----
+
+The resulting XML block would look like:
+
+[source,xml,linenums]
+----
+<my-extension:config>
+	<pooling-profile />
+	<reconnect />
+	<tls:context />
+</my-extension:config>
+----
+
+[NOTE]
+- The elements are not generated using the name of the annotated field.
+- You cannot use more than one parameter of the same type on the same element (a configuration may only have _one_ threading profile)
+//MG: what do we mean by element here? in same "configuration element"/configuration defined class?
+
+== TLS Context
+
+`TlsContextFactory` supports the XML element being a global element, and it is also possible to configure it as a reference parameter. The name of the attribute is always generated as `tlsContext`. You can see in the example that the `petstore` configuration references the `tlsContext` by name.
+
+[source,java,linenums]
+----
+<tls:context name="globalTlsContext">
+   <tls:trust-store path="ssltest-cacerts.jks" password="changeit"/>
+   <tls:key-store path="ssltest-keystore.jks" keyPassword="changeit" password="changeit"/>
+</tls:context>
+
+
+<petstore:config name="globalTls" tlsContext="globalTlsContext" />
+----
+
+`TlsContextFactory` implements the `Initialisable` interface. The injected instance will not be automatically initialized, therefore the extension must apply a lifecycle.
+
+== Special Parameters Types
+
+Operations or source callback Parameters can be defined of some special types to be able to retrieve values from the event or the resoved value:
+ParameterResolver<T>
+This parameter type is useful when is required to obtain the used expression for a parameter.
+Capabilities
+Using this kind of parameter the extension developer has the capability of:
+
+Differ the expression resolution, if an expression was used.
+Get the used expression.
+How to use it:
+This an example operation where a String parameter is declared:
+
+[source,java,linenums]
+----
+public void someOperation(String someParameter) {
+ ...
+}
+----
+
+To retrieve a ParameterResolver but keeping the String value as the parameter type for the operation model, is  required to change the parameter type from String to ParameterResolver but declaring String as the generic type of it:
+
+[source,java,linenums]
+----
+public void someOperation(ParameterResolver<String> someParameter) {
+ ...
+}
+
+TypedValue<T>
+----
+
+This parameter type is useful when is required to retrieve the DataType of the value of a certain parameter.
+Capabilities
+With this parameter type, the extension developer can consult the DataType of the parameter value, being able to retrieve the MimeType and encoding of it, and also to get the resolved value for the parameter.
+How to use it:
+This an example operation where a String parameter is declared:
+
+[source,java,linenums]
+----
+public void someOperation(String someParameter) {
+ ...
+}
+
+To retrieve a TypedValue but keeping the String value as the parameter type for the operation model, is required to change parameter type from String to TypedValue, but declaring String as the generic type of it:
+
+public void someOperation(TypedValue<String> someParameter) {
+ ...
+}
+----
+
+== How to Configure XML Support for Extension
+
+XML support for Mule is made possible through the Spring framework. This means a Mule component/extension must have an XSD schema, `NamespaceHandler` and a set of `BeanDefinitionParsers` and or `FactoryBeans`.
+
+You can customize the `schemaLocation`, `schemaVersion`, and namespace prefix, but SDK will calculate defaults for all of them. For the schema version, the Maven artifact version is used.
+
+=== XML DSL
+
+Use the `@Xml` annotation to set namespace details for your extension explicitly, rather than let the SDK infer them automatically.
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@Xml(namespaceLocation = "http://www.mulesoft.org/schema/mule/extension/heisenberg", namespace = "heisenberg")
+public class HeisenbergExtension
+----
+
+This example is exhaustive and thus shows how users can customize `schemaLocation`, `schemaVersion`, namespace prefix, etc. However, all of those attributes are optional and the SDK will calculate defaults for all of them. In the case of the schema version, it will use the maven artifact version.
+
+=== Declaring the XML Element Alias
+
+Declare the XML element alias using the `@Alias` annotation:
+
+[source,java,linenums]
+----
+@Alias("ListenPayments")
+public class HeisenbergSource extends Source<Void, Serializable>
+{
+    //…
+
+    @Parameter
+    @Alias("poolSize")
+    private int corePoolSize;
+
+    //…
+}
+----
+
+The XML name of the annotated element will be obtained from the declared alias in quotes above, instead of using the class or Java parameter name.
+
+In this case, the resulting XML is:
+
+[source,java,linenums]
+----
+<flow name="flow1">
+<heisenberg:listen-payments poolSize="10" />
+</flow>
+----
+
+=== Customizing XML Schema Generation
+
+SDK prefers consistency when it comes to schema generation for extensions. However, you can in fact customize how the XML is organized to support parameters of complex types (POJO, lists, maps, etc). SDK provides the `@XmlHints` annotation giving access to two booleans whose values you can toggle.
+//MG: what does "hints" mean in this context? It is not clear to me.
+
+* `allowInlineDefinition` - SDK determines through the types if it is possible to define them explicitly through XML (normally defined through child elements)
+//MG: is `allowTopLevelDefinition` supported?
+* `allowReferences` - when true, this targets the complex type parameters. Regardless of the complex parameters having a child element or not, there will always be an attribute allowing the user to provide a reference to a MEL expression or a static reference to the Mule registry.
+//MG: so MEL and DW are supported at the operation level. There may be cases when a static value in an attribute that allows references to be interpreted as the actual value, and a not a reference to the registry.
+
+A typical example of this is an outbound operation (`socket:send`, `file:write`, etc), in which the input parameter is of type Object (because many input types are supported):
++
+`<file:write data="Hello" />`
++
+This should not match the attribute data to a registry entry of key "Hello", but should map to the actual “Hello” String, which, can be achieved by the following code:
++
+`public void write(@XmlHints(allowReferences=false) Object data) {
+}`
+
+=== Schema Generation
+
+While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
+
+
+=== XML Support Takeaways
+
+Because parsers and schemas are automatically generated, consistency is easily achieved
+The parsers know how to deal with all the `DataType` qualifiers, including POJO. These parsers know how to deal with POJOs that are compliant with the bean contract and are capable of handling:
+
+* simple attributes
+* acyclic bean composition
+* list and maps of simple types and beans
+
+All of the above can be defined in line or through spring references.
+
+=== Inline Configuration Example
+
+Parameters declared inline can be of complex types like List, Maps, POJOs and also they can be combined. All the “simple” values, like String or Integer will be declared as a value attribute of the element, while complex structures will be supported as child elements.
+
+Type references as child-elements are not allowed to declare its own name attribute, since it is reserved for top level elements only.
+
+[source,java,linenums]
+----
+<heisenberg:config name="heisenberg" cancer="true" dateOfBirth="1959-09-07T00:00:00"
+                       dateOfDeath="2011-09-07T00:00:00-05:00" money="1000000">
+	 <!-- List<String> -->
+        <heisenberg:enemies>
+            <heisenberg:enemy value="Gustavo Fring"/>
+            <heisenberg:enemy value=""/>
+        </heisenberg:enemies>
+
+  <!-- Set<Ricin> with inline Ricin -->
+        <heisenberg:ricin-packs>
+            <heisenberg:ricin-pack microgramsPerKilo="22">
+                <heisenberg:destination victim="Lidia" address="Stevia coffe shop"/>
+            </heisenberg:ricin-pack>
+            <heisenberg:ricin-pack microgramsPerKilo="10">
+                <heisenberg:destination victim="Paul" address="Downtown pet shop"/>
+            </heisenberg:ricin-pack>
+        </heisenberg:ricin-packs>
+
+	 <!-- KnockeableDoor -->
+        <heisenberg:next-door address="pollos hermanos" victim="Gustavo Fring">
+            <heisenberg:previous victim="Krazy-8" address="Jesse's"/>
+        </heisenberg:next-door>
+
+	 <!-- Map<String, KnockeableDoor> with door as ref -->
+        <heisenberg:candidate-doors>
+            <heisenberg:candidate-door key="skyler" value="skylerDoor"/>
+            <heisenberg:candidate-door key="saul" value="saulDoor"/>
+        </heisenberg:candidate-doors>
+
+	 <!-- Map<String, List<String>> -->
+<heisenberg:deaths-by-seasons>
+   	     <!-- Entry with List<String> inline -->
+            <heisenberg:deaths-by-season key="s01">
+                <heisenberg:deaths-by-season-item value="emilio"/>
+                <heisenberg:deaths-by-season-item value="domingo"/>
+            </heisenberg:deaths-by-season>
+   	     <!-- Entry with List<String> as expression-->
+            <heisenberg:deaths-by-season key="s02" value="#[['some', 'other']]"/>
+            <heisenberg:deaths-by-season key="s02" value="#[['tuco', 'tortuga']]"/>
+        </heisenberg:deaths-by-seasons>
+
+	 <!-- Map<String, Ricin> with inline Ricin-->
+        <heisenberg:labeled-ricins>
+            <heisenberg:labeled-ricin key="pojo">
+                <heisenberg:ricin microgramsPerKilo="22">
+                    <heisenberg:destination victim="Lidia" address="Stevia coffe shop"/>
+                </heisenberg:ricin>
+            </heisenberg:labeled-ricin>
+        </heisenberg:labeled-ricins>
+
+	 <!-- Map<String, Long> -->
+        <heisenberg:recipes>
+            <heisenberg:recipe key="methylamine" value="75"/>
+            <heisenberg:recipe key="pseudoephedrine" value="0"/>
+        </heisenberg:recipes>
+    </heisenberg:config>
+----
+
+=== Top Level Parameters
+
+Another cool feature is that for every POJO type with support for inline definition, top-level support is added as well. So, for example, in the same way that a Door object is declared inline above, There’s also a top level element for which you can define this:
+
+[source,xml,linenums]
+----
+<mule>
+<heisenberg:door victim="Skyler" address="308 Negra Arroyo Lane" name="skylerDoor" />
+</mule>
+----
+
+Notice how the name attribute which wasn’t available on the inline definition schema is not available. The platform will parse that Door object and will add it to the registry under the name “skylerDoor”.
+
+
+=== Configuration Example Using References
+
+You can also build a configuration using only references to things in the Mule registry. Here’s an example:
+
+[source,xml,linenums]
+----
+<heisenberg:config name="expressionHeisenbergByRef"
+                  myName="#[myName]"
+                  age="#[age]"
+                  cancer="#[true]"
+                  initialHealth="#[initialHealth]"
+                  finalHealth="#[finalHealth]"
+               dateOfBirth="#[org.mule.module.extensions.internal.ConfigParserTestCase.getDateOfBirth().getTime()]"
+                  dateOfDeath="#[org.mule.module.extensions.internal.ConfigParserTestCase.getDateOfDeath()]"
+                  money="#[money]"
+                  recipe="#[app.registry.recipes]"
+                  candidateDoors="#[app.registry.candidateDoors]"
+                  enemies="#[app.registry.enemies]"
+                  ricinPacks="#[app.registry.ricinPacks]"
+                  nextDoor="#[app.registry.door]">
+</heisenberg:config>
+
+<spring:beans>
+   <util:map id="recipes" value-type="java.lang.Long">
+       <spring:entry key="methylamine" value="75"/>
+       <spring:entry key="pseudoephedrine" value="0"/>
+       <spring:entry key="P2P" value="25"/>
+   </util:map>
+
+   <util:map id="candidateDoors">
+       <spring:entry key="skyler" value-ref="skylerDoor"/>
+       <spring:entry key="saul" value-ref="saulDoor"/>
+   </util:map>
+
+   <util:list id="enemies">
+       <spring:value>Gustavo Fring</spring:value>
+       <spring:value>Hank</spring:value>
+   </util:list>
+
+   <util:set id="ricinPacks">
+       <spring:ref bean="ricin"/>
+   </util:set>
+   </spring:beans>
+
+<heisenberg:door victim="Gustavo Fring" address="pollos hermanos" name="door">
+   <heisenberg:previous victim="Krazy-8" address="Jesse's" />
+</heisenberg:door>
+
+<heisenberg:ricin microgramsPerKilo="22" name="ricin">
+   <heisenberg:destination victim="Lidia" address="Stevia coffee shop" />
+</heisenberg:ricin>
+
+<heisenberg:door victim="Skyler" address="308 Negra Arroyo Lane" name="skylerDoor" />
+
+<heisenberg:door victim="Saul" address="Shopping Mall" name="saulDoor" />
+----
+
+=== Declaring Subtypes Mapping
+
+When a `@Parameter` or operation argument is of a general type with multiple implementations, any of those implementations can be used to populate the parameter. In order to provide better XML support for type hierarchies, the Extension developer can declare how a base type should be mapped to its subtypes whenever that base type appears as a parameter.
+
+If the developer declares:
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@SubTypeMapping(baseType = Shape.class, subTypes = {Square.class, Triangle.class})
+public class HeisenbergExtension
+----
+
+Then, for any parameter of `Shape` type, the user will have XML support to create a `Square`, a `Triangle` or a `Shape` (if shape is not an abstract type):
+
+[source,xml,linenums]
+----
+<heisenberg:my-operation>
+	<heisenberg:shape-param>
+<heisenberg:square side="4" area="16"/>
+</heisenberg:shape-param>
+</heisenberg:my-operation>
+----
+
+=== Declaring Imported Types
+
+If an extension is required to use a type defined in a different module, then the developer will be able to declare that type as an imported type. Then, whenever that type is used, a reference to its original declaration will be provided in the XML support, instead of redefining the type as if it was declared in the current Extension.
+
+[source,java,linenums]
+----
+@Extension(name = "petstore")
+@Import(type = Ricin.class, from = HeisenbergExtension.class)
+public class PetstoreExtension
+----
+
+When the import is declared, the user will be able to reference the original `heisenberg:ricin` element:
+
+[source,xml,linenums]
+----
+<petstore:banned-items>
+	<petstore:item>
+<heisenberg:ricin microgramsPerKilo="22">
+   <heisenberg:destination victim="Lidia" address="Stevia coffe shop" />
+</heisenberg:ricin>
+</petstore:item>
+</petstore:banned-items>
+----
+
+=== Platform-Provided NamespaceHandler
+
+Because `NamespaceHandlers` are java classes and not static resources like the spring bundles and the XSD schemas, these don’t require code generation and can be coded once in a generic way.
+
+The `ExtensionsNamespaceHandler` class queries the `ExtensionManager` for any XML capable extensions matching a given namespace, and by using the introspection model is capable of handling any extension in a generic way. It then registers `BeanDefinitionParsers` for multiple purposes:
+
+* Parsing configurations
+* Parsing top level pojos
+* Parsing operations
+
+=== Platform-Provided Definition Parsers
+
+The platform also provides a set of definition parsers to parse extensions and their components in a generic way without relying on generated code.
+
+==== ConfigurationBeanDefinitionParser
+
+The `configurationBeanDefinitionParser` parses configuration objects and their attributes by navigating the DOM Element and the configuration metamodel side-by-side. Because the extensions’s API supports expressions on every attribute, what it registers in the Mule registry is not the actual configuration but a `ValueResolver` which returns the correct configuration for each event. It does so by building a `ResolverSet` for each attribute and then obtains a `ResolverSetResult` from the invoking event. Those results are cached and associated to a configuration instance.
+
+==== ConfigurationProviderFactoryBean
+
+This definition parser doesn’t build the instance on its own, but collaborates with a `FactoryBean`. Because the registered object is a `ConfigurationProvider` and the config attributes are also resolved through `ValueResolvers`, Spring is not 100% in charge of the creation of the object. The problem of that is the resolution of the property placeholders that the user might use on the configuration or any of its nested attributes. To solve this problem, an `ElementDescriptor` class was created. This class is basically a `ValueObject` containing the most valuable information of the DOM element. The trick is that the `ElementDescriptor` is created through a `BeanDefinition` and then passed to the `FactoryBean` as a constructor value. In that way, the `ElementDescriptor` that reaches the `FactoryBean` has resolved property placeholders and then the factory bean completes the object creation.
+
+==== OperationBeanDefinitionParser
+
+The same pattern is applied to operations. There is also an operations bean definition parser which parses the operations and outputs instances of OperationMessageProcessor.
+
+==== OperationMessageProcessorFactoryBean
+
+Operation elements and their child elements can also contain property placeholders and have the same problems as the configurations. The same pattern of using an ElementDescriptor with a FactoryBean is repeated just like with configurations.
+
+==== TopLevelParameterTypeBeanDefinitionParser
+
+Finally, this definition parser is used to parse top level pojos and make them available through the Mule registry. It reuses the logic previously used for parsing configurations.
+
+=== Obtaining a Configuration’s Name
+
+Something good about the SDK is that it takes care about XML parsing automatically. The downside of it is that you lose some degree of control regarding which information you can actually obtain.
+
+One particular case is obtaining the name that a config has been given on the XML. Obtaining such a name is useful for logging purposes or to give descriptive names to any threads that the config starts.
+
+To do that, the `@ConfigName` annotation is available:
+
+[source,java,linenums]
+----
+@ConfigName
+private String configName;
+----
+
+That annotation can be used on fields of classes from which a config is derived. Has to be of type String and does not require setters.
+
+== UI Configurations
+
+The platform tooling requires rendering UIs for a user to configure extensions and their operations. As the platform goes, this tooling goes beyond Anypoint Studio. It is possible to enrich the ExtensionModel with generic, technology agnostic, hints about how should that UI be rendered.
+
+=== @Placement
+
+https://github.com/mulesoft/mule-extensions-api/blob/72d2ae3ec8d9d480bd4318ce6c0e84b18f866bc7/src/main/java/org/mule/extension/api/annotation/param/display/Placement.java#L26-L26
+
+The Placement annotation can be used at a parameter level on configs, operations and sources. It allows to assign parameters to specific tabs and/or specify the order in which it should appear in the tooling. This not only allows for a more clear and descriptive UI, it also allows putting cohesive parameters together regardless of how/where they’re defined in the source code.
+
+=== @DisplayName
+
+Allows giving a parameter a UI name which is different from the model one. It can be applied to any parameter, at any level.
+
+https://github.com/mulesoft/mule-extensions-api/blob/aa0ee5622ab258c159664cbfb9508f20e30f95c2/src/main/java/org/mule/extension/api/annotation/param/display/DisplayName.java#L30-L30
+
+=== @Text
+
+https://github.com/mulesoft/mule-extensions-api/blob/9bb020798dfb3936ff1245e086e70ac47faa3f8f/src/main/java/org/mule/extension/api/annotation/param/display/Text.java#L27-L27
+
+Specifies that a parameter should be rendered as a multi line text box. It can be applied to any parameter, at any level.
+
+=== @Password
+
+https://github.com/mulesoft/mule-extensions-api/blob/9bb020798dfb3936ff1245e086e70ac47faa3f8f/src/main/java/org/mule/extension/api/annotation/param/display/Password.java#L27-L27
+
+Specifies that a parameter represents a password and should be masked in the UI. It can be applied to any parameter, at any level.
+
+=== @Summary
+
+https://github.com/mulesoft/mule-extensions-api/blob/a839fead7f1a5d80c90e1e509930b5ace23bba1a/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/annotation/param/display/Summary.java#L32
+
+Allows a brief summary about the parameter describing its purpose. This annotation is meant to be used for the content of a tooltip which adds a short but meaningful explanation of the parameter.
+
+=== @Example
+
+https://github.com/mulesoft/mule-extensions-api/blob/0345b700213ab38351ef3803b682ec58a8aad908/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/annotation/param/display/Example.java#L28
+
+Allows giving an example of how the value of the parameter should look like.
+
+== Dependency Injection
+
+All configurations and operations support dependency injection at a field level using the @Inject annotation. Any object in the mule registry is a candidate for injection. If many candidates of the same type are available, then the @Named annotation or any @Qualifier can be applied.
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+public class HeisenbergExtension
+{
+@Inject
+private ExtensionManager extensionManager;
+}
+
+public class HeisenbergOperations
+{
+
+   @Inject
+   private ExtensionManager extensionManager;
+}
+----
+
+== Testing Framework
+
+Tests using extensions should extend the `MuleArtifactFunctionalTestCase` class. This specialization of the traditional `FunctionalTestCase` TCK component still requires the user to provide the path to configuration file(s) with your tests flows, component, etc., but also provides the following services:
+
+* It automatically discovers, creates and registers all the Mule modules in the test classpath
+* It generates all resources needed for such modules to function
+* It executes the tests using a classloading isolation schema similar to the one that the runtime will use when actually running in production.

@@ -1,7 +1,7 @@
 = Creating an Account
 :keywords: anypoint platform, permissions, configuring, accounts
 
-If you already have a Mule Community account you can use that account. On the Anypoint Platform link:https://anypoint.mulesoft.com/#/signup[Login] page and enter your Mule Community credentials.
+If you already have a Mule Community account you can use that account. On the  link:https://anypoint.mulesoft.com/#/signup[Anypoint Platform Login page] enter your Mule Community credentials.
 
 You are presented with and must agree to the terms of service before proceeding.
 
@@ -25,6 +25,11 @@ A form appears for providing your contact information and creating a user name a
 +
 Anypoint Platform creates a new organization using the *Company* name you entered and makes you the administrator of that organization.
 * Agree to the link:https://cloudhub.io/legal.html[terms of service].
+. Click the *I'm not a Robot* Captcha's checkmark and wait for validation.
++
+[NOTE]
+You might be prompted to perform a small test before proceeding.
++
 . Click *Create account*.
 +
 . Start link:/api-manager/api-manager-user-guide[using the Anypoint Platform].
@@ -68,7 +73,7 @@ Assume that you are invited to join *MuleSoft* Organization, and that you have t
 
 . `Member` - An account not associated with any Organization.
 . `Admin` - An account with the link:/access-management/creating-an-account#the-organization-administrator[organization administrator role] associated to  a different organization. Let's call this other organization *Anypoint*.
-. `Owner` - An link:/access-management/roles#orgOwner[organization owner account] for a different organization (for example *Anypoint*). This means that `Owner` was the account used to create the *Anypoint* organization.
+. `Owner` - An link:/access-management/roles#organization-owner[organization owner account] for a different organization (for example *Anypoint*). This means that `Owner` was the account used to create the *Anypoint* organization.
 
 After clicking the link in the invitation, you can choose the account you want to use:
 
@@ -77,7 +82,7 @@ If the account you want to use is already associated to another organization, an
 
 ==== Using an Unassociated Account
 
-When an link:/access-management/creating-an-account#the-organization-administrator[organization administrator] *deletes* an account from the organization, this account is left _unattached_.
+When an organization administrator *deletes* an account from the organization, this account is left _unattached_.
 
 image::creating-an-account-ed2fb.png[]
 
@@ -100,7 +105,7 @@ If there were other members in the business group you are leaving behind, the or
 
 ==== Account Associated as an Organization Owner
 
-An usual scenario, is to create an account and not associate it to any existing organization. This automatically assigns your account to a new organization and sets your account as an link:/access-management/roles#orgOwner[organization owner]. +
+An usual scenario, is to create an account and not associate it to any existing organization. This automatically assigns your account to a new organization and sets your account as an link:/access-management/roles#organization-owner[organization owner]. +
 This is the case of the `Owner` account in this example:
 
 image::creating-an-account-8fecd.png[]

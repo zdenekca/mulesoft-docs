@@ -1,0 +1,9 @@
+Should follow connector doc template
+
+What the connector is
+
+How to use?
+Configuration reqs - Studio and Mozart considerations
+Provide link to the core connector Reference
+
+Link to procedures for specific configuration scenarios

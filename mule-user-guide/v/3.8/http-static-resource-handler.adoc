@@ -80,7 +80,7 @@ doc:name="HTTP Static Resource Handler"
 +
 image:httpstaticblah.png[image]
 +
-. Leave the HTTP connector with its default settings, pointing to `0.0.0.0:8081`.
+. Leave the HTTP connector with its default settings, pointing to `+0.0.0.0:8081+`.
 . Create a new folder on your local hard drive, and place a static HTML file in it. Any HTML file works, such as:
 +
 [source,html,linenums]
@@ -97,7 +97,7 @@ image:httpstaticblah.png[image]
 image:http_static.png[image]
 +
 . Save, then run your project. Right-click your project name in the Package Explorer and click *Run As* > *Mule Application*. You can also run your application from the *Run* menu.
-. Open any browser window, and type link:0.0.0.0:8081[0.0.0.0:8081] in the address bar. 
+. Open any browser window, and type +0.0.0.0:8081+ in the address bar. 
 . Your HTML file loads, and if you have a display item like in the example, the text displays:
 +
 image:hello-mules.png[hello-mules]
@@ -141,7 +141,7 @@ In this example, the path is /Users/me/ and the file name is mulesoft.html.
 ----
 +
 . Save, then run your project.
-. Open any browser window, then type `0.0.0.0:8081` in the address bar:
+. Open any browser window, then type `+0.0.0.0:8081+` in the address bar:
 +
 image:hello-mules.png[hello-mules]
 +
