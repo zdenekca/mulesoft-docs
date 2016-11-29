@@ -159,7 +159,11 @@ Most of the Runtime Manager Agent configuration options add or replace configura
 
 === Selecting and Configuring Monitoring Console Options
 
+<<<<<<< HEAD
 Normally, you will configure a Runtime Manager Agent to communicate and exchange monitoring information with an Anypoint Platform Runtime Manager cloud console. This type of installation is performed using the `-H` option, using the security token provided by the Anypoint Platform Runtime Manager cloud console. Communication with either type of Anypoint Runtime Manager console is via web sockets, and will be configured as a WebSockets transport in the `$MULE_HOME/conf/mule-agent.yml` file.
+=======
+Normally, you will configure a Runtime Manager Agent to communicate and exchange monitoring information with an Anypoint Platform Runtime Manager cloud console. This type of installation is performed using the `-H` option, using the security token provided by the Anypoint Platform Runtime Manager cloud console. Communication with either type of Anypoint Runtime Manager console is via websockets, and will be configured as a WebSockets transport in the `$MULE_HOME/conf/mule-agent.yml` file.
+>>>>>>> edits to pull request
 
 === Combining Monitoring Console Options
 
@@ -187,7 +191,15 @@ For further information, please check the JMX section in Mule Agent documentatio
 
 The `amc_setup` command has various parameters to fulfill various use cases:
 
+<<<<<<< HEAD
 * Register a Mule runtime with a Runtime Manager console
+=======
+== amc_setup Parameters
+
+The `amc_setup` command has various parameters to fulfill various use cases:
+
+* Register a Mule runtime with a Runtime Mansgher console
+>>>>>>> edits to pull request
 * Manage a Mule runtime via the local Runtime Manager Agent REST API interface, either via HTTP or HTTPS
 * Update the Runtime Manager Agent software
 * Get Help
@@ -230,7 +242,13 @@ These arguments work in both cloud and on-prem versions of Anypoint Platform.
 
 
 === Hybrid Runtime Manager Management
+<<<<<<< HEAD
 Configures the Runtime Manager Agent to create a hybrid management connection with a Runtime Manager. The connection is to a specific environment for a specific business group. The business group can exist in an account in the MuleSoft managed (cloud-based) Anypoint Platform, or in an Anypoint Platform On-Premises Edition installation which you are responsible for managing.
+=======
+
+The simplest way to manage a Mule runtime is to register the Mule runtime with the cloud Runtime Manager console.
+This option, configurable on the installation command through the '-H' argument, configures the Runtime Manager Agent to connect to the Runtime Manager. This option requires a token (provided by the Runtime Manager console) and an instance name. For details, see link:/runtime-manager/managing-servers#add-a-server[Managing Servers].
+>>>>>>> edits to pull request
 
 
 The simplest way to manage a Mule runtime is to register the Mule runtime with the MuleSoft managed Anypoint Platform Runtime Manager console.
@@ -255,10 +273,19 @@ In the Runtime Manager console, you can see a full example of the code you need 
 `<server-name>` is the instance name with which to label the Mule runtime in the Runtime Manager console. This name must be unique within the business group's environment.
 |===
 
+<<<<<<< HEAD
 ==== Obtaining a Registration Token
 The `-H` parameter is required to register a Mule runtime with Runtime Manager. You must provide a valid registration token to this parameter. The access_token is copied from the Runtime Manager console, for a specific environment within a specific business group. The Mule runtime will then be managed within this particular Anypoint Platform business group's environment.  The `-H` is used for both regular (cloud-based) Anypoint Platform and Anypoint Platform On-Premises Editions.
 
 To obtain the registration token, you need to use the *Add Server* option in the Runtime Manager. This presents a complete command to register the Mule runtime in the format `./amc_setup -H <token> <server-name>`. Once you have the command with the registration token, copy-paste it into the `$MULE_HOME/bin` folder for each Mule runtime you wish to register. Make sure to change the instance name `server-name` to the unique instance name you wish to use to label this Mule runtime in the Runtime Manager console.
+=======
+To obtain the registration token, you need to use the *Add Server* option in the Runtime Manager. This presents a complete command to register the Mule runtime in the format `./amc_setup -H <token> server_name`. Once you have the command with the registration token, copy-paste it into the `$MULE_HOME/bin` folder for each Mule runtime you wish to register. Make sure to change the server name `server_name` to the unique name you wish to use to label this Mule runtime in the Runtime Manager console.
+
+[NOTE]
+----
+You can use the same copied registration command for multiple Mule runtimes, but make sure to change the default label `server_name` to a unique name for each Mule runtime.
+----
+>>>>>>> edits to pull request
 
 [NOTE]
 ====
@@ -324,7 +351,10 @@ The help fo these additional parameters says they are optional, but you will nee
 
 ==== Specifying URLs of On-Premises Services
 
+<<<<<<< HEAD
 This table describes all the additional parameters you will need to append to the `./amc_setup -H <token> <server-name>` command to register a Mule runtime with an Anypoint Platform On-Premises Edition Runtime Manager.
+=======
+>>>>>>> edits to pull request
 
 [%header,cols="20a,80a"]
 |===
