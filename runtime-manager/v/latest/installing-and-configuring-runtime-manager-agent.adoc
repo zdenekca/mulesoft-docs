@@ -46,12 +46,12 @@ The Runtime Manager Agent works with Mule 3.6.0 and newer, and API Gateway 2.1 a
 
 [TIP]
 ====
-We recommend that you run the latest version of Mule Enterprise. You can download the latest version from the link:http://www.mulesoft.com/support-login[customer portal].
+We recommend that you run the latest version of Mule Enterprise. You can download the latest version from the link:http://www.mulesoft.com/support-login[customer portal].
 ====
 
 == Installing from a Software Distribution
 
-The agent comes bundled with your Mule runtime installation. You can install it by running `$MULE_HOME/bin/amc_setup` (or `$MULE_HOME\bin\amc_setup.bat` if on Windows).
+The agent comes bundled with your Mule runtime installation. You can install it by running `$MULE_HOME/bin/amc_setup` (or `$MULE_HOME\bin\amc_setup.bat` if on Windows).
 
 *See the <<Installation Options>> section below for the arguments that can be used when running this command.*
 
@@ -67,7 +67,7 @@ Download the agent and follow the steps in the <<Installing the Agent from the Z
 == Download the Latest Version of the Agent
 
 
-Download the link: http://mule-agent.s3.amazonaws.com/1.6.0/agent-setup-1.6.0.zip[Runtime Manager Agent v1.6.0 zip file].
+Download the link: http://mule-agent.s3.amazonaws.com/1.6.1/agent-setup-1.6.1.zip[Runtime Manager Agent v1.6.1 zip file].
 
 
 You can also find the download links to older versions of the Runtime Manager in the link:/release-notes/runtime-manager-agent-release-notes[release notes page]
@@ -110,7 +110,7 @@ If you're not sure if a prior version has already been installed, check the `$MU
 
 Previous releases of compatible Mule and API Gateway runtimes shipped with an older version of the `amc_setup` script. If you already ran an older version of this script to install an earlier version of the Runtime Manager Agent, then you can upgrade the Runtime Manager Agent software but keep your existing Runtime Manager Agent configuration and modifications.
 
-To upgrade an existing Runtime Manager Agent, after you have updated the software in your $MULE_HOME/bin folder, type `./amc_setup -U` to update the agent version, but keep your existing `$MULE_HOME/conf/mule-agent.yml` configuration.
+To upgrade an existing Runtime Manager Agent, after you have updated the software in your $MULE_HOME/bin folder, type `./amc_setup -U` to update the agent version, but keep your existing `$MULE_HOME/conf/mule-agent.yml` configuration.
 
 [NOTE]
 ====
@@ -118,7 +118,7 @@ If you are using Windows, run `amc_setup.bat -U` instead of `./amc_setup -U`.
 
 *See the <<Installation Options>> section below for the arguments that can be used when running this command.*
 
-Restart Mule with the `$MULE_HOME/bin/./mule restart` command.
+Restart Mule with the `$MULE_HOME/bin/./mule restart` command.
 ====
 
 [NOTE]
@@ -131,11 +131,11 @@ For information on starting and stopping API Gateway, see link:/api-manager/conf
 The amc_setup script makes the following changes to your Mule runtime installation:
 
 . Backs up the current version of the agent:
-** Everything under `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER` is archived into  `$MULE_HOME/tools/mule-agent-backup.zip`.
-** Any custom modules you have installed (usually located in `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER/lib/modules`) are archived into  `$MULE_HOME/tools/mule-agent-modules-backup.zip`.
-. Updates agent libs under `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER/lib`
-. Keeps the current `$MULE_HOME/conf/mule-agent.yml` configuration file.
-. Keeps modules under `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER/lib/modules` unchanged (all custom modules added to the agent that are not included in the agent distribution should be installed in this folder).
+** Everything under `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER` is archived into  `$MULE_HOME/tools/mule-agent-backup.zip`.
+** Any custom modules you have installed (usually located in `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER/lib/modules`) are archived into  `$MULE_HOME/tools/mule-agent-modules-backup.zip`.
+. Updates agent libs under `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER/lib`
+. Keeps the current `$MULE_HOME/conf/mule-agent.yml` configuration file.
+. Keeps modules under `$MULE_HOME/plugins/MULE_AGENT_PLUGIN_FOLDER/lib/modules` unchanged (all custom modules added to the agent that are not included in the agent distribution should be installed in this folder).
 . No reregistration is needed after the process is done, just restart the Mule or API Gateway instance.
 
 
@@ -222,7 +222,7 @@ These arguments work in both cloud and on-prem versions of Anypoint Platform.
 
 
 |`--mule-home`
-|The location of the `$MULE_HOME` directory. Use this option if you are not running the installation script from `$MULE_HOME/bin`. The mule-agent.yml file is read from `../conf`, relative to this `--mule-home` location.
+|The location of the `$MULE_HOME` directory. Use this option if you are not running the installation script from `$MULE_HOME/bin`. The mule-agent.yml file is read from `../conf`, relative to this `--mule-home` location.
 
 |`--skip-gateway-clientid`
 |Skip Anypoint API Gateway client_id and client_secret configuration.
@@ -258,7 +258,7 @@ In the Runtime Manager console, you can see a full example of the code you need 
 ==== Obtaining a Registration Token
 The `-H` parameter is required to register a Mule runtime with Runtime Manager. You must provide a valid registration token to this parameter. The access_token is copied from the Runtime Manager console, for a specific environment within a specific business group. The Mule runtime will then be managed within this particular Anypoint Platform business group's environment.  The `-H` is used for both regular (cloud-based) Anypoint Platform and Anypoint Platform On-Premises Editions.
 
-To obtain the registration token, you need to use the *Add Server* option in the Runtime Manager. This presents a complete command to register the Mule runtime in the format `./amc_setup -H <token> <server-name>`. Once you have the command with the registration token, copy-paste it into the `$MULE_HOME/bin` folder for each Mule runtime you wish to register. Make sure to change the instance name `server-name` to the unique instance name you wish to use to label this Mule runtime in the Runtime Manager console.
+To obtain the registration token, you need to use the *Add Server* option in the Runtime Manager. This presents a complete command to register the Mule runtime in the format `./amc_setup -H <token> <server-name>`. Once you have the command with the registration token, copy-paste it into the `$MULE_HOME/bin` folder for each Mule runtime you wish to register. Make sure to change the instance name `server-name` to the unique instance name you wish to use to label this Mule runtime in the Runtime Manager console.
 
 [NOTE]
 ====
@@ -565,7 +565,7 @@ keytool -import -v -trustcacerts -alias client -file client.crt -keystore cacert
 
 The communication channel for the agent will be encrypted using public/private key certificates.
 In the following steps you will be asked to provide the keystore and truststore. Both keystore and
-truststore format must be JKS.
+truststore format must be JKS. 
 
 
 Keystore location (?):/security/rmakeystore.jks
@@ -598,6 +598,7 @@ services:
     frequencyTimeUnit: MINUTES
 
 ----
+Note: The `/security/cacerts.jks` truststore file will be imported into the `$MULE_HOME/conf` folder and renamed as `truststore.jks`. 
 
 . Restart the Mule runtime, and verify the Runtime Manager Agent REST interface starts up successfully. Add SSL debugging to the Mule runtime logging. `./mule -M-Djavax.net.debug=all`
 
@@ -680,9 +681,9 @@ The sections that follow provide additional configuration details for Runtime Ma
 If you wish to use the Agent to send data from the Runtime Manager to Splunk, an ELK stack or other external software, then you must configure it in a different way from the one described below. See link:/runtime-manager/sending-data-from-arm-to-external-monitoring-software[Sending Data from the Runtime Manager to External Monitoring Software] for details.
 
 
-=== Configuring mule-agent.yml
+=== Configuring mule-agent.yml
 
-At startup, the Runtime Manager Agent reads its configuration from the file `$MULE_HOME/conf/mule-agent.yml`. You must manually add, then edit this file with your installation's configuration parameters.
+At startup, the Runtime Manager Agent reads its configuration from the file `$MULE_HOME/conf/mule-agent.yml`. You must manually add, then edit this file with your installation's configuration parameters.
 
 [source,yaml, linenums]
 ----
@@ -692,9 +693,9 @@ organizationId: organizationId
 transports:
     rest.agent.transport:
         security:
-            keyStorePassword: mykeystorePassword
-            keyStoreAlias: agent
-            keyStoreAliasPassword: agentpassword
+            keyStorePassword: rmakeystore.jks
+            keyStoreAlias: rma
+            keyStoreAliasPassword: mulesoft
         port: 9997
 
 services:
@@ -726,10 +727,10 @@ internalHandlers:
 
 ==== Configuration File Structure
 
-The `mule-agent.yml` file is structured in three levels:
+The `mule-agent.yml` file is structured in three levels:
 
 * First level: Component types: transports, services, internalHandlers, and externalHanders.
-** Second level: Component name, for example, `mule.agent.jmx.publisher.service`.
+** Second level: Component name, for example, `mule.agent.jmx.publisher.service`.
 *** Third level: Component configuration. A component can have complex object configurations, including more than one recursive level.
 
 To learn more on how to configure the Runtime Manager Agent, refer to the documentation of each component.
@@ -747,11 +748,11 @@ Some agent components allow you to configure them during runtime. For further in
 
 == Enabling REST Agent Transport and Websocket Transport
 
-When you register the API Gateway in the Runtime Manager, the generated `mule-agent.yml` disables the REST agent Transport.
+When you register a Mule runtime in the Runtime Manager, the generated `mule-agent.yml` disables the REST agent Transport (it replaces any existing configuration).
 
-Conversely, if you run `./amc_setup -I`, you enable the REST agent Transport and disable the WebSocket Transport, that is the one used to connect to AMC.
+Conversely, if you run `./amc_setup -I`, you enable the REST agent Transport and disable the WebSocket Transport (it replaces any existing WebSocket Transport configuration used to connect to Runtime Manager).
 
-To run both transports, modify the `mule-agent.yml` file as follows:
+To run both transports, modify the `mule-agent.yml` file with the following pattern:
 
 [source,yaml, linenums]
 ----
@@ -827,7 +828,7 @@ The hostnames that you should include in your Layer 7 Firewall rules include:
 
 You can configure the Runtime Manager Agent to send websocket messages through an HTTP proxy.
 
-By default, the Runtime Manager Agent reads its proxy configuration from the same file that Anypoint API Gateway uses for its proxy configuration. This file is `wrapper.conf`, located under Mule's `conf/` directory. However, you can override the values stored in this file with values specific to the Runtime Manager Agent, by editing the agent's configuration file.
+By default, the Runtime Manager Agent reads its proxy configuration from the same file that Anypoint API Gateway uses for its proxy configuration. This file is `wrapper.conf`, located under Mule's `conf/` directory. However, you can override the values stored in this file with values specific to the Runtime Manager Agent, by editing the agent's configuration file.
 
 === Default wrapper.conf File
 
@@ -844,7 +845,7 @@ In this file the properties that define proxy configuration are:
 
 `$MULE_HOME/conf/mule-agent.yml`.
 
-To define proxy configuration specific to the Runtime Manager Agent, edit the configuration properties in this file as shown below. The properties in this file override those stored in the default `wrapper.conf` file.
+To define proxy configuration specific to the Runtime Manager Agent, edit the configuration properties in this file as shown below. The properties in this file override those stored in the default `wrapper.conf` file.
 
 [source, yaml, linenums]
 ----
