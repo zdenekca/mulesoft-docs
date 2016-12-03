@@ -286,3 +286,16 @@ These sub-processors appear _inside_ a child element whose name corresponds to t
    </heisenberg:kill-one>
 </flow>
 ----
+
+== Supporting a Callback
+
+An operation at a position *N* that returns a callback `InterceptingCallback` can wrap all processors in a flow from *N+M*, that is, it processes the previous operation in the chain.
+
+=== Considerations for Operation with Callback
+
+
+* All the considerations in the callback’s javadocs
+* The generic is not optional. It MUST be provided
+If an operation wants to set more than the payload (attributes, mediaType, etc), then it must return an `InterceptingCallback<OperationResult<Payload, Attributes>>`
+* The callback can prevent the intercepted chain from being executed through the `shouldProcessNext()` method
+* The callback can intercept errors and resulting `MuleMessage` from the intercepted chain, but it cannot change its values.
