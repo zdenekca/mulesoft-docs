@@ -1,4 +1,4 @@
-= Adding Operations
+= Adding Operations to an Extension
 :toc: macro
 :toclevels: 2
 :toc-title:
@@ -15,10 +15,13 @@ After creating a configuration, add functionality to your extension by declaring
 
 Operations are declared in a similar way as configurations, with the additional restriction that a class that has been annotated to serve as an configuration cannot also contain configurations. You can use the `@Operations` annotation to point to the classes which hold the operations.
 
+* Every public method of the `@Operations` class is assumed to be a valid operation, therefore there is no need to use any annotation.
+* Any public method you don’t want exposed as an operation should be annotated with `@Ignore`
+* Every method argument is translated as a `ParameterModel`
+//MG need to mention ParameterModel?
+* Arguments of each operation (`@Operations` class method) can be annotated with `@Optional` and with `@Expression`
 
-[NOTE]
-`@Operation` annotated methods are scopes, whose execution implies the execution of child operations, receiving one or more arguments which are of either of type NestedProcessor or List<NestedProcessor>
-
+The two operation classes link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class] contain many operation examples. See how we refer to them from the `@Extension` annotated class.
 
 [source,java,linenums]
 ----
@@ -29,24 +32,11 @@ public class HeisenbergExtension
 }
 ----
 
-The two operation classes mentioned above contain a fairly complete array of operation examples. You can see them in the link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and the link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class].
-
-=== Key Takeaways
-
-* Every public method is assumed to be a valid operation, no need to use any annotation `@Operation`
-* If there is any public method you don’t want exposed as an operation, then annotate it with `@Ignore`
-* Each method argument is translated as a `ParameterModel`
-//MG need to mention ParameterModel?
-* Method arguments can be annotated with `@Optional` and with `@Expression`
 
 
 == Defining Operations at the Configuration Level
 
 Operations can also be defined at the configuration level by simply placing the `@Operations` annotation on a configuration class.
-
-[NOTE]
-This does not preclude the definition of operations at the _Extension_ level.
-//MG meaning operations defined within the Extension main class annotated with @Extension
 
 
 [source,java,linenums]
@@ -107,7 +97,7 @@ This operation is adapted into a `MessageProcessor`, which returns a copy of the
 
 === Setting Payload and Attributes
 
-There are operations which set the output message *payload* and the *attributes* POJO. This is achieved by returning an `OperationResult` instance
+When the *payload* and the *attributes* of message must be manipulated and returned by the operation, return an `OperationResult`.
 
 [source,java,linenums]
 ----
@@ -116,11 +106,12 @@ public OperationResult<InputStream, FileAttributes> read(String path) {
 }
 ----
 
-`OperationResult` is defined here: https://github.com/mulesoft/mule-extensions-api/blob/1458edadff5d165503b4bf2b11b29eae07ac1cbd/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/runtime/operation/OperationResult.java#L32-L32
+`OperationResult` is defined link:https://github.com/mulesoft/mule-extensions-api/blob/1458edadff5d165503b4bf2b11b29eae07ac1cbd/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/runtime/operation/OperationResult.java#L32-L32[here].
 
 This object can return a *payload*, an *attributes object* and a `DataType`. The Mule runtime takes this object and generates a new Mule message, which is then propagated through the pipeline.
+//MG: pipeline?
 
-Although the object allows for returning those three pieces of information, it doesn’t require the user to actually provide all three of them. If any is not provided, then the value from the incoming `MuleMessage` will be used.
+Although the object permits returning a *payload*, an *attributes object* and a `DataType`, it doesn’t require the user to actually provide all three. If none are provided, then the value from the incoming `MuleMessage` will be used.
 
 === Void Operations
 
@@ -227,20 +218,71 @@ Another case is an operation including code to determine the `DataType`.
 
 The solution for this is to simply have an operation which returns a MuleMessage with a handcrafted DataType. Notice however that if the operation returns a custom DataType but the user forced values on the XSD, the user’s settings will take precedence over the operation’s code.
 
-== Operation Scopes
+== Operation Sub-processors
 
-Some operations require sub-processes. In SDK, declare the operations that have sub-processes with the `@Operations` annotation. The annotated method should take one or more arguments of type `NestedProcessor` or `List<NestedProcessor>`. The platform can mask the child chain, but it's the responsibility of the extension implementation to invoke the child process.
-//unclear what was meant in spec, esp "besides" - "The platform provides support for masking the child chain besides the NestedProcessor, but it’s up to the implementation to actually invoke it."
+Some operations require sub-processes. The annotated method should take one or more arguments of type `NestedProcessor` or `List<NestedProcessor>`. The platform can mask the child chain, but it's the responsibility of the extension implementation to invoke the child process.
+//MG how are these annotated? unclear what was meant in spec, esp "besides" - > "The platform provides support for masking the child chain besides the NestedProcessor, but it’s up to the implementation to actually invoke it."
 
 
+=== Single Nested Processors for an Operation
 
-=== Single Nested Processor
+Receives a single nested processor:
 
-Receives a single nested processor
+[source,java,linenums]
+----
+public String killOne(NestedProcessor killOperation, String reason) throws Exception
+{
+   StringBuilder builder = new StringBuilder("Killed the following because " + reason + ":\n");
+   builder.append(killOperation.process()).append("\n");
 
-=== Multiple Nested Processors
 
-Receives many nested processors
+   return builder.toString();
+}
+----
 
-In XML, the generated schema for the operation creates a nested structure for the sub-operations.
-Nested operations appear _inside_ a child element whose name corresponds to the name of the `NestedProcessor` attribute. This is to support situations in which you want to declare different sets of nested processors.
+=== Multiple Nested Processors for an Operation
+
+Receives many nested processors:
+
+[source,java,linenums]
+----
+public String killMany(List<NestedProcessor> killOperations, String reason) throws Exception
+{
+   StringBuilder builder = new StringBuilder("Killed the following because " + reason + ":\n");
+   for (NestedProcessor processor : killOperations)
+   {
+       builder.append(processor.process()).append("\n");
+   }
+
+
+   return builder.toString();
+}
+----
+
+=== XML Representation of Nested Operations
+
+In XML, the generated schema for the operation creates a nested structure for the sub-processors.
+
+[NOTE]
+These sub-processors appear _inside_ a child element whose name corresponds to the name of the `NestedProcessor` attribute. This is to support situations in which you want to declare different sets of nested processors.
+
+[source,xml,linenums]
+----
+<flow name="killMany">
+   <heisenberg:kill-many config-ref="heisenberg" reason="I'm the one who knocks">
+       <heisenberg:kill-operations>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Gustavo Fring" goodbyeMessage="bye bye"/>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Frank" goodbyeMessage="bye bye"/>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Nazi dudes" goodbyeMessage="bye bye"/>
+       </heisenberg:kill-operations>
+   </heisenberg:kill-many>
+</flow>
+
+<flow name="killOne">
+   <heisenberg:kill-one config-ref="heisenberg" reason="I'm the one who knocks">
+       <heisenberg:kill-operation>
+           <heisenberg:kill-with-custom-message config-ref="heisenberg" victim="Gustavo Fring" goodbyeMessage="bye bye"/>
+       </heisenberg:kill-operation>
+   </heisenberg:kill-one>
+</flow>
+----
