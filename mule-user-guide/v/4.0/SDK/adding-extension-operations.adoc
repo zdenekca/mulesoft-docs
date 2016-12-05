@@ -373,15 +373,149 @@ public PagingProvider<ConnectionImpl, Account> getPagedPersonalInfo(int fetchSiz
 * in some cases, it may not be desirable to retrieve the total quantity of results, in which case force the `getTotalResults()` method to return an `Optional.empty()` value
 //MG: is Optional.empty() standard Java expression?
 
-== Parameter Introspection
+== Introspection of Extension Parameters
 
-We recommend you annotate the parameters of your extension configuration and operation fields as per the guidance on setting configuration attributes with `@Parameter`.
+We recommend you annotate the parameters of your extension configurations and operations as per the guidance on setting configuration attributes with `@Parameter`, whenever possible.
 
 [IMPORTANT]
 ====
-POJO without annotations are introspected using the JDK's "Introspector" class to obtain the properties exposed by getters and setters. Those properties are then turned into parameters. The downsides to this are:
+In cases where your extension must access a POJO that is defined in another .jar stored elsewhere, is shared with other projects or which cannot depend on extension annotates, the POJO is introspected using the JDK's "Introspector" class getters and setters to obtain its properties. Those properties are then turned into parameters. The downsides to this are:
 
-* the parameters are assumed to be optional. No placement or expression support information can be specified either, always assuming defaults
-//MG: please explain above sentence--esp. "always assuming defaults"
-* Value injection occurs through the setter instead of the field itself, as there is no mechanism to verify the setter and the corresponding field have matching names and or exist.
+* the parameters are assumed to be optional. There is no support for UI placement via `@Placement`, nor expression support via `@Expression`--defaults are always assumed
+//MG: please explain above sentence--esp. "always assuming defaults" - see spec plz
+* Value injection occurs through the setter instead of the field itself, as there is no mechanism to verify the setter and the corresponding field have matching names or even exist.
+//MG the setter of the JDK operates on the parameter, not the Extensions API?
 ====
+
+== Parameter Groups
+
+Groups of parameters which have a logical dependency on one another can be grouped; for example, connection parameters like "host", "port", "username" and "password" could be grouped in a single class using `@ParameterGroup`.
+
+[source,java,linenums]
+----
+@Parameter
+private String id;
+
+
+@ParameterGroup(name = "Connection")
+private ConnectionParameters connectionParameters;
+
+
+final class ConnectionParameters
+{
+
+
+   @Parameter
+   private String host;
+
+
+	 @Parameter
+	 private String port;
+…
+}
+----
+
+When it comes to writing the code itself for the extension, you can handle related items inside their own class.
+//MG: was this untrue before, could you not write params inside their own class?
+From the model point of view, the `ConnectionParameters` class written above would be flattened and added to the component that declares it. The corresponding `ConfigurationModel` would list three parameters: `id`, `host` and `port`, without any reference to the `ConnectionParameters` object.
+
+The same goes for operations:
+
+[source,java,linenums]
+----
+public void sendMessage(@Content payload, @ParameterGroup(name = "Connection) connectionParameters) {
+}
+----
+
+[NOTE]
+You may not use the `@ParameterGroup` annotation inside a complex object which is being used as a parameter group.
+//MG: does this mean: you cannot use nested parameter groups?
+
+=== Making Parameters Exclusive
+
+When imposing restrictions on which parameters cannot be set at the same time as others, use `@ExclusiveOptionals` on the parameter group class. Notice how the `@Optional` is used to indicate the specific parameter to exclude.
+//MG: in spec the example does not have the @ParameterGroup annotation, is this correct?
+//MG: in addition to making the params optional, they also cannot be set by extension user at same time?
+
+[source,java,linenums]
+----
+@ExclusiveOptionals(isOneRequired = true)
+public class MyParameterGroup {
+
+
+	@Parameter
+	private Pojo notAffectedByExclusiveness;
+
+
+	@Parameter
+	@Optional
+	private String name;
+
+
+	@Parameter
+	@Optional
+	private Integer ID;
+}
+----
+
+== Defining Infrastructure Parameters
+
+At the "configurable" and "connection provider" levels of an extension are several types that can be leveraged using the Mule core infrastructure:
+
+* `PoolingProfile`
+* `RetryPolicyTemplate`
+* `TlsContextFactory`
+
+Declare a parameter as one of these types for any configuration or connection provider that needs one.
+
+[source,java,linenums]
+----
+public class MyExtension {
+
+
+	@Parameter
+	private PoolingProfile poolingProfile;
+
+
+	@Parameter
+private RetryPolicyTemplate retryPolicy;
+
+
+@Parameter
+private TlsContextFactory tlsContext;
+}
+----
+
+The resulting XML block would look like:
+
+[source,xml,linenums]
+----
+<my-extension:config>
+	<pooling-profile />
+	<reconnect />
+	<tls:context />
+</my-extension:config>
+----
+
+[NOTE]
+- The elements are not generated using the name of the annotated field.
+- You cannot use more than one parameter of the same type on the same element (a configuration may only have _one_ threading profile)
+//MG: what do we mean by element here? in same "configuration element"/configuration defined class?
+
+== TLS Context
+
+`TlsContextFactory` supports the XML element being a global element, and it is also possible to configure it as a reference parameter.
+
+[source,java,linenums]
+----
+<tls:context name="globalTlsContext">
+   <tls:trust-store path="ssltest-cacerts.jks" password="changeit"/>
+   <tls:key-store path="ssltest-keystore.jks" keyPassword="changeit" password="changeit"/>
+</tls:context>
+
+
+<petstore:config name="globalTls" tlsContext="globalTlsContext" />
+----
+
+`TlsContextFactory` implements the `Initialisable` interface. The injected instance will not be automatically initialized, therefore the extension must apply a lifecycle.
+//MG: please clarify what "inject instance" refers to in the spec, as well as what "apply lifecycle" means.
