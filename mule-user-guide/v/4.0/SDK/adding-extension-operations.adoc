@@ -18,7 +18,7 @@ Operations are declared in a similar way as configurations, with the additional 
 * Every public method of the `@Operations` class is assumed to be a valid operation, therefore there is no need to use any annotation.
 * Any public method you don’t want exposed as an operation should be annotated with `@Ignore`
 * Every method argument is translated as a `ParameterModel`
-//MG need to mention ParameterModel?
+//MG need to mention ParameterModel? What does this model allow Extensions API to do?
 * Arguments of each operation (`@Operations` class method) can be annotated with `@Optional` and with `@Expression`
 
 The two operation classes link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class] contain many operation examples. See how we refer to them from the `@Extension` annotated class.
@@ -68,19 +68,19 @@ Below you can find some details about how to implement operations.
 
 === Injecting @UseConfig into Operation Method
 
-You can access data defined in a `@Configuration` class by having the argument annotated with the `@UseConfig` annotation. This is a mechanism for injecting a configuration into an operation. See this link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L69-L69[example]
+An operation can access a `@Configuration` class at runtime if one or many arguments of the operation are annotated with the `@UseConfig` annotation. This injection mechanism allows access to the configuration dynamically as the operation is executed. See this link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L69-L69[example]
 
-In the examples above you can see operations which don’t require the configuration, while others do. Those operations implement part of their logic by having an argument annotated with `@UseConfig`.
+In the examples above you can see operations which don’t require configuration data, while others do. Those operations implement part of their logic by having an argument annotated with `@UseConfig`.
 
-The reason why you might choose to receive the configuration as a method argument becomes clearer in the *operations lifecycle* section. This is the mechanism available to obtain a configuration inside an operation, dynamically, at runtime. Notice that:
+The reason why you might choose to receive the configuration as a method argument becomes clearer in the *operations lifecycle* section. Note that:
 //MG why receive a configuration as an argument? receive user-defined fields?
 
 
-* If the operation receives many arguments, there’s no restriction as far as the position at which the injected configuration is provided as an argument. The framework uses the `@UseConfig` annotation to support an injected configuration as an argument
-* There is no restriction nor enforcement regarding the type of the configuration other than it actually matching the configuration’s actual type
-* The argument will not be translated into a `ParameterModel`
+* If the operation receives many arguments, there is no restriction on the position of the argument supporting configuration injection.
+* There is no restriction or enforcement regarding the type of the configuration passed as an argument, as long as the type is the same as the configuration
+* The argument will _not_ be translated into a `ParameterModel`
 
-=== Setting Return Values and Message Attributes
+=== Returning Values and Message Attributes
 
 An operation can return a single value of any type.
 
@@ -95,7 +95,7 @@ public String toUpperCase(String value) {
 
 This operation is adapted into a `MessageProcessor`, which returns a copy of the input message, whose _payload_ has been set to the method's _return value_.
 
-=== Setting Payload and Attributes
+=== Setting Payload and Attributes through Operation
 
 When the *payload* and the *attributes* of message must be manipulated and returned by the operation, return an `OperationResult`.
 
@@ -224,7 +224,7 @@ Some operations require sub-processes. The annotated method should take one or m
 //MG how are these annotated? unclear what was meant in spec, esp "besides" - > "The platform provides support for masking the child chain besides the NestedProcessor, but it’s up to the implementation to actually invoke it."
 
 
-=== Single Nested Processors for an Operation
+=== Single Nested Processor for an Operation
 
 Receives a single nested processor:
 
@@ -290,12 +290,85 @@ These sub-processors appear _inside_ a child element whose name corresponds to t
 == Supporting a Callback
 
 An operation at a position *N* that returns a callback `InterceptingCallback` can wrap all processors in a flow from *N+M*, that is, it processes the previous operation in the chain.
+//MG: processes M and then N processors?
 
 === Considerations for Operation with Callback
 
 
 * All the considerations in the callback’s javadocs
 * The generic is not optional. It MUST be provided
-If an operation wants to set more than the payload (attributes, mediaType, etc), then it must return an `InterceptingCallback<OperationResult<Payload, Attributes>>`
+If an operation operates on items other than the payload (attributes, mediaType, etc), then it must return `InterceptingCallback<OperationResult<Payload, Attributes>>`
 * The callback can prevent the intercepted chain from being executed through the `shouldProcessNext()` method
-* The callback can intercept errors and resulting `MuleMessage` from the intercepted chain, but it cannot change its values.
+* The callback can intercept errors and the resulting `MuleMessage` from the intercepted chain, but it cannot change their values.
+
+Example:
+
+[source,java,linenums]
+----
+public InterceptingCallback<InputStream> interceptingRead(String path) {
+	return new InterceptingCallback<InputStream>() {
+		public InputStream getResult() {
+			Return read(path);
+		}
+
+
+		public boolean shouldProcessNext() {
+			return true;
+		}
+
+
+		public void onSuccess(MuleMessage message) {
+			….
+		}
+
+
+		public void onException(Exception e) {
+			….
+		}
+
+
+		public void onComplete() {
+			cleanUp();
+		}
+};
+}
+----
+
+== Operations that Support Paging
+
+Paging lets you avoid out-of-memory issues when processing a large quantity of records. Use SDK's `PagingProvider` interface to process records in chunks.
+
+.Example implementation of paged operation
+[source,java,linenums]
+----
+public PagingProvider<ConnectionImpl, Account> getPagedPersonalInfo(int fetchSize) {
+
+
+ return new PagingProvider<ConnectionImpl, Account>() {
+
+
+   @Override
+   public List<Account> getPage(ConnectionImpl conn) {
+     return conn.getAccounts(fetchSize);
+   }
+
+
+   @Override
+   public Optional<Integer> getTotalResults(ConnectionImpl conn) {
+     return conn.getTotalPagesForSize(fetchSize);
+   }
+
+
+   @Override
+   public void close() throws IOException {
+     conn.close()
+   }
+ };
+}
+----
+
+[NOTE]
+* `getPage()` returns the next "page" of items
+* `getPage()` returns an empty list when there are no more items to process
+* in some cases, it may not be desireable to retrieve the total quantity of results, in which case force the `getTotalResults()` method to return an `Optional.empty()` value
+//MG: how does one implement Optional.empty()?
