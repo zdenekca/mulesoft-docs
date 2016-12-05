@@ -370,5 +370,18 @@ public PagingProvider<ConnectionImpl, Account> getPagedPersonalInfo(int fetchSiz
 [NOTE]
 * `getPage()` returns the next "page" of items
 * `getPage()` returns an empty list when there are no more items to process
-* in some cases, it may not be desireable to retrieve the total quantity of results, in which case force the `getTotalResults()` method to return an `Optional.empty()` value
-//MG: how does one implement Optional.empty()?
+* in some cases, it may not be desirable to retrieve the total quantity of results, in which case force the `getTotalResults()` method to return an `Optional.empty()` value
+//MG: is Optional.empty() standard Java expression?
+
+== Parameter Introspection
+
+We recommend you annotate the parameters of your extension configuration and operation fields as per the guidance on setting configuration attributes with `@Parameter`.
+
+[IMPORTANT]
+====
+POJO without annotations are introspected using the JDK's "Introspector" class to obtain the properties exposed by getters and setters. Those properties are then turned into parameters. The downsides to this are:
+
+* the parameters are assumed to be optional. No placement or expression support information can be specified either, always assuming defaults
+//MG: please explain above sentence--esp. "always assuming defaults"
+* Value injection occurs through the setter instead of the field itself, as there is no mechanism to verify the setter and the corresponding field have matching names and or exist.
+====
