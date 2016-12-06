@@ -5,11 +5,11 @@
 
 *Latest version: 2.8.0*
 
-The Microsoft Dynamics Customer Relationship Management (CRM) connector lets you access Microsoft Dynamics CRM’s SOAP Organization Service. You can add this connector to an Anypoint Studio flow.
+The Microsoft Dynamics Customer Relationship Management (CRM) connector lets you access Microsoft Dynamics CRM’s SOAP Organization Service. You can add this connector to an Anypoint Studio flow.
 
-*Release Notes*: link:/release-notes/microsoft-dynamics-crm-connector-release-notes[Microsoft Dynamics CRM Connector Release Notes]
-
-*Samples*: link:_attachments/dynamics-crm-connector-samples.zip[dynamics-crm-connector-samples.zip]
+*Release Notes*: link:/release-notes/microsoft-dynamics-crm-connector-release-notes[Microsoft Dynamics CRM Connector Release Notes] +
+*Technical Reference*: link:http://mulesoft.github.io/ms-dynamics-crm-connector/2.8.0/apidocs/dynamicscrm-apidoc.html[MS Dynamics CRM Connector Technical Reference] +
+*Samples*: link:_attachments/dynamics-crm-connector-samples.zip[dynamics-crm-connector-samples.zip]
 
 == Overview
 
@@ -62,15 +62,15 @@ Configure the connector as a Microsoft Dynamics CRM instance:
 +
 image:CRMGlobalType.png[CRMGlobalType]
 +
-. Specify a *Username* and *Password*.
-. Specify a *Organization Service URL* for accessing the CRM system. Click *OK*.
+. Specify a *Username* and *Password*.
+. Specify a *Organization Service URL* for accessing the CRM system. Click *OK*.
 +
 For example: `https://{siteUrl}/XRMServices/2011/Organization.svc`
 +
 . Click *Test Connection* to ensure that the connection works correctly.
 . After the connection succeeds, click *OK*.
 +
-image:CRMKerberosConnection.png[CRMKerberosConnection] 
+image:CRMKerberosConnection.png[CRMKerberosConnection] 
 
 === Creating a Mule Flow
 
@@ -87,7 +87,7 @@ image:CRMdemoflow1.png[CRMdemoflow1]
 
 To configure the flow:
 
-. Double-click the *HTTP* connector and click the green plus *+* sign to the right of *Connector Configuration*:
+. Double-click the *HTTP* connector and click the green plus *+* sign to the right of *Connector Configuration*:
 +
 image:HTTPconfigref.png[HTTPconfigref]
 +
@@ -96,21 +96,21 @@ image:HTTPconfigref.png[HTTPconfigref]
 image:MSDyCRMHTTPconfig.png[MSDyCRMHTTPconfig]
 +
 . Double-click *Microsoft Dynamics CRM*.
-. Click the green plus symbol *+* to the right of *Connector Configuration*:
+. Click the green plus symbol *+* to the right of *Connector Configuration*:
 +
 image:CRMConfigRef.png[CRMConfigRef]
 +
 . Select the connection strategy for authenticating your CRM instance.
-. Specify your access to the CRM server: *Username*, *Password*, and *Organization Service URL*. 
+. Specify your access to the CRM server: *Username*, *Password*, and *Organization Service URL*. 
 . Click *OK* - See <<CRM Authentication>> for information on each authentication scheme.
 +
 image:CRMproperties.png[CRMproperties]
 
-. For *Operation*, click *Retrieve multiple by query*.
-*Note*: This option only appears if you were able to successfully contact the CRM server. 
-. For *Query Language*, click *DataSense Query Language*.
-*Note*: The Query section only appears for a query *Operation*. 
-. Click *Query Builder*.
+. For *Operation*, click *Retrieve multiple by query*.
+*Note*: This option only appears if you were able to successfully contact the CRM server. 
+. For *Query Language*, click *DataSense Query Language*.
+*Note*: The Query section only appears for a query *Operation*. 
+. Click *Query Builder*.
 . In the Query Builder window: +
 .. In *Types*, click *account*.
 .. In *Fields*, click *accountid*, *accountnumber*, and *name*.
@@ -123,14 +123,14 @@ image:CRMQueryBuilder.png[CRMQueryBuilder]
 
 === Running a Flow
 
-. In Package Explorer, right click your project's name, and click *Run As* > *Mule Application*.
+. In Package Explorer, right click your project's name, and click *Run As* > *Mule Application*.
 . Check the console to see when the application starts. You should see a message such as this example if no errors occur:
 +
 
 [source, code, linenums]
 ----
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ Started app 'crm-demo'                                   +
++ Started app 'crm-demo'                                   +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ----
 
@@ -189,8 +189,8 @@ Sample Kerberos configuration file:
 default_realm = MYREALM.COM
 [realms]
 MYREALM.COM = {
-    kdc = mydomaincontroller.myrealm.com
-    default_domain = MYREALM.COM
+    kdc = mydomaincontroller.myrealm.com
+    default_domain = MYREALM.COM
 }
 [domain_realm]
 .myrealm.com = MYREALM.COM
@@ -205,8 +205,8 @@ To reference the Kerberos configuration file in a connector's connection configu
 
 . Set the property *Kerberos Properties File Path*
 . Place the file in the class path (usually under src/main/resources) and set the value of the property to *classpath:krb5.conf*  +
-Or:  +
-Provide the full path to the file as in *C:\kerberos\krb5.conf* 
+Or:  +
+Provide the full path to the file as in *C:\kerberos\krb5.conf* 
 
 You can tune the Kerberos login module (Krb5LoginModule) with scenario-specific configurations by defining a JAAS login configuration file.
 
@@ -215,9 +215,9 @@ Example JAAS login configuration file for the Kerberos login module:
 [source, code, linenums]
 ----
 Kerberos {
-    com.sun.security.auth.module.Krb5LoginModule required
-    debug=true
-    refreshKrb5Config=true;
+    com.sun.security.auth.module.Krb5LoginModule required
+    debug=true
+    refreshKrb5Config=true;
 };
 ----
 
@@ -228,13 +228,13 @@ To reference the JAAS login configuration file for the Kerberos login module in 
 . Set the property *Login Properties File Path*
 . Place the file in the class path (usually under `src/main/resources`) and set the value of the property to `classpath:jaas.conf`
 +
-Or: 
+Or: 
 +
-Provide the full path to the file as in `C:\kerberos\jaas.conf` 
+Provide the full path to the file as in `C:\kerberos\jaas.conf` 
 
 === NTLM Authentication
 
-For connecting to Microsoft Dynamics CRM with NTLM authentication, the connector routes requests through _Anypoint Platform Gateway Service_.
+For connecting to Microsoft Dynamics CRM with NTLM authentication, the connector routes requests through _Anypoint Platform Gateway Service_.
 
 The Anypoint Platform Gateway Service runs as a Windows service. Install using the instructions in the link:/mule-user-guide/v/3.8/windows-gateway-services-guide[Windows Gateway Service guide] on a machine that is joined to the same domain as the Dynamics CRM instance that you want to authenticate against.
 
@@ -246,9 +246,9 @@ For your protection, the executable is signed by MuleSoft Inc.
 +
 . Follow the instructions to complete the installation. No further configuration is required.
 
-After installing _Anypoint Platform Gateway Service_, configure the connector’s connection properties with the *Username*, *Password*, and the *Organization Service URL*.
+After installing _Anypoint Platform Gateway Service_, configure the connector’s connection properties with the *Username*, *Password*, and the *Organization Service URL*.
 
-Under NTLM authentication settings, set the *Gateway Router Service Address* to the address of the Anypoint Platform Gateway Service. This address by default is `https://myserver:9333/router`.
+Under NTLM authentication settings, set the *Gateway Router Service Address* to the address of the Anypoint Platform Gateway Service. This address by default is `https://myserver:9333/router`.
 
 At this point, the connection should be successfully tested.
 
@@ -258,8 +258,8 @@ Microsoft Dynamics CRM Online, with Office365, allows federated authentication t
 
 For these cases, there are optional connection configuration parameters:
 
-* Sts Metadata Url (optional): The STS's metadata exchange URL. For ADFS, this is usually link:https://mycompany-sts.com/adfs/services/trust/mex[https://mycompany-sts.com/adfs/services/trust/mex].
-*  Sts Username Port Qname (optional): The name of port that accepts username and password credentials as described in the STS's metadata exchange URL. Specify this value as a `Qname` in the format `{namespace}/port_name`. For ADFS, this is usually:
+* Sts Metadata Url (optional): The STS's metadata exchange URL. For ADFS, this is usually link:https://mycompany-sts.com/adfs/services/trust/mex[https://mycompany-sts.com/adfs/services/trust/mex].
+*  Sts Username Port Qname (optional): The name of port that accepts username and password credentials as described in the STS's metadata exchange URL. Specify this value as a `Qname` in the format `{namespace}/port_name`. For ADFS, this is usually:
 +
 [source, code]
 ----
@@ -302,9 +302,10 @@ These system settings can be passed to the VM executing the mule app by doing:
 -Dorg.mule.module.dynamicscrm.metadata.retrievers.nocache=1
 ----
 
-As example.
 
 == Operations
+
+For the technical reference documentation for all connector operations, see the link:https://mulesoft.github.io/ms-dynamics-crm-connector/[Dynamics CRM APIdoc].
 
 === Create Record
 
@@ -371,9 +372,9 @@ Native Query Language: The raw FetchXML to run. More information on how to creat
 
 |===
 
-*Output*: `ProviderAwarePagingDelegate<Map<String, Object>, DynamicsCRMConnector>`
+*Output*: `ProviderAwarePagingDelegate<Map<String, Object>, DynamicsCRMConnector>`
 
-In a Mule flow, this passes on to the next flow component a `List<Map<String, Object>`, where each `Map<String, Object>` element in the list contains a record of the queried entity. The map’s keys are the entity attribute names for the records.
+In a Mule flow, this passes on to the next flow component a `List<Map<String, Object>`, where each `Map<String, Object>` element in the list contains a record of the queried entity. The map’s keys are the entity attribute names for the records.
 
 === Update Record
 
@@ -436,7 +437,7 @@ The following table details the operation inputs.
 |*Use Single Transaction*|(Optional) Indicates if Dynamics CRM should use a single transaction to delete all items (supported since Microsoft Dynamics CRM 2016).
 |===
 
-*Output*:  `BulkOperationResult<String>` object
+*Output*:  `BulkOperationResult<String>` object
 
 === Associate Records
 
@@ -512,7 +513,7 @@ Executes a Dynamics CRM organization request and returns the response. The follo
 In addition of using a POJO (from the link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.organizationrequest.aspx[OrganizationRequest] hierarchy tree), this operation supports providing the payload as a Map<String, Object> (which is the most efficient/compact way of usage).
 |===
 
-*Output*:  A POJO (from the link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.organizationresponse.aspx[OrganizationResponse] hierarchy tree) containing the results of the method executed. The structure of each response is described in the operation’s metadata.
+*Output*:  A POJO (from the link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.organizationresponse.aspx[OrganizationResponse] hierarchy tree) containing the results of the method executed. The structure of each response is described in the operation’s metadata.
 
 *Supported Operations*: The full set of the Microsoft Dynamics CRM organization request entities described at link:https://msdn.microsoft.com/en-us/library/microsoft.crm.sdk.messages.aspx[Microsoft.Crm.Sdk.Messages] and link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.messages.aspx[Microsoft.Xrm.Sdk.Messages] namespaces (operation availability depends on the Microsoft Dynamics CRM version you are working with - check the documentation related to yours).
 
@@ -530,7 +531,7 @@ In addition of using an array or list with POJOs (from the link:https://msdn.mic
 |*Use Single Transaction*|(Optional) Indicates if Dynamics CRM should use a single transaction to execute all items (supported since Microsoft Dynamics CRM 2016).
 |===
 
-*Output*:  `BulkOperationResult<OrganizationResponse>` object (from the link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.organizationresponse.aspx[OrganizationResponse] hierarchy tree) containing the results of the requests executed.
+*Output*:  `BulkOperationResult<OrganizationResponse>` object (from the link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.organizationresponse.aspx[OrganizationResponse] hierarchy tree) containing the results of the requests executed.
 
 *Supported Operations*: The full set of the Microsoft Dynamics CRM organization request entities described at link:https://msdn.microsoft.com/en-us/library/microsoft.crm.sdk.messages.aspx[Microsoft.Crm.Sdk.Messages] and link:https://msdn.microsoft.com/en-us/library/microsoft.xrm.sdk.messages.aspx[Microsoft.Xrm.Sdk.Messages] namespaces (operation availability depends on the Microsoft Dynamics CRM version you are working with - check the documentation related to yours).
 
@@ -563,6 +564,19 @@ The following table lists the exception types that are thrown for every operatio
 |Execute Multiple |IOrganizationServiceExecuteOrganizationServiceFaultFaultFaultMessage
 |===
 
+== Maven Dependency Snippet
+
+Make sure that this snippet is included in your Maven project using the connector.
+
+[source,java,linenums]
+----
+<dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-ms-dynamics-crm</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+----
+
 == Data Considerations
 
 === Entity Reference
@@ -579,23 +593,23 @@ The Retrieve Multiple Records operation also allows selecting and filtering of E
 
 [source, code, linenums]
 ----
-Select fullname From contact Where createdby_referenceto_systemuser = 
+Select fullname From contact Where createdby_referenceto_systemuser = 
 'c7a58b13-df19-491c-a918-1bc26eaf6eb3'
 ----
 
 === Party List
 
-A Party List is typically found on email activities to represent the To, Bcc, and Cc attributes. This type of attribute is accessible as a list of `Map<String, String>` objects where each list item represents an <<Entity Reference>>. +
-As an example, the *Email* Party List attribute *To* is a list of Lookup objects that can target any of the following entities: *Account*, *Contact*, *Lead*, *Queue*, and *SystemUser*.
+A Party List is typically found on email activities to represent the To, Bcc, and Cc attributes. This type of attribute is accessible as a list of `Map<String, String>` objects where each list item represents an <<Entity Reference>>. +
+As an example, the *Email* Party List attribute *To* is a list of Lookup objects that can target any of the following entities: *Account*, *Contact*, *Lead*, *Queue*, and *SystemUser*.
 
-The *To* attribute is a List of `Map<String, String>` objects where each Map’s key is one of the following: 
+The *To* attribute is a List of `Map<String, String>` objects where each Map’s key is one of the following: 
 
 [source, code]
 ----
 to_referenceto_account, to_referenceto_contact, to_referenceto_lead, to_referenceto_queue or to_referenceto_systemuser
 ----
 
-For an email sent to an _account_ and a _contact_, the *To* attribute is:
+For an email sent to an _account_ and a _contact_, the *To* attribute is:
 
 [source, code, linenums]
 ----
