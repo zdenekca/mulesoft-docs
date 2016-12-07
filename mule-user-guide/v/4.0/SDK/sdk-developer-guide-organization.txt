@@ -1,17 +1,88 @@
 Mule SDK Concepts (what extension is, what do i need to develop one, when to develop one, how?)
-	
+
+
 Creating a Configuration 
+
 
 what is a configuration? what does a configuration do? do i need one? How do I specify the required parameters for a configuration? where do I save this? How do I reference it?
 
+Creating Connector Authentication
+
 Adding Operations for the Extension
 
-what do the operations allow users of my extension to do?
+
+What do the operations allow users of my extension to do?
 
 
 
+Creating a SaaS Connector using SDK
+
+- Java SDK based
+- SOAP
+- REST
+- General Approaches —> https://docs.mulesoft.com/anypoint-connector-devkit/v/3.8/setting-up-api-access (relevant?)
+
+Error Handling
+
+block 
+each error has a namespace within the connector
+can say an operation throws these types of errors
+way to add custom errors
+
+ErrorTypes must implement ErrorTypeDefinition
+This must be implemented in the extension code
+
+@Throws can be put at many levels to throw an error, lowest level will output
+ErrorTypeProvider must return a set of possible errors
+ExceptionEnricher can add more information to Exception through @OnException
+
+Can output a Mule message
 
 Background reading: Extensions API
 
 How it works with SDK Extension
 How Mule discovers extension through API
+
+Sources
+
+one event, similar to req-rep / however, exchange patterns do not exist anymore
+With the event that comes back from the source,
+onSuccess and onError can be provided if the flow succeeds
+You can fetch the error type that Mule throws
+In Mule 3, there are start and stop methods in source class,
+Now, onSource, and source callback, onStop receives nothing, but throws exception
+What happens if source fails to start > onSourceException?
+How to propagate state through source? Reference to connection and get it back on success and on error
+How do you know on which connection to reply?
+SourceCallbackContext
+Cannot send a response to a source without onSuccess
+Tell Studio you emit a response for your source using @EmitsResponse
+It will be discarded if ???
+
+Parameters
+
+@NullSafe can be used on a POJO that is an object for optional parameters
+Has to be list, map or pojo
+
+Group parameters that are logically stored together.
+ParameterGroup is not recursive in Mule 4
+Each must have a name
+Order and Placement, how is it different from Mule 3
+
+DataWeave
+
+Core data language in Mule
+Access payload this way?
+
+Operations
+
+differentiate content from configuration
+Use @Content to distinguish, but always mark the primary content with @Content(primary=true)
+The primary content must always accept an exception
+Default content is the payload
+Non-primary content might be required and have their own defaults
+When a parameter is content, it is in the element, you can embed it in the parameter
+Instead of having to use two connectors to transform and write content, you can use dataweave as part of the runtime.
+
+DataWeave does not change the payload because of the mapping. The operation, however, may change the payload
+

@@ -1,0 +1,11 @@
+= Connection Management
+
+For an extension which supports SaaS connections, it is important to define how the extension should use Mule to:
+
+* *create the connection*
+* *reconnect to the service*
+* *handle connection retries*
+* *support different connection mechanisms*
+// oauth, http basic, etc?
+
+The `ConnectionProvider` interface is responsible for creating, disconnecting, and describing the connection so the runtime can handle it.

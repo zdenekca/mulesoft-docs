@@ -504,7 +504,7 @@ The resulting XML block would look like:
 
 == TLS Context
 
-`TlsContextFactory` supports the XML element being a global element, and it is also possible to configure it as a reference parameter.
+`TlsContextFactory` supports the XML element being a global element, and it is also possible to configure it as a reference parameter. The name of the attribute is always generated as `tlsContext`. You can see in the example that the `petstore` configuration references the `tlsContext` by name.
 
 [source,java,linenums]
 ----
@@ -519,3 +519,76 @@ The resulting XML block would look like:
 
 `TlsContextFactory` implements the `Initialisable` interface. The injected instance will not be automatically initialized, therefore the extension must apply a lifecycle.
 //MG: please clarify what "inject instance" refers to in the spec, as well as what "apply lifecycle" means.
+
+== How to Configure XML Support for Extension
+
+XML support for Mule is made possible through the Spring framework. This means a Mule component/extension must have an XSD schema, `NamespaceHandler` and a set of `BeanDefinitionParsers` and or `FactoryBeans`.
+
+You can customize the `schemaLocation`, `schemaVersion`, and namespace prefix, but SDK will calculate defaults for all of them. For the schema version, the Maven artifact version is used.
+
+== XML DSL
+
+Use the `@Xml` annotation to set namespace details for your extension.
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@Xml(namespaceLocation = "http://www.mulesoft.org/schema/mule/extension/heisenberg", namespace = "heisenberg")
+public class HeisenbergExtension
+----
+
+This example is exhaustive and thus shows how users can customize `schemaLocation`, `schemaVersion`, namespace prefix, etc. However, all of those attributes are optional and the SDK will calculate defaults for all of them. In the case of the schema version, it will use the maven artifact version.
+
+=== Declaring the XML Element Alias
+
+Declare the XML element alias using the `@Alias` annotation:
+
+[source,java,linenums]
+----
+@Alias("ListenPayments")
+public class HeisenbergSource extends Source<Void, Serializable>
+{
+    //…
+
+    @Parameter
+    @Alias("poolSize")
+    private int corePoolSize;
+
+    //…
+}
+----
+
+The XML name of the annotated element will be obtained from the declared alias in quotes above, instead of using the class or Java parameter name.
+
+In this case, the resulting XML is:
+
+[source,java,linenums]
+----
+<flow name="flow1">
+<heisenberg:listen-payments poolSize="10" />
+</flow>
+----
+
+=== Customizing XML Schema Generation
+
+SDK prefers consistent generation for extensions. However, you can in fact customize how the XML is configured, to support parameters of complex types (POJO, lists, maps, etc). SDK provides the `@XmlHints` annotation allowing two booleans whose values you can toggle.
+//MG: i don't understand the name of the annotation, what is the connection between Hints and the booleans allowing the types to be defined or referenced inline
+
+* `allowInlineDefinition` - SDK determines through the types if it is possible to define them explicitly through XML (normally through child elements)
+//MG: what does it mean to define a type through XML, how is this introspected?
+//MG: is `allowTopLevelDefinition` supported?
+* `allowReferences` - This customization targets the complex type parameters. Regardless of the complex parameters having a child element or not, there will always be an attribute allowing the user to provide a reference to a MEL expression or a static reference to the Mule registry.
+//MG: so MEL and DW are supported at the operation level. There may be cases when a static value in an attribute that allows references to be interpreted as the actual value, and a not a reference to the registry.
+
+A typical example of this is an outbound operation (socket:send, file:write, etc), in which the input parameter is of type Object (because many input types are supported):
++
+`<file:write data="Hello" />`
++
+This should not match the attribute data to a registry entry of key "Hello", but should map to the actual “Hello” String, which, can be achieved by the following code:
++
+`Public void write(@XmlHints(allowReferences=false) Object data) {
+}`
+
+=== Schema Generation
+
+//
