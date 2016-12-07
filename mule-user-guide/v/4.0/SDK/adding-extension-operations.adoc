@@ -13,10 +13,10 @@ After creating a configuration, add functionality to your extension by declaring
 
 == Declaring Operations
 
-Operations are declared in a similar way as configurations, with the additional restriction that a class that has been annotated to serve as an configuration cannot also contain configurations. You can use the `@Operations` annotation to point to the classes which hold the operations.
+Operations are declared in a similar way as are configurations, with the additional restriction that a class that has been annotated to serve as an configuration cannot also contain configurations. You can use the `@Operations` annotation to point to the classes which hold the operations.
 
 * Every public method of the `@Operations` class is assumed to be a valid operation, therefore there is no need to use any annotation.
-* Any public method you don’t want exposed as an operation should be annotated with `@Ignore`
+* Any public method you do not want exposed as an operation should be annotated with `@Ignore`
 * Every method argument is translated as a `ParameterModel`
 //MG need to mention ParameterModel? What does this model allow Extensions API to do?
 * Arguments of each operation (`@Operations` class method) can be annotated with `@Optional` and with `@Expression`
@@ -95,7 +95,7 @@ public String toUpperCase(String value) {
 
 This operation is adapted into a `MessageProcessor`, which returns a copy of the input message, whose _payload_ has been set to the method's _return value_.
 
-=== Setting Payload and Attributes through Operation
+=== Setting Payload and Attributes Through Operation
 
 When the *payload* and the *attributes* of message must be manipulated and returned by the operation, return an `OperationResult`.
 
@@ -591,4 +591,7 @@ This should not match the attribute data to a registry entry of key "Hello", but
 
 === Schema Generation
 
-//
+While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions with the XML property, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
+
+This documentation is already available in the extension class java docs which is not available through reflection. The only way to get it is by having access to the AST tree that the annotation scanner knows how to read. This is when the ExtensionDescriberPostProcessor SPI component comes into play. There’s a SchemaDocumenterPostProcessor which when invoked in the context of an annotation processor, knows how to extract the documentation from the class javadoc and put it as documentation in the Extension. If not invoked from this context or if the extension is not XML capable, this post processor skips processing.
+//MG: need to clarify some points here to understand what the dev's part in this process is.
