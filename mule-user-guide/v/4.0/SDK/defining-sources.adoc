@@ -1,0 +1,151 @@
+= Declaring a Message Source
+
+While the integration developer can use a poll scope and an operation to poll an inbound endpoint, there are several cases which require a "message source":
+
+* HTTP listener
+* File watcher
+* JMS/AMQP to receive messages from queues subscribed to
+* Streaming API, and other cases
+
+As mentioned, a poll scope and operation can perform a similar function to that of a message source. Some similarities between the two are that they both have:
+
+* Parameters
+* return type
+* Name and Description
+* Interceptors
+* Reconnection capabilities
+
+[%header]
+|===
+|Operations |Message Sources
+|Operations work inside an `OperationContext` which wraps a `MuleEvent` |Message sources create an `OperationContext` which in turn creates a `MuleEvent`, thus wrapping it
+|Operation lifecycle is tied to the containing flow
+|Message sources can be started/stopped independently of the containing flow
+|Operations support dynamic configurations obtained based on the received event
+|Message sources cannot have dynamic configurations because there is no event. Configuration is assigned at event start time and is fixed
+|Any operation parameter has the option of accepting expressions.
+|Sources have a clear definition of which parameters can accept expressions and which cannot. Only parameters which are part of a callback can accept them.
+|An operation can have lifecycle, but its parameter values are unavailable, and unnecessary |A message source must have `start()` and `stop()` phases and they may require access to parameter values
+|A connection is obtained from the `ConnectionManager` each time the operation is executed |A connection is obtained each time the message source is started or when reconnection happens.
+|===
+
+Sources must implement the source class which takes two generics: one for the type of the generated event payload and another one for the type of the attributes:
+
+[source,java,linenums]
+----
+@Alias("listener")
+@MetadataScope(outputResolver = HttpListenerMetadataResolver.class)
+@EmitsResponse
+public class HttpListener extends Source<Object, HttpRequestAttributes> {
+----
+
+You can use the `@Alias` annotation to force a name to use instead of the one SDK infers.
+You can use `@MetadataScope` and the other DataSense annotations.
+
+== Response or No Response
+
+One of the main properties of a message source is whether or not it generates a response. To specify that your source has the capability of generating a response, it must be annotated with `@EmitsResponse`.
+
+Note that this is added to tell the runtime and tooling that the source has response capability.
+
+[NOTE]
+====
+Realize that the SDK nor the runtime will validate that:
+
+* a source which emits response actually does so
+* a source which doesn’t declare itself to emit response is prevented from sending one
+====
+
+=== Sources that do not Emit Response
+
+Examples of sources which do not emit a response are:
+
+* file listener
+* Salesforce streaming API
+* poll element
+* source which listens for async push notifications
+
+
+=== Sources that May Emit a Response
+
+Sources that may emit a response:
+
+* TCP Server
+* HTTP server
+* JMS server
+
+This classification is *non-deterministic* by nature. Take for example an HTTP server that supports sending a response, though the user chooses not to have the source send one.
+Another example: although a JMS listener might respond by sending a message to a reply queue, conversely it might be configured not to respond.
+
+=== Summary of Response Behavior
+
+Even though a message source has the capability of sending a response, it doesn’t necessarily imply that it will respond, *even if the message was processed successfully*. There are logic or configuration circumstances that might warrant foregoing response generation.
+
+== Start and Stop
+
+As explained before, sources need to have the ability to be started and stopped at any time. For this, the following methods need to be implemented:
+
+
+/**
+* This method will be invoked by the runtime to make the source start
+* producing messages.
+* <p>
+* Each generated message will be passed back to the runtime through the
+* given {@code sourceCallback} for processing.
+* <p>
+* This method should throw an exception if the source fails to start, but
+* any other exception encountered during the process of generating messages,
+* should be communicated to the runtime through the {@link SourceCallback#onSourceException(Throwable)}
+* method.
+* <p>
+* Only the runtime should invoke this method. Do not do it manually
+*
+* @param sourceCallback a {@link SourceCallback}
+* @throws MuleException If the source fails to start.
+*/
+public abstract void onStart(SourceCallback<T, A> sourceCallback) throws MuleException;
+
+
+/**
+* This method will be invoked by the runtime to make the source stop producing messages.
+* <p>
+* This method should not fail. Any exceptions found during the stop process should be
+* logged and correctly handled by the source, but after invoking this method the source
+* must:
+* <ul>
+* <li>Stop producing messages</li>
+* <li>Free any allocated resources</li>
+* <li>Be capable of being restarted</li>
+* </ul>
+* <p>
+* Only the runtime should invoke this method. Do not do it manually
+*/
+public abstract void onStop();
+Notice that because the sources define their own (and reduced) lifecycle mechanism, sources are not allowed to implement any of the standard mule lifecycle interfaces (Initialisable, Startable, Stoppable, Disposable).
+onStart()
+
+
+The semantics of this method is that after being invoked, the source should be sensible to whatever triggers the generation of a new message and should successfully push such message to the owning flow.
+
+
+This method receives a SourceCallback object as parameter. The SourceCallback is the API through which the source will push data to the flow. The data is pushed in the form of a Result object, and the runtime knows how to translate that into a Mule message.
+
+
+This method should throw an exception if the source fails to start, but any other exceptions produced while listening/triggering new messages should be communicated through the SourceCallback (see the Error Handling section).
+
+
+Only the runtime should invoke this method. Do not do it manually
+
+
+onStop()
+
+
+This method will be invoked by the runtime to make the source stop producing messages. This method should not fail. Any exceptions found during the stop process should be logged and correctly handled by the source, but after invoking this method the source must:
+
+
+Stop producing messages
+Free any allocated resources
+Be capable of being restarted
+
+
+Only the runtime should invoke this method. Do not do it manually

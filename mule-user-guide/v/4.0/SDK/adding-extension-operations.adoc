@@ -571,13 +571,12 @@ In this case, the resulting XML is:
 
 === Customizing XML Schema Generation
 
-SDK prefers consistent generation for extensions. However, you can in fact customize how the XML is configured, to support parameters of complex types (POJO, lists, maps, etc). SDK provides the `@XmlHints` annotation allowing two booleans whose values you can toggle.
-//MG: i don't understand the name of the annotation, what is the connection between Hints and the booleans allowing the types to be defined or referenced inline
+SDK prefers consistency when it comes to schema generation for extensions. However, you can in fact customize how the XML is organized to support parameters of complex types (POJO, lists, maps, etc). SDK provides the `@XmlHints` annotation giving access to two booleans whose values you can toggle.
+//MG: what does "hints" mean in this context? It is not clear to me.
 
-* `allowInlineDefinition` - SDK determines through the types if it is possible to define them explicitly through XML (normally through child elements)
-//MG: what does it mean to define a type through XML, how is this introspected?
+* `allowInlineDefinition` - SDK determines through the types if it is possible to define them explicitly through XML (normally defined through child elements)
 //MG: is `allowTopLevelDefinition` supported?
-* `allowReferences` - This customization targets the complex type parameters. Regardless of the complex parameters having a child element or not, there will always be an attribute allowing the user to provide a reference to a MEL expression or a static reference to the Mule registry.
+* `allowReferences` - when true, this targets the complex type parameters. Regardless of the complex parameters having a child element or not, there will always be an attribute allowing the user to provide a reference to a MEL expression or a static reference to the Mule registry.
 //MG: so MEL and DW are supported at the operation level. There may be cases when a static value in an attribute that allows references to be interpreted as the actual value, and a not a reference to the registry.
 
 A typical example of this is an outbound operation (socket:send, file:write, etc), in which the input parameter is of type Object (because many input types are supported):
@@ -591,7 +590,14 @@ This should not match the attribute data to a registry entry of key "Hello", but
 
 === Schema Generation
 
-While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions with the XML property, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
+While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
+//MG: why does the schema need to contain documentation explaining the attr, operations, types?
 
-This documentation is already available in the extension class java docs which is not available through reflection. The only way to get it is by having access to the AST tree that the annotation scanner knows how to read. This is when the ExtensionDescriberPostProcessor SPI component comes into play. There’s a SchemaDocumenterPostProcessor which when invoked in the context of an annotation processor, knows how to extract the documentation from the class javadoc and put it as documentation in the Extension. If not invoked from this context or if the extension is not XML capable, this post processor skips processing.
-//MG: need to clarify some points here to understand what the dev's part in this process is.
+Write your documentation on the extension class and methods using javadocs. The only way to get it is by having access to the AST tree that the annotation scanner knows how to read. This is when the `ExtensionDescriberPostProcessor` SPI component comes into play. There’s a `SchemaDocumenterPostProcessor` which when invoked in the context of an annotation processor, knows how to extract the documentation from the Extension's javadoc and place this documentation in an Extension directory. If not invoked from the annotation processor context or if the extension is not XML compatible, this post-processor skips the processing step.
+//MG: Write correct javadoc in all extension classes. Run a tool that generates the schema, this also generates the documentation artifacts in the extension folder? Similarly as was done with DevKit?
+
+=== Spring Bundle Generation
+
+Once the XSD is available, the next step is to generate the Spring bundle (`spring.schemas` and `spring.handlers` files that Spring uses to ascertain which XSD and `NamespaceHandler` to use). When the annotation processor triggers resource generation for the XSD and `mule.extensions` files, the "contributors" for these files are also invoked and then produce the bundle.
+
+// rest of section needs to be filled in
