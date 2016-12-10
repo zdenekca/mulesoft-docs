@@ -1,4 +1,10 @@
 = Declaring a Message Source
+:toc-macro:
+:toclevels: 3
+:toc-title: Page Contents
+
+
+toc::[]
 
 While the integration developer can use a poll scope and an operation to poll an inbound endpoint, there are several cases which require a "message source":
 
@@ -180,6 +186,7 @@ For certain sources (like ones that do not emit responses), there’s probably n
 
 As explained before there’s a hybrid approach to declaring a source, because of the diverse nature of the possible parameters.
 
+
 === Obtaining the Configuration
 
 Just like an operation, a source might reference a configuration to obtain parameters about its behavior. To obtain such configuration, a field is to be annotated with the `@UseConfig` annotation (the same annotation that can be used in operations arguments to inject a configuration):
@@ -189,12 +196,14 @@ Just like an operation, a source might reference a configuration to obtain param
 @EmitsResponse
 public class HttpListener extends Source<Object, HttpRequestAttributes> {
 
- @Inject
- private MuleContext muleContext;
+@Inject
+private MuleContext muleContext;
 
- @UseConfig
- private HttpListenerConfig config;
- ----
+@UseConfig
+private HttpListenerConfig config;
+----
+[NOTE]
+The `@Inject` annotation can be used on fields to achieve Dependency Injection, such as can be achieved in any other Mule component.
 
 === Obtaining a Connection
 
@@ -212,10 +221,6 @@ private HttpListenerConfig config;
 @Connection
 private Server server;
 ----
-
-=== Dependency Injection
-
-The `@Inject` annotation can be used on fields to achieve Dependency Injection, such as can be achieved in any other Mule component.
 
 === Source Behavior Parameters
 
