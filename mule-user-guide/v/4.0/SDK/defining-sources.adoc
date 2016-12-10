@@ -7,7 +7,7 @@ While the integration developer can use a poll scope and an operation to poll an
 * JMS/AMQP to receive messages from queues subscribed to
 * Streaming API, and other cases
 
-As mentioned, a poll scope and operation can perform a similar function to that of a message source. Some similarities between the two are that they both have:
+As mentioned, a *poll scope* and *operation* can perform a similar function to that of a message source. Some similarities between the two are that they both have:
 
 * Parameters
 * return type
@@ -56,7 +56,7 @@ Realize that the SDK nor the runtime will validate that:
 * a source which doesn’t declare itself to emit response is prevented from sending one
 ====
 
-=== Sources that do not Emit Response
+=== Sources that do not Emit a Response
 
 Examples of sources which do not emit a response are:
 
@@ -79,13 +79,14 @@ Another example: although a JMS listener might respond by sending a message to a
 
 === Summary of Response Behavior
 
-Even though a message source has the capability of sending a response, it doesn’t necessarily imply that it will respond, *even if the message was processed successfully*. There are logic or configuration circumstances that might warrant foregoing response generation.
+Even though a message source has the capability of sending a response, it doesn’t necessarily imply that it will respond, even if the message was processed successfully. There are logic or configuration circumstances that might warrant foregoing response generation.
 
-== Start and Stop
+== onStart() and onStop()
 
-As explained before, sources need to have the ability to be started and stopped at any time. For this, the following methods need to be implemented:
+Message sources can be started or stopped at any time, independently of their containing flow. To this effect `onStart()` and `onStop()` methods must be defined:
 
-
+[source,java,linenums]
+----
 /**
 * This method will be invoked by the runtime to make the source start
 * producing messages.
@@ -121,31 +122,181 @@ public abstract void onStart(SourceCallback<T, A> sourceCallback) throws MuleExc
 * Only the runtime should invoke this method. Do not do it manually
 */
 public abstract void onStop();
-Notice that because the sources define their own (and reduced) lifecycle mechanism, sources are not allowed to implement any of the standard mule lifecycle interfaces (Initialisable, Startable, Stoppable, Disposable).
-onStart()
+----
+
+Since sources define their own lifecycle mechanism, they cannot implement any of the standard Mule lifecycle interfaces (`Initialisable`, `Startable`, `Stoppable`, `Disposable`).
+
+=== onStart()
+
+After `onStart()` is invoked, the source should be aware of any event that triggers the generation of a new message and successfully push the new message to the containing flow.
+
+[IMPORTANT]
+Do not invoke this method in your code. Only the runtime invokes this method, for example, upon starting the flow.
+
+This method must receive a `SourceCallback` object as a parameter. The `SourceCallback` is the API through which the source will push data to the flow. The data is pushed in the form of a `Result` object, and the runtime translates the object into a Mule message.
+
+This method should throw an exception if the source fails to start, but any other exceptions produced while listening/triggering new messages should be communicated through the `SourceCallback` (see the link:SDK/error-handling[Error Handling] section).
 
 
-The semantics of this method is that after being invoked, the source should be sensible to whatever triggers the generation of a new message and should successfully push such message to the owning flow.
+=== onStop()
+
+The `onstop()` method is invoked by the runtime to stop the source from producing messages.
+
+[IMPORTANT]
+Do not invoke this method in your code. Only the runtime invokes this method.
+
+This method should not fail. To that effect, any exceptions found during the stop process should be logged and correctly handled by the source, but after invoking this method the source must:
+
+* stop producing messages
+* free any allocated resources
+* be capable of being restarted
+
+[TIP]
+Best practice dictates that the source should never keep a hard reference to the `SourceCallback`, because the source needs to be restartable and a new instance of `SourceCallback` must provided on each invocation of `onStart()`. Keeping a reference to the callback on a field or some other container will force you to have clean up logic for it. This applies to the source state in general, therefore avoid creating such references.
+
+== Sending Messages to the Flow
+
+Once the source generates an object to be sent to the flow, it does so through the `SourceCallback`. Here’s some example code taken from the HTTP connector:
+
+[source,java,linenums]
+----
+SourceCallbackContext context = sourceCallback.createContext();
+context.addVariable(RESPONSE_CONTEXT, responseContext);
+sourceCallback.handle(createResult(requestContext), context);
+----
+
+The `handle()` method is used to push data into the flow. That data is pushed in the form of a `Result` object, which is the same `Result` object that operations use when they need to set a payload value as well as attributes (most sources will need to set attributes.) For example, the File source sets an attributes object which contains metadata about a file, whereas the HTTP listener instantiates an object which contains information about the incoming HTTP request.
+
+Notice that the `sourceCallback` is used to created a `SourceCallbackContext`. The callback context is used to maintain state across messages. For example, in the case of HTTP, each message needs a reference to the client which placed the original request, so that a response can be sent back. Because the source will be processing several requests concurrently, each message must to be tied to a specific state.
+
+In the “Callback Methods” section of this document you see how this same HTTP listener utilizes that variable to emit a response.
+
+[IMPORTANT]
+The only legal way of creating a SourceCallbackContext object is through a SourceCallback, which will only accept context objects created by it.
+
+For certain sources (like ones that do not emit responses), there’s probably no need to keep any state for the message. For those cases, there’s an overload of the `handle()` method which just accepts the `Result` object without the need of a context.
+
+== Declaring Parameters
+
+As explained before there’s a hybrid approach to declaring a source, because of the diverse nature of the possible parameters.
+
+=== Obtaining the Configuration
+
+Just like an operation, a source might reference a configuration to obtain parameters about its behavior. To obtain such configuration, a field is to be annotated with the `@UseConfig` annotation (the same annotation that can be used in operations arguments to inject a configuration):
+
+[source,java,linenums]
+----
+@EmitsResponse
+public class HttpListener extends Source<Object, HttpRequestAttributes> {
+
+ @Inject
+ private MuleContext muleContext;
+
+ @UseConfig
+ private HttpListenerConfig config;
+ ----
+
+=== Obtaining a Connection
+
+If the source requires a connection (and most connectors will, unless you’re implementing a scheduler or a poll), then you need to obtain such a connection through a connection provider. Once again, we use the same annotation as operations, except it is applied to a field instead of an argument.
+//operations can use the @Connection annotation?
+
+[source,java,linenums]
+----
+@EmitsResponse
+public class HttpListener extends Source<Object, HttpRequestAttributes> {
+
+@UseConfig
+private HttpListenerConfig config;
+
+@Connection
+private Server server;
+----
+
+=== Dependency Injection
+
+The `@Inject` annotation can be used on fields to achieve Dependency Injection, such as can be achieved in any other Mule component.
+
+=== Source Behavior Parameters
+
+Some parameters are defined using fields. These are the fields which are used to give the source the necessary configuration to start and stop. Since these parameters are used in the message generation process and are used at a point in which a message not yet exists, they cannot accept expressions.
+
+Other parameters, are defined in methods annotated with `@OnSuccess` and `@OnError`, which we’ll explain next.
+
+=== Callback Parameters
+
+Once the flow is finished processing each of the messages generated by the source, the source might optionally need to obtain the response that the flow has generated. We can do this by declaring methods annotated with `@OnSucess` or `@OnError`. These methods are declared in a similar fashion as operations, but they need to be void, since they listener for the response but cannot alter it.
+
+Each of the parameters in these callback methods will be evaluated in the same manner as operations (including auto transformation). However, since these callback methods are executed in response to the runtime processing a message, they can actually accept expressions. In fact, they accept expressions by default.
+//see first sentence, what does this mean: including auto transformation?
+
+== Callback Methods
+
+Callback methods are used to tap into the responses generated by the flow that encapsulates the source.
+
+The `@OnSuccess` method executes when the flow successfully processes the message (either because no errors were thrown or because they were all handled gracefully). The `@OnError` method is executed when an unhandled error is thrown by the flow.
+
+[source,java,linenums]
+----
+@OnSuccess
+public void onSuccess(@Optional @DisplayName(RESPONSE_SETTINGS) @NullSafe HttpListenerSuccessResponseBuilder responseBuilder,
+                     SourceCallbackContext callbackContext)
+   throws Exception {
 
 
-This method receives a SourceCallback object as parameter. The SourceCallback is the API through which the source will push data to the flow. The data is pushed in the form of a Result object, and the runtime knows how to translate that into a Mule message.
+ HttpResponseContext context = callbackContext.getVariable(RESPONSE_CONTEXT);
+ responseSender.sendResponse(context, responseBuilder);
+}
+----
+
+This example taken from the HTTP connector shows how the `onSuccess()` callback method can:
+
+* Receive a complex parameter, using the same annotations as a regular operation would.
+* Receive a `SourceCallbackContext` parameter. This allows the callback method to obtain the same callback context which was pushed alongside the original payload (or a default one).
+* In this case, this source is actually pulling a variable from the context in order to use it
+* emit responses; this is the place to actually send it
+
+Now let’s see an `@OnError `method from the same connector:
+
+[source,java,linenums]
+----
+@OnError
+public void onError(
+                   @Optional @DisplayName(ERROR_RESPONSE_SETTINGS) @NullSafe HttpListenerErrorResponseBuilder errorResponseBuilder,
+                   SourceCallbackContext callbackContext,
+                   Error error) {
+}
+----
+
+In this case, the method is very similar to the successful one. It also receives parameters and the callback context, and sends an error response back to the requester. But it can also receive an `Error` object. This is the actual Mule `Error` object which contains the information about the failure that was caught.
+
+=== Content Parameters
 
 
-This method should throw an exception if the source fails to start, but any other exceptions produced while listening/triggering new messages should be communicated through the SourceCallback (see the Error Handling section).
+The callbacks accept content parameters just like any operation. In the case of the http connector, it makes sense for the HttpListenerResponseBuilder to use them to allow the use of DataWeave into transforming the flow’s result into whatever format that the connector intends to return. All the concepts of content and primary contents apply, as well as their associated restrictions.
 
+=== Gotchas
 
-Only the runtime should invoke this method. Do not do it manually
+Even if the source doesn’t emit responses, it might still need to have callback methods for releasing resources, for logging, auditing, etc.
 
+A source is not required to provide both `@OnSuccess` and `@OnError` methods. They can just declare the ones they need or none at all
 
-onStop()
+== Types of Sources and Example Sources
 
+The following are two canonical examples of message sources, which are representative of the possible approaches:
 
-This method will be invoked by the runtime to make the source stop producing messages. This method should not fail. Any exceptions found during the stop process should be logged and correctly handled by the source, but after invoking this method the source must:
+* link:https://github.com/mulesoft/mule/blob/60a749ea1de5ac4d2452bbb37595772f86aa5a48/extensions/file/src/main/java/org/mule/extension/file/internal/DirectoryListener.java[Directory Listener] in the file connector
+* link:https://github.com/mulesoft/mule/blob/7505e871af307850bef9d6f259e78c05ec282023/modules/http/src/main/java/org/mule/extension/http/internal/listener/HttpListener.java[HTTP listener] in the HTTP connector
 
+These show three main categories of sources:
+//MG: three categories: blocking, polling, callback sources?
 
-Stop producing messages
-Free any allocated resources
-Be capable of being restarted
+=== Blocking/Polling Sources
 
+This is the example of the Directory Listener. In this case, it’s up to the source to go fetch data, either by parking at a blocking API (in this case `watcher.take()`) or by polling at some other API at regular intervals. In either case, the source needs to have its own WorkManager/Scheduler/Whatever threading API we define to handle threads to take care of this.
 
-Only the runtime should invoke this method. Do not do it manually
+Notice that in this case, the `onSourceException()` method of the `SourceCallback` becomes specially important. Because the actual listening happens on a thread proprietary to the source, you can’t just throw an exception an except mule to catch it and know what to do with it. Such error needs to be communicated through the callback.
+
+=== Callback Sources
+
+See the HTTP Listener or the Salesforce Connector. In this example, there is a third-party library/client which is actually in control of triggering the events, and it pushes data to the source which then pushes it back to the runtime.
