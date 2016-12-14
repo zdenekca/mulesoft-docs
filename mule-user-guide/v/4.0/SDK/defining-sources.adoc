@@ -298,10 +298,10 @@ These show three main categories of sources:
 
 === Blocking/Polling Sources
 
-This is the example of the Directory Listener. In this case, it’s up to the source to go fetch data, either by parking at a blocking API (in this case `watcher.take()`) or by polling at some other API at regular intervals. In either case, the source needs to have its own WorkManager/Scheduler/Whatever threading API we define to handle threads to take care of this.
+This is the example of the Directory Listener. In this case, it’s up to the source to go fetch data, either by parking at a blocking API (in this case `watcher.take()`) or by polling at some other API at regular intervals. In either case, the source needs to have its own WorkManager/Scheduler threading API we define to handle threads to take care of this.
 
-Notice that in this case, the `onSourceException()` method of the `SourceCallback` becomes specially important. Because the actual listening happens on a thread proprietary to the source, you can’t just throw an exception an except mule to catch it and know what to do with it. Such error needs to be communicated through the callback.
+Notice that in this case, the `onSourceException()` method of the `SourceCallback` becomes especially important. Because the actual listening happens on a thread proprietary to the source, you can’t just throw an exception an except mule to catch it and know what to do with it. Such error needs to be communicated through the callback.
 
 === Callback Sources
 
-See the HTTP Listener or the Salesforce Connector. In this example, there is a third-party library/client which is actually in control of triggering the events, and it pushes data to the source which then pushes it back to the runtime.
+See the HTTP Listener or the Salesforce Connector. In this example, there is a third-party library/client which is in control of triggering the events. This library pushes data to the source which then pushes it back to the runtime.
