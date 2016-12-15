@@ -1,0 +1,31 @@
+= Error Handling
+
+SDK enables the extension developer to declare the *error types* that can be thrown by the extension and where they can be thrown, for example at the operation or configuration levels.
+//what are the levels at which the errors can be thrown at runtime
+* Map the existing Java exceptions to Mule errors
+* Declare which components can throw errors, including the type of the errors
+
+== Declaring Error Types and Where Errors are Thrown
+
+
+Mule `ErrorTypes` can be a part of a namespace. You can declare a specialization or origin of this error.
+//"can be"? are their regular Mule errortypes and those customized by module?
+
+The module namespace, by default, should be the module’s namespace. The module developer can customize the `ErrorType` or throw errors as long as the proper namespace is specified.
+//confirm the above, but where is ns specified?
+
+As a consequence, all the declared errors inside a module would be part of the same namespace, so the module developer should, upon specifying the correct namespace, worry only about the error type.
+//assuming module=extension?
+//can the Mule error type be customized via the module. Where is a module's namespace identified in the code?
+
+[NOTE]
+Example: If the Slack module declares the `NOT_FOUND` error for a certain operation, this will be registered as `SLACK:NOT_FOUND` error.
+//all-caps?
+
+The purpose of the restriction on error declaration is to impose a standardized way to expose module errors and also ensure a consistent experience for the developer handling errors in a Mule application. For a module developer, this provides a streamlined development experience. For the Mule app developer, a consistent experience across all modules.
+
+== Error Type Declaration
+
+
+
+=== Error Thrown
