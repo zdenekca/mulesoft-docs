@@ -1,0 +1,38 @@
+== Creating Extension Configurations
+
+As specified in the link:/mule-sdk-intro[basic SDK concepts], you may want one or many configurations for an extension. Learn how to set the required and optional attributes for your extension's configurations.
+
+Configuration classes marked with `@Configuration` are scanned for fields annotated with `@Parameter`, which define the attributes that the extension configuration requires or may be configured by the end user to work. Getters and setters are not required since the framework will inject the values via field accessors.
+
+*Lists, Maps, Sets, complex POJOs and simple types are supported as parameters.* For a complete example look see the link:https://github.com/mulesoft/mule/blob/cae6622ef70895ec4413ddda194f235ec38b5c99/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergExtension.java#L57-L57[HeisenbergExtension]:
+
+
+The `@Optional` annotation can be used to indicate that a parameter is not required and optionally can also be used to provide a default value.
+
+== Supporting Mule Variable or DataWeave Language Expressions
+
+All configuration attributes support expressions by default unless the extension’s developer specifically makes the design decision not to support them on certain attributes.
+
+You can choose from three levels of expression support:
+
+----
+SUPPORTED
+NOT_SUPPORTED
+REQUIRED
+----
+
+You can use the `@Expression` annotation on the `@Parameter` to specify that. For example, the following snippet is taken from the `HeisenbergExtension` class:
+
+[source,java,linenums]
+----
+@Parameter
+@Expression(REQUIRED)
+@Optional
+private String labAddress;
+
+
+@Parameter
+@Expression(NOT_SUPPORTED)
+@Optional
+private String firstEndeavor;
+----
