@@ -1,4 +1,7 @@
-== Creating Extension Configurations
+== Creating Configurations
+:toc: macro
+:toclevels: 2
+:toc-title:
 
 
 As specified in the link:/mule-sdk-intro[basic SDK concepts], you may want one or many configurations for an extension. Learn how to set the required and optional attributes for your extension's configurations.

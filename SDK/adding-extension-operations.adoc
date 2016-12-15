@@ -1,4 +1,4 @@
-= Adding Operations to an Extension
+= Adding Operations
 :toc: macro
 :toclevels: 2
 :toc-title:
