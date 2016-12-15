@@ -1,5 +1,6 @@
 == Creating Extension Configurations
 
+
 As specified in the link:/mule-sdk-intro[basic SDK concepts], you may want one or many configurations for an extension. Learn how to set the required and optional attributes for your extension's configurations.
 
 Configuration classes marked with `@Configuration` are scanned for fields annotated with `@Parameter`, which define the attributes that the extension configuration requires or may be configured by the end user to work. Getters and setters are not required since the framework will inject the values via field accessors.

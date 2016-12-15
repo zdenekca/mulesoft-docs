@@ -1,11 +1,46 @@
 = Connection Management
+:toc-macro:
+:toclevels: 3
 
-For an extension which supports SaaS connections, it is important to define how the extension should use Mule to:
 
-* *create the connection*
-* *reconnect to the service*
-* *handle connection retries*
-* *support different connection mechanisms*
+toc::[]
+
+== Overview
+
+Define how your module should use Mule to:
+
+* Create a connection
+* Reconnect to the service
+* Handle connection retries and
+* Support different connection mechanisms
 // oauth, http basic, etc?
 
-The `ConnectionProvider` interface is responsible for creating, disconnecting, and describing the connection so the runtime can handle it.
+[NOTE]
+====
+Essential annotations you use in your code to support connection management are:
+
+* `@ConnectionProviders`
+* `@Connection`
+====
+
+By default, a connection is created each time an operation needs one and is destroyed each time the operation finishes. In some cases you need another approach. There are three types of management strategies:
+
+== Connection Handling Strategies
+
+* *POOLING*: User can configure if the connections should be pooled or handed off directly. The `ConnectionType` provides a default `PoolingProfile`. You can enable this strategy by making the `ConnectionProvider` implement the `PoolingConnectionProvider` interface
+When pooling is enabled, XSD support is automatically added to configure a `<pooling-profile />` element. If no such element is defined, a default one is used. Therefore, the `PoolingConnectioProvider` implementation in not required to have a field of type `PoolingProfile`.
+* *CACHED*: Per each configuration instance, a connection is established and cached so that one specific config always gets the same connection. The connection is maintained until the configuration itself is stopped. You can enable this strategy by making the `ConnectionProvider` implement the `CachedConnectionProvider` interface.
+* *NONE*: This is the default case. The runtime adds no additional infrastructure like in the pooling/OAuth cases. The `ConnectionProvider` is responsible for providing the totality of the connection handling behavior.
+
+== ConnectionProvider
+
+At the heart of the connectivity framework of Mule SDK is the `ConnectionProvider` interface, which is responsible for:
+
+* *creating the connection*,
+* *disconnecting*, and
+* *describing* the connection so the runtime can handle it.
+
+[NOTE]
+Inspect the link:https://github.com/mulesoft/mule-api/blob/2feae79470691d95a64bf79f062d07b5b8478588/src/main/java/org/mule/api/connection/ConnectionProvider.java[ConnectionProvider interface] more detail to see how the interface handles the above aspects of the connection.
+
+Although this is decoupled from a compilation point of view, there’s a strong lifecycle coupling between a configuration instance and a `ConnectionProvider`. A connectable configuration instance is tightly bound to a `ConnectionProvider` instance through the Mule runtime `ConnectionManager`.

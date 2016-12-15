@@ -8,6 +8,7 @@
 toc::[]
 
 
+//look at spec and doc these: Non Blocking Operations and Execution Types
 
 After creating a configuration, add functionality to your extension by declaring its operations. In the previous version of SDK, called *DevKit*, operations were referred to in development terms as "message processors". Similarly, the operations discussed here can operate on Mule message data.
 

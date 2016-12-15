@@ -1,21 +1,133 @@
 = Error Handling
+:toc-macro:
+:toclevels: 3
 
-SDK enables the extension developer to declare the *error types* that can be thrown by the extension and where they can be thrown, for example at the operation or configuration levels.
+
+toc::[]
+
+
+
+== Background on Mule Error Handling
+
+Note that Mule 4 enables the integration developer to leverage errors defined in Mule. Therefore, you as the Mule module developer should allow the users of your module to handle any possible Java exceptions that can be thrown, by mapping these to Mule errors, and even enriching those errors. You can define various types for your module to throw.
+//MG: is this correct terminology? map Exceptions to Errors?
+`ErrorType` is the identifier that you use to identify the Mule error, or other specialized error, that your module can throw, which helps the user identify the origin of any given issue.
+
+[NOTE]
+When a MuleEvent fails it contains an Error object, which contains an `ErrorType` and information about the error. For example, one possible Mule `ErrorType` is `MULE:CONNECTIVITY`.
+
+SDK enables the module developer to declare the *error types* that can be thrown by the module and where they can be thrown, for example at the *operation or configuration levels*. Implement the `ErrorTypeProvider` to specify which error types can be thrown.
 //what are the levels at which the errors can be thrown at runtime
-* Map the existing Java exceptions to Mule errors
+* Map the existing Java exceptions to Mule errors in the ErrorTypesDefinition
 * Declare which components can throw errors, including the type of the errors
 
-== Declaring Error Types and Where Errors are Thrown
+
+[source,java,linenums]
+----
+public enum HeisenbergErrors implements ErrorTypeDefinition<HeisenbergErrors> {
+ ORPHAN_ERROR,
+ CONNECTIVITY {
+   @Override
+   public Optional<ErrorTypeDefinition<?>> getParent() {
+     return Optional.of(MuleErrors.CONNECTIVITY);
+   }
+ },
 
 
-Mule `ErrorTypes` can be a part of a namespace. You can declare a specialization or origin of this error.
-//"can be"? are their regular Mule errortypes and those customized by module?
+ OAUTH2 {
+   @Override
+   public Optional<ErrorTypeDefinition<?>> getParent() {
+     return Optional.of(HeisenbergErrors.CONNECTIVITY);
+   }
+ }
+}
+----
 
-The module namespace, by default, should be the module’s namespace. The module developer can customize the `ErrorType` or throw errors as long as the proper namespace is specified.
-//confirm the above, but where is ns specified?
+With a little sugar:
+
+[source,java,linenums]
+----
+public enum HeisenbergErrors implements ErrorTypeDefinition<HeisenbergErrors> {
+
+
+ ORPHAN_ERROR,
+ CONNECTIVITY(MuleErrors.CONNECTIVITY),
+ OAUTH2(HeisenbergErrors.CONNECTIVITY),
+ HEALTH(HeisenbergErrors.CONNECTIVITY);
+
+
+ private ErrorTypeDefinition<?> parentErrortype;
+
+
+ HeisenbergErrors(ErrorTypeDefinition parentErrorType){
+   this.parentErrortype = parentErrorType;
+ }
+
+
+ HeisenbergErrors(){
+ }
+
+
+ @Override
+ public Optional<ErrorTypeDefinition<? extends Enum<?>>> getParent() {
+   return ofNullable(parentErrortype);
+ }
+}
+----
+
+
+== Error Type Declaration
+
+Each error should have an `@ErrorTypes` `ErrorTypeDefinition`. This must be an `enum` class defining the error types.
+
+To declare Error Types that an Module could handle, the module developer should declare at `@Module` level his error types definition class with an `@ErrorTypes` annotation which requires as value a Enum Class implementing ErrorTypeDefinition.
+
+`@ErrorTypes` are declared at the `@Module` level and reference the class with the definition. This is the class you implement to create your error types definition.
+
+[source,java,linenums]
+----
+public interface ErrorTypeDefinition<E extends Enum<E>> {
+
+
+ /**
+  * @return The type of the current error type definition
+  */
+ default String getType() {
+   return ((E) this).name();
+ }
+
+
+ /**
+  * @return The {@link Optional} parent of the current error type definition
+  */
+ default Optional<ErrorTypeDefinition<? extends Enum<?>>> getParent() {
+   return empty();
+ }
+}
+----
+
+=== Error Type Provider
+
+Implement the `ErrorTypeProvider` to specify the error types that can be thrown by operations. In the module code, whenever you want to specify the errors that an operation or other can throw, you use the @Throws annotation, referencing the `ErrorTypeProvider` class.
+
+[source,java,linenums]
+----
+public interface ErrorTypeProvider {
+
+
+ /**
+  * @return a {@link Set} of {@link ErrorTypeDefinition}
+  */
+ Set<ErrorTypeDefinition> getErrorTypes();
+}
+----
+
+`@Throws` is used to annotate your `ErrorTypeProvider` class returning a `Set` of error type definitions, all of which must be in the `ErrorTypeDefinition` class. `@Throws` can be applied at the `@Module`, `@Operations`, and at the methods of the `@Operations`. Note you cannot throw an error at the configuration cannot level. A connection exception is automatically exposed as `<module:CONNECTIVITY>`, extending the Mule connectivity error type.
+
+The module developer can inherit an `ErrorType` defined by Mule. For example, an module can throw a connectivity error that extends from a Mule defined connectivity error.
 
 As a consequence, all the declared errors inside a module would be part of the same namespace, so the module developer should, upon specifying the correct namespace, worry only about the error type.
-//assuming module=extension?
+//assuming module=module?
 //can the Mule error type be customized via the module. Where is a module's namespace identified in the code?
 
 [NOTE]
@@ -24,8 +136,76 @@ Example: If the Slack module declares the `NOT_FOUND` error for a certain operat
 
 The purpose of the restriction on error declaration is to impose a standardized way to expose module errors and also ensure a consistent experience for the developer handling errors in a Mule application. For a module developer, this provides a streamlined development experience. For the Mule app developer, a consistent experience across all modules.
 
-== Error Type Declaration
+=== @Throws
+
+Use this annotation to throw an exception. deepest `@Throws` declaration overrides any parent `@Throws` declaration.
+
+== Other Options for Throwing Errors
+
+You can throw a `ModuleException` anywhere in your module if you know exactly the `ErrorType` you want to throw (note: it has to have been defined already in your module's error definitions).
+
+You can implement an `ExceptionEnricher` is going to be used, but letting the user throw a new kind of exception, the ModuleException.
+This exception is built from a cause exception and an ErrorIdentifier; with this new exception, the module developer can explicitly declare the error type to be thrown.
+
+[IMPORTANT]
+Use a `ModuleException` or the error will be reported to the user as `<MODULE:UNKNOWN>`.
+
+The Mule application developer cannot catch an `UNKNOWN` error.
+
+=== Enriching Exceptions
+
+By using the `@OnException` annotation you can point to an `ExceptionEnricher` implementation so when an exception occurs in an operation the Enricher class declared will be called immediately, passing the exception thrown by the operation to the `enrichException` method.
+
+[source,java,linenums]
+----
+@Extension
+@Configurations({PooledConnectionConfig.class, OAuthConfig.class, RestConfig.class})
+@Operations(Operations.class);
+@OnException(PetExceptionEnricher.class)
+public class PetStoreConnector {
+…
+}
+----
+
+You can also define an enricher in an operation method or source class. Handlers defined at operation or source level override whatever setting on the extension level.
+
+[source,java,linenums]
+----
+@Operation
+@OnException(handler = OperationSpecific.class)
+public void myOperation() {
+}
+----
+
+The semantics of the `ExceptionEnricher` is such that it can either be used to decorate a given exception but it can also be used to handle the exception directly and return a value back into the pipeline.
+
+For example, consider the following:
+
+[source,java,linenums]
+----
+public class PetExceptionEnricher implements ExceptionEnricher {
+
+	public Exception handleException(Exception e) {
+		if (e instanceof SocketException) {
+return new ConnectionException(e);
+} else {
+		logger.debug(“Oh no!”, e);
+		}
+		return e;
+}
+----
+
+What the `ExceptionEnricher` interface allows is to provide generic logic to handle exceptions, either via logging, sending notifications, etc.
+
+Optionally, you can throw a new exception which replaces the original one. In this case, we wrap the SocketException into a ConnectionException, so that the runtime gets to know that reconnection is needed. Notice that this implies that the handler should not fail by any other reason.
+
+This is the Exception Enricher interface that you implement to receive the exception thrown by the operation and returns another exception enriched or just the same one after doing some processing.
+
+[source,java,linenums]
+----
+public interface ExceptionEnricher {
 
 
-
-=== Error Thrown
+public Exception enrichException(Exception e);
+}
+----
