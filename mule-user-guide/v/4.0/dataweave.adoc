@@ -212,7 +212,27 @@ If you're already familiar with Java, learning DataWeave is not difficult. That 
 
 After having absorbed this material, you are ready to begin learning about DataWeave basic syntax, and start using expressions in your application. 
 
+== Auto-Complete
 
+If you are configuring a field that supports expressions and need help with syntax, you can access DataWeave suggestions by one of two methods.
+
+* Place your cursor inside the brackets in a field that has `#[]` pre-populated for you, then press Ctrl + Space Bar.
+* Enter `#[` to open a new DataWeave expression and display suggestions, as shown below.
++
+image:auto_complete.png[auto_complete]
++
+[WARNING]
+Note that the autocomplete functionality described here works in the *Visual Editor only*. Although Studio's XML tab does offer some autocomplete options, the suggestions there are limited by Eclipse and are not based on DataSense or DataWeave.
+
+== Tips
+
+* DataWeave performs link:http://en.wikipedia.org/wiki/Type_coercion[type coercion] at runtime. 
+* When writing in Studio's XML editor, you cannot use double quotes to express String literals, because DataWeave expressions already appear enclosed in double quotes in configuration files. Instead, you can either: +
+** use single quotes                   `('expression')`
+** escape quotes with &quot;      `(&quot;expression&quot;)`
+** escape quotes with \u0027      `(\u0027expression\u0027)`
++
+If you're writing on Studio's visual editor, Studio transforms double quotes into escaped quotes `(&quot;) `in the XML view.
 
 
 == DataWeave Reference Material
