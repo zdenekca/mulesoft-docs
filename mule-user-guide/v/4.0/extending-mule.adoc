@@ -1,0 +1,280 @@
+= Mule SDK
+:keywords: connectors, devkit, open source, develop, extend, customize
+:imagesdir: _images
+
+Create extensions using the *Mule SDK*, the standard framework used to build components, connectors and packaged functionality for use with Mule.
+
+*Extensions API* is a set of interfaces and classes that define a contract between an extension and the Mule 4 runtime environment. It is designed to handle communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core and works with Maven.
+//MG how designed to work with Maven?
+
+[NOTE]
+All components, connectors and pluggable functionality for Mule can generally be considered extensions in Mule terms. The Extensions API, and more specifically the API's `ExtensionManager`, is the mechanism used to "discover" extensions for Mule.
+////
+Mariano: validate ExtensionManager part. When are extensions discovered? via Maven pom?
+How about other extended packaged functionality? How built before?
+////
+
+== Anatomy of an Extension
+
+An extension has a standard representation based on the *Model API*, the canonical that is used to introspect an extension to ensure its structural requirements are met. All other APIs link to this abstract representation. A separate *metadata API* obtains the metadata structure of any given extension.
+//MG when is this metadata API called?
+
+
+
+[NOTE]
+All extensions are required to have at least one "configuration", based on a *Configuration Model* though not all sources and operations depend on a configuration or connection.
+//MG: any other required models that must be defined for an extension to work?
+
+Besides the `ExtensionModel` and `ConfigurationModel` models, other important ones to know are:
+
+* `SourceModel` - defines how the extension should generate messages
+* `OperationModel` - defines operations for the extension
+* `ConnectionProviderModel` - to create connections that describe the type of configuration they accept and the type of connection they construct
+* `ParameterModel` - configurable arguments for a parent entity like an operation, source or connection provider.
+
+Some extensions, for instance, an extension supporting XML language requires additional properties to indicate the namespace URI that the schema generator should use. For this, a custom model property can be used to add that information via the `EnrichableModel`, an interface that is defined and implemented in all the model types described above.
+//MG is this the mechanism that is used to map the extension to xml?
+
+////
+
+* Extension Design:
+https://docs.google.com/document/d/14elYssySOmrOENK5jjrTh7OJo7LfUqc9bE0ffQhAyyQ/edit#
+* Declaring an Extension
+* Declaring Configurations
+* Declaring Operations
+** Using Annotations
+
+////
+
+
+== Declaring an Extension
+
+
+Declare an extension on your class or interface using the `@Extension` annotation.
+
+`@Extension(name = "heisenberg", description = ”heisenberg extension”)`
+
+[NOTE]
+This marks a discoverable entry point for a `Describer`, which lets the Anypoint Platform kick off the process used to validate the extension.
+
+=== Extension Code Organization
+
+Extensions are composed of at least one configuration and a set of operations, whose behavior is affected by any number of configurations.
+
+* Configurations and operations must be defined in different classes
+* If the extension provides several configurations, each one must be defined in its own class, although all of them will be required to belong to have a common ancestor class and/or implement the same interface when defined at the same level
+* Operations can be defined in a more flexible way. They can all be defined in the same class, be spread across several classes, or even have a one operation per class model.
+
+== Configuration Model
+
+A configuration is a set of configurable attributes which affect the behavior of the extension. All extensions are required to have at least one configuration, but can also define as many other configurations as needed. Different configurations might provide a unique set of parameters from other configurations for its extension. Additionally, a configuration may also specify its own set of *operations*, *sources* and *connection providers*; naturally, these can only be accessed when using the configuration to which they belong.
+
+////
+[NOTE]
+The configuration is based on link:https://github.com/mulesoft/mule-extensions-api/blob/master/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/model/config/ImmutableConfigurationModel.java[this model].
+////
+
+An extension can be asked for its configuration in which case it will return a collection of configurations. The first element of that collection will be the default configuration. The other elements (if any) will be the optional configurations alphabetically sorted by name.
+
+[NOTE]
+Read more about configurations in *How to Declare a Configuration*
+
+////
+For the simplest use case, the same class annotated with @Extension is implicitly considered a configuration. For more advanced use cases in which you’re to deal several different annotations, you can split them into several classes.
+
+
+@Extension(name = "heisenberg", description = ”heisenberg extension”)
+public class HeisenbergExtension
+{
+
+
+You can also split it by using the @Configurations annotation to reference the configuration classes, but remember that they all must have a common ancestor. A trivial example would be to have all of them extending the HeisenbergExtension class as follows:
+
+
+@Extension(name = "heisenberg", description = ”heisenberg extension”, version = "1.0")
+@Configurations({BlueHeisenbergConfig.class, PseudoEfedrinHeisenbergConfig.class})
+public class HeisenbergExtension
+{
+}
+
+
+@Configuration(name = "blue")
+public class BlueHeisenberg extends HeisenbergExtension
+{
+}
+
+
+@Configuration(name = "pseudo")
+public class PseudoEfedrinHeisenberg extends HeisenbergExtension
+{
+}
+
+
+The @Configuration class allows specifying a name and a description for each of those configurations. Notice that the @Configuration annotation is optional. You might choose to specify it and then the extension builder will assume the default “config” as the name for that configuration. CAREFUL WITH THIS THOUGH: If you have more than one configuration with the implicit “config” name an exception will be thrown because no two configurations can have the same name. You’re only allowed to use the implicit name once per extension.
+
+
+A third variation would be one in which the configuration is split among several classes, but the one defining the extension is one of them:
+
+
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@Configurations({BlueHeisenbergConfig.class, PseudoEfedrinHeisenbergConfig.class, HeisenbergExtension.class})
+public class HeisenbergExtension
+{
+}
+
+
+What the example above shows is that when the @Configurations annotation is present, then the class defining the extension is not assumed to also be a configuration. You can make it so but by referencing it in the @Configurations annotation.
+
+
+Finally, another option would be to define the same schema but using an interface to define the extension. This approach can be very useful at delivering a more testeable code:
+
+
+@Extension(name = "heisenberg", description = ”heisenberg extension”)
+@Configurations({BlueHeisenbergConfig.class, PseudoEfedrinHeisenbergConfig.class})
+public interface HeisenbergExtension
+{
+}
+
+
+@Configuration(name = "blue")
+public class BlueHeisenberg implements HeisenbergExtension
+{
+}
+
+
+@Configuration(name = "pseudo")
+public class PseudoEfedrinHeisenberg implements HeisenbergExtension
+{
+}
+
+
+
+TIP: BlueHeisenberg and PseudoEfedrineHeisenberg classes could extends an abstract BaseHeisenbergExtension class which implements the interface. That approach is also valid and allows for code sharing among the configurations.
+////
+
+
+
+////
+* Extension Packaging (Internals)
+
+* How Mule Interacts with the Extension
+////
+
+== How Mule Discovers and Implements an Extension
+
+For an extension to be discovered, it must have some code that describes it as such. `AnnotationBasedDescriber` is an abstract utility class living in the Mule runtime. The `AnnotationBasedDescriber` constructor takes a class as its argument. The annotations in that class are parsed by the describer and the output is the "construct" that the runtime can subsequently transform into an "extension" via an `ExtensionFactory`.
+// Mariano: please validate above para, I had to reword for clarity, but may have missed a finer point.
+
+The way to use this class is as follows:
+// Mariano: where does this below code get implemented? How is this consumed by `AnnotationBasedDescriber`? Is it looking for a DescriberSupport extended class?
+
+[source,java,linenums]
+----
+public final class ValidationExtensionDescriber extends DescriberSupport
+{
+   public ValidationExtensionDescriber()
+   {
+       super(ValidationExtension.class);
+   }
+}
+----
+
+//How Mule Discovers the Extension
+
+That (and the SPI bundle in the `META-INF` folder) is what is needed to facilitate the discovery of the extension. Notice that the class doesn’t extend `AnnotationsBasedDescriber`, which by design is final. Instead, instantiate the `DescriberSupport` class providing the annotated type. The support class will in turn delegate to the `AnnotationsBasedDescriber`.
+//MG: what does "providing the annotated type mean"?
+//delegate _what_ to the AnnotationsBasedDescriber?
+
+== Annotating the Extension Class Code
+
+The principle of using annotations is to code an extension in a way that is consistent with the Mule API, but completely agnostic of Mule’s implementation and runtime details.
+
+This means:
+
+* no coupling to Mule internals
+* coupling to Mule API is kept to a minimum, but encouraged when it makes sense (e.g. there is no point in making a facade for something as "core" as the MuleMessage)
+* it is easy to use
+
+Annotate your classes so your extension can take advantage of:
+
+* Parameter/expression evaluation
+* Connection Management
+* XSD generation
+* XML DSL parsing and interpretation
+* Lifecycle and IoC
+* Error handling
+
+
+
+== Extension Dependencies
+
+The parent module of the extension adds the dependencies to the `extension-XYZ-support` artifacts. It also registers build plugins necessary for the extensions compilations (look at the Resources API.
+
+All extensions should have this common parent POM:
+
+[source,xml,linenums]
+----
+<parent>
+   <groupId>org.mule.extensions</groupId>
+   <artifactId>mule-extensions</artifactId>
+   <version>${muleVersion}</version>
+</parent>
+----
+
+The above artifact contains all the dependencies common to all extensions such as `mule-extensions-support`, `mule-extensions-spring-support`, the extensions annotations, etc.
+
+=== Extensions API Packages and Dependencies
+
+* `extensions-api`: contains interfaces and final classes for this API. More specifically, it contains the implementation of the DataType framework
+* `extensions-api-annotations`: contains the annotations
+* `extensions-support`: a Mule module that contains the base implementation of the extensions-api
+* `extensions-spring-support`: a Mule module that contains support for extensions with the XML capability. This is separate from `extensions-support` so that non XML extensions can be used without burdening with this use case specific components
+
+The artifacts follow these simple rules:
+
+* `extensions-api` is under no circumstance dependent on mule-core
+//* `extensions-api` might depend on an upcoming mule-api artifact
+* `extensions-api` and extensions-api-annotations are to be versioned separately from the rest of the mule distribution but will always be versioned consistently in respect to each other
+* `extension-spring-support` depends on `extensions-support`, not the other way around
+
+== How an Extension is Validated
+
+A *Fluent API* is in charge of centralizing the validations of the model, along with its instantiation logic. The Fluent API acts as an abstraction layer to separate the concrete implementations of the extension from the validation of the extension model.
+
+The Fluent API produces an `ExtensionDeclaration` object, which is a raw instrospection of the extension without having been validated. As described in the last paragraph, this allows decoupling the model metadata from how the model is implemented.
+
+The `Describer` interface is the mechanism used by the Fluent API and the Anypoint Platform to build a `Descriptor`, a raw data model. The platform is in charge of translating the construct into an actual extension.
+
+
+////
+[NOTE]
+Find ways to construct custom reusable building blocks in the link:/mule-user-guide/v/3.8/extending[Reference for Extending Mule]
+
+== Add Functionality to Mule
+
+[%header,cols="2*a"]
+|===
+|Addition |Description |Studio Instructions |Standalone Instructions
+|*Enterprise License* |Ready to deploy to production? Acquire, then install an Enterprise license on your instance of Mule. (Using the out-of-the-box trial runtime, you can run applications for a maximum of 12 continuous hours.) 2+|link:/mule-user-guide/v/3.8/installing-an-enterprise-license[Installing an Enterprise License]
+|*Community Runtime* |Want to explore what the open-source, community version of Mule has to offer? Add the Community runtime to your existing instance of Anypoint Studio, or download the latest Mule Community Standalone runtime listed under the "Standalone Community Edition Download" heading on the download site. |link:/anypoint-studio/v/7/adding-community-runtime[Adding Community Runtime] |http://www.mulesoft.org/download-mule-esb-community-edition[Download Community Standalone]
+|*Anypoint Connectors* |Need to connect to a SaaS application? Check our link:http://www.mulesoft.org/connectors[library of Anypoint Connectors], and add them your instance of Mule. 2+|link:/mule-user-guide/v/3.8/installing-connectors[Installing Connectors]
+|*Modules* |Add suites of functionality to your instance of Mule such as link:/mule-user-guide/v/3.8/installing-anypoint-enterprise-security[Anypoint Enterprise Security] and link:/mule-healthcare-toolkit/v/3.6[Mule Healthcare Toolkit]. 2+|link:/anypoint-studio/v/7/installing-extensions[Installing Extensions]
+|*New Versions* |Update your instance of Mule to the latest and greatest version available! |link:/anypoint-studio/v/7/installing-extensions[Updating to new version] |*Enterprise*: link:https://support.mulesoft.com[Customer Portal]
+
+*Community:* link:http://www.mulesoft.org/download-mule-esb-community-edition[Download Community Standalone]
+|===
+
+== Build Customized Functionality 
+
+If you find that your integration development team regularly requires functionality not included with Mule out of the box, you can make use of the extensive link:/anypoint-connector-devkit/v/3.8[Anypoint Connector DevKit] to build your own connectors.
+
+Use DevKit to:
+
+* Build your own *connectors* to use in Mule applications
+* Build your own *modules* that you can add to an instance of Studio
+* Extend an existing Mule element to *customize* it to your needs
+
+== Contribute to the Open Source Project
+
+We're always interested in improvements, fixes, and ideas that help solve problems or code faster. If you're interested in contributing and making Mule even better, bring it on! Our source code lives on GitHub and we welcome pull requests for fixes and innovations. Follow the steps in  link:https://docs.mulesoft.com/#making-a-contribution[Making a Contribution] to prepare and submit your contribution.
+////

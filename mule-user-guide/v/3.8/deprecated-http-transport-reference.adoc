@@ -23,7 +23,7 @@ HTTP/S endpoints are synchronous by default, so you do not have to set `exchange
 |===
 |Feature |Value |Description
 |Transport |UDP |The name/protocol of the transport
-|Doc |http://www.mulesoft.org/docs/site/3.8.1/apidocs/org/mule/transport/http/package-summary.html[JavaDoc] http://www.mulesoft.org/docs/site/current3/schemadocs/namespaces/http_www_mulesoft_org_schema_mule_http/namespace-overview.html[SchemaDoc]
+|Doc |http://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/transport/http/package-summary.html[JavaDoc] http://www.mulesoft.org/docs/site/current3/schemadocs/namespaces/http_www_mulesoft_org_schema_mule_http/namespace-overview.html[SchemaDoc]
 |Links to the JavaDoc and SchemaDoc for the transport
 |Inbound |image:check.png[check] |Whether the transport can receive inbound events and can be used for an inbound endpoint.
 |Outbound |image:check.png[check] |Whether the transport can produce outbound events and be used with an outbound endpoint.
@@ -268,13 +268,13 @@ To redirect an HTTP client, you must set two properties on the endpoint. First, 
 [TIP]
 See the HTTP protocol specification for detailed information about status codes at http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html.
 
-The following example flow listens on the local address `http://localhost:8080/mine` and sends a response with the redirection code instructing the client to go to http://mule.mulesoft.org/.
+The following example flow listens on the local address `http://localhost:8080/mine` and sends a response with the redirection code instructing the client to go to http://mulesoft.org/.
 
 [source,xml, linenums]
 ----
 <http:inbound-endpoint address="http://localhost:8080/mine" exchange-pattern="request-response"/>
 <set-property propertyName="http.status" value="307"/>
-<set-property propertyName="Location" value="http://mule.mulesoft.org/"/>
+<set-property propertyName="Location" value="http://mulesoft.org/"/>
 ----
 
 [NOTE]
@@ -311,7 +311,7 @@ If you set `responseTimeout` to 0, you disable the timeout entirely.
 
 == Getting a Hash Map of POST Body Parameters
 
-You can use the custom transformer link:http://www.mulesoft.org/docs/site/3.8.1/apidocs/org/mule/transport/http/transformers/HttpRequestBodyToParamMap.html[HttpRequestBodyToParamMap] on your inbound endpoint to return the message properties as a hash map of name-value pairs. This transformer handles GET and POST with `application/x-www-form-urlencoded` content type.
+You can use the custom transformer link:http://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/transport/http/transformers/HttpRequestBodyToParamMap.html[HttpRequestBodyToParamMap] on your inbound endpoint to return the message properties as a hash map of name-value pairs. This transformer handles GET and POST with `application/x-www-form-urlencoded` content type.
 
 For example:
 

@@ -23,7 +23,7 @@ image:cache_icon.png[cache_icon]Caching message content during processing saves
 
 == Assumptions
 
-This document assumes that you are familiar with Mule ESB and the link:/docs/display/34X/Mule+Studio+Essentials[Mule Studio interface]. To increase your familiarity with Studio, consider completing one or more link:/mule-fundamentals/v/3.4/basic-studio-tutorial[Mule Studio Tutorials]. Further, this example assumes you are familiar with XML coding and that you have a basic understanding of link:/mule-fundamentals/v/3.4/mule-application-architecture[Mule flows] and SOAP as a Web service paradigm and the practice of WSDL-first Web service development. 
+This document assumes that you are familiar with Mule ESB and the link:/anypoint-studio/v/5/index[Mule Studio interface]. To increase your familiarity with Studio, consider completing one or more link:/anypoint-studio/v/5/basic-studio-tutorial[Mule Studio Tutorials]. Further, this example assumes you are familiar with XML coding and that you have a basic understanding of link:/mule-user-guide/v/3.4/mule-application-architecture[Mule flows] and SOAP as a Web service paradigm and the practice of WSDL-first Web service development. 
 
 This document describes the details of the example within the context of Mule Studio, Mule ESB’s graphical user interface (GUI), and includes configuration details for both the visual and XML editors. 
 
@@ -39,7 +39,7 @@ As with this example, you can create template applications straight out of the b
 
 Follow the procedure below to create, then run this example application in Mule ESB.
 
-. link:/mule-user-guide/v/3.4/mule-examples[*Create, then run*] the example application in Mule Studio.
+. *Create, then run* the example application in Mule Studio.
 . Open a Web browser, then navigate to the following URL:
 +
 `http://localhost:8091/populate/`

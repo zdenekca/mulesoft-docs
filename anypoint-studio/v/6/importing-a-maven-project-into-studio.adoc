@@ -1,14 +1,14 @@
 = Importing a Maven Project into Studio 
 :keywords: anypoint studio, maven, import maven
 
-If you have a Mule project that was built using http://maven.apache.org/[Maven] outside Anypoint Studio, you can still import it into Studio and continue to work on it with the benefits of the Studio IDE.
+If you have a Mule project that was built using link:https://maven.apache.org/[Maven] outside Anypoint Studio, you can still import it into Studio and continue to work on it with the benefits of the Studio IDE.
 
 [WARNING]
 *Important*: if you use the Maven *studio:studio* goal, you cannot use the *m2ecplipse* plugin, because it overrides the studio:studio goal. Anypoint Studio has built in capabilities for importing and exporting between Maven and Studio using the studio:studio goal, which covers most use cases.
 
 == Prerequisites
 
-This document assumes that you have link:/mule-user-guide/v/3.8/downloading-and-starting-mule-esb[downloaded and installed Anypoint Studio]. If you do not have any previous experience with Eclipse or an Eclipse-based IDE, please review the brief introduction to the link:/anypoint-studio/v/6/[Anypoint Studio interface]. The document also assumes you're familiar with link:http://maven.apache.org/[Apache Maven].
+This document assumes that you have link:/mule-user-guide/v/3.8/downloading-and-starting-mule-esb[downloaded and installed Anypoint Studio]. If you do not have any previous experience with Eclipse or an Eclipse-based IDE, please review the brief introduction to the link:/anypoint-studio/v/6/[Anypoint Studio interface]. The document also assumes you're familiar with link:https://maven.apache.org/[Apache Maven].
 
 == Importing a Maven Project into Studio
 
@@ -91,7 +91,7 @@ Mule is indicating that some dependencies or artifacts cannot be resolved. Ensur
 
 * Learn how to build a complete link:/anypoint-studio/v/6/building-a-mule-application-with-maven-in-studio[Studio Maven Project], including tests and dependencies.
 * Learn how to link:/anypoint-studio/v/6/enabling-maven-support-for-a-studio-project["mavenize" an existing Mule project].
-* Learn how to create a link:/mule-user-guide/v/3.8/preparing-a-gitignore-file[gitignore] file if you want to implement Git.
+* Learn how to create a link:/anypoint-studio/v/6/preparing-a-gitignore-file[gitignore] file if you want to implement Git.
 * Explore how to use link:/anypoint-studio/v/6/using-subversion-with-studio[Studio and Subversion].
 * link:http://training.mulesoft.com[MuleSoft Training]
 * link:https://www.mulesoft.com/webinars[MuleSoft Webinars]

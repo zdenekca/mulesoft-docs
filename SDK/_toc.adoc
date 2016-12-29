@@ -1,0 +1,8 @@
+* link:/SDK/mule-sdk-intro[Mule SDK for Extensions]
+* link:/SDK/creating-extension-configurations[About Extension Configurations]
+* link:/SDK/connection-management[Providing Connection Management]
+* link:/SDK/adding-extension-operations[Coding the Extension Operations]
+* link:/SDK/metadata-retrieval[Supporting Metadata Retrieval]
+* link:/SDK/defining-sources[Coding an Extension as a Message Source]
+* link:/SDK/error-handling[Error and ErrorType Support]
+* link:/SDK/extensions-api[Extensions API - How Extensions Work with Mule]

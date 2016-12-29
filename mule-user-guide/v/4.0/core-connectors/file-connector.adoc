@@ -1,0 +1,366 @@
+= File Connector
+:keywords: file, connector, matcher, directory, listener
+:toc:
+:toc-title:
+
+toc::[]
+
+[[overview]]
+== Overview
+
+The File connector can operate on or retrieve information about files on a locally mounted file system.
+
+[[important-concepts]]
+== Important Concepts
+
+This document assumes that you are familiar with Mule,
+link:/mule-user-guide/v/latest/connectors[Anypoint Connectors], and
+link:/anypoint-studio/v/latest[Anypoint Studio]. To increase your familiarity with Studio, consider completing a link:/anypoint-studio/v/latest/basic-studio-tutorial[Anypoint Studio Tutorial]. This page requires some basic knowledge of link:/mule-user-guide/v/latest/mule-concepts[Mule Concepts], link:/mule-user-guide/v/latest/elements-in-a-mule-flow[Elements in a Mule Flow], and link:/mule-user-guide/v/latest/global-elements[Global Elements].
+
+[[requirements]]
+== Hardware and Software Requirements
+
+For hardware and software requirements, please visit the link:/release-notes/file-connector[Connector Release Notes].
+
+[[install]]
+== How to Install
+
+You can install the connector in Anypoint Studio using the instructions in
+link:/getting-started/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
+
+[[upgrading]]
+=== Upgrading from an Older Version
+
+If you are currently using an older version of the connector, a small popup appears in the bottom right corner of Anypoint Studio with an "Updates Available" message.
+
+. Click the popup and check for available updates. 
+. Click the Connector version checkbox and click *Next* and follow the instructions provided by the user interface. 
+. *Restart* Studio when prompted. 
+. After restarting, when creating a flow and using the connector, if you have several versions of the connector installed, you may be asked which version you would like to use. Choose the version you would like to use.
+
+Additionally, we recommend that you keep Studio up to date with its latest version.
+
+[[ns-schema]]
+== Connector Namespace and Schema
+
+When designing your application in Studio, the act of dragging the connector from the palette onto the Anypoint Studio canvas should automatically populate the XML code with the connector *namespace* and *schema location*.
+
+*Namespace:* `+http://www.mulesoft.org/schema/mule/connector+`
+*Schema Location:* `+http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd+`
+
+[TIP]
+If you are manually coding the Mule application in Studio's XML editor or other text editor, define the namespace and schema location in the header of your *Configuration XML*, inside the `<mule>` tag.
+
+[source, xml,linenums]
+----
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:connector="http://www.mulesoft.org/schema/mule/connector"
+      xsi:schemaLocation="
+               http://www.mulesoft.org/schema/mule/core
+               http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+               http://www.mulesoft.org/schema/mule/connector
+               http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd">
+
+      <!-- put your global configuration elements and flows here -->
+
+</mule>
+----
+
+////
+[[maven]]
+== Maven Dependency Information
+
+For Maven dependency management, include this XML snippet in your `pom.xml` file.
+
+[source,xml,linenums]
+----
+<dependency>
+  <groupId></groupId>
+  <artifactId></artifactId>
+  <version></version>
+</dependency>
+----
+
+[TIP]
+====
+Inside the `<version>` tags, put the desired version number, the word `RELEASE` for the latest release, or `SNAPSHOT` for the latest available version. The available versions to date are:
+
+* *x.y.z*
+====
+////
+
+[[configure]]
+== How to Configure
+
+Simply place the connector into your flow in the source or process side of the flow, select an operation and any required details. You can define a `<file-matcher>` outside flow(s) to use across any file connector operations in your flow(s) or define them inline inside a `<file:match-with>` element. Define this inside the operation.
+
+[[operations]]
+== Operations
+
+View all available operations from the link:/file-connector-technical-reference[Technical Reference].
+
+[[use-cases]]
+== Use Cases
+
+Typical use cases this connector helps perform.
+
+* link:#read[Read Files]
+* link:#write[Write Files]
+* link:#list[List Files]
+* link:#copy[Copy Files]
+* link:#move[Move Files]
+* link:#rename[Rename Files or Directories]
+* link:#delete[Delete Files]
+* link:#retrieve-metadata[Retrieve File Metadata]
+* link:#define-matcher[Define a Matcher] to filter lists of files.
+* get a best guess about the MIME type of a file.
+* link:#poll-watermark[Poll a Directory or File] with the `<poll>` and `<watermark>` elements
+* link:#create-dir[Create Directory]
+* link:#listen-on-dir[Configure as a Directory Listener] for created, updated or deleted files
+* copy, move or delete a file automatically when processing is done
+* recurse through a directory’s files and limit the recursion level
+
+[NOTE]
+Special files like devices are not supported (for example: `/dev/null`)
+
+[[listen-on-dir]]
+=== Configure as a Directory Listener
+
+[NOTE]
+Using the connector as a message source is useful in cases where a flow should respond to changes done on the filesystem, examples being trigger files, transaction files being added on a drop folder, settings files updated, etc. All of the above cases could be done using a `<file:list>` operation inside a poll scope (maybe also combined with a `<watermark>`.
+
+
+
+[[read]]
+=== Read Files
+
+.Syntax
+[source,xml,linenums]
+----
+<file:read path="#[path]"
+lock="true|false"
+outputEncoding="UTF-8"
+outputMimeType="application/xml" />
+----
+
+
+[[write]]
+=== Write Files
+
+Write to a file.
+
+.Syntax
+[source,xml,linenums]
+----
+<file:write path="#[path]"
+content="#[payload]"
+mode="OVERWRITE|APPEND|CREATE_NEW"
+lock="true|false"
+createParentDirectories="true|false" />
+----
+
+
+[[list]]
+=== List Files
+
+List files on demand. In combination with the file matcher, this capability makes it possible to use this connector in tandem with other Mule elements such as `<poll>` or `<watermark>`. The `list` operation returns a `TreeNode`.
+
+[source,xml,linenums]
+----
+<file:list directoryPath="~/dropfolder"
+	recursive="true|false"
+	matchWith="">
+		<file:match-with>
+	<file:matcher directory="true" />
+	</file:match-with>
+</file:list>
+----
+
+
+[[copy]]
+=== Copy Files
+
+The connector has the ability to copy files.
+
+[source,xml,linenums]
+----
+<file:copy sourcePath="source.txt" targetPath="backup" overwrite="true|false" createParentDirectories="true|false" />
+----
+
+[[move]]
+=== Move Files
+
+Move files on demand.
+
+[source,xml,linenums]
+----
+<file:move sourcePath="source.txt" targetPath="backup"  overwrite="true|false" createParentDirectories="true|false" />
+----
+
+[[delete]]
+=== Delete Files
+Files can also be deleted on demand:
+
+[source,xml,linenums]
+----
+<file:delete path="byebye.txt" />
+----
+
+
+[[rename]]
+=== Rename Files or Directories
+
+Example `rename` invocation.
+
+[source,xml,linenums]
+----
+<file:rename path="invoices/current" to="archived" />
+----
+
+
+[[retrieve-metadata]]
+=== Retrieving File Metadata
+
+To hold the file’s metadata, a `FileAttributes` POJO is accessed from `MuleMessage#getAttributes()`. The `FileAttributes` POJO is immutable and has the following values:
+
+
+|===
+|*Name*|*Type*
+|`lastModifiedTime`|`DateTime`
+|`lastAccessTime`|`DateTime`
+|`creationTime`|`DateTime`
+|`size`|https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html[long]
+|`regularFile`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[boolean]
+|`directory`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[boolean]
+|`symbolicLink`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[boolean]
+|`path`|String
+|`name`|String
+|===
+
+==== Laziness
+
+Both the payload `InputStream` and the `FileAttributes` POJO are as lazy as possible. Creating a message with an `InputStream` payload returned won’t actually mean that it opened a file handler with the OS. It is only be opened when the stream is actually read. In that way, if many files are returned from a `list` operation, the user doesn’t have to worry about closing the ones that were discarded.
+
+At the same time, the `FileAttributes` POJO won’t actually fetch the file metadata until the first getter is invoked.
+
+
+[[define-matcher]]
+=== Define a File Matcher
+
+NOTE: The term file filtering could also be applied to describe the functionality.
+
+Another common scenario (which also applies to the watch message source but not exclusively) is the need for only accept files which match with certain criteria.
+
+For that, a `<file:matcher>` element will be created. This element defines the possible criterias that can be used to either accept or reject a file. This is how the matcher can be defined
+
+[source,xml,linenums]
+----
+<file:matcher
+	filename-pattern="a?*.{htm,html,pdf}"
+path-pattern="a?*.{htm,html,pdf}"
+	createdSince="2015-06-03T13:21:58+00:00"
+	createdUntil="2015-07-03T13:21:58+00:00"
+	updatedSince="2015-05-03T13:21:58+00:00"
+	updatedUntil="2015-06-03T13:21:58+00:00"
+accessedSince="2015-06-03T13:21:58+00:00"
+accessedUntil="2015-06-03T13:21:58+00:00"
+directory="true|false"
+regularFile="true|false"
+symbolicLink="true|false"
+minSize="0"
+maxSize="1024" />
+----
+
+All of the attributes above are optional and are ignored if not provided. Also, they are all related to each other under an `AND` operator.
+
+A look at each attribute:
+
+* `filename-pattern`: Similar to the current filename pattern filter but more powerful. Glob expressions and regex will be supported. Glob will be the default. You can select which one to use by setting a prefix. E.g: glob:**.{java, js} , regex:[0-9]*_test.csv
+ * `path-pattern`: the same as filename-pattern but applies over the entire file path. Not just the filename
+ * `createdSince`: an inclusive lower boundary for the file creation stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+ * `createdUntil`: an inclusive upper boundary for the file creation stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+ * `updatedSince`: an inclusive lower boundary for the file modification stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+ * `updatedUntil`: an inclusive upper boundary for the file modification stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+ * `accessedSince`: an inclusive lower boundary for the file access stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+ * `accessedUntil`: an inclusive upper boundary for the file access stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+ * `directory`: matches only if the file is a directory
+ * `regularFile`: matches only if the file is a regular file
+ * `symbolicLink`: matches only if the file is a symbolic link
+ * `minSize`: an inclusive lower boundary for the file size expressed in bytes
+ * `maxSize`: an inclusive upped boundary for the file size expressed in bytes
+
+File matcher can either be used as a named top level element (allowing it to be reused in flows), or as an inner element belonging to a particular component.
+
+Here are the two ways:
+
+.Example of top level reusable matcher
+[source,xml,linenums]
+----
+<file:matcher name="smallFileMatcher" maxSize="100" />
+
+<flow name="smallFiles">
+	<file:list path="~/smallfiles" matcher="smallFileMatcher" />
+	..
+</flow>
+----
+
+
+.Example of inline non-reusable matcher
+
+[source,xml,linenums]
+----
+<flow name="smallFiles">
+	<file:list path="~/smallfiles" matcher="smallFileMatcher">
+<file:match-with>
+<file:matcher maxSize="100" />
+</file:match-with>
+	</file:list>
+	...
+</flow>
+----
+
+[[poll-watermark]]
+=== Poll a Directory or File
+
+[NOTE]
+Although polling is a powerful and reliable solution, it's not an efficient one. Use the connector as a listener to leverage operating system notifications. It is much more resource efficient than using a poll scope to wrap the listener.
+
+[source,xml,linenums]
+----
+<flow name="syncWithWatermark" processingStrategy="synchronous">
+	<poll>
+		<fixed-frequency-scheduler frequency="1" timeUnit="HOURS" />
+		<watermark variable="timestamp" default-expression="#[server.dateTime]"
+ selector="MAX" selector-expression="#[payload.metadata.lastModifiedTime]" />
+		<file:list basePath="~/dropfolder">
+			<file:match-with>
+<file:matcher updatedSince="#[flowVars['timestamp']]" />
+</file:match-with>
+</file:list>
+	</poll>
+	<flow-ref name="doYourSyncMagic" />
+</flow>
+----
+
+[[create-dir]]
+=== Create Directory
+
+Can also be used to create a series of chained directories. For example, if the folder `backup` doesn’t exist, it will also be created in order to create the next one in the structure.
+
+[source,xml,linenums]
+----
+<file:create-directory directoryPath="backup/january_2016" />
+----
+
+////
+[[walk]]
+=== Navigate a Directory
+////
+
+[[faq]]
+
+== See Also
+
+* link:/connectors[Connectors]
+* link:/mule[Mule]

@@ -1,0 +1,43 @@
+= Email Connector
+:keywords: email, connector, send, retrieve, manage, match, matcher, smtp, ipop, imap
+:toc:
+:toc-title: Page Contents
+:toc-levels: 3
+
+
+toc::[]
+
+
+[[what-is]]
+== What is the Email connector?
+
+A single connector to manage and send email based on the link:http://www.oracle.com/technetwork/java/javamail/index.html[JavaMail API], supporting SMTP, IMAP and POP3 protocols. The Email connector allows connection over SSL/TLS.
+
+== How to Configure
+
+Enter details in a global element representing the connector configuration.
+
+
+* link:/email-connector-reference[Email Connector Reference]
+
+== Email Connector Operations
+
+Retrieve, manage and send email. IMAP and POP3 operations allow email retrieval and management, with an optional email matcher allowing you to filter email.
+
+* List emails
+
+=== IMAP Only
+
+* Store email
+* Mark as read
+* Mark as deleted
+* Expunge folder
+
+=== SMTP Only
+
+SMTP provides various operations to create and send email:
+
+* Email Builder
+* Email Body
+* Email Attachment
+* Send Email

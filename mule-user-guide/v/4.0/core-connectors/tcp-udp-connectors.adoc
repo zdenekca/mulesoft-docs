@@ -1,0 +1,102 @@
+= Sockets Extension (TCP/UDP)
+:keywords: tcp, udp, transport, sockets, connector
+:toc:
+:toc-title: Page Contents
+:toc-levels: 3
+
+
+toc::[]
+
+
+[[what-is]]
+== What is in the Sockets Extension?
+
+Two connectors for UDP and TCP protocols are bundled in one functional entity called the *Sockets extension*. The sockets extension provides connectors that can receive or send messages using UDP or TCP sockets. A listener or a requester can be configured for each protocol.
+
+== How to Configure a Listener or Requester (TCP/UDP)
+
+Provide connection attributes depending on whether you use a requester or a listener, and whether the protocol used is TCP or UDP. Some attributes apply to all connections.
+
+[NOTE]
+A connector configuration is _not_ always required. A listener configuration is required for using as a socket listener (receiver). A requester configuration is required in the case of the requester's `send` operation.
+//MG configuration optional in most cases?
+
+=== Encoding Attributes
+
+|===
+|`name`| Name of the configuration|String
+|`defaultEncoding`|Default encoding used for serializing Strings. It can be overridden by a custom encoding in the send operation.|If not specified, Mule default encoding is used.
+|===
+
+If the TCP listener or requester is configured with a TLS Context, an SSL Socket (or ServerSocket) is used to secure the communication.
+
+
+
+
+=== How Raw Data Stream Converted
+
+Underlying "connection providers" define how the data stream is converted into a Mule message. TCP does not guarantee that data written to a socket is transmitted in a single packet, so if you want to transmit entire Mule messages reliably, you must specify a link:/tcp-configurable-protocol[TCP Configurable Protocol].
+
+
+
+
+////
+For reference doc:
+
+== Connection Attributes
+
+=== Attributes Common to All
+
+|===
+|+sendBufferSize+|+Size of the buffer (in bytes) used when sending data, set on the socket itself.+|+Default determined by the socket+
+|+receiveBufferSize+|+Size of the buffer (in bytes) used when receiving data, set on the socket itself.+|+Default determined by the socket for TCP. For UDP it is ++16384+
+|+reuseAddress+|+If set, SO_REUSEADDRESS is set on server sockets before binding. This helps reduce "address already in use" errors when a socket is re-used.+|+Defaults to true+
+|+clientTimeout+|+This sets the SO_TIMEOUT value on sockets. Indicates the amount of time (in milliseconds) that the socket will wait in a blocking operation before failing.+|+Default determined by socket (wait indefinitely)+
+|===
+
+
+=== TCP Attributes (both listener and requester)
+
+
+|===
+|+sendTcpNoDelay+|+If set, transmitted data is not collected together for greater efficiency but sent immediately. Defaults to true.+|+Defaults to true+
+|+linger+|+Sets the SO_LINGER value. This is related to how long (in milliseconds) the socket will take to close so that any remaining data is transmitted correctly.+|+Default determined by socket +
+|+keepAlive+|+Enables SO_KEEPALIVE behavior on open sockets. This automatically checks socket connections that are open but unused for long periods and closes them if the connection becomes unavailable.+|+Default determined by socket +
+|+failOnUnresolvedHost+|+If set, it will fail during socket creation if the host set on the endpoint cannot be resolved. However, it can be set to false to allow unresolved hosts (this is useful in some circumstances like connecting through a proxy).+|+Defaults to true+
+|#heading=h.q0j44nawk5n9[+protocol]+|+Application level protocols with the corresponding logic for sending and receiving data.+|#heading=h.68oj4qxbeqtl[+SafeProtocol]+
+|===
+
+
+=== UDP Attributes (both listener and requester)
+
+|===
+|+broadcast+|+Enable/disable SO_BROADCAST in the DatagramSocket+|+Defaults to false+
+|===
+////
+
+== Configure SSL over TCP
+
+To use SSL over a TCP connection, the only thing that needs to be done is configure a TLS context to the TCP Connection Provider (both listener and requester).
+
+[source,xml,linenums]
+----
+<tls:context name="tlsContext">
+   <tls:trust-store path="tls/ssltest-cacerts.jks" password="changeit"/>
+   <tls:key-store path="tls/ssltest-keystore.jks" keyPassword="changeit" password="changeit"/>
+</tls:context>
+
+
+   <sockets:tcp-listener-connection host="localhost"
+                                    port="${port}"
+                                    tlsContext="tlsContext"/>
+
+
+<sockets:tcp-requester-connection host="localhost" port="${port}"
+                                 failOnUnresolvedHost="true"
+                                 sendTcpNoDelay="true"
+                                 tlsContext="tlsContext"/>
+----
+
+
+[NOTE]
+If the TLS Context is going to be used in a `tcp-listener-connection` (server side), the keystore must be configured.

@@ -5,12 +5,17 @@ Studio's *Visual Debugger* allows you to run your application in Debug mode, st
 
 To do this, you set a *breakpoint* at any building block in your flow that you wish to check or test (see image below). When you run your application in Debug mode, the application stops immediately after executing the building block with the breakpoint. Using the *Mule Debugger View*, you can browse through the contents of the message as it exists at that point in the flow, and evaluate link:/mule-user-guide/v/3.7/mule-expression-language-mel[Mule Expressions] against the message.
 
-Note that the Visual Debugger is completely distinct from the Java Debugger contained in Studio; in fact, you may run both debuggers concurrently on your application.
+[CAUTION]
+--
+Studio Debugger only works with Enterprise Edition runtimes and does not connect to Comunity Edition runtimes.
+--
 
+
+Note that the Visual Debugger is completely distinct from the Java Debugger contained in Studio; in fact, you may run both debuggers concurrently on your application.
 
 == Assumptions
 
-This document assumes that you are familiar with the link:/anypoint-studio/v/5/index[Anypoint Studio Essentials], particularly link:/mule-user-guide/v/3.7/studio-building-blocks[Studio Building Blocks]. Review the link:/anypoint-studio/v/5/basic-studio-tutorial[Getting Started with Mule Studio] chapter to learn more about developing with Mule ESB's graphical user interface.
+This document assumes that you are familiar with the link:/anypoint-studio/v/5/index[Anypoint Studio Essentials], particularly link:/anypoint-studio/v/6/#building-blocks[Studio Building Blocks]. Review the link:/anypoint-studio/v/5/basic-studio-tutorial[Getting Started with Mule Studio] chapter to learn more about developing with Mule ESB's graphical user interface.
 
 == Prerequisites
 

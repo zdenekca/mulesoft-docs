@@ -1,0 +1,110 @@
+== Connector Examples
+
+Some examples:
+
+
+PetStoreConnector: Test case extension
+Cached Connection: Look at the File connector
+Pooled Connections: Look at the FTP connector
+
+
+@ConnectionProviders
+
+
+The @ConnectionProviders annotation is used to declare the ConnectionProviders that this extension defines, following the same patterns as @Configurations and @Operations.
+
+
+If an extension contains more than one Connection Provider, then the @Alias annotations is to be used to give each one a significant name, and optionally, a description. By convention, the XML translation of that connection provider will add the “-connection” suffix to that name.
+
+
+This annotation has the following rules:
+
+
+All the defined providers must be instantiable, be public and have a default constructor.
+It can be used at the @Extension or @Configuration level
+You’re not required to define a provider, but then don’t come crying if you can’t use the connector because there’s no third party extension contributing a valid one.
+
+
+Each ConnectionProvider implementation can be annotated with @Alias to customize the provider’s name on any supported DSL. Do notice that whatever alias you provide, will be added the “-connection” suffix. If no @Alias is given, then a default name will be inferred using the name of the annotated method.
+
+
+The providers also share the same “implicit” behavior as the configurations. If a config requires a connection providers but doesn’t specifically declare one, then all the provider models will be traversed looking for the first one which can be instantiated implicitly (using the same rules as with the configs). If found, then the provider is created and assigned.
+
+
+Finally, the ConnectionProvider defined in an extension has to be compatible with all configs and operations between its scope. Meaning that:
+
+
+It is mandatory to actually declare the generics in the ConnectionProvider
+The Config generic has to be resolved to a type which is assignable from all the configuration types in the extension
+The Connection generic has to be resolved to a type which is assignable from all the argument types annotated with @Connection
+
+
+Simply put, if the provider is available at the extension level, then it has to be compatible with every single config type in the extension and it has to work with every defined operation. If it’s declared at the config level, then it’s only required to work with that config and with the operations available to it.
+
+
+@Connection
+
+
+In the snippet above a new annotation makes its entrance: @Connection. The idea behind it is that the connection gets injected into the operation just like the configurations get injected with the @UseConfig one.
+
+
+The main advantages of the above are:
+
+
+The operations are not responsible for knowing how to obtain the connection
+The operations do not need to depend on the config to obtain their connections. This gives a lot of flexibility not only in terms of connection provisioning but in any other layer of functionality we want to add in the future
+Nice hooking point for MUnit
+
+
+The connection concept
+
+
+The @Connection annotation introduces the concept of a connection, although no specific Connection interface or contract is enforced. The ideas behind this concept are:
+
+
+The connection concept is not a hard one.
+It doesn’t necessarily references the socket connection itself
+It can simply be a client or something of that sort.
+
+
+What’s really important about it is that regardless the underlying mechanism, all the operations need to be independent of the connection class. This means that the connector developer must provide some level of abstraction common to all sorts of connections and capable of serving all operations. Again, no type restrictions are put into this abstraction. There’s no connection interface that must be implemented.
+
+
+Connections on message sources
+
+
+This is better covered on the Message Sources spec, but basically the same concept applies on message sources but with same caveats:
+
+
+In message sources, the @Connection annotation is applied at a field level, not an argument one
+When pooling, one connection is taken from the pool and kept by the source until it is stopped. Only then the connection is returned to the pool
+
+
+Implicit Connection Providers
+
+
+This is similar to the implicit configurations which is described on the execution spec. Basically this feature means that there are cases in which a connection provider is not forced to be explicitly defined on the configuration.
+
+
+If a connection provider is required but not defined in the config then the runtime will search the ExtensionModel for a ConnectionProviderModel which only has optional parameters or has no parameters at all. The first ConnectionProviderModel to comply with this is used to instantiate a default connection provider. Notice that:
+
+
+If any of those parameters have a default value, it will be honoured
+Models defined at a configuration level will take precedence over those defined at the extension level
+
+
+Dynamic configurations
+
+
+There’s a strong 1:1 relationship between the lifecycle of a config and its connection provider. A ConnectionProvider instance has no reason to exists without an owning configuration instance. Therefore, all of a config’s lifecycle events are propagated to its connection provider.
+
+
+So, because the relationship between the two is so strong, what happens if a connection provider is defined using expressions like this:?
+
+
+<ftp:config name="ftp" transferMode="BINARY">
+	<ftp:connection user="#[user]" password="#[password]" />
+</ftp:config>
+
+
+In the example above, the parameters which strictly belong to the config are static, but the connection provider ones are dynamic. So, if a connection provider is dynamic, the entire config is assumed to be dynamic. This is so each dynamic config instance can always obtain connections from the same predictable source.
