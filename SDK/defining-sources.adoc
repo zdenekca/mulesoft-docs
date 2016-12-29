@@ -6,20 +6,31 @@
 
 toc::[]
 
-While the integration developer can use a poll scope and an operation to poll an inbound endpoint, there are several cases which require a "message source":
+== Overview
+
+If you need a module to consume data and send it into the Mule flow based on specific parameters, you should consider whether it should be coded as an inbound receiver of data, or *message source*. For your case, find out if your message source will be generating responses.
+
+[NOTE]
+A few strategies are used to get inbound data through a source. A source can "poll" a location like an API to listen for events. In other cases the source uses a third party library like a SaaS service to trigger the events and push the message to the source.
+
+While the integration developer can mimic message source functionality by using a poll scope and a module operation to to work with data from an inbound endpoint, there are several cases which require explicit configuration to act as a "message source":
 
 * HTTP listener
 * File watcher
 * JMS/AMQP to receive messages from queues subscribed to
 * Streaming API, and other cases
 
-As mentioned, a *poll scope* and *operation* can perform a similar function to that of a message source. Some similarities between the two are that they both have:
+=== Comparing Operations and Message Sources
+
+As mentioned, using a *poll scope* + *operation* acts like a message source. Some similarities between the two are that they both have:
 
 * Parameters
 * return type
 * Name and Description
 * Interceptors
 * Reconnection capabilities
+
+However, sources are controlled independently of the Mule flow and generate the operation context, rather than work inside an operation context.
 
 [%header]
 |===
@@ -35,7 +46,7 @@ As mentioned, a *poll scope* and *operation* can perform a similar function to t
 |A connection is obtained from the `ConnectionManager` each time the operation is executed |A connection is obtained each time the message source is started or when reconnection happens.
 |===
 
-Sources must implement the source class which takes two generics: one for the type of the generated event payload and another one for the type of the attributes:
+Sources must implement the `Source` class which takes two generics: one for the type of the generated event payload and another one for the type of the attributes:
 
 [source,java,linenums]
 ----
@@ -48,7 +59,7 @@ public class HttpListener extends Source<Object, HttpRequestAttributes> {
 You can use the `@Alias` annotation to force a name to use instead of the one SDK infers.
 You can use `@MetadataScope` and the other DataSense annotations.
 
-== Response or No Response
+== Generating Responses
 
 One of the main properties of a message source is whether or not it generates a response. To specify that your source has the capability of generating a response, it must be annotated with `@EmitsResponse`.
 
@@ -66,10 +77,10 @@ Realize that the SDK nor the runtime will validate that:
 
 Examples of sources which do not emit a response are:
 
-* file listener
+* File listener
 * Salesforce streaming API
-* poll element
-* source which listens for async push notifications
+* Poll element
+* Source which listens for async push notifications
 
 
 === Sources that May Emit a Response
@@ -89,7 +100,7 @@ Even though a message source has the capability of sending a response, it doesn�
 
 == onStart() and onStop()
 
-Message sources can be started or stopped at any time, independently of their containing flow. To this effect `onStart()` and `onStop()` methods must be defined:
+Message sources can be started or stopped at any time, independently of the flow that contains a message source. To this effect `onStart()` and `onStop()` methods must be defined:
 
 [source,java,linenums]
 ----
@@ -134,7 +145,7 @@ Since sources define their own lifecycle mechanism, they cannot implement any of
 
 === onStart()
 
-After `onStart()` is invoked, the source should be aware of any event that triggers the generation of a new message and successfully push the new message to the containing flow.
+After `onStart()` is invoked by Mule, the source is aware of any event that triggers the generation of a new message and then successfully pushes the new message to the containing flow.
 
 [IMPORTANT]
 Do not invoke this method in your code. Only the runtime invokes this method, for example, upon starting the flow.
@@ -151,18 +162,18 @@ The `onstop()` method is invoked by the runtime to stop the source from producin
 [IMPORTANT]
 Do not invoke this method in your code. Only the runtime invokes this method.
 
-This method should not fail. To that effect, any exceptions found during the stop process should be logged and correctly handled by the source, but after invoking this method the source must:
+This method should not fail. To that effect, any exceptions found during the stop process should be logged and correctly handled by the source, but after the runtime invokes this method the source must:
 
 * stop producing messages
 * free any allocated resources
-* be capable of being restarted
+* allow itself to be restarted
 
 [TIP]
-Best practice dictates that the source should never keep a hard reference to the `SourceCallback`, because the source needs to be restartable and a new instance of `SourceCallback` must provided on each invocation of `onStart()`. Keeping a reference to the callback on a field or some other container will force you to have clean up logic for it. This applies to the source state in general, therefore avoid creating such references.
+Best practice dictates that the source should not keep a hard reference to the `SourceCallback`, because the source needs to be restartable and a new instance of `SourceCallback` must provided on each invocation of `onStart()`. Keeping a reference to the callback on a field or some other container will force you to have clean up logic for it. This applies to the source state in general, therefore avoid creating such references.
 
 == Sending Messages to the Flow
 
-Once the source generates an object to be sent to the flow, it does so through the `SourceCallback`. Here’s some example code taken from the HTTP connector:
+Once the source generates an object to be sent to the flow, it does so through the `SourceCallback`. Here’s some example code taken from the HTTP connector to illustrate this fact:
 
 [source,java,linenums]
 ----
@@ -261,7 +272,7 @@ This example taken from the HTTP connector shows how the `onSuccess()` callback 
 * In this case, this source is actually pulling a variable from the context in order to use it
 * emit responses; this is the place to actually send it
 
-Now let’s see an `@OnError `method from the same connector:
+Now let’s see an `@OnError` method from the same connector:
 
 [source,java,linenums]
 ----
@@ -300,7 +311,7 @@ These show three main categories of sources:
 
 This is the example of the Directory Listener. In this case, it’s up to the source to go fetch data, either by parking at a blocking API (in this case `watcher.take()`) or by polling at some other API at regular intervals. In either case, the source needs to have its own WorkManager/Scheduler threading API we define to handle threads to take care of this.
 
-Notice that in this case, the `onSourceException()` method of the `SourceCallback` becomes especially important. Because the actual listening happens on a thread proprietary to the source, you can’t just throw an exception an except mule to catch it and know what to do with it. Such error needs to be communicated through the callback.
+Notice that in this case, the `onSourceException()` method of the `SourceCallback` becomes especially important. Because the actual listening happens on a thread proprietary to the source, you can’t just throw an exception and expect Mule to catch it and know what to do with it. Such errors need to be communicated through the callback.
 
 === Callback Sources
 

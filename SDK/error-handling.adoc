@@ -6,10 +6,11 @@
 toc::[]
 
 
+In this section you learn how to implement the `ErrorTypeDefinition` class to define errors, as well as set up the `ErrorTypeProvider` class so that your operation can actually throw the errors you want it to be able to throw. It is possible to throw errors explicitly. Additionally, you can enrich exceptions by using `@OnException`, sending any exception thrown to an enricher class, which you implement to provide specialized handling. 
 
 == Background on Mule Error Handling
 
-Note that Mule 4 enables the integration developer to leverage errors defined in Mule. Therefore, you as the Mule module developer should allow the users of your module to handle any possible Java exceptions that can be thrown, by mapping these to Mule errors, and even enriching those errors. You can define various types for your module to throw.
+Note that Mule 4 enables the integration developer to leverage errors defined in Mule. Therefore, you as the Mule module developer should allow the users of your module to handle any possible Java exceptions that can be thrown, by mapping these to Mule errors, and at times going further to enrich those errors. You can define various error types for your module to throw.
 //MG: is this correct terminology? map Exceptions to Errors?
 `ErrorType` is the identifier that you use to identify the Mule error, or other specialized error, that your module can throw, which helps the user identify the origin of any given issue.
 
@@ -78,11 +79,14 @@ public enum HeisenbergErrors implements ErrorTypeDefinition<HeisenbergErrors> {
 
 == Error Type Declaration
 
-Each error should have an `@ErrorTypes` `ErrorTypeDefinition`. This must be an `enum` class defining the error types.
+Each error should have an error types definition implementing the interface `ErrorTypeDefinition`. This must be an `enum` class defining the error types.
 
-To declare Error Types that an Module could handle, the module developer should declare at `@Module` level his error types definition class with an `@ErrorTypes` annotation which requires as value a Enum Class implementing ErrorTypeDefinition.
+To declare error types that a module handles, the module developer should declare at the `@Module` level the error types definition class with an `@ErrorTypes` annotation which requires as value a Enum Class implementing ErrorTypeDefinition.
+//reuires as value?
 
-`@ErrorTypes` are declared at the `@Module` level and reference the class with the definition. This is the class you implement to create your error types definition.
+Error types are declared at the `@Module` level referencing the class with the error types definition.
+
+Below is the class you implement to create your error types definition. You annotate your class with `@ErrorTypes`.
 
 [source,java,linenums]
 ----
@@ -108,7 +112,7 @@ public interface ErrorTypeDefinition<E extends Enum<E>> {
 
 === Error Type Provider
 
-Implement the `ErrorTypeProvider` to specify the error types that can be thrown by operations. In the module code, whenever you want to specify the errors that an operation or other can throw, you use the @Throws annotation, referencing the `ErrorTypeProvider` class.
+Implement the `ErrorTypeProvider` to specify the error types that can be thrown by operations. In the module code, whenever you want to specify the errors that an operation or other can throw, you use the `@Throws` annotation, referencing the `ErrorTypeProvider` class.
 
 [source,java,linenums]
 ----
@@ -138,7 +142,7 @@ The purpose of the restriction on error declaration is to impose a standardized 
 
 === @Throws
 
-Use this annotation to throw an exception. deepest `@Throws` declaration overrides any parent `@Throws` declaration.
+Use this annotation to throw an exception. Deepest `@Throws` declarations override any parent `@Throws` declaration.
 
 == Other Options for Throwing Errors
 
