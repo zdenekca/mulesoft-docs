@@ -219,6 +219,7 @@ Another case is an operation including code to determine the `DataType`.
 
 The solution for this is to simply have an operation which returns a MuleMessage with a handcrafted DataType. Notice however that if the operation returns a custom DataType but the user forced values on the XSD, the user’s settings will take precedence over the operation’s code.
 
+////
 == Operation Sub-processors
 
 Some operations require sub-processes. The annotated method should take one or more arguments of type `NestedProcessor` or `List<NestedProcessor>`. The platform can mask the child chain, but it's the responsibility of the extension implementation to invoke the child process.
@@ -259,6 +260,7 @@ public String killMany(List<NestedProcessor> killOperations, String reason) thro
    return builder.toString();
 }
 ----
+
 
 === XML Representation of Nested Operations
 
@@ -334,6 +336,8 @@ public InterceptingCallback<InputStream> interceptingRead(String path) {
 };
 }
 ----
+//MG nested processor implementation not yet final?
+////
 
 == Operations that Support Paging
 
