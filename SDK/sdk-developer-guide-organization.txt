@@ -1,5 +1,35 @@
 Mule SDK Concepts (what extension is, what do i need to develop one, when to develop one, how?)
 
+Use the Mule SDK to develop functional components for use in Mule. You should be an experienced Java developer and understand the architecture of the service or system you are creating a module for. Additionally, you should be experienced with Mule.
+
+What do I need to develop a module with SDK?
+
+JDK 8
+Maven
+Mule 4
+See how to set up Development Environment.
+
+What are the prerequisites I need to have in mind?
+Anypoint Connector knowledge
+Learn code organization best practices for modules
+
+What basic development steps do I follow?
+Module main class
+Configuration class
+Operations Class
+Error Type Definitions Class
+
+What is the module code structure and the required annotations?
+
+
+After coding the basic structure of my module, what should I do?
+Understand how static and dynamic metadata retrieval are required to provide the user with the DataSense feature. It is important your module support Datasense
+static - known at compile time
+dynamic - based on connection configuration, resolved at user design time. All complex types must be defined as dynamic and must have a TypeResolver associated
+
+How does Mule and my SDK module work together?
+
+
 
 Creating a @Configuration Class
 
