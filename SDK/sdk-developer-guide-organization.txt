@@ -1,6 +1,17 @@
 Mule SDK Concepts (what extension is, what do i need to develop one, when to develop one, how?)
 
-Use the Mule SDK to develop functional components for use in Mule. You should be an experienced Java developer and understand the architecture of the service or system you are creating a module for. Additionally, you should be experienced with Mule.
+What is the “SDK”?
+
+The Mule SDK is a tool to develop functional modules for use in Mule runtime integration apps. You should be an experienced Java developer and understand the architecture of the service or system that your module exposes to the user in an intelligible UI provided by Anypoint Studio, or other IDEs. Additionally, you should be experienced with Mule. (Note: the end user can write a Mule application in XML without the use of an IDE.)
+
+What is a module in SDK terms?
+
+A module is the sum total of the Java classes that compose it. The module class is the entry point that Mule interacts with and references these classes normally:
+- Extension main class - Contains generic information such as the name, description, version, etc. It also contains the list of available configuration models plus the operations, sources and connection providers which are globally available all across the extension.
+- Configuration
+- Operations
+- 
+
 
 What do I need to develop a module with SDK?
 
@@ -23,11 +34,12 @@ What is the module code structure and the required annotations?
 
 
 After coding the basic structure of my module, what should I do?
-Understand how static and dynamic metadata retrieval are required to provide the user with the DataSense feature. It is important your module support Datasense
+Understand how static and dynamic metadata retrieval are required to provide the user with the DataSense feature. It is important your module support DataSense
 static - known at compile time
 dynamic - based on connection configuration, resolved at user design time. All complex types must be defined as dynamic and must have a TypeResolver associated
 
-How does Mule and my SDK module work together?
+How does my module work in a running Mule application?
+Mule stores a ConfigurationProvider
 
 
 

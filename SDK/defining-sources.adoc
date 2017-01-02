@@ -8,7 +8,7 @@ toc::[]
 
 == Overview
 
-If you need a module to consume data and send it into the Mule flow based on specific parameters, you should consider whether it should be coded as an inbound receiver of data, or *message source*. For your case, find out if your message source will be generating responses.
+If you need to configure your module to consume data and send it into the Mule flow, you should consider whether it should be coded as an inbound receiver of data, or *message source*. For your case, find out if your message source will be generating responses.
 
 [NOTE]
 A few strategies are used to get inbound data through a source. A source can "poll" a location like an API to listen for events. In other cases the source uses a third party library like a SaaS service to trigger the events and push the message to the source.

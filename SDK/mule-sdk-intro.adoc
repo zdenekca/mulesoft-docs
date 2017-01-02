@@ -1,27 +1,42 @@
-= Mule SDK
+= SDK for Mule 4
 :keywords: devkit, development, features, architecture
 
 
-Create extensions using the *Mule SDK*, the standard framework used to build components, connectors and packaged functionality for use in Mule 4.
+Create Mule 4 modules using the *Mule SDK*, the standard framework used to build components, connectors, message sources, and more, for use in Mule 4 applications.
 
-All modules, connectors and pluggable functionality for Mule can generally be considered extensions in Mule 4 terms. The Extensions API is the mechanism used to "discover" extensions for Mule.
+Mule 4 integration applications use Mule 4 modules. These modules are built using the SDK. The Extensions API is the mechanism that Mule 4 runtime uses to manage module functionality and resources for a running Mule 4 application, to execute any given module operation according to the SDK module developer's definition as coded/annotated in Java.
 
 [IMPORTANT]
-DevKit-built connectors work out of the box with Mule 3.5.3 to Mule 3.9.x. Use *SDK* to build connectors for Mule 4 or later.
+*Anypoint Connector DevKit*-built connectors work out of the box with Mule 3.5.3 to Mule 3.9.x. Use *SDK* to build Anypoint Connectors for Mule 4.
 
-== What is an Extension?
+== What is a Module?
 
-An extension is a module that eases the interaction between a Mule application and external resources.
+A module is the Java code that is written and compiled to function in a Mule app. The module defines a contract between Mule and a resource, for example a cloud service or API, enabling ease of access to the service for the Mule app/integration developer, for example by providing the user the settings required for connection to the service.
 
-A module facilitates integration with SaaS, web services and other data sources. In Mule 4, connectors to SaaS applications are still considered *cloud connectors*.
+The developer using Mule 4 SDK to code the module must provide the necessary parameters for all desired module functionality in specific classes. The developer must annotate the classes according to the predefined SDK model.
 
-== How Does Mule Discover Extensions?
+The end user of the module is the Mule 4 integration developer. The integration developer is responsible for defining at application design time the data to be passed through the module at application run time, so that for example the connection(s) settings and the operation(s) to be carried out are correct.
 
-*Extensions API* is the set of interfaces and classes that define the contract between an extension and the Mule 4 runtime environment. At deployment of a Mule application, the API handles communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
+The module class is the entry point that Mule interacts with and references these classes:
+
+- Extension main class - Contains generic information such as the name, description, version, etc. It also contains the list of available configuration models plus the operations, sources and connection providers which are globally available all across the extension.
+- Configuration
+- Operations
+
+[NOTE]
+Find out how the module Java code is organized and annotated.
+
+== How does Mule 4 interact with a Module?
+
+*Extensions API* is the set of interfaces and classes that define how Mule 4 runtime carries out the operation or other functionality defined in the module. At deployment of a Mule application, the Extensions API handles communication between the SDK-built module and the Mule 4 runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
 
 == Dev Environment Requirements
 
 Ensure your development environment is equipped with the following:
+
+* http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java JDK version 8]
+* link:https://maven.apache.org/download.cgi[Apache Maven]
+* Mule 4
 
 
 ////

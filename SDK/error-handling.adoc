@@ -1,4 +1,4 @@
-= Error Handling
+= Error Handling Support
 :toc-macro:
 :toclevels: 3
 
@@ -6,7 +6,7 @@
 toc::[]
 
 
-In this section you learn how to implement the `ErrorTypeDefinition` class to define errors, as well as set up the `ErrorTypeProvider` class so that your operation can actually throw the errors you want it to be able to throw. It is possible to throw errors explicitly. Additionally, you can enrich exceptions by using `@OnException`, sending any exception thrown to an enricher class, which you implement to provide specialized handling. 
+In this section you learn how to implement the `ErrorTypeDefinition` class to define errors, as well as set up the `ErrorTypeProvider` class so that your operation can actually throw the errors you want it to be able to throw. It is possible to throw errors explicitly. Additionally, you can enrich exceptions by using `@OnException`, sending any exception thrown to an enricher class, which you implement to provide specialized handling.
 
 == Background on Mule Error Handling
 
