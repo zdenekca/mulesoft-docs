@@ -2,18 +2,18 @@
 :keywords: devkit, development, features, architecture
 
 
-Create Mule 4 modules using the *Mule SDK*, the standard framework used to build components, connectors, message sources, and more, for use in Mule 4 applications.
+Create Mule 4 modules using the *Mule SDK*, the standard framework used to build components, connectors, message sources, and more, for use in Mule 4 applications. The framework provides Java annotations to assist the developer in the work of writing the module.
 
 Mule 4 integration applications use Mule 4 modules. These modules are built using the SDK. The Extensions API is the mechanism that Mule 4 runtime uses to manage module functionality and resources for a running Mule 4 application, to execute any given module operation according to the SDK module developer's definition as coded/annotated in Java.
 
 [IMPORTANT]
-*Anypoint Connector DevKit*-built connectors work out of the box with Mule 3.5.3 to Mule 3.9.x. Use *SDK* to build Anypoint Connectors for Mule 4.
+*Anypoint Connector DevKit*-built connectors work out of the box with Mule 3.5.3 to Mule 3.9.x. You must use *SDK* to build Anypoint Connectors for Mule 4. SDK is an annotations-based framework allowing you as the developer to organize and build features for the module. For a complete list of SDK annotations, see the link:/annotation-reference[Annotation Reference].
 
-== What is a Module?
+== What is a Module in Mule 4 terms?
 
-A module is the Java code that is written and compiled to function in a Mule app. The module defines a contract between Mule and a resource, for example a cloud service or API, enabling ease of access to the service for the Mule app/integration developer, for example by providing the user the settings required for connection to the service.
+A module is the Java code that is written and compiled to function in an integration app designed to run on Mule 4. The module defines a contract between Mule and a resource, for example a cloud service or API, enabling ease of access to the service for the Mule app/integration developer, for example by providing the user the settings required for connection to the service.
 
-The developer using Mule 4 SDK to code the module must provide the necessary parameters for all desired module functionality in specific classes. The developer must annotate the classes according to the predefined SDK model.
+The developer uses the Mule 4 SDK framework to code the module providing the necessary parameters for all desired module functionality in specific classes. The developer must annotate the classes according to the predefined SDK model. In this way the developer can expose to the end user/app developer the module functionality via Anypoint Studio or browser design tools in a predictable manner.
 
 The end user of the module is the Mule 4 integration developer. The integration developer is responsible for defining at application design time the data to be passed through the module at application run time, so that for example the connection(s) settings and the operation(s) to be carried out are correct.
 
@@ -26,11 +26,8 @@ The module class is the entry point that Mule interacts with and references thes
 [NOTE]
 Find out how the module Java code is organized and annotated.
 
-== How does Mule 4 interact with a Module?
 
-*Extensions API* is the set of interfaces and classes that define how Mule 4 runtime carries out the operation or other functionality defined in the module. At deployment of a Mule application, the Extensions API handles communication between the SDK-built module and the Mule 4 runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
-
-== Dev Environment Requirements
+== What do I need in order to develop a Mule 4 module?
 
 Ensure your development environment is equipped with the following:
 
@@ -59,14 +56,13 @@ See also link:/anypoint-connector-devkit/v/3.8/creating-a-soap-connector[Creatin
 . link:/anypoint-connector-devkit/v/3.8/packaging-your-connector-for-release[Package your connector].
 ////
 
-== SDK Annotations
+== How do I structure my module code?
 
-SDK is an annotations-based framework allowing you as the developer to build features. For a complete list of SDK annotations, see the link:/annotation-reference[Annotation Reference].
+Here are some noteworthy guidelines for module development; these are general and not exhaustive.
 
-=== Declaring an Extension
-
-Use the `@Extension`, `@Configurations`, and `@Configuration` annotation to declare your extension and its configurations.
-
+. First declare your module/extension and its configuration(s). Use the `@Extension`, `@Configurations`, and `@Configuration` annotation to declare your extension and its configurations.
++
+////
 [source,java,linenums]
 ----
 @Extension(name = "heisenberg", description = ”heisenberg extension”)
@@ -95,19 +91,30 @@ public class PseudoEfedrinHeisenberg extends HeisenbergExtension
 {
 }
 ----
-
+////
 [NOTE]
-`@Extension` marks a discoverable entry point for discovery and validation for use with Mule. Learn more about link/configurations[ways to create configurations].
+`@Extension` marks a discoverable entry point for discovery and validation of the module for use with Mule. Modules are composed of at least one configuration and a set of operations, whose behavior may be dynamic, that is, dependent on the configuration used. +
+. Annotate the parameters used for the configurations, with `@Parameter`, optionally grouping them with `@ParameterGroup`. By default, "expressions" written in Mule expression language (DataWeave) are supported for use in parameters. Otherwise, you must specify they are not supported.
+. Create a class for operations and annotate the class with `@Operations`. Each class method would be an operation.
+. Support a mapping of the module functionality to an XML structure, by decorating the module class with `@Xml` and other supporting annotations.
 
+Note there are guidelines that you must follow in addition to these.
 
+== What is a Configuration?
 
-=== Extension Code Organization
+A configuration is a set of configurable attributes which affect the behavior of the module. All modules are required to have at least one configuration, but can also define as many other configurations as needed. Different configurations might not only provide a different set of parameters, but also specify their own set of operations, sources and connection providers which are only available when using that configuration.
 
-Extensions are composed of at least one configuration and a set of operations, whose behavior is affected by any number of configurations.
+An extension can be asked for its configuration in which case it returns a collection of them. The first element of that collection will be the default configuration. The other elements (if any) will be the optional configurations alphabetically sorted by name. All configurations must have a name.
+
+== What are the guidelines for coding Configurations and Operations?
 
 * Configurations and operations must be defined in different classes
 * If the extension provides several configurations, each one must be defined in its own class, although all of them will be required to belong to have a common ancestor class and/or implement the same interface when defined at the same level
 * Operations can be defined in a more flexible way. They can all be defined in the same class, be spread across several classes, or even have a one operation per class model.
+
+== How does Mule 4 interact with a Module?
+
+*Extensions API* is the set of interfaces and classes that not only centralizes all validations and instantiating logic, for the module. At deployment of a Mule application, the Extensions API handles communication between the SDK-built module and the Mule 4 runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
 
 ////
 DevKit features
