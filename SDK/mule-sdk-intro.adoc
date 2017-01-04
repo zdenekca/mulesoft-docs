@@ -72,7 +72,7 @@ Here are some guidelines for module development to get you started.
 
 * The main class for the module is the entry point for Mule. It should contain generic information such as the name, description, version, etc. It also contains configurable fields or references the list of available fields by *configurations* and references the *operations*, any *sources* and *connection providers* which are globally available all across the module.
 
-. First declare your module/extension with `@Extension`, and reference any configurations there or reference them with `@Configurations`.
+. First declare your module/extension with `@Extension`, and define any configuration parameters there and or reference a configuration class explicitly with `@Configurations`, specifying the name of the class thereafter.
 +
 [NOTE]
 `@Extension` marks a discoverable entry point for discovery and validation of the module for use with Mule. Modules are composed of at least one configuration and a set of operations, whose behavior may be dynamic, that is, dependent on the configuration used.
@@ -81,13 +81,13 @@ Here are some guidelines for module development to get you started.
 . Annotate the parameters used for the configurations, with `@Parameter`, optionally grouping them with `@ParameterGroup`. By default, "expressions" written in Mule expression language (DataWeave) are supported for use in parameters. Otherwise, you must specify they are not supported.
 . Create a class for operations and annotate the class with `@Operations`. Each method in the class would be a single operation.
 
-Note there are guidelines that you must follow in addition to these. Learn about them in the Reference documentation alongside the link:/annotation-reference[Annotation Reference].
+Note there are guidelines that you must follow in addition to these. Learn about them in the SDK reference documentation alongside the link:/annotation-reference[Annotation Reference].
 
 == What are the guidelines for coding Configurations and Operations?
 
 * Configurations and operations must be defined in different classes
-* If the extension provides several configurations, each one must be defined in its own class, although all of them will be required to belong to have a common ancestor class and/or implement the same interface when defined at the same level
-* Operations can be defined in a more flexible way. They can all be defined in the same class, be spread across several classes, or even have a one operation per class model.
+* If the extension provides several configurations, each must be defined in its own class. However all configurations are required to belong to a common ancestor class and/or implement the same interface if defined at the same "level"
+* Operations can be defined in a more flexible way. They can all be defined in the same class, be spread across several classes, or even have a one-operation-per-class model.
 
 [TIP]
 Read more in the link:/creating-configurations[Configuration Reference] and link:/adding-operations[Operations Reference].
