@@ -134,7 +134,7 @@ https://github.com/mulesoft/mule-api/blob/e166e97a8dcfb9349b743e46608785c4d2e6ce
 This pojo not only says if the exception is valid. Also, it  provides a message, code and optionally an exception which gives context about why the connection is actually invalid.
 
 
-=== Disabling validation
+=== Disabling Validation
 
 
 In some cases, the validation of the connection might turn expensive. For example, in the case of FTP, the connection validation is to seen a NOOP command. If the latency to the FTP server is high, it might constitute a problem. For those cases, a disableValidation attribute will be added to the connection providers which support pooling and cache.
@@ -169,10 +169,10 @@ The above configuration will attempt reconnection up to three times with a frequ
 Users are not forced to provide a reconnection policy. The default value is to not reconnect.
 
 
-=== Reconnection dynamics
+=== Reconnection Dynamics
 
 
-Reconnection will happen each time an operation or message source fails with a ConnectionException, or a ConnectionException can be found on the error’s cause tree. When that happens the runtime will:
+Reconnection happens each time an operation or message source fails with a ConnectionException, or a ConnectionException can be found on the error’s cause tree. When that happens the runtime will:
 
 
 Log an error
