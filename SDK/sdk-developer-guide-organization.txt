@@ -25,7 +25,7 @@ Anypoint Connector knowledge
 Learn code organization best practices for modules
 
 What basic development steps do I follow?
-Module main class
+Module/Ext main class
 Configuration class
 Operations Class
 Error Type Definitions Class
@@ -70,7 +70,7 @@ ExceptionEnricher can add more information to Exception through @OnException
 
 Can output a Mule message
 
-Background reading: Extensions API
+Background reading: Extensions API 
 
 How it works with SDK Extension
 How Mule discovers extension through API

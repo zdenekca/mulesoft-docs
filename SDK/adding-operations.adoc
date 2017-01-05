@@ -4,17 +4,28 @@
 :toc-title:
 
 
+Declare the operations at the extension or configuration level and define them in one or many classes marking applicable classes with `@Operations`. Since operations frequently make use of configuration parameters, make sure you have already:
+
+* Added basic global or configuration-specific attributes
++
+[TIP]
+====
+Did you mark them with `@Parameter`? Specify if:
+
+* `@Optional`,
+* `@NullSafe`
+* Supporting Mule expressions via `@Expression`(REQUIRED) or `@Expression`(NOT_SUPPORTED)
+* `@DefaultEncoding` for optional parameters of String type only should use Mule runtime encoding
+====
+
 
 toc::[]
 
 
-//look at spec and doc these: Non Blocking Operations and Execution Types
-
-After creating a configuration, add functionality to your extension by declaring its operations. In the previous version of SDK, called *DevKit*, operations were referred to in development terms as "message processors". Similarly, the operations discussed here can operate on Mule message data.
 
 == Declaring Operations
 
-Operations are declared in a similar way as are configurations, with the additional restriction that a class that has been annotated to serve as an configuration cannot also contain configurations. You can use the `@Operations` annotation to point to the classes which hold the operations.
+Operations are declared in a similar way as configurations, with the additional restriction that a class that has been annotated to serve as one configuration *cannot* contain its own configurations. Use the `@Operations` annotation to point to a class which holds the operations.
 
 * Every public method of the `@Operations` class is assumed to be a valid operation, therefore there is no need to use any annotation.
 * Any public method you do not want exposed as an operation should be annotated with `@Ignore`
@@ -22,20 +33,24 @@ Operations are declared in a similar way as are configurations, with the additio
 //MG need to mention ParameterModel? What does this model allow Extensions API to do?
 * Arguments of each operation (`@Operations` class method) can be annotated with `@Optional` and with `@Expression`
 
-The two operation classes link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class] contain many operation examples. See how we refer to them from the `@Extension` annotated class.
+////
+The two operation classes link:https://github.com/mulesoft/mule/blob/82934f04daabd257c06521751a159b532d7fdbe3/modules/extensions-support/src/test/java/org/mule/module/extension/HeisenbergOperations.java#L44-L44[Heisenberg operations class] and link:https://github.com/mulesoft/mule/blob/b53d11bf70a167124c78c800924e6e3b8c3abb45/modules/extensions-support/src/test/java/org/mule/module/extension/MoneyLaunderingOperation.java#L13-L13[MoneyLaundering operation class] contain many operation examples.
+////
+
+See how you can declare available operations from the `@Extension` annotated class.
 
 [source,java,linenums]
 ----
-@Extension(name = "heisenberg", description = "heisenberg extension")
-@Operations({HeisenbergOperations.class, MoneyLaunderingOperation.class})
-public class HeisenbergExtension
+@Extension(name = "my-extension", description = my very own Mule extension”)
+@Operations({MyOperations.class, NeatOperation.class})
+public class MyExtension
 {
 }
 ----
 
 
 
-== Defining Operations at the Configuration Level
+=== Configuration Level Operations
 
 Operations can also be defined at the configuration level by simply placing the `@Operations` annotation on a configuration class.
 
@@ -377,6 +392,78 @@ public PagingProvider<ConnectionImpl, Account> getPagedPersonalInfo(int fetchSiz
 * `getPage()` returns an empty list when there are no more items to process
 * in some cases, it may not be desirable to retrieve the total quantity of results, in which case force the `getTotalResults()` method to return an `Optional.empty()` value
 //MG: is Optional.empty() standard Java expression?
+
+== Non-blocking Operations
+
+Mule 4 has a brand new execution engine based on reactive streams. That means there’s top level support for non blocking operations. By default, all operations are blocking. As you probably noticed, the semantics of all the operation examples we’ve seen above are inherently blocking: the runtime invokes a method and gets a value in response. And that’s fine, since in real life most operations will be blocking (there aren’t much non blocking API’s/protocols out there, APIs such as JMS and DB don’t support non blocking and chances are they never will).
+
+One of the few protocols for which does support this is http. Being able to perform non blocking http request is key for scalability of gateway proxies. Any connector consuming a REST API can also benefit from this.
+
+Let’s see how the SDK allows you to develop non-blocking operations looking at an overly simplified http request operation
+
+public void request(String url, @Connection HttpClient client, @Content String body, CompletionCallback<InputStream, HttpAttributes> callback) {
+ client.send(url, body, new HttpResponseCallback() {
+   void onResponse(HttpResponse response) {
+     callback.success(Result.builder().output(response.getBody())
+                          .attributes(toAttributes(response))
+                          .build());
+   }
+
+   void onError(Exception e) {
+     callback.error(e);
+   }
+ });
+}
+
+Let’s dig into the example:
+
+An operation becomes non blocking when it has an argument of type CompletionCallback
+Just like configurations and connections, this argument is synthetic and won’t be visible to the user.
+Unlike blocking operations, the return type is not specified through the method’s return type:
+Non blocking operations always need to be specified through void methods
+The return value is passed through the success(Result) method of the CompletionCallback
+The declaration of the operation’s output type is done through the callback generics. Those generics are mandatory and cannot be skipped
+Non Blocking operations should not throw exceptions. Any errors should be channeled through the error() method in the callback
+Notice that in this example, the CompletionCallback is being consumed from between an HttpResponseCallback. This second callback is provided by an httpClient which supports asynchronous responses itself. As stated before, in order to do non blocking, you need to be consuming an API which allows that.
+
+So the result of this code, is a non blocking operation which returns an InputStream as payload and a HttpAttributes object as message attributes.
+
+=== Void operations
+
+It’s also possible to have a void non blocking operation. The use case for that is an IO operation which doesn’t return anything, such as writing to a file:
+
+public void write(String path, @Content byte[] bytes, CompletionCallback<Void, NullAttributes> callback) {
+ ...
+}
+
+As you can see here, you can use void and NullAttributes to represent an operation which is void.
+
+== Execution Types
+
+As explained in the non blocking operations section, Mule 4 now has a reactive execution engine. That means that unlike Mule 3.x in which each flow had its own thread pool, SEDA queues, etc, now the runtime has a few global executors through which all tasks are run.
+
+In order to schedule those tasks correctly, the runtime needs to know which kind of processing each application is going to perform. The different processing types are listed in this enum: <<insert link when merged>>
+
+=== Specifying Execution Types
+
+In order to specify an operation’s execution type, the @Execution annotation is used:
+
+@Execution(CPU_INTENSIVE)
+public void computeFlightPlan() { .. }
+
+Inferring execution types automatically
+
+For usability purposes, it is not mandatory to always specify the execution type. If not provided, the SDK will automatically perform a best guess.
+
+Operation requires connection and is blocking: BLOCKING
+Operation requires connection and is non blocking: CPU_LITE
+None of the above: CPU_LITE
+
+
+Notice that as educated as this guess might be, it’s still a guess. You should always pay attention to which execution type your operation corresponds with, and if it doesn’t match with the best guess then you should specify the correct one. Failing to do that will negatively impact the performance of any application using your module.
+
+Also note that the runtime will never guess a CPU_INTENSIVE type. For those kind of operations, it is mandatory for the developer to specify it.
+
 
 == Introspection of Extension Parameters
 

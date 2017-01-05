@@ -6,16 +6,22 @@ Create link:/[Mule 4] modules using the *Mule SDK*, the standard framework used 
 
 Mule 4 modules are built using the SDK. The Extensions API is the mechanism that Mule 4 uses to manage module functionality and its resources for a running Mule 4 application.
 
+== What is the SDK?
+
+The SDK is not just a set of Java annotations providing reliable communication of a Mule module with the Extensions API. It is also comprised of parent Maven POM files to set up projects, a framework for code testing, module packaging and documentation generation.
+
 [IMPORTANT]
-*Anypoint Connector DevKit*-built connectors work out of the box with Mule 3.5.3 to Mule 3.9.x. You must use *SDK* to build Anypoint Connectors for Mule 4. Like its predecessor, DevKit, SDK is an annotations-based framework allowing you as the developer to organize and build features for the module. For a complete list of SDK annotations, see the link:/annotation-reference[Annotation Reference].
+*Anypoint Connector DevKit*-built connectors/modules work out of the box with Mule 3.5.3 to Mule 3.9.x. *You must use SDK to build Anypoint Connectors for Mule 4.* Like its predecessor, DevKit, SDK is an annotations-based framework allowing you as the developer to organize and build features for the module.
+
+For a complete list of SDK annotations, see the link:/annotation-reference[Annotation Reference].
 
 == What is a module in Mule 4 terms?
 
-A *module* is an entity that is designed, compiled and built to run on Mule 4. A module defines a contract between Mule and something else, for example a cloud service or API. This module, like any Mule component can be dropped into a Mule flow. You may enable the module to work as a message source in order to create events and kick off a flow, or inside a flow to process or dispatch data.
+A *module* is an entity that is designed and built to run on Mule 4 according to the SDK framework. SDK helps you define a contract between Mule and the module, for example an Anypoint Connector which easily extends the functionality of a cloud service or API in a predictable way. This module, like any Mule component can be dropped into a Mule flow. You may enable the module to work as a *message source* in order to create events and kick off a flow, as well as inside a flow to process or dispatch data from Mule events.
 
 == What tools are available to Mule 4 module developers?
 
-The *module developer* must use the Mule 4 SDK framework to code the module in Java, coding and annotating the necessary classes with decorators according to the some straightforward development guidelines. In this way the developer can expose to the end user of the module (the Mule app developer) the desired functionality. Anypoint Studio is the IDE in which many Mule app developers interact with your module.
+The *module developer* must use the Mule 4 SDK framework to code the module in Java, coding and annotating the necessary classes with decorators according to some straightforward development guidelines. In this way the developer can expose to the end user of the module (the Mule app developer) the desired functionality. Anypoint Studio is the IDE in which many Mule app developers interact with your completed module.
 
 [TIP]
 Find out next what you need to start developing a module.
@@ -27,7 +33,8 @@ Ensure your development environment is equipped with the following:
 
 * http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[Java/JDK 8]
 * link:https://maven.apache.org/download.cgi[Apache Maven]
-* Mule 4
+* Mule runtime v4
+* SDK for Mule
 
 
 ////
@@ -58,7 +65,7 @@ Any operation could rely on a configuration. If that is the case, annotate the o
 
 == How do I implement connection management in a module?
 
-Implement a `ConnectionProvider` class to create, handle and return a connection. You may require different connection provider classes depending on the types of connections your module supports: simple, pooled, or cached. Connection providers specify the type of configuration(s) they accept. If the provider is available at the `@Extension` class level, then it has to be compatible with _every_ configuration type in the extension and it has to work with _every_ defined operation. If declared at the "configuration" level, then the provider is only required to work with that configuration and with the operations available to it.
+Implement a `ConnectionProvider` class for your configuration(s). This enables your module to create, handle and return connections. You may require different connection provider classes depending on the types of connections your module supports: simple, pooled, or cached. Connection providers specify the type of configuration(s) they accept. If the provider is available at the `@Extension` class level, then it has to be compatible with _every_ configuration type in the module and it has to work with _every_ defined operation. If declared at the "configuration" level, then the provider is only required to work with that configuration and with the operations available to it.
 
 See the link:/connection-management[Connection Management] documentation to learn more.
 
@@ -70,15 +77,16 @@ Although decoupled from a compilation point of view, there’s a strong lifecycl
 
 Here are some guidelines for module development to get you started.
 
-* The main class for the module is the entry point for Mule. It should contain generic information such as the name, description, version, etc. It also contains configurable fields or references the list of available fields by *configurations* and references the *operations*, any *sources* and *connection providers* which are globally available all across the module.
-
-. First declare your module/extension with `@Extension`, and define any configuration parameters there and or reference a configuration class explicitly with `@Configurations`, specifying the name of the class thereafter.
+. First mark the entry point of your module/extension with `@Extension`.
 +
 [NOTE]
-`@Extension` marks a discoverable entry point for discovery and validation of the module for use with Mule. Modules are composed of at least one configuration and a set of operations, whose behavior may be dynamic, that is, dependent on the configuration used.
+`@Extension` mark a discoverable entry point for discovery and validation of the module for use with Mule 4. It should contain generic information such as the name, description, version, etc. Modules are composed of at least one configuration and a set of operations, whose behavior may be static, or dynamic (dependent on the configuration). See link:declaring-extension[Declaring an Extension].
 +
-. Declare a connection provider and annotate it with `@ConnectionProviders`
-. Annotate the parameters used for the configurations, with `@Parameter`, optionally grouping them with `@ParameterGroup`. By default, "expressions" written in Mule expression language (DataWeave) are supported for use in parameters. Otherwise, you must specify they are not supported.
+. Define any configuration parameters there in your extension class or in a separate class marked with `@Configurations`. . Annotate the parameters used for the configurations, with `@Parameter`, optionally grouping them with `@ParameterGroup`.
+. By default, "expressions" written in Mule expression language (DataWeave) are supported for use as parameters. Otherwise, you must specify per the SDK guidelines that the parameter does not support expressions.
+
+. Declare a connection provider for the configuration(s) and annotate using `@ConnectionProviders`
+
 . Create a class for operations and annotate the class with `@Operations`. Each method in the class would be a single operation.
 
 Note there are guidelines that you must follow in addition to these. Learn about them in the SDK reference documentation alongside the link:/annotation-reference[Annotation Reference].
