@@ -1,6 +1,6 @@
 = Adding Operations
 :toc: macro
-:toclevels: 2
+:toclevels: 3
 :toc-title:
 
 
