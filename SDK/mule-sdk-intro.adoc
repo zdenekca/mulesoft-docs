@@ -8,7 +8,7 @@ Mule 4 modules are built using the SDK. The Extensions API is the mechanism that
 
 == What is the SDK?
 
-The SDK is not just a set of Java annotations providing reliable communication of a Mule module with the Extensions API. It is also comprised of parent Maven POM files to set up projects, a framework for code testing, module packaging and documentation generation.
+The SDK is not just a set of Java annotations providing reliable communication of a Mule module with the Extensions API. It also comprises a testing framework, parent Maven POM files to set up module projects, build the module for inclusion in an app that uses it, and generate documentation.
 
 [IMPORTANT]
 *Anypoint Connector DevKit*-built connectors/modules work out of the box with Mule 3.5.3 to Mule 3.9.x. *You must use SDK to build Anypoint Connectors for Mule 4.* Like its predecessor, DevKit, SDK is an annotations-based framework allowing you as the developer to organize and build features for the module.

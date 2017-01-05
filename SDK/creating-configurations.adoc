@@ -1,4 +1,4 @@
-== Creating Configurations for the Module
+== Creating a Configuration
 :toc: macro
 :toclevels: 3
 :toc-title:
