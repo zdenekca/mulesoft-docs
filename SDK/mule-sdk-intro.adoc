@@ -323,3 +323,5 @@ DevKit supports:
 == How is the SDK different from DevKit?
 
 DevKit is a framework for building cloud service connectors on Mule 3. SDK is a new framework for building much more than connectors. SDK lets the developer build extensions for Mule 4 and later, using Java annotations and Maven to build the extensions.
+
+== I have an existing connector. How do I migrate it to Mule 4 with SDK?

@@ -815,7 +815,7 @@ XML support for Mule is made possible through the Spring framework. This means a
 
 You can customize the `schemaLocation`, `schemaVersion`, and namespace prefix, but SDK will calculate defaults for all of them. For the schema version, the Maven artifact version is used.
 
-== XML DSL
+=== XML DSL
 
 Use the `@Xml` annotation to set namespace details for your extension explicitly, rather than let the SDK infer them automatically.
 
@@ -868,7 +868,7 @@ SDK prefers consistency when it comes to schema generation for extensions. Howev
 * `allowReferences` - when true, this targets the complex type parameters. Regardless of the complex parameters having a child element or not, there will always be an attribute allowing the user to provide a reference to a MEL expression or a static reference to the Mule registry.
 //MG: so MEL and DW are supported at the operation level. There may be cases when a static value in an attribute that allows references to be interpreted as the actual value, and a not a reference to the registry.
 
-A typical example of this is an outbound operation (socket:send, file:write, etc), in which the input parameter is of type Object (because many input types are supported):
+A typical example of this is an outbound operation (`socket:send`, `file:write`, etc), in which the input parameter is of type Object (because many input types are supported):
 +
 `<file:write data="Hello" />`
 +
@@ -882,12 +882,10 @@ This should not match the attribute data to a registry entry of key "Hello", but
 While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
 
 
-// rest of section needs to be filled in
-
 === XML Support Takeaways
 
 Because parsers and schemas are automatically generated, consistency is easily achieved
-The parsers know how to deal with all the DataType qualifiers, including POJO. These parsers know how to deal with POJOs that are compliant with the bean contract and are capable of handling:
+The parsers know how to deal with all the `DataType` qualifiers, including POJO. These parsers know how to deal with POJOs that are compliant with the bean contract and are capable of handling:
 
 * simple attributes
 * acyclic bean composition
@@ -972,7 +970,7 @@ Another cool feature is that for every POJO type with support for inline definit
 </mule>
 ----
 
-Notice how the name attribute which wasn’t available on the inline definition schema is not available. The platform will parse that Door object and will add it to the registry under the name “skylerDoor”
+Notice how the name attribute which wasn’t available on the inline definition schema is not available. The platform will parse that Door object and will add it to the registry under the name “skylerDoor”.
 
 
 === Configuration Example Using References
@@ -1114,7 +1112,7 @@ Operation elements and their child elements can also contain property placeholde
 
 Finally, this definition parser is used to parse top level pojos and make them available through the Mule registry. It reuses the logic previously used for parsing configurations.
 
-==== Obtaining a Configuration’s name
+=== Obtaining a Configuration’s Name
 
 Something good about the SDK is that it takes care about XML parsing automatically. The downside of it is that you lose some degree of control regarding which information you can actually obtain.
 
@@ -1193,8 +1191,8 @@ public class HeisenbergOperations
 
 == Testing Framework
 
-Tests using extensions should extend the `MuleArtifactFunctionalTestCase` class. This specialization of the traditional `FunctionalTestCase` tck component still requires the user to provide the path to configuration file(s) with your tests flows, component, etc., but also provides the following services:
+Tests using extensions should extend the `MuleArtifactFunctionalTestCase` class. This specialization of the traditional `FunctionalTestCase` TCK component still requires the user to provide the path to configuration file(s) with your tests flows, component, etc., but also provides the following services:
 
-* It automatically discovers, creates and registers all the mule modules in the test classpath
+* It automatically discovers, creates and registers all the Mule modules in the test classpath
 * It generates all resources needed for such modules to function
 * It executes the tests using a classloading isolation schema similar to the one that the runtime will use when actually running in production.
