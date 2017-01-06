@@ -817,7 +817,7 @@ You can customize the `schemaLocation`, `schemaVersion`, and namespace prefix, b
 
 == XML DSL
 
-Use the `@Xml` annotation to set namespace details for your extension.
+Use the `@Xml` annotation to set namespace details for your extension explicitly, rather than let the SDK infer them automatically.
 
 [source,java,linenums]
 ----
@@ -882,26 +882,27 @@ This should not match the attribute data to a registry entry of key "Hello", but
 While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
 
 
-
 // rest of section needs to be filled in
 
-XML support takeaways
+=== XML Support Takeaways
 
 Because parsers and schemas are automatically generated, consistency is easily achieved
-The parsers know how to deal with all the DataType qualifiers, including POJO. These parsers know how to deal with pojos compliant with the Bean contract and is capable of handling:
+The parsers know how to deal with all the DataType qualifiers, including POJO. These parsers know how to deal with POJOs that are compliant with the bean contract and are capable of handling:
 
-simple attributes
-acyclic bean composition
-list and maps of simple types and beans
+* simple attributes
+* acyclic bean composition
+* list and maps of simple types and beans
 
 All of the above can be defined in line or through spring references.
 
-Inline configuration example
+=== Inline Configuration Example
 
 Parameters declared inline can be of complex types like List, Maps, POJOs and also they can be combined. All the “simple” values, like String or Integer will be declared as a value attribute of the element, while complex structures will be supported as child elements.
 
 Type references as child-elements are not allowed to declare its own name attribute, since it is reserved for top level elements only.
 
+[source,java,linenums]
+----
 <heisenberg:config name="heisenberg" cancer="true" dateOfBirth="1959-09-07T00:00:00"
                        dateOfDeath="2011-09-07T00:00:00-05:00" money="1000000">
 	 <!-- List<String> -->
@@ -958,22 +959,28 @@ Type references as child-elements are not allowed to declare its own name attrib
             <heisenberg:recipe key="pseudoephedrine" value="0"/>
         </heisenberg:recipes>
     </heisenberg:config>
+----
 
-Top Level Parameters
+=== Top Level Parameters
 
 Another cool feature is that for every POJO type with support for inline definition, top-level support is added as well. So, for example, in the same way that a Door object is declared inline above, There’s also a top level element for which you can define this:
 
+[source,xml,linenums]
+----
 <mule>
 <heisenberg:door victim="Skyler" address="308 Negra Arroyo Lane" name="skylerDoor" />
 </mule>
+----
 
 Notice how the name attribute which wasn’t available on the inline definition schema is not available. The platform will parse that Door object and will add it to the registry under the name “skylerDoor”
 
 
-Configuration example using references
+=== Configuration Example Using References
 
-You can also build a configuration using only references to things on the registry. Here’s an example:
+You can also build a configuration using only references to things in the Mule registry. Here’s an example:
 
+[source,xml,linenums]
+----
 <heisenberg:config name="expressionHeisenbergByRef"
                   myName="#[myName]"
                   age="#[age]"
@@ -1017,41 +1024,53 @@ You can also build a configuration using only references to things on the regist
 </heisenberg:door>
 
 <heisenberg:ricin microgramsPerKilo="22" name="ricin">
-   <heisenberg:destination victim="Lidia" address="Stevia coffe shop" />
+   <heisenberg:destination victim="Lidia" address="Stevia coffee shop" />
 </heisenberg:ricin>
 
 <heisenberg:door victim="Skyler" address="308 Negra Arroyo Lane" name="skylerDoor" />
 
 <heisenberg:door victim="Saul" address="Shopping Mall" name="saulDoor" />
+----
 
-Declaring Subtypes Mapping
+=== Declaring Subtypes Mapping
 
-When a @Parameter or Operation argument is of a general type with multiple implementations, any of those implementations can be used to populate the parameter. In order to provide a better Xml support for this type hierarchies, the Extension developer can declare how a base type should be mapped to its subtypes whenever that base type appears as a parameter.
+When a `@Parameter` or operation argument is of a general type with multiple implementations, any of those implementations can be used to populate the parameter. In order to provide better XML support for type hierarchies, the Extension developer can declare how a base type should be mapped to its subtypes whenever that base type appears as a parameter.
 
 If the developer declares:
 
+[source,java,linenums]
+----
 @Extension(name = "heisenberg", description = "heisenberg extension")
 @SubTypeMapping(baseType = Shape.class, subTypes = {Square.class, Triangle.class})
 public class HeisenbergExtension
+----
 
-Then, for any parameter of Shape type, the user will have xm support to create an Square, a Triangle or a Shape (if shape is not an abstract type):
+Then, for any parameter of `Shape` type, the user will have XML support to create a `Square`, a `Triangle` or a `Shape` (if shape is not an abstract type):
 
+[source,xml,linenums]
+----
 <heisenberg:my-operation>
 	<heisenberg:shape-param>
 <heisenberg:square side="4" area="16"/>
 </heisenberg:shape-param>
 </heisenberg:my-operation>
+----
 
-Declaring Imported Types
+=== Declaring Imported Types
 
-If an extension is required to use a type defined in a different module, then the developer will be able to declare that type as an Imported type. Then, whenever that type is used, a references to its original declaration will be provided in the xml support, instead of redefining the type as if it was declared in the current Extension
+If an extension is required to use a type defined in a different module, then the developer will be able to declare that type as an imported type. Then, whenever that type is used, a reference to its original declaration will be provided in the XML support, instead of redefining the type as if it was declared in the current Extension.
 
+[source,java,linenums]
+----
 @Extension(name = "petstore")
 @Import(type = Ricin.class, from = HeisenbergExtension.class)
 public class PetstoreExtension
+----
 
-When the import is declared, the user will be able to reference the original heisenberg:ricin element:
+When the import is declared, the user will be able to reference the original `heisenberg:ricin` element:
 
+[source,xml,linenums]
+----
 <petstore:banned-items>
 	<petstore:item>
 <heisenberg:ricin microgramsPerKilo="22">
@@ -1059,96 +1078,104 @@ When the import is declared, the user will be able to reference the original hei
 </heisenberg:ricin>
 </petstore:item>
 </petstore:banned-items>
+----
 
-Platform provided NamespaceHandler
+=== Platform-Provided NamespaceHandler
 
-Because NamespaceHandlers are java classes and not static resources like the spring bundles and the XSD schemas, these don’t require code generation and can be coded once in a generic way. The ExtensionsNamespaceHandler class queries the ExtensionManager for any XML capable extensions matching a given namespace, and by using the introspection model is capable of handling any extension in a generic way. It then registers BeanDefinitionParsers for multiple purposes:
+Because `NamespaceHandlers` are java classes and not static resources like the spring bundles and the XSD schemas, these don’t require code generation and can be coded once in a generic way.
 
-Parsing configurations
-Parsing top level pojos
-Parsing operations
+The `ExtensionsNamespaceHandler` class queries the `ExtensionManager` for any XML capable extensions matching a given namespace, and by using the introspection model is capable of handling any extension in a generic way. It then registers `BeanDefinitionParsers` for multiple purposes:
 
-Platform Provided Definitions Parsers
+* Parsing configurations
+* Parsing top level pojos
+* Parsing operations
 
-The platform provides a set of definition parsers to also being capable of parsing extensions and their components in a generic way without relying on generated code.
+=== Platform-Provided Definition Parsers
 
-ConfigurationBeanDefinitionParser
+The platform also provides a set of definition parsers to parse extensions and their components in a generic way without relying on generated code.
 
-The configurationBeanDefinitionParser parses configuration objects and their attributes by navigating the DOM Element and the configuration meta model side by side. Because the extensions’s API supports expressions on every attribute, what it registers in the Mule registry is not the actual configuration but a ValueResolver which returns the correct configuration for each event. It does so buy building a ResolverSet for each attributes and then obtaining a ResolverSetResult from the invoking event. Those results are cached and associated to a configuration instance.
+==== ConfigurationBeanDefinitionParser
 
-ConfigurationProviderFactoryBean
+The `configurationBeanDefinitionParser` parses configuration objects and their attributes by navigating the DOM Element and the configuration metamodel side-by-side. Because the extensions’s API supports expressions on every attribute, what it registers in the Mule registry is not the actual configuration but a `ValueResolver` which returns the correct configuration for each event. It does so by building a `ResolverSet` for each attribute and then obtains a `ResolverSetResult` from the invoking event. Those results are cached and associated to a configuration instance.
 
-This definition parser doesn’t build the instance on its own, but collaborates with a FactoryBean. Because the registered object is a ConfigurationProvider and the config attributes are also resolved through ValueResolvers, Spring is not 100% in charge of the creation of the object. The problem of that is the resolution of the property placeholders that the user might use on the configuration or any of its nested attributes. To solve this problem, an ElementDescriptor class was created. This class is basically a ValueObject containing the most valuable information of the DOM element. The trick is that the ElementDescriptor is created through a BeanDefinition and then passed to the FactoryBean as a constructor value. In that way, the ElementDescriptor that reaches the FactoryBean has resolved property placeholders and then the factory bean complets the object creation.
+==== ConfigurationProviderFactoryBean
 
-OperationBeanDefinitionParser
+This definition parser doesn’t build the instance on its own, but collaborates with a `FactoryBean`. Because the registered object is a `ConfigurationProvider` and the config attributes are also resolved through `ValueResolvers`, Spring is not 100% in charge of the creation of the object. The problem of that is the resolution of the property placeholders that the user might use on the configuration or any of its nested attributes. To solve this problem, an `ElementDescriptor` class was created. This class is basically a `ValueObject` containing the most valuable information of the DOM element. The trick is that the `ElementDescriptor` is created through a `BeanDefinition` and then passed to the `FactoryBean` as a constructor value. In that way, the `ElementDescriptor` that reaches the `FactoryBean` has resolved property placeholders and then the factory bean completes the object creation.
 
-The same pattern is applied to operations. There’s also an operations bean definition parser which parses the operations and outputs instances of OperationMessageProcessor.
+==== OperationBeanDefinitionParser
 
-OperationMessageProcessorFactoryBean
+The same pattern is applied to operations. There is also an operations bean definition parser which parses the operations and outputs instances of OperationMessageProcessor.
+
+==== OperationMessageProcessorFactoryBean
 
 Operation elements and their child elements can also contain property placeholders and have the same problems as the configurations. The same pattern of using an ElementDescriptor with a FactoryBean is repeated just like with configurations.
 
-TopLevelParameterTypeBeanDefinitionParser
+==== TopLevelParameterTypeBeanDefinitionParser
 
 Finally, this definition parser is used to parse top level pojos and make them available through the Mule registry. It reuses the logic previously used for parsing configurations.
 
-Obtaining a config’s name
+==== Obtaining a Configuration’s name
 
 Something good about the SDK is that it takes care about XML parsing automatically. The downside of it is that you lose some degree of control regarding which information you can actually obtain.
 
 One particular case is obtaining the name that a config has been given on the XML. Obtaining such a name is useful for logging purposes or to give descriptive names to any threads that the config starts.
 
-To do that, the @ConfigName annotation is available:
+To do that, the `@ConfigName` annotation is available:
 
+[source,java,linenums]
+----
 @ConfigName
 private String configName;
+----
 
 That annotation can be used on fields of classes from which a config is derived. Has to be of type String and does not require setters.
 
-UI configurations
+== UI Configurations
 
-The platform tooling requires rendering UI’s for configuring extensions and their operations. As the platform goes, those toolings go way beyond Studio. It is possible to enrich the ExtensionModel with generic, technology agnostic, hints about how should that UI be rendered.
+The platform tooling requires rendering UIs for a user to configure extensions and their operations. As the platform goes, this tooling goes beyond Anypoint Studio. It is possible to enrich the ExtensionModel with generic, technology agnostic, hints about how should that UI be rendered.
 
-@Placement
+=== @Placement
 
 https://github.com/mulesoft/mule-extensions-api/blob/72d2ae3ec8d9d480bd4318ce6c0e84b18f866bc7/src/main/java/org/mule/extension/api/annotation/param/display/Placement.java#L26-L26
 
 The Placement annotation can be used at a parameter level on configs, operations and sources. It allows to assign parameters to specific tabs and/or specify the order in which it should appear in the tooling. This not only allows for a more clear and descriptive UI, it also allows putting cohesive parameters together regardless of how/where they’re defined in the source code.
 
-@DisplayName
+=== @DisplayName
 
-Allows giving a parameter a UI name which is different from the model one. It can be applied on any parameter, at any level.
+Allows giving a parameter a UI name which is different from the model one. It can be applied to any parameter, at any level.
 
 https://github.com/mulesoft/mule-extensions-api/blob/aa0ee5622ab258c159664cbfb9508f20e30f95c2/src/main/java/org/mule/extension/api/annotation/param/display/DisplayName.java#L30-L30
-@Text
+
+=== @Text
 
 https://github.com/mulesoft/mule-extensions-api/blob/9bb020798dfb3936ff1245e086e70ac47faa3f8f/src/main/java/org/mule/extension/api/annotation/param/display/Text.java#L27-L27
 
-Specifies that a parameter should be rendered as a multi line text box. It can be applied on any parameter, at any level.
+Specifies that a parameter should be rendered as a multi line text box. It can be applied to any parameter, at any level.
 
-@Password
+=== @Password
 
 https://github.com/mulesoft/mule-extensions-api/blob/9bb020798dfb3936ff1245e086e70ac47faa3f8f/src/main/java/org/mule/extension/api/annotation/param/display/Password.java#L27-L27
 
-Specifies that a parameter represents a password and should be masked in the UI. It can be applied on any parameter, at any level.
+Specifies that a parameter represents a password and should be masked in the UI. It can be applied to any parameter, at any level.
 
-@Summary
+=== @Summary
 
 https://github.com/mulesoft/mule-extensions-api/blob/a839fead7f1a5d80c90e1e509930b5ace23bba1a/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/annotation/param/display/Summary.java#L32
 
-Allows giving a brief summary about the parameter describing its purpose. This annotation is meant to be used for the content of a tooltip which adds a short but meaningful explanation of the parameter.
+Allows a brief summary about the parameter describing its purpose. This annotation is meant to be used for the content of a tooltip which adds a short but meaningful explanation of the parameter.
 
-@Example
+=== @Example
 
 https://github.com/mulesoft/mule-extensions-api/blob/0345b700213ab38351ef3803b682ec58a8aad908/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/annotation/param/display/Example.java#L28
 
-
 Allows giving an example of how the value of the parameter should look like.
 
-Dependency Injection
+== Dependency Injection
 
-All configs and operations support dependency injection at a field level using the @Inject annotation. Any object in the mule registry is a candidate for injection. If many candidates of the same type are available, then the @Named annotation or any @Qualifier can be applied.
+All configurations and operations support dependency injection at a field level using the @Inject annotation. Any object in the mule registry is a candidate for injection. If many candidates of the same type are available, then the @Named annotation or any @Qualifier can be applied.
 
+[source,java,linenums]
+----
 @Extension(name = "heisenberg", description = "heisenberg extension")
 public class HeisenbergExtension
 {
@@ -1162,11 +1189,12 @@ public class HeisenbergOperations
    @Inject
    private ExtensionManager extensionManager;
 }
+----
 
-Testing Framework
+== Testing Framework
 
-Tests using extensions should extend the MuleArtifactFunctionalTestCase class. This specialization of the traditional FunctionalTestCase tck component still requires the user to provide the path to configuration file(s) with your tests flows, component, etc., but also provides the following services:
+Tests using extensions should extend the `MuleArtifactFunctionalTestCase` class. This specialization of the traditional `FunctionalTestCase` tck component still requires the user to provide the path to configuration file(s) with your tests flows, component, etc., but also provides the following services:
 
-It automatically discovers, creates and registers all the mule modules in the test classpath
-It generates all resources needed for such modules to function
-It executes the tests using a classloading isolation schema similar to the one that the runtime will use when actually running in production.
+* It automatically discovers, creates and registers all the mule modules in the test classpath
+* It generates all resources needed for such modules to function
+* It executes the tests using a classloading isolation schema similar to the one that the runtime will use when actually running in production.
