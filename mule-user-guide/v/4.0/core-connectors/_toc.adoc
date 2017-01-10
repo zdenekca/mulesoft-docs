@@ -1,3 +1,3 @@
-// Core Connectors 3.8 TOC File
+// Core Connectors 4.0 TOC File
 
-* link:/mule-user-guide/v/4.0/core-connectors[Core Connectors]
+* link:/mule-user-guide/v/latest/core-connectors[Core Connectors]
