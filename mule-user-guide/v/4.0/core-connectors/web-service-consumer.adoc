@@ -9,15 +9,6 @@ toc::[]
 
 Use the web service consumer to configure a connection to a SOAP service, where no Anypoint Connector for the service.
 
-== Features
-
-* Full metadata support for headers, body and attachments (including for multipart soap message operations) for both input and output.
-* MTOM attachments
-* SOAP attachments
-* SOAP multipart messages
-* SOAP Headers
-* Web Service Security (Timestamp, UsernameToken, Signature, Encryption)
-* Custom transport configuration (HTTP, JMS)
 
 == What is the Web Service Consumer?
 
@@ -33,7 +24,18 @@ The web service consumer has a single operation, the *Consume* operation. It pro
 As with the old module, the underlying transport can be configured. By default, it uses HTTP with a simple configuration, however both JMS and HTTP can be configured.
 //MG what do we mean by simple configuration
 
-== Configuration
+
+== Features
+
+* Full metadata support for headers, body and attachments (including for multipart soap message operations) for both input and output.
+* MTOM attachments
+* SOAP attachments
+* SOAP multipart messages
+* SOAP Headers
+* Web Service Security (Timestamp, UsernameToken, Signature, Encryption)
+* Custom transport configuration (HTTP, JMS)
+
+== Configuring the Web Service Consumer
 
 Configuring the WSC means entering the connection details. The configuration for the web service consumer is basically a container for the connection. It only has one optional attribute: the *encoding*. The provided encoding will be used in all the requests and responses managed by the *Consume* operation. If none specified, the web service consumer uses Mule's default encoding.
 //configuration/container and the connection. Configuring the WSC means entering the connection details.
@@ -45,7 +47,7 @@ Configuring the WSC means entering the connection details. The configuration for
 </wsc:config>
 ----
 
-== Connection
+== Creating a Connection
 
 To connect with a SOAP service, three parameters must be provided:
 
@@ -84,7 +86,7 @@ All connections created by the web service consumer are reusable and the provide
 
 The connection is able to fetch remote secured WSDL files since the request is performed using the provided transport configuration. Basically you can connect through a secured WSDL with the same underlying transport configuration used for consuming the service.
 
-== Web Service Security
+== Configuring Web Service Security
 //MG what is WS-security, under the hood?
 
 The web service consumer provides the capability to add security for the outgoing and incoming SOAP messages, the supported security mechanisms that provides are:
@@ -95,6 +97,11 @@ The web service consumer provides the capability to add security for the outgoin
  * Encryption
  * Decryption
  * UsernameToken
+
+[TIP]
+====
+Define `<wsc:security-strategies>` supporting one or many of the above security strategies
+====
 
 === UsernameToken
 
@@ -117,7 +124,7 @@ Adds a username token to the outgoing SOAP message.
 This security strategy exposes the following configuration attributes:
 
 * `username`: Defines the username to access Web service; added to header of request sent to Web service.
-* *password: *Defines the password to access Web service; added to header of request sent to Web service.
+* `password`: *Defines the password to access Web service; added to header of request sent to Web service.
 * `passwordType`: This specifies how the password should be serialized, *DIGEST* or *TEXT*. The _password digest_ option is non-standard and should only be used for interop issues where the message receiver desires an extra SHA-1 Hash of the password. Defaults to *TEXT.*
 * `addCreated`: Specifies whether or not to add a "Created" header to the Web service request. Defaults to *_false_*
 * `addNonce`: Specifies whether or not to add a "Nonce" header to the Web service request. Defaults to *_false_*
@@ -304,7 +311,7 @@ Here is an example of a WSC consumer connection secured with encryption, decrypt
 //MG
 ////
 
-== Consume Operation
+== The Consume Operation
 
 The *Consume* operation is the only web service consumer operation. It enables the consumption of a web service operation providing the required information for the specific operation that is wanted to execute.
 
@@ -342,13 +349,13 @@ And the output can be of two different types dependending whether the response c
 
 === Operation Input
 
-The input consist on a *Message* that represents a SOAP message and it's composed by the body, a set of headers and a set of attachments, all of them optional parameters.
+The input consist of a *Message* that represents a SOAP message. Input is composed of the body, a set of headers and a set of attachments, all of them optional parameters.
 
 ==== Body
 
-The input body for an operation is an XML that follows the element definition pointed by the message part in the provided wsdl.
+The input body for an operation is XML that follows the element definition pointed to by the message part in the provided WSDL.
 
-For example given a soap operation definition (extracted from a wsdl file) like this one:
+For example given a SOAP operation definition (extracted from a WSDL file) like this one:
 
 [source,xml,linenums]
 ----

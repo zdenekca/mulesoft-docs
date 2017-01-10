@@ -22,7 +22,6 @@ Getting rid of transformers as a topic in Mule 4
 +
 **** link:/mule-user-guide/v/4.0/mule-filters-scopes-and-routers[Scopes, and Routers]
 // Filters are not going to be part of Mule 4 (Part of the compatibility Module)
-**** link:/mule-user-guide/v/4.0/mule-connectors[Anypoint Connectors]
 *** link:/mule-user-guide/v/4.0/global-elements[Global Elements]
 *** link:/mule-user-guide/v/4.0/error-handling[Error Handling]
 +
