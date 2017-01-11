@@ -133,6 +133,10 @@ This object can return a *payload*, an *attributes object* and a `DataType`. The
 
 Although the object permits returning a *payload*, an *attributes object* and a `DataType`, it doesn’t require the user to actually provide all three. If none are provided, then the value from the incoming `MuleMessage` will be used.
 
+== Operations that Return List of Messages
+
+//MG placeholder for new section in spec
+
 === Void Operations Do Not Operate on Mule Message
 
 Void operations do not modify the Mule message in any way:
