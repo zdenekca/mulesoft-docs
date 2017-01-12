@@ -16,6 +16,7 @@ Listen for requests that arrive at a certain address by placing the HTTP connect
 
 * link:/mule-user-guide/v/latest/http-listener-reference[HTTP Listener Reference]
 * link:/http-listener-how-to[How to Use an HTTP Listener]
+// List special configuration procedures from above doc below
 
 === How to Use an HTTP Requester
 
@@ -26,6 +27,7 @@ The request will return a `MuleMessage` with specific `HttpResponseAttributes`.
 * link:/mule-user-guide/v/latest/http-request-reference[HTTP Requester Reference]
 * link:/mule-user-guide/v/3.8/http-listener-connector#mapping-between-http-requests-and-mule-messages[Mapping HTTP Requests to MuleMessage]
 * link:/http-listener-how-to[How to Use an HTTP Requester]
+// List special configuration procedures from above doc below
 
 === How to Load a Static HTTP Resource
 
@@ -41,6 +43,7 @@ Through additional configuration, the connector allows you to:
 * Send link:/mule-user-guide/v/3.8/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
 
 
+////
 [tabs]
 ------
 [tab,title="Studio Visual Editor"]
@@ -264,8 +267,9 @@ To enable the non-blocking processing strategy, you must set this as a property 
 
 [NOTE]
 Note that link:/mule-user-guide/v/3.8/flow-processing-strategies#supported-non-blocking-components[not all Mule components] currently support the non-blocking processing strategy, if there are any unsupported components in a flow, they will cause the flow to fall back to synchronous processing.
+////
 
-== Migrating
+== Migrating from Mule 3 HTTP Connectors
 
 
 == See Also
