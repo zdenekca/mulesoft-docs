@@ -5,3 +5,4 @@
 *** link:/mule-user-guide/v/latest/http-listener-reference[HTTP Listener Reference]
 *** link:/mule-user-guide/v/latest/http-requester-reference[HTTP Requester Reference]
 ** link:/mule-user-guide/v/latest/email-connector[Email Connector]
+** link:/mule-user-guide/v/latest/jms-connector[JMS Connector]
