@@ -1,3 +1,6 @@
 // Core Connectors 4.0 TOC File
 
 * link:/mule-user-guide/v/latest/core-connectors[Core Connectors]
+** link:/mule-user-guide/v/latest/http-connectors[HTTP Connectors]
+** link:/mule-user-guide/v/latest/http-listener-reference[HTTP Listener Reference]
+** link:/mule-user-guide/v/latest/http-requester-reference[HTTP Requester Reference]
