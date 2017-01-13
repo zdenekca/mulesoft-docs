@@ -11,13 +11,36 @@ toc::[]
 [[what-is]]
 == What is the Socket Extension?
 
-UDP and TCP protocols and are bundled and configured in one functional entity called the *Socket extension*. The sockets extension provides connectors that can send messages using UDP or TCP sockets. A listener or a requester can be configured for each protocol.
+UDP and TCP protocols and are bundled and configured in one functional entity called the *Socket extension*. The socket extension provides connectors that can send messages using UDP or TCP sockets. A listener or a requester can be configured for each protocol.
 
-== How to Configure
+== How to Configure a Listener or Requester
 
-There are two configurations for the Sockets extension, one for setting up a listener source (receiver), and another one for the requester used in the `send` operation (requester). The default encoding can be overridden by specifying the `defaultEncoding` in the configuration.
+A listener configuration is required for using as a socket listener (receiver). The requester configuration is required in the case of the requester's `send` operation.
 
-* link:/specify-protocol[Configure How TCP Data Stream Converted to Messages]
+.Attributes
+|===
+|`name`| Name of the configuration|String
+|`defaultEncoding`|Default encoding used for serializing Strings. It can be overridden by a custom encoding in the send operation.|If not specified, Mule default encoding is used.
+|===
+
+If the TCP listener or requester is configured with a TLS Context, an SSL Socket (or ServerSocket) is used to secure the communication.
+
+Here are the attributes common to all TCP and UDP connection configurations supported by the Socket extension.
+
+|===
+|`sendBufferSize`|Size of the buffer (in bytes) used when sending data, set on the socket itself.|Default determined by the socket
+|`receiveBufferSize`|Size of the buffer (in bytes) used when receiving data, set on the socket itself.|Default determined by the socket for TCP. For UDP it is +16384
+|`reuseAddress`|If set, SO_REUSEADDRESS is set on server sockets before binding. This helps reduce "address already in use" errors when a socket is re-used.|Defaults to true
+|`clientTimeout`|This sets the SO_TIMEOUT value on sockets. Indicates the amount of time (in milliseconds) that the socket will wait in a blocking operation before failing.|Default determined by socket (wait indefinitely)
+|===
+
+
+
+=== How Raw Data Stream Converted
+
+Underlying "connection providers" define how the data stream is converted into a Mule message. TCP does not guarantee that data written to a socket is transmitted in a single packet, so if you want to transmit entire Mule messages reliably, you must specify a link:/tcp-configurable-protocol[TCP Configurable Protocol].
+
+
 
 
 ////
@@ -54,7 +77,7 @@ For reference doc:
 |===
 ////
 
-== SSL
+== Configure SSL over TCP
 
 To use SSL over a TCP connection, the only thing that needs to be done is configure a TLS context to the TCP Connection Provider (both listener and requester).
 
@@ -78,4 +101,5 @@ To use SSL over a TCP connection, the only thing that needs to be done is config
 ----
 
 
-Take into account that if the TLS Context is going to be used in a tcp-listener-connection (server side),  the keystore must be configured.
+[NOTE]
+If the TLS Context is going to be used in a `tcp-listener-connection` (server side), the keystore must be configured.
