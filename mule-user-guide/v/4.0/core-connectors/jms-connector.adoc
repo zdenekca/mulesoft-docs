@@ -1,5 +1,5 @@
 = JMS Connector
-:keywords: jms, transport, connector, pub-sub, queue
+:keywords: jms, transport, api, connector, pub-sub, queue
 :toc:
 :toc-title: Page Contents
 :toc-levels: 3

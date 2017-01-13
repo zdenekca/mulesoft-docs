@@ -35,7 +35,7 @@ As with the old module, the underlying transport can be configured. By default, 
 * Web Service Security (Timestamp, UsernameToken, Signature, Encryption)
 * Custom transport configuration (HTTP, JMS)
 
-== Configuring the Web Service Consumer
+== How to Configure the Web Service Consumer
 
 Configuring the WSC means entering the connection details. The configuration for the web service consumer is basically a container for the connection. It only has one optional attribute: the *encoding*. The provided encoding will be used in all the requests and responses managed by the *Consume* operation. If none specified, the web service consumer uses Mule's default encoding.
 //configuration/container and the connection. Configuring the WSC means entering the connection details.
@@ -47,7 +47,7 @@ Configuring the WSC means entering the connection details. The configuration for
 </wsc:config>
 ----
 
-== Creating a Connection
+=== How to Create a Connection
 
 To connect with a SOAP service, three parameters must be provided:
 
@@ -80,14 +80,11 @@ If the SOAP server supports MTOM the connection can have MTOM enabled using the 
 
 All connections created by the web service consumer are reusable and the provider is implemented as a `PoolingConnectionProvider`.
 
-== Underlying Transport
 
-//MG "TO BE DEFINED" - please consider if this section is valid
 
-The connection is able to fetch remote secured WSDL files since the request is performed using the provided transport configuration. Basically you can connect through a secured WSDL with the same underlying transport configuration used for consuming the service.
-
-== Configuring Web Service Security
+=== How to Configure Web Service Security
 //MG what is WS-security, under the hood?
+Define `<wsc:security-strategies>` supporting one or many of the below security strategies.
 
 The web service consumer provides the capability to add security for the outgoing and incoming SOAP messages, the supported security mechanisms that provides are:
 
@@ -98,12 +95,7 @@ The web service consumer provides the capability to add security for the outgoin
  * Decryption
  * UsernameToken
 
-[TIP]
-====
-Define `<wsc:security-strategies>` supporting one or many of the above security strategies
-====
-
-=== UsernameToken
+==== UsernameToken
 
 Adds a username token to the outgoing SOAP message.
 
@@ -129,7 +121,7 @@ This security strategy exposes the following configuration attributes:
 * `addCreated`: Specifies whether or not to add a "Created" header to the Web service request. Defaults to *_false_*
 * `addNonce`: Specifies whether or not to add a "Nonce" header to the Web service request. Defaults to *_false_*
 
-=== Timestamp
+==== Timestamp
 
 Adds a timestamp entry to the outgoing message, it only contains two attributes: `timeToLive` and `timeToLiveUnit`.
 
@@ -147,7 +139,7 @@ Adds a timestamp entry to the outgoing message, it only contains two attributes:
 `timeToLive`: length of time the message is valid. This attributes is qualified by the `timeToLiveUnit` attribute. The default value is 60 (seconds, qualified by the time unit `timeToLiveUnit`).  +
 `timeToLiveUnit`: unit of time which qualifies the `timeToLive` attribute. The default is `SECONDS`.
 
-=== Signature
+==== Signature
 
 Signs the outgoing message using the keystore configuration provided.
 
@@ -168,7 +160,7 @@ Signs the outgoing message using the keystore configuration provided.
 ----
 
 
-=== Verify Signature
+==== Verify Signature
 
 Validates the signature of an incoming SOAP message using the truststore configuration provided.
 
@@ -185,7 +177,7 @@ Validates the signature of an incoming SOAP message using the truststore configu
 </wsc:connection>
 ----
 
-=== Encrypt
+==== Encrypt
 
 Encrypts the body of an outgoing SOAP message using the keystore configuration provided
 
@@ -203,7 +195,7 @@ Encrypts the body of an outgoing SOAP message using the keystore configuration p
 </wsc:connection>
 ----
 
-=== Decrypt
+==== Decrypt
 
 Decrypts the body of an incoming soap message using the Keystore configuration provided.
 
@@ -222,7 +214,7 @@ Decrypts the body of an incoming soap message using the Keystore configuration p
 </wsc:connection>
 ----
 
-=== Truststore and Keystore Configurations
+==== Truststore and Keystore Configurations
 
 ==== Keystore Configuration
 
@@ -277,7 +269,7 @@ Both keystore and truststore configuration can be defined as global elements so 
 ----
 
 
-=== Using Multiple Security Strategies
+=== How to Use Multiple Security Strategies
 
 Declaring multiple security strategies is valid.
 
@@ -313,7 +305,7 @@ Here is an example of a WSC consumer connection secured with encryption, decrypt
 
 == The Consume Operation
 
-The *Consume* operation is the only web service consumer operation. It enables the consumption of a web service operation providing the required information for the specific operation that is wanted to execute.
+The *Consume* operation is the only web service consumer operation. It enables the execution of a web service operation providing the required information for the specific operation to execute.
 
 Basically the idea behind the operation is that for the given connection, exposes a set of soap operations that can be executed, and selecting the one it's wanted to consume describes the required headers types, the body type and the attachments if has any; and will also describe the output message of the operation.
 

@@ -1,0 +1,34 @@
+= File Connector
+:keywords: file, connector, matcher, directory, listener
+:toc:
+:toc-title: Page Contents
+
+toc::[]
+
+[[what-is]]
+== What is the File connector?
+
+A connector that can operate on or retrieve information about files on a locally mounted file system.
+
+== Features
+
+* read, write and list files at any point of a flow
+* retrieve metadata about a file
+* define matchers to filter lists of files.
+* get a best guess about the MIME type of a file.
+* use the file connector with the `<poll>` and `<watermark>` elements
+* watch a directory for created, updated or deleted files
+* copy, move or delete a file automatically when processing is done
+* recurse through a directory’s files and limit the recursion level
+* check for file existence (useful for trigger file based use cases)
+* copy, move or delete files at any point of the flow
+* manually create a directory at any given point of the flow
+
+[NOTE]
+Special files like devices are not supported (for example: `/dev/null`)
+
+== How to Configure
+
+No configuration is required. You can directly perform a file operation in your flow. However, you can define a `<file-matcher>` above a flow to use across any file connector operations in your flow(s) or define them for one operation inside a `<file:match-with>` element.
+
+Learn more about the operations in the link:/file-connector-technical-reference[File Connector].

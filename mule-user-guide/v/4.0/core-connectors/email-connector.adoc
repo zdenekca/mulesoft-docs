@@ -1,4 +1,12 @@
 = Email Connector
+:keywords: email, connector, send, retrieve, manage, match, matcher, smtp, ipop, imap
+:toc:
+:toc-title: Page Contents
+:toc-levels: 3
+
+
+toc::[]
+
 
 [[what-is]]
 == What is the Email connector?
