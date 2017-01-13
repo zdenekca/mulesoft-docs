@@ -9,11 +9,11 @@ toc::[]
 
 
 [[what-is]]
-== What is the Socket Extension?
+== What is in the Socket Extension?
 
-UDP and TCP protocols and are bundled and configured in one functional entity called the *Socket extension*. The socket extension provides connectors that can send messages using UDP or TCP sockets. A listener or a requester can be configured for each protocol.
+Two connectors for UDP and TCP protocols are bundled in one functional entity called the *Socket extension*. The socket extension provides connectors that can listen or send messages using UDP or TCP sockets. A listener or a requester can be configured for each protocol.
 
-== How to Configure a Listener or Requester
+== How to Configure a Listener or Requester (TCP/UDP)
 
 A listener configuration is required for using as a socket listener (receiver). The requester configuration is required in the case of the requester's `send` operation.
 
