@@ -16,8 +16,10 @@ Two connectors for UDP and TCP protocols are bundled in one functional entity ca
 == How to Configure a Listener or Requester (TCP/UDP)
 
 A listener configuration is required for using as a socket listener (receiver). The requester configuration is required in the case of the requester's `send` operation.
+//MG configuration optional in most cases
 
-.Attributes
+=== Encoding Attributes
+
 |===
 |`name`| Name of the configuration|String
 |`defaultEncoding`|Default encoding used for serializing Strings. It can be overridden by a custom encoding in the send operation.|If not specified, Mule default encoding is used.
