@@ -1,0 +1,9 @@
+= Mule Runtime v4.0 Updates
+:keywords: news, updates, mule ESB, mule runtime, 4.0, mule 4.0,
+
+This new version of Mule 4 features many changes from the previous versions.
+
+If you are familiar with the concepts of the previous versions of the runtime, check sections below to learn what's changing in *Mule Runtime v4.0*:
+
+* link:/mule-user-guide/v/4.0/mule-runtime-updates-for-mule-developers[Mule 4 News for Mule Developers]
+* link:/mule-user-guide/v/4.0/mule-runtime-updates-for-connector-developers[Mule 4 News for Connectors Developers]
