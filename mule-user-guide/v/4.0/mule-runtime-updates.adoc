@@ -1,9 +1,99 @@
 = Mule Runtime v4.0 Updates
-:keywords: news, updates, mule ESB, mule runtime, 4.0, mule 4.0,
+:keywords: news, updates, mule ESB, mule runtime, 4.0, mule 4.0, mule 4, mule 4 for mule 3 developers, what's new mule 4
 
-This new version of Mule 4 features many changes from the previous versions.
-
+Mule 4 introduces significant changes from previous versions. +
 If you are familiar with the concepts of the previous versions of the runtime, check sections below to learn what's changing in *Mule Runtime v4.0*:
 
-* link:/mule-user-guide/v/4.0/mule-runtime-updates-for-mule-developers[Mule 4 News for Mule Developers]
-* link:/mule-user-guide/v/4.0/mule-runtime-updates-for-connector-developers[Mule 4 News for Connectors Developers]
+
+== No More Blocking Runtime
+
+As opposed to Mule 3.x, Mule 4 is an entirely _self-tuning_ and _non-blocking_ runtime, meaning that it uses a *task-oriented* execution model allowing the user to take advantage of non-blocking IO calls and avoiding performance problems due to incorrect processing strategies configurations. +
+// blocking thread-per-request model to a non blocking evented model
+
+Mule 4 removes complex tuning requirements to achieve optimum performance.
+
+== Module Consistency
+
+Mule 4 introduces more consistency around *connectors* and *extensions* unifying everything as *Modules* to extend the behavior inside a Mule application.
+
+Both custom and core connectors are created and managed using the *Mule SDK*.
+
+Introducing *_Smart Connectors_*: Modules designed using XML to manipulate connections. +
+Users can define the module, set configurations and define operations that can later be invoked in the mule application to manipulate connections.
+// Need confirmation and more info around this.
+
+
+
+== Simplified Mule Message Structure
+
+Mule 4 includes a simplified Mule message structure, composed  by:
+
+* `payload`: The message content.
+* `data-type`: Descriptor for the message content.
+* `metadata`: Synthetic properties added by each connector. (HTTP headers or JMS properties are going to be placed in the metadata).
+
+=== Simplified Scopes
+
+link:https://docs.mulesoft.com/mule-user-guide/v/3.8/scopes[Message scopes] are no longer supported in Mule 4.0. There are only *variables*. +
+Stuff like sub-flow (??), message enrichers and polls do not exist anymore.
+
+Before executing, Mule now gathers input context and retrieves information to parametrize the operation.
+
+[source,XML,linenums]
+----
+<httpn:request config-ref="requestConfig" method="#[dw:attributes.method]" path="#[dw:attributes.requestPath]" parseResponse="false">
+       <httpn:request-builder>
+           <httpn:query-params>#[dw:attributes.queryParams]</httpn:query-params>
+           <httpn:headers>#[dw:attributes.headers]</httpn:headers>
+       </httpn:request-builder>
+</httpn:request>
+----
+
+Once it executes, the result is a new message, replacing the message in the context.
+
+You can also define a target to save the Message in a variable:
+
+[source,XML,linenums]
+----
+<httpn:request target="myVar" config-ref="requestConfig" method="#[dw:attributes.method]" path="#[dw:attributes.requestPath]" parseResponse="false">
+      <httpn:request-builder>
+          <httpn:query-params>#[dw:attributes.queryParams]</httpn:query-params>
+          <httpn:headers>#[dw:attributes.headers]</httpn:headers>
+      </httpn:request-builder>
+</httpn:request>
+----
+
+This saves the message in the `myVar` variable.
+
+The Mule Context is now completely managed by the user.
+
+== Error Handling Strategies
+
+Mule 4.0 moves away from the Exception scenario.
+Allows handling custom errors.
+
+Is `<try>` the official name for error strategies (??)
+
+== Mule API
+
+Allows:
+
+* Easier upgrades
+* Guaranteed compatibilities across versions.
+
+Connectors are distributed outside the runtime. +
+Mule 4.0 does not include any connector by default.
+
+
+== DataWeave: The Mule Language
+
+MEL is being deprecated, and *Dataweave* is now the language used within the runtime.
+
+[NOTE]
+Some operations are not available outside EE
+
+== Compatibility Module
+
+To help users migrate to Mule 4, we included a *Compatibility Module* with a migration tool for the new semantics.
+
+Run Mule 4 in Compatibility Mode to be able to use deprecated transformers. [not confirmed].
