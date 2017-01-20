@@ -273,7 +273,7 @@ If any other type is found, then auto-transformation to `InputStream` is attempt
 ** `APPEND`: If the file exists, then write at the end of it
 ** `CREATE_NEW`: Means that the operation should result in a new file being created. If the file is already there, then an exception is thrown.
 * `path` is optional to make pass-through scenarios easier.
-** If `sourcePath` not set, the `MuleMessage#getAttributes()` value is tested to infer path. If this is an instance of `FileAttributes`, then the `FileAttributes#getPath()` is used. Otherwise, an `IllegalArgumentException` will be thrown.
+** If `path` not set, the `MuleMessage#getAttributes()` value is tested to infer path. If this is an instance of `FileAttributes`, then the `FileAttributes#getPath()` is used. Otherwise, an `IllegalArgumentException` will be thrown.
 
 [[list]]
 === List Files
@@ -319,7 +319,7 @@ Move file example.
 
 ==== Notes
 
-The notes for the `copy` operation apply to `move`.
+The notes for the `copy` operation apply to the `move` operation.
 
 [[delete]]
 === Delete Files
@@ -344,7 +344,7 @@ Rename file or directory example.
 
 ==== Notes
 
-* As with the `write` operation, `sourcePath` is optional to make pass-through scenarios easier.
+* Like with the `write` operation, `path` is optional to make pass-through scenarios easier.
 ** If `path` is not set, it may be inferred by `MuleMessage#getAttributes()`. If this is an instance of `FileAttributes`, then the `FileAttributes#getPath()` is used. Otherwise, an `IllegalArgumentException` will be thrown.
 
 
