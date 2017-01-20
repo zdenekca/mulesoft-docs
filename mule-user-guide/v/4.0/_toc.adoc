@@ -2,8 +2,6 @@
 
 * link:/mule-user-guide/v/4.0/index[Mule Runtime]
 ** link:/mule-user-guide/v/4.0/mule-runtime-updates[What's New]
-*** link:/mule-user-guide/v/4.0/mule-runtime-updates-for-mule-developers[Updates for Mule Application Developers]
-*** link:/mule-user-guide/v/4.0/mule-runtime-updates-for-connector-developers[Updates for Connector Developers]
 ** link:/mule-user-guide/v/4.0/mule-concepts[Key Concepts]
 *** link:/mule-user-guide/v/4.0/mule-message-structure[Mule Message Structure]
 *** link:/mule-user-guide/v/4.0/message-state[Mule Message State]
