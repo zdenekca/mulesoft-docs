@@ -13,9 +13,8 @@ The File connector can operate on or retrieve information about files on a local
 [[important-concepts]]
 == Important Concepts
 
-This document assumes that you are familiar with Mule,
-link:/mule-user-guide/v/latest/connectors[Anypoint Connectors], and
-link:/anypoint-studio/v/latest[Anypoint Studio]. To increase your familiarity with Studio, consider completing a link:/anypoint-studio/v/latest/basic-studio-tutorial[Anypoint Studio Tutorial]. This page requires some basic knowledge of link:/mule-user-guide/v/latest/mule-concepts[Mule Concepts], link:/mule-user-guide/v/latest/elements-in-a-mule-flow[Elements in a Mule Flow], and link:/mule-user-guide/v/latest/global-elements[Global Elements].
+This document assumes that you are familiar with link:/mule-user-guide/v/latest/mule-concepts[Mule Concepts] and
+link:/mule-user-guide/v/latest/connectors[Anypoint Connectors].
 
 [[requirements]]
 == Hardware and Software Requirements
@@ -25,8 +24,9 @@ For hardware and software requirements, please visit the link:/release-notes/fil
 [[install]]
 == How to Install
 
-You can install the connector in Anypoint Studio using the instructions in
-link:/getting-started/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
+File connector is bundled with Mule 4.
+
+See also link:/getting-started/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
 
 [[upgrading]]
 === Upgrading from an Older Version
@@ -43,13 +43,13 @@ Additionally, we recommend that you keep Studio up to date with its latest versi
 [[ns-schema]]
 == Connector Namespace and Schema
 
-When designing your application in Studio, the act of dragging the connector from the palette onto the Anypoint Studio canvas should automatically populate the XML code with the connector *namespace* and *schema location*.
+The act of dragging the connector from the design palette onto the canvas where you visualize your flow should automatically populate the XML code with the connector namespace and schema location:
 
 *Namespace:* `+http://www.mulesoft.org/schema/mule/connector+`
 *Schema Location:* `+http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd+`
 
 [TIP]
-If you are manually coding the Mule application in Studio's XML editor or other text editor, define the namespace and schema location in the header of your *Configuration XML*, inside the `<mule>` tag.
+If you are manually coding the Mule application in Studio's XML editor or other text editor, define the namespace and schema location in the header of your *Configuration XML*.
 
 [source, xml,linenums]
 ----
@@ -93,43 +93,123 @@ Inside the `<version>` tags, put the desired version number, the word `RELEASE` 
 [[configure]]
 == How to Configure
 
-Simply place the connector into your flow in the source or process side of the flow, select an operation and any required details. You can define a `<file-matcher>` outside flow(s) to use across any file connector operations in your flow(s) or define them inline inside a `<file:match-with>` element. Define this inside the operation.
-
-[[operations]]
-== Operations
-
-View all available operations from the link:/file-connector-technical-reference[Technical Reference].
+Place the connector into your flow as applicable for your use case. Select an operation and fill in required and optional attributes. Additionally, you can define a `<file-matcher>` outside flow(s) to use across any file connectors in your flow(s) or define them inline inside a `<file:match-with>` element, defined inside the connector element.
 
 [[use-cases]]
 == Use Cases
 
-Typical use cases this connector helps perform.
+Typical use cases this connector helps perform. See the link:/connector[Connector Technical Reference] for all operations and attributes.
 
 * link:#read[Read Files]
-* link:#write[Write Files]
+* link:#write[Write to File]
 * link:#list[List Files]
 * link:#copy[Copy Files]
 * link:#move[Move Files]
 * link:#rename[Rename Files or Directories]
 * link:#delete[Delete Files]
 * link:#retrieve-metadata[Retrieve File Metadata]
-* link:#define-matcher[Define a Matcher] to filter lists of files.
-* get a best guess about the MIME type of a file.
+* link:#define-matcher[Define a Matcher] to filter lists of files
 * link:#poll-watermark[Poll a Directory or File] with the `<poll>` and `<watermark>` elements
 * link:#create-dir[Create Directory]
 * link:#listen-on-dir[Configure as a Directory Listener] for created, updated or deleted files
-* copy, move or delete a file automatically when processing is done
-* recurse through a directory’s files and limit the recursion level
+* obtain the MIME type of a file when reading or listing files or obtain resolved MIME type using `#[dataType.mimeType]`
+* recurse through a directory’s files
+//MG include how to limit recursion level with walker once implemented
 
 [NOTE]
-Special files like devices are not supported (for example: `/dev/null`)
+Special files like device files are not supported (for example: `/dev/null`)
 
 [[listen-on-dir]]
 === Configure as a Directory Listener
 
-[NOTE]
-Using the connector as a message source is useful in cases where a flow should respond to changes done on the filesystem, examples being trigger files, transaction files being added on a drop folder, settings files updated, etc. All of the above cases could be done using a `<file:list>` operation inside a poll scope (maybe also combined with a `<watermark>`.
+The listener responds to three types of events:
 
+* file creation
+* file update
+* file deletion
+
+Using the connector as a listener (message source) is useful in cases where a flow should respond to changes to the filesystem such as trigger files, transaction files added to a drop folder, settings files updated, directory changes, etc.
+
+[NOTE]
+It is possible to achieve the same with a `<file:list>` operation inside a poll scope, with `watermark` in addition. However, this may be more resource intensive. See more in the *Notes* section.
+
+.Syntax for configuring the connector as a listener
+[source,xml,linenums]
+----
+<file:directory-listener directory="~/drop-folder"
+	notifyOnCreate="true|false"
+	notifyOnUpdate="true|false"
+	notifyOnDelete="true|false"
+recursive="true|false"
+matchWith="optionallyAMatcherReference" />
+----
+
+[NOTE]
+None of the above attributes can accept expressions.
+
+.Example for listening on a drop folder
+[source,xml,linenums]
+----
+<flow name="inbound">
+<file:directory-listener directory="~/drop-folder" />
+<logger message="['There was a ' + message.attributes.eventType + ' in file ' + message.attributes.path]" />
+</flow>
+----
+
+.Example for logging based on event type
+[source,xml,linenums]
+----
+<flow name="inbound">
+<file:directory-listener directory="~/drop-folder" />
+<choice>
+	<when expression="#[message.attributes.eventType == 'CREATE'">
+		<logger message="file created" />
+	</when>
+	<when expression="#[message.attributes.eventType == 'UPDATE'">
+		<logger message="file updated" />
+	</when>
+	<when expression="#[message.attributes.eventType == 'DELETE'">
+		<logger message="file deleted" />
+		</when>
+		<otherwise>
+			<logger message="Impossible but wanted to show the DELETED key" />
+		</otherwise>
+	</choice>
+</flow>
+----
+
+
+==== Notes
+
+* If the `directory` path does not map to a directory then you get a `ConfigurationException`.
+* You can optionally disable up to two of the types of events by setting two of `notifyOnCreate`, `notifyOnUpdate` or `notifyOnDelete` to false.
+** If you disable all three, the listener does not work and a `ConfigurationException` is thrown.
+* The listener should not be considered the recommended approach over a poll-list-watermark approach
+** The tradeoff between poll and listener performance is reliability. Since operating system events don't generally include the concept of transaction or replay, there's no way to guarantee that an event is going to be captured if failure or server crash happens.
+* Use the recursive attribute  to listen on a subdirectory (default: false).
+* payload is a `FileInputStream` instance when the triggered event type is `CREATE` or `UPDATE`,
+* when a file is deleted as the file no longer exists anymore the `MuleMessage` has a `NullPayload` with a `FileAttributes` instance.
+* when the event refers to the creation of a directory, the `MuleMessage` has a `NullPayload` with a `FileAttributes` instance.
+* the `FileAttributes` instance contained in the created Message holds the event type (`CREATE` | `UPDATE` | `DELETE`).
+*  if file is deleted, file attributes are not available.
+** Only `path` and `name` attributes are available.
+** Message attributes are an instance of `DeletedFileAttributes`.
+** If unavailable attribute requested, throws `IllegalStateException`.
+* if event references a deleted directory, then the payload is also a NullPayload
+
+
+==== Operating System Limitations
+
+Listener behavior might be slightly different depending on the OS to which it is deployed.
+
+The main differences are usually (but not exclusively) related to:
+
+* Overflows: In highly concurrent scenarios a given file might be associated to hundreds of events per second. Some OS might not be able to handle that gracefully and decide to drop some of those events or even fail.
+* Polling: Some operation systems (like older versions of OSX) don't actually support file system notifications. In those cases, the JRE decides to compensate by using a high frequency poll, in which case the listener becomes pretty much the same as a poll element.
+
+==== HA support
+
+When used in HA, the watcher will only function on the primary node. If the primary node crashes, then the new one places a new watcher.
 
 
 [[read]]
@@ -144,9 +224,22 @@ outputEncoding="UTF-8"
 outputMimeType="application/xml" />
 ----
 
+==== Notes
+
+* Reads the file in a given path and returns a `MuleMessage` with an `InputStream` as the payload
+* Returns a `FileAttributes` instance as attributes.
+* By default, if the file does not exists an `IllegalArgumentException` is thrown.
+* If using "target" to load the `InputStream` make sure that the returned `InputStream` is fully consumed or eventually
++
+[IMPORTANT]
+the underlying file handle and file system lock (if locking was enabled) will only be released once the `InputStream` is closed.
++
+* If not able to write the file or create directories, whether due to no write permissions, problem with the file system, etc, a `MuleRuntimeException` is thrown.
+* If the path points to a directory instead of a file, an `IllegalArgumentException` will be thrown.
+
 
 [[write]]
-=== Write Files
+=== Write to File
 
 Write to a file.
 
@@ -160,6 +253,27 @@ lock="true|false"
 createParentDirectories="true|false" />
 ----
 
+==== Content Types Accepted
+
+When writing to a file, this operation can take a payload of any of the following types:
+
+`byte`
+`byte[]`
+`String`
+`OutputHandler`
+`InputStream`
+
+[NOTE]
+If any other type is found, then auto-transformation to `InputStream` is attempted. If that fails, then the write operation fails.
+
+==== Notes
+
+* There are three types of write modes which are important:
+** `OVERWRITE`: If the file exists, then overwrite it completely
+** `APPEND`: If the file exists, then write at the end of it
+** `CREATE_NEW`: Means that the operation should result in a new file being created. If the file is already there, then an exception is thrown.
+* `path` is optional to make pass-through scenarios easier.
+** If `sourcePath` not set, the `MuleMessage#getAttributes()` value is tested to infer path. If this is an instance of `FileAttributes`, then the `FileAttributes#getPath()` is used. Otherwise, an `IllegalArgumentException` will be thrown.
 
 [[list]]
 === List Files
@@ -181,26 +295,36 @@ List files on demand. In combination with the file matcher, this capability make
 [[copy]]
 === Copy Files
 
-The connector has the ability to copy files.
+Copy a file to a target path.
 
 [source,xml,linenums]
 ----
 <file:copy sourcePath="source.txt" targetPath="backup" overwrite="true|false" createParentDirectories="true|false" />
 ----
 
+==== Notes
+
+* As with the `write` operation, `sourcePath` is optional to make pass-through scenarios easier.
+** If `sourcePath` is not set, it may be inferred by `MuleMessage#getAttributes()`. If this is an instance of `FileAttributes`, then the `FileAttributes#getPath()` is used. Otherwise, an `IllegalArgumentException` will be thrown.
+
 [[move]]
 === Move Files
 
-Move files on demand.
+Move file example.
 
 [source,xml,linenums]
 ----
 <file:move sourcePath="source.txt" targetPath="backup"  overwrite="true|false" createParentDirectories="true|false" />
 ----
 
+==== Notes
+
+The notes for the `copy` operation apply to `move`.
+
 [[delete]]
 === Delete Files
-Files can also be deleted on demand:
+
+Delete file example.
 
 [source,xml,linenums]
 ----
@@ -211,18 +335,23 @@ Files can also be deleted on demand:
 [[rename]]
 === Rename Files or Directories
 
-Example `rename` invocation.
+Rename file or directory example.
 
 [source,xml,linenums]
 ----
 <file:rename path="invoices/current" to="archived" />
 ----
 
+==== Notes
+
+* As with the `write` operation, `sourcePath` is optional to make pass-through scenarios easier.
+** If `path` is not set, it may be inferred by `MuleMessage#getAttributes()`. If this is an instance of `FileAttributes`, then the `FileAttributes#getPath()` is used. Otherwise, an `IllegalArgumentException` will be thrown.
+
 
 [[retrieve-metadata]]
 === Retrieving File Metadata
 
-To hold the file’s metadata, a `FileAttributes` POJO is accessed from `MuleMessage#getAttributes()`. The `FileAttributes` POJO is immutable and has the following values:
+`FileAttributes` POJO holds file metadata and is the message attributes `MuleMessage#getAttributes()`. The `FileAttributes` POJO is immutable and contains:
 
 
 |===
@@ -230,29 +359,27 @@ To hold the file’s metadata, a `FileAttributes` POJO is accessed from `MuleMes
 |`lastModifiedTime`|`DateTime`
 |`lastAccessTime`|`DateTime`
 |`creationTime`|`DateTime`
-|`size`|https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html[long]
-|`regularFile`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[boolean]
+|`size`|https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html[`long`]
+|`regularFile`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[`boolean`]
 |`directory`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[boolean]
-|`symbolicLink`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[boolean]
-|`path`|String
-|`name`|String
+|`symbolicLink`|https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html[`boolean`]
+|`path`|`String`
+|`name`|`String`
 |===
 
 ==== Laziness
 
-Both the payload `InputStream` and the `FileAttributes` POJO are as lazy as possible. Creating a message with an `InputStream` payload returned won’t actually mean that it opened a file handler with the OS. It is only be opened when the stream is actually read. In that way, if many files are returned from a `list` operation, the user doesn’t have to worry about closing the ones that were discarded.
-
-At the same time, the `FileAttributes` POJO won’t actually fetch the file metadata until the first getter is invoked.
+Both the payload `InputStream` and the `FileAttributes` POJO are as lazy as possible. Creating a message with an `InputStream` payload returned won’t actually mean that it opened a file handler with the OS. It is only opened when the stream is read. Therefore, if many files are returned from a `list` operation, the user doesn’t have to worry about closing the ones that were discarded. At the same time, the `FileAttributes` POJO won’t actually fetch the file metadata until the first getter is invoked.
 
 
 [[define-matcher]]
 === Define a File Matcher
 
+Use a matcher with an operation or listener to work with files that match certain criteria.
+
 NOTE: The term file filtering could also be applied to describe the functionality.
 
-Another common scenario (which also applies to the watch message source but not exclusively) is the need for only accept files which match with certain criteria.
-
-For that, a `<file:matcher>` element will be created. This element defines the possible criterias that can be used to either accept or reject a file. This is how the matcher can be defined
+`<file:matcher>` element defines the criteria used to either accept or reject a file for processing by connector. This is how the matcher can be defined.
 
 [source,xml,linenums]
 ----
@@ -272,8 +399,6 @@ minSize="0"
 maxSize="1024" />
 ----
 
-All of the attributes above are optional and are ignored if not provided. Also, they are all related to each other under an `AND` operator.
-
 A look at each attribute:
 
 * `filename-pattern`: Similar to the current filename pattern filter but more powerful. Glob expressions and regex will be supported. Glob will be the default. You can select which one to use by setting a prefix. E.g: glob:**.{java, js} , regex:[0-9]*_test.csv
@@ -290,9 +415,11 @@ A look at each attribute:
  * `minSize`: an inclusive lower boundary for the file size expressed in bytes
  * `maxSize`: an inclusive upped boundary for the file size expressed in bytes
 
-File matcher can either be used as a named top level element (allowing it to be reused in flows), or as an inner element belonging to a particular component.
+==== Notes
 
-Here are the two ways:
+* All attributes above are optional. They are ignored if not provided. All attributes are considered together (implicit `AND`)when qualifying files
+* File matcher can either be used as a top level element referenced by `name` (allowing it to be reused in flows), or as an inner element belonging to a particular connector instance.
+** Here are the two ways:
 
 .Example of top level reusable matcher
 [source,xml,linenums]
@@ -320,6 +447,7 @@ Here are the two ways:
 </flow>
 ----
 
+
 [[poll-watermark]]
 === Poll a Directory or File
 
@@ -346,7 +474,7 @@ Although polling is a powerful and reliable solution, it's not an efficient one.
 [[create-dir]]
 === Create Directory
 
-Can also be used to create a series of chained directories. For example, if the folder `backup` doesn’t exist, it will also be created in order to create the next one in the structure.
+Can also be used to create a series of chained directories. For the below example, if the folder `backup` doesn’t exist, it will be created in addition to `january_2016`.
 
 [source,xml,linenums]
 ----
