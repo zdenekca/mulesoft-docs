@@ -257,14 +257,14 @@ createParentDirectories="true|false" />
 
 When writing to a file, this operation can take a payload of any of the following types:
 
-`byte`
-`byte[]`
-`String`
-`OutputHandler`
-`InputStream`
+* `byte`
+* `byte[]`
+* `String`
+* `OutputHandler`
+* `InputStream`
 
 [NOTE]
-If any other type is found, then auto-transformation to `InputStream` is attempted. If that fails, then the write operation fails.
+If any other type is found, then auto-transformation to `InputStream` is attempted. If that fails, then the `write` operation fails.
 
 ==== Notes
 
