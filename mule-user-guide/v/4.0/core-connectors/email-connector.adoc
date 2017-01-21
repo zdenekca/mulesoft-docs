@@ -1,43 +1,237 @@
 = Email Connector
 :keywords: email, connector, send, retrieve, manage, match, matcher, smtp, ipop, imap
 :toc:
-:toc-title: Page Contents
+:toc-title:
 :toc-levels: 3
-
 
 toc::[]
 
-
-[[what-is]]
-== What is the Email connector?
+[[overview]]
+== Overview
 
 A single connector to manage and send email based on the link:http://www.oracle.com/technetwork/java/javamail/index.html[JavaMail API], supporting SMTP, IMAP and POP3 protocols. The Email connector allows connection over SSL/TLS.
 
+[[important-concepts]]
+== Important Concepts
+
+This document assumes that you are familiar with link:/mule-user-guide/v/latest/mule-concepts[Mule Concepts] and
+link:/mule-user-guide/v/latest/connectors[Anypoint Connectors].
+
+
+[[requirements]]
+== Hardware and Software Requirements
+
+For hardware and software requirements, please visit the link:/release-notes/connector[Connector Release Notes].
+
+[[install]]
+== How to Install
+
+Bundled with Mule 4.
+
+See also link:/getting-started/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
+
+[[upgrading]]
+=== Upgrading from an Older Version
+
+If you’re currently using an older version of the connector, a small popup appears in the bottom right corner of Anypoint Studio with an "Updates Available" message.
+
+. Click the popup and check for available updates. 
+. Click the Connector version checkbox and click *Next* and follow the instructions provided by the user interface. 
+. *Restart* Studio when prompted. 
+. After restarting, when creating a flow and using the connector, if you have several versions of the connector installed, you may be asked which version you would like to use. Choose the version you would like to use.
+
+Additionally, we recommend that you keep Studio up to date with its latest version.
+
+[[ns-schema]]
+== Connector Namespace and Schema
+
+When designing your application in Studio, the act of dragging the connector from the palette onto the Anypoint Studio canvas should automatically populate the XML code with the connector *namespace* and *schema location*.
+
+*Namespace:* `+http://www.mulesoft.org/schema/mule/connector+`
+*Schema Location:* `+http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd+`
+
+[TIP]
+If you are manually coding the Mule application in Studio's XML editor or other text editor, define the namespace and schema location in the header of your *Configuration XML*, inside the `<mule>` tag.
+
+[source, xml,linenums]
+----
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:connector="http://www.mulesoft.org/schema/mule/connector"
+      xsi:schemaLocation="
+               http://www.mulesoft.org/schema/mule/core
+               http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+               http://www.mulesoft.org/schema/mule/connector
+               http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd">
+
+      <!-- put your global configuration elements and flows here -->
+
+</mule>
+----
+
+////
+[[maven]]
+== Maven Dependency Information
+
+For Maven dependency management, include this XML snippet in your `pom.xml` file.
+
+[source,xml,linenums]
+----
+<dependency>
+  <groupId></groupId>
+  <artifactId></artifactId>
+  <version></version>
+</dependency>
+----
+
+[TIP]
+====
+Inside the `<version>` tags, put the desired version number, the word `RELEASE` for the latest release, or `SNAPSHOT` for the latest available version. The available versions to date are:
+
+* *x.y.z*
+====
+////
+
+[[configure]]
 == How to Configure
 
-Enter details in a global element representing the connector configuration.
+. Place the connector into your flow as applicable for your use case.
+. Choose the configuration that matches the protocol you need to use (link:#smtp-config[SMTP Configuration], link:#POP3-config[POP3 configuration] or link:#IMAP-config[IMAP Configuration]).
+. If you need to secure the connection with TLS, choose a connection provider for IMAPS, SMTPS or POP3S accordingly.
+. Select an operation for the connector instance and fill in necessary fields.
 
 
-* link:/email-connector-reference[Email Connector Reference]
+[[use-cases]]
+== Use Cases
 
-== Email Connector Operations
+* link:#config-imap[Configure IMAP] (with secure connection)
+* link:#config-POP3[Configure POP3] (with secure connection)
+* link:#config-SMTP[Configure SMTP] (with secure connection)
++
+[NOTE]
+The three different configurations are described below, each one of them can be created without passing any attributes, all of them have default values.
++
+* Retrieve and manage email using IMAP or POP3 operations
+* Send email with SMTP operations
+* IMAP and POP3 operations allow email retrieval and management, offering an email matcher to filter email. See the link:/connector[Connector Technical Reference] for all connector operations and attributes.
 
-Retrieve, manage and send email. IMAP and POP3 operations allow email retrieval and management, with an optional email matcher allowing you to filter email.
+=== IMAP
 
-* List emails
-
-=== IMAP Only
-
+* link:#list[List emails] (IMAP)
 * Store email
 * Mark as read
 * Mark as deleted
 * Expunge folder
 
-=== SMTP Only
+=== POP3
 
-SMTP provides various operations to create and send email:
+* link:#list[List emails] (POP3)
+
+=== SMTP
+
+Operations to create and send email:
 
 * Email Builder
 * Email Body
 * Email Attachment
 * Send Email
+
+
+[[list]]
+=== List Emails
+
+.POP3 Example
+[source,xml,linenums]
+----
+<email:list-pop3 config-ref="config" mailboxFolder="INBOX">
+	<email:matcher since="2015-06-03T13:21:58+00:00"
+seen="false"
+until="2015-07-03T13:21:58+00:00">
+</email:matcher>
+</email:list-pop3>
+----
+
+[[config-imap]]
+=== Configure IMAP
+
+`<email:imap name="config-imap">`
+
+The IMAP configuration also defines one optional parameter `eagerlyFetchContent`. This defines whether the retrieved emails should be opened and read or not. By default, all email retrieved by IMAP configuration is opened.
+
+[source,xml,linenums]
+----
+<email:imap name="config"  eagerlyFetchContent="false">
+   <email:imap-connection host="127.0.0.1" … />
+</email:imap>
+----
+
+If email content is not opened, it will still be marked as "NOT OPEN" but you won't be able to get the inline content and the attachments.
+
+[NOTE]
+The POP3 protocol does not make this distinction, all emails retriever by a POP3 configuration are always opened.
+
+
+
+.Example of IMAP Configuration with Secure Connection Provider and TLS Context Defined Inline
+[source,xml,linenums]
+----
+<email:imap name="config">
+<email:imaps-connection username="user" password="pass" host="host.imap">
+<tls:context name="tlsContext">
+<tls:key-store path="serverKeystore"
+keyPassword="key-pass"
+password="mulepass"/>
+ 	<tls:trust-store path="trustStore" password="mulepassword"/>
+</tls:context>
+</email:imaps-connection>
+</email:imap>
+----
+
+
+
+
+
+[[config-POP3]]
+=== Configure POP3
+
+`<email:pop3 name="config-pop3">`
+
+The POP3 configuration does not define any attributes, is just a container for the connection.
+
+[source,xml,linenums]
+----
+<email:pop3 name="config">
+   <email:pop3-connection host="127.0.0.1" … />
+</email:pop3>
+----
+
+
+[[config-SMTP]]
+=== Configure SMTP
+
+`<email:smtp name="config-smtp">`
+
+The SMTP configuration defines two optional attributes
+
+`from`: the from address. The person that is going to send messages using this configuration. This attribute is optional and will fallback to the default session user.
+
+`defaultEncoding`: default encoding to be used (if no other is specified in the operation that uses this configuration)  in the messages sent using SMTP. This attribute is optional and it will fallback to the default mule configuration encoding.
+
+[source,xml,linenums]
+----
+<email:smtp name="config" from="owow@mule.com" defaultEncoding="UTF-8">
+   <email:smtp-connection host="127.0.0.1" … />
+</email:smtp>
+----
+
+
+
+
+
+
+
+
+== See Also
+
+* link:/connectors[Connectors]
+* link:/mule[Mule]

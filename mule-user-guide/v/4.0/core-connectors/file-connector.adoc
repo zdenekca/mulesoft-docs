@@ -131,7 +131,7 @@ The listener responds to three types of events:
 Using the connector as a listener (message source) is useful in cases where a flow should respond to changes to the filesystem such as trigger files, transaction files added to a drop folder, settings files updated, directory changes, etc.
 
 [NOTE]
-It is possible to achieve the same with a `<file:list>` operation inside a poll scope, with `watermark` in addition. However, this may be more resource intensive. See more in the *Notes* section.
+It is possible to achieve the same with a `<file:list>` operation inside a poll scope, with `<watermark<`. However, this may be more resource intensive. See more in the *Notes* section.
 
 .Syntax for configuring the connector as a listener
 [source,xml,linenums]
@@ -188,8 +188,8 @@ None of the above attributes can accept expressions.
 ** The tradeoff between poll and listener performance is reliability. Since operating system events don't generally include the concept of transaction or replay, there's no way to guarantee that an event is going to be captured if failure or server crash happens.
 * Use the recursive attribute  to listen on a subdirectory (default: false).
 * payload is a `FileInputStream` instance when the triggered event type is `CREATE` or `UPDATE`,
-* when a file is deleted as the file no longer exists anymore the `MuleMessage` has a `NullPayload` with a `FileAttributes` instance.
-* when the event refers to the creation of a directory, the `MuleMessage` has a `NullPayload` with a `FileAttributes` instance.
+* when a file is deleted as the file no longer exists anymore the `MuleMessage` has a `NullPayload` and a `FileAttributes` instance.
+* when the event refers to the creation of a directory, the `MuleMessage` has a `NullPayload` and a `FileAttributes` instance.
 * the `FileAttributes` instance contained in the created Message holds the event type (`CREATE` | `UPDATE` | `DELETE`).
 *  if file is deleted, file attributes are not available.
 ** Only `path` and `name` attributes are available.
@@ -232,7 +232,7 @@ outputMimeType="application/xml" />
 * If using "target" to load the `InputStream` make sure that the returned `InputStream` is fully consumed or eventually
 +
 [IMPORTANT]
-the underlying file handle and file system lock (if locking was enabled) will only be released once the `InputStream` is closed.
+The underlying file handle and file system lock (if locking was enabled) will only be released once the `InputStream` is closed.
 +
 * If not able to write the file or create directories, whether due to no write permissions, problem with the file system, etc, a `MuleRuntimeException` is thrown.
 * If the path points to a directory instead of a file, an `IllegalArgumentException` will be thrown.
