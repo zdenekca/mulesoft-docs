@@ -383,11 +383,11 @@ The matcher can be defined inline or outside the operation.
 
 ==== Email Attributes Listed
 
-Email metadata is returned as attributes of the `MuleMessage` at every `list` operation execution.
+Email metadata is returned as attributes of the `MuleMessage` at every `list` operation execution. If multiple emails are returned, `list` returns multiple Mule messages.
 
-It contains all the metadata of an email, such as subject, recipients, etc.
+Email attributes contain all the metadata of an email, such as subject, recipients, etc.
 
-For POP3 configured operations the attributes are:
+For POP3 configured operations, the attributes are:
 
 `From address`: the address of the person who has sent the email
 `To addresses`: all the to (primary) email addresses to send the email to.
