@@ -137,20 +137,6 @@ Operations to create and send email:
 * Send Email
 
 
-[[list]]
-=== List Emails
-
-.POP3 Example
-[source,xml,linenums]
-----
-<email:list-pop3 config-ref="config" mailboxFolder="INBOX">
-	<email:matcher since="2015-06-03T13:21:58+00:00"
-seen="false"
-until="2015-07-03T13:21:58+00:00">
-</email:matcher>
-</email:list-pop3>
-----
-
 [[config-imap]]
 === Configure IMAP
 
@@ -168,7 +154,7 @@ The IMAP configuration also defines one optional parameter `eagerlyFetchContent`
 If email content is not opened, it will still be marked as "NOT OPEN" but you won't be able to get the inline content and the attachments.
 
 [NOTE]
-The POP3 protocol does not make this distinction, all emails retriever by a POP3 configuration are always opened.
+The POP3 protocol does not make the distinction that IMAP does. All email retrieved by a POP3 configuration is always opened.
 
 
 
@@ -188,15 +174,12 @@ password="mulepass"/>
 ----
 
 
-
-
-
 [[config-POP3]]
 === Configure POP3
 
 `<email:pop3 name="config-pop3">`
 
-The POP3 configuration does not define any attributes, is just a container for the connection.
+The POP3 configuration does not define any attributes. It is just a container for the connection.
 
 [source,xml,linenums]
 ----
@@ -214,7 +197,6 @@ The POP3 configuration does not define any attributes, is just a container for t
 The SMTP configuration defines two optional attributes
 
 `from`: the from address. The person that is going to send messages using this configuration. This attribute is optional and will fallback to the default session user.
-
 `defaultEncoding`: default encoding to be used (if no other is specified in the operation that uses this configuration)  in the messages sent using SMTP. This attribute is optional and it will fallback to the default mule configuration encoding.
 
 [source,xml,linenums]
@@ -224,6 +206,19 @@ The SMTP configuration defines two optional attributes
 </email:smtp>
 ----
 
+[[list]]
+=== List Emails
+
+.POP3 Example
+[source,xml,linenums]
+----
+<email:list-pop3 config-ref="config" mailboxFolder="INBOX">
+	<email:matcher since="2015-06-03T13:21:58+00:00"
+seen="false"
+until="2015-07-03T13:21:58+00:00">
+</email:matcher>
+</email:list-pop3>
+----
 
 
 
