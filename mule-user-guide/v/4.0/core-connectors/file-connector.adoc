@@ -417,7 +417,7 @@ A look at each attribute:
 
 ==== Notes
 
-* All attributes above are optional. They are ignored if not provided. All attributes are considered together (implicit `AND`)when qualifying files
+* All attributes above are optional. They are ignored if not provided. All attributes are considered together (implicit `AND`) when qualifying files.
 * File matcher can either be used as a top level element referenced by `name` (allowing it to be reused in flows), or as an inner element belonging to a particular connector instance.
 ** Here are the two ways:
 

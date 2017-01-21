@@ -9,7 +9,7 @@ toc::[]
 [[overview]]
 == Overview
 
-A single connector to manage and send email based on the link:http://www.oracle.com/technetwork/java/javamail/index.html[JavaMail API], supporting SMTP, IMAP and POP3 protocols. The Email connector allows connection over SSL/TLS.
+A single connector to manage and send email based on the link:http://www.oracle.com/technetwork/java/javamail/index.html[JavaMail API], supporting SMTP, IMAP and POP3 protocols. The Email connector can be configured to connect over SSL/TLS.
 
 [[important-concepts]]
 == Important Concepts
@@ -96,67 +96,89 @@ Inside the `<version>` tags, put the desired version number, the word `RELEASE` 
 == How to Configure
 
 . Place the connector into your flow as applicable for your use case.
-. Choose the configuration that matches the protocol you need to use (link:#smtp-config[SMTP Configuration], link:#POP3-config[POP3 configuration] or link:#IMAP-config[IMAP Configuration]).
-. If you need to secure the connection with TLS, choose a connection provider for IMAPS, SMTPS or POP3S accordingly.
+. Choose the configuration that matches the protocol your case requires:
+* link:#config-imap[Configure IMAP(S)] ("S" = with secure connection)
+* link:#config-POP3[Configure POP3(S)]
+* link:#config-SMTP[Configure SMTP(S)]
+[TIP]
+If you need to secure the connection with TLS, choose the connection provider for IMAPS, SMTPS or POP3S accordingly. See link:#configure-secure[How to Configure a Secure Connection]
 . Select an operation for the connector instance and fill in necessary fields.
 
-
-[[use-cases]]
-== Use Cases
-
-* link:#config-imap[Configure IMAP] (with secure connection)
-* link:#config-POP3[Configure POP3] (with secure connection)
-* link:#config-SMTP[Configure SMTP] (with secure connection)
-+
 [NOTE]
-The three different configurations are described below, each one of them can be created without passing any attributes, all of them have default values.
-+
+Any of these configurations can be created without setting attributes--all of them have default values.
+
+=== Which configuration do I choose?
+
+To give an idea of what the protocols are set up for in this connector:
+
 * Retrieve and manage email using IMAP or POP3 operations
 * Send email with SMTP operations
-* IMAP and POP3 operations allow email retrieval and management, offering an email matcher to filter email. See the link:/connector[Connector Technical Reference] for all connector operations and attributes.
+* IMAP and POP3 operations allow email retrieval and management, offering an email matcher to filter email.
 
-=== IMAP
+=== How is the secure connection provider different from the normal provider?
 
-* link:#list[List emails] (IMAP)
-* Store email
-* Mark as read
-* Mark as deleted
-* Expunge folder
+Secure providers add one more parameter of type `TLSContext`.
+`TlsContext` is configured with a key store and a trust store to perform a secure connection with the server.
 
-=== POP3
+[[configure-secure]]
+=== How to Configure a Secure Connection
 
-* link:#list[List emails] (POP3)
+`TlsContext` is the element to define to set up a secure connection. It can be defined inline. Or define it as a global element, outside the flow and reference it by name.
 
-=== SMTP
+.TlsContext defined inline
+[source,xml,linenums]
+----
+<email:imap name="config">
+<email:imaps-connection username="user" password="pass" host="host.imap">
+<tls:context name="tlsContext">
+<tls:key-store path="serverKeystore"
+keyPassword="key-pass"
+password="mulepass"/>
+ 	<tls:trust-store path="trustStore" password="mulepassword"/>
+</tls:context>
+</email:imaps-connection>
+</email:imap>
+----
 
-Operations to create and send email:
+A reference to a global `</tls:context>` can be provided instead of declaring the child element inline.
 
-* Email Builder
-* Email Body
-* Email Attachment
-* Send Email
+.Global TlsContext referenced
+[source,xml,linenums]
+----
+<email:imap name="config" password="pass" user="User" host="host.imap">
+	<email:imaps-connection tls-context="tlsContext" />
+</email:imap>
+----
 
+If no `</tls:context>` is provided, the connection takes the default TLS Context created by Mule.
+
+.Default TlsContext used
+[source,xml,linenums]
+----
+<email:imap name="config" password="pass" user="User" host="host.imap">
+<email:imaps-connection>
+</email:imap>
+----
 
 [[config-imap]]
-=== Configure IMAP
+=== IMAP(S) Connection
 
 `<email:imap name="config-imap">`
 
-The IMAP configuration also defines one optional parameter `eagerlyFetchContent`. This defines whether the retrieved emails should be opened and read or not. By default, all email retrieved by IMAP configuration is opened.
+IMAP configurations contain: `<email:imap-connection/>` or `<email:imaps-connection/>`
 
+The IMAP configuration has an optional parameter `eagerlyFetchContent`. This boolean sets whether the retrieved emails should be opened and read or not.
+
+[NOTE]
+By default, all emails retrieved by IMAP configuration are opened.
+
+.Example IMAP connection
 [source,xml,linenums]
 ----
 <email:imap name="config"  eagerlyFetchContent="false">
    <email:imap-connection host="127.0.0.1" … />
 </email:imap>
 ----
-
-If email content is not opened, it will still be marked as "NOT OPEN" but you won't be able to get the inline content and the attachments.
-
-[NOTE]
-The POP3 protocol does not make the distinction that IMAP does. All email retrieved by a POP3 configuration is always opened.
-
-
 
 .Example of IMAP Configuration with Secure Connection Provider and TLS Context Defined Inline
 [source,xml,linenums]
@@ -173,13 +195,18 @@ password="mulepass"/>
 </email:imap>
 ----
 
+==== Notes
+
+* If email content is not opened, it is marked as "NOT OPEN". You won't be able to get the inline content and the attachments.
 
 [[config-POP3]]
-=== Configure POP3
-
-`<email:pop3 name="config-pop3">`
+=== POP3(S) Connection
 
 The POP3 configuration does not define any attributes. It is just a container for the connection.
+`<email:pop3 name="config-pop3">`
+
+POP3 configurations have: `<email:pop3-connection/>` or `<email:pop3s-connection/>`
+
 
 [source,xml,linenums]
 ----
@@ -188,13 +215,18 @@ The POP3 configuration does not define any attributes. It is just a container fo
 </email:pop3>
 ----
 
+==== Notes
+
+* Email retrieved through the POP3 configuration is always opened.
 
 [[config-SMTP]]
-=== Configure SMTP
+=== SMTP(S) Connection
 
 `<email:smtp name="config-smtp">`
 
-The SMTP configuration defines two optional attributes
+For SMTP, configurations contain: `<email:smtp-connection/>` or `<email:smtps-connection/>`
+
+The SMTP configuration defines two optional attributes:
 
 `from`: the from address. The person that is going to send messages using this configuration. This attribute is optional and will fallback to the default session user.
 `defaultEncoding`: default encoding to be used (if no other is specified in the operation that uses this configuration)  in the messages sent using SMTP. This attribute is optional and it will fallback to the default mule configuration encoding.
@@ -206,10 +238,129 @@ The SMTP configuration defines two optional attributes
 </email:smtp>
 ----
 
+[[use-cases]]
+== Use Cases
+
+Operations and use cases are below.
+
+[NOTE]
+Learn how to link:#define-filter[Define an Email Filter] with the link:#list[List operation] (POP3/IMAP)
+
+=== Manage Existing Email (IMAP)
+
+* link:#list[List email] (also available for POP3)
+* link:#store-email[Store email]
+* link:#mark-asread[Mark as read]
+* link:#mark-as-deleted[Mark as deleted]
+* link:#expunge-folder[Expunge folder]
+
+=== Create and Send Email (SMTP)
+
+Operations to create and send email:
+
+* Email Builder
+* Email Body
+* Email Attachment
+* Send Email
+
+See the link:/connector[Connector Technical Reference] for all connector operations and attributes.
+
+
+[[define-filter]]
+=== Define Email Filter
+
+Set a filter to define which emails to handle with the connector.
+
+Create an `<email:matcher>` element where you define the criteria.
+
+Since POP3 and IMAP differ in what they retrieve, there are two matcher implementations, one for each protocol.
+
+.POP3 Matcher
+[source,xml,linenums]
+----
+<email:pop3-matcher
+	subjectRegex="a?*[0-9]"
+fromRegex="a?*[0-9]"
+	receivedSince="2015-06-03T13:21:58+00:00"
+	receivedUntil="2015-07-03T13:21:58+00:00"
+	sentSince="2015-06-03T13:21:58+00:00"
+	sentUntil="2015-07-03T13:21:58+00:00"
+/>
+<email:pop3-matcher>
+----
+
+[NOTE]
+The POP3 protocol does not ensure a received date is present, it depends on each POP3 server implementation.
+
+.IMAP Matcher
+[source,xml,linenums]
+----
+<email:imap-matcher
+	subjectRegex="a?*[0-9]"
+fromRegex="a?*[0-9]"
+	receivedSince="2015-06-03T13:21:58+00:00"
+	receivedUntil="2015-07-03T13:21:58+00:00"
+	sentSince="2015-06-03T13:21:58+00:00"
+	sentUntil="2015-07-03T13:21:58+00:00"
+read="true|false"
+deleted="true|false"
+recent="true|false"
+answered="true|false"
+/>
+<email:imap-matcher>
+----
+
+All of the attributes are optional. They are ignored if not provided. All attributes are considered together (implicit `AND`) when qualifying files.
+
+Let’s take a look at each individual attribute:
+
+Shared attributes
+`subjectRegex`: regex that will match with the subject.
+`fromRegex`: same as subject-pattern but will match from addresses.
+`receivedSince`: an inclusive lower boundary for the email received date stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+`receivedUntil`: an inclusive upper boundary for the email received date stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+`sentSince`: an inclusive lower boundary for the email sent date stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+`sentUntil`: an inclusive upper boundary for the email sent date stamp expressed as either a DateTime instance or a String in ISO-8601 format.
+
+==== IMAP Only Attributes
+
+`read`: matches seen emails.
+`deleted`: matches deleted emails.
+`recent`: matches recent emails. Folder implementations set this flag to indicate that this message is new to this folder, that is, it has arrived since the last time this folder was opened.
+`answered`: matches answered emails.
+
+The filter can be defined globally, or inline within an operation.
+
+.Example of top level, reusable matcher
+[source,xml,linenums]
+----
+<email:pop3-matcher name="matcher" receivedUntil="2015-06-03T13:21:58+00:00" seen="true"/>
+
+<flow name="flow">
+	<email:pop3-list config-ref="config" matchWith="matcher" />
+</flow>
+----
+
+
+.Example of inner, not reusable, matcher
+[source,xml,linenums]
+----
+<flow name="flowWithMatcher">
+	<email:list config-ref="config"/>
+		<email:pop3-matcher receivedUntil="2015-06-03T13:21:58+00:00"/>
+	</email:list>
+	...
+</flow>
+----
+
 [[list]]
 === List Emails
 
-.POP3 Example
+List all the emails in the configured mailbox folder that match with the specified matcher criteria.
+
+Use `<email:list-pop3 … />` or `<email:list-imap … />`
+
+.Example POP3 List Operation
 [source,xml,linenums]
 ----
 <email:list-pop3 config-ref="config" mailboxFolder="INBOX">
@@ -219,6 +370,111 @@ until="2015-07-03T13:21:58+00:00">
 </email:matcher>
 </email:list-pop3>
 ----
+
+Parameters:
+
+`mailboxFolder`: the folder name where the emails are going to fetched. Defaults to `INBOX`
+`matcher`: a matcher to filter the output emails
+`deleteAfterRetrieve`: if true, deletes the email messages after being retrieved.
+`pageSize`: Page size to be used for the fetching
+
+The matcher can be defined inline or outside the operation.
+
+
+==== Email Attributes Listed
+
+Email metadata is returned as attributes of the `MuleMessage` at every `list` operation execution.
+
+It contains all the metadata of an email, such as subject, recipients, etc.
+
+For POP3 configured operations the attributes are:
+
+`From address`: the address of the person who has sent the email
+`To addresses`: all the to (primary) email addresses to send the email to.
+`Cc addresses`: all the carbon copy/forward email addresses to send the email to.
+`Bcc addresses`: all the blind carbon copy/forward email addresses to.
+`Reply to addresses`: all the email addresses that this email should reply to.
+`Subject`: the subject of the email
+Sent date: the sent date of the email.
+`Received date`: the received date of the email
+`Id`: the unique identifier number of the email
+`Number`: the number of the email in the mailbox in a particular moment.
+
+For *IMAP* configured operations the same attributes apply but in addition, a set of flags that marks the emails to add more specific information, POP3 mailboxes don't have flag support.
+
+`Flags`: an `EmailFlags` object that contains the following flags:
+
+* `answered` (boolean)
+* `deleted` (boolean)
+* `draft` (boolean)
+* `recent` (boolean)
+* `seen` (boolean)
+
+==== Notes
+
+* This operation is paginated, and the page size represents the size of the page that will be fetched from the email server before applying the matcher criteria.
+** If none of the emails in the retrieved block match the criteria, another page will be fetched until at least one email is found, or all the emails have been retrieved.
+** The implementation of the list operation for each protocol is the same, but each one receives a different matcher implementation used in the list command, so creating an operation for each protocol enables the creation of each matcher from xml, enforcing the one for the desired protocol.
+* A new `MuleMessage` carrying a multipart payload is created for each fetched email from the folder, where the payload contains the text body of the email and the attachments as other payload parts. The other metadata is carried in the email attributes, such as subject, received date, flags,  etc.
+* If no matcher is specified it will fetch all folder emails.
+* For IMAP configurations, opening email depends on how it was configured--if the email is not opened the content is not accessed and the body and attributes are not fetched, and the email is not marked with the `SEEN` flag.
+
+[[store-email]]
+=== Store Email
+
+Stores the specified email of `emailId` into the configured `localDirectory` as a .txt file.
+
+`<email:store config-ref="config" mailboxFolder="INBOX" localDirectory="/Users/home"/>`
+
+*Parameters:*
+
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to INBOX
+`emailId`: an optional email number to look up in the folder and delete.
+`localDirectory`: the local directory where the emails are going to be stored.
+`fileName`: the prefix name of the file that is going to be stored, the operation appends the id of the email and the received date (if have) at the end. As default the prefix is the subject of the email.
+`overwrite`: if a file with the same name already exists should be overwritten or not. Defaults to false.
+
+[[mark-as-read]]
+=== Mark as Read
+
+Marks the email with the given email id as read email by setting the `SEEN` flag on it.
+
+`<email:mark-as-read config-ref="config" emailId="123">`
+
+*Parameters*
+
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to `INBOX`
+`emailId`: an optional email number to look up in the folder and delete.
+
+[[mark-as-deleted]]
+=== Mark as Deleted
+
+Marks the email with the given email id as deleted by setting the `DELETED` flag on it; this way the emails are scheduled for deletion.
+
+.Marking a single email
+`<email:mark-as-deleted config-ref="config" emailId="123">`
+
+Falling back to mark all the emails that are in the incoming `MuleMessage` if any.
+
+`<email:mark-as-deleted config-ref="config"/>`
+
+Parameters:
+
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to INBOX
+`emailId`: an optional email number to look up in the folder and delete.
+
+[[expunge-folder]]
+=== Expunge Folder Emails
+
+Eliminates from the mailbox all the messages scheduled for deletion with the DELETED flag set.
+
+.Expunge the emails from the `RECENT` folder.
+
+`<email:expunge-folder config-ref="config" mailboxFolder="RECENT">`
+
+Parameters
+
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to INBOX
 
 
 
