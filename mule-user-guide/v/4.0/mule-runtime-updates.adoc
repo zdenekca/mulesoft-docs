@@ -22,8 +22,6 @@ Introducing *_Smart Connectors_*: Modules designed using XML to manipulate conne
 Users can define the module, set configurations and define operations that can later be invoked in the mule application to manipulate connections.
 // Need confirmation and more info around this.
 
-
-
 == Simplified Mule Message Structure
 
 Mule 4 includes a simplified Mule message structure, composed  by:
@@ -72,7 +70,7 @@ The Mule Context is now completely managed by the user.
 Mule 4.0 moves away from the Exception scenario.
 Allows handling custom errors.
 
-Is `<try>` the official name for error strategies (??)
+Is `<try>` the official name for error strategies.
 
 == Mule API
 
@@ -83,6 +81,12 @@ Allows:
 
 Connectors are distributed outside the runtime. +
 Mule 4.0 does not include any connector by default.
+
+Mule API
+
+* Tooling API
+* Core API
+* Extension API
 
 
 == DataWeave: The Mule Language
