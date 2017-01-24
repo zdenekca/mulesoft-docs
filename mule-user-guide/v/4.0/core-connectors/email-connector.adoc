@@ -2,7 +2,7 @@
 :keywords: email, connector, send, retrieve, manage, match, matcher, smtp, ipop, imap
 :toc:
 :toc-title:
-:toc-levels: 3
+:toc-levels: 2
 
 toc::[]
 
@@ -96,7 +96,7 @@ Inside the `<version>` tags, put the desired version number, the word `RELEASE` 
 == How to Configure
 
 . Place the connector into your flow as applicable for your use case.
-. Choose the configuration that matches the protocol your case requires:
+. Choose a configuration for your connector that matches the protocol your use case requires:
 * link:#config-imap[Configure IMAP(S)] ("S" = with secure connection)
 * link:#config-POP3[Configure POP3(S)]
 * link:#config-SMTP[Configure SMTP(S)]
@@ -109,21 +109,24 @@ Any of these configurations can be created without setting attributes--all of th
 
 === Which configuration do I choose?
 
-To give an idea of what the protocols are set up for in this connector:
+Choose a configuration that supports the the email protocol for the operation you are trying to perform through your email server:
 
-* Retrieve and manage email using IMAP or POP3 operations
-* Send email with SMTP operations
-* IMAP and POP3 operations allow email retrieval and management, offering an email matcher to filter email.
+* Retrieve and manage email using *IMAP or POP3*
+* Send email using *SMTP*
+
+[NOTE]
+IMAP and POP3 operations allow email retrieval and management, offering an email matcher to filter email.
 
 === How is the secure connection provider different from the normal provider?
 
-Secure providers add one more parameter of type `TLSContext`.
+Secure providers include one more parameter of type `TLSContext`.
+
 `TlsContext` is configured with a key store and a trust store to perform a secure connection with the server.
 
 [[configure-secure]]
 === How to Configure a Secure Connection
 
-`TlsContext` is the element to define to set up a secure connection. It can be defined inline. Or define it as a global element, outside the flow and reference it by name.
+`TlsContext` is the element you configure to set up a secure connection for the connector. It can be defined inline or defined as a global element outside the flow and referenced by name.
 
 .TlsContext defined inline
 [source,xml,linenums]
@@ -161,18 +164,20 @@ If no `</tls:context>` is provided, the connection takes the default TLS Context
 ----
 
 [[config-imap]]
-=== IMAP(S) Connection
+=== IMAP(S) Configuration
 
-`<email:imap name="config-imap">`
+The IMAP configuration `<email:imap name="config-imap">` must contain an IMAP or IMAPS connection provider:
 
-IMAP configurations contain: `<email:imap-connection/>` or `<email:imaps-connection/>`
+* `<email:imap-connection/>`
+* `<email:imaps-connection/>`
+
 
 The IMAP configuration has an optional parameter `eagerlyFetchContent`. This boolean sets whether the retrieved emails should be opened and read or not.
 
 [NOTE]
 By default, all emails retrieved by IMAP configuration are opened.
 
-.Example IMAP connection
+.Example IMAP configuration
 [source,xml,linenums]
 ----
 <email:imap name="config"  eagerlyFetchContent="false">
@@ -180,7 +185,9 @@ By default, all emails retrieved by IMAP configuration are opened.
 </email:imap>
 ----
 
-.Example of IMAP Configuration with Secure Connection Provider and TLS Context Defined Inline
+The IMAPS connection's `TlsContext` is defined inline in this example:
+
+.Example IMAPS configuration
 [source,xml,linenums]
 ----
 <email:imap name="config">
@@ -200,14 +207,15 @@ password="mulepass"/>
 * If email content is not opened, it is marked as "NOT OPEN". You won't be able to get the inline content and the attachments.
 
 [[config-POP3]]
-=== POP3(S) Connection
+=== POP3(S) Configuration
 
-The POP3 configuration does not define any attributes. It is just a container for the connection.
-`<email:pop3 name="config-pop3">`
+The POP3 configuration `<email:pop3 name="config-pop3">` does not define any attributes. It is just a container for the connection. The POP3 configuration must contain either a POP3 or POP3S connection provider:
 
-POP3 configurations have: `<email:pop3-connection/>` or `<email:pop3s-connection/>`
+* `<email:pop3-connection/>`
+* `<email:pop3s-connection/>`
 
 
+.POP3 Example
 [source,xml,linenums]
 ----
 <email:pop3 name="config">
@@ -217,20 +225,22 @@ POP3 configurations have: `<email:pop3-connection/>` or `<email:pop3s-connection
 
 ==== Notes
 
-* Email retrieved through the POP3 configuration is always opened.
+* Email retrieved through the POP3 configuration is always opened automatically.
 
 [[config-SMTP]]
-=== SMTP(S) Connection
+=== SMTP(S) Configuration
 
-`<email:smtp name="config-smtp">`
+The SMTP configuration `<email:smtp name="config-smtp">` must contain a SMTP or SMTPS connection provider:
 
-For SMTP, configurations contain: `<email:smtp-connection/>` or `<email:smtps-connection/>`
+* `<email:smtp-connection/>`
+* `<email:smtps-connection/>`
 
 The SMTP configuration defines two optional attributes:
 
-`from`: the from address. The person that is going to send messages using this configuration. This attribute is optional and will fallback to the default session user.
-`defaultEncoding`: default encoding to be used (if no other is specified in the operation that uses this configuration)  in the messages sent using SMTP. This attribute is optional and it will fallback to the default mule configuration encoding.
+* `from`: the from address. The person that is going to send messages using this configuration. This attribute is optional and will fallback to the default session user.
+* `defaultEncoding`: default encoding to be used (if no other is specified in the operation that uses this configuration)  in the messages sent using SMTP. This attribute is optional and it will fallback to the default mule configuration encoding.
 
+.Example SMTP Configuration
 [source,xml,linenums]
 ----
 <email:smtp name="config" from="owow@mule.com" defaultEncoding="UTF-8">
@@ -241,41 +251,43 @@ The SMTP configuration defines two optional attributes:
 [[use-cases]]
 == Use Cases
 
-Operations and use cases are below.
-
-[NOTE]
-Learn how to link:#define-filter[Define an Email Filter] with the link:#list[List operation] (POP3/IMAP)
+Operations and use cases for the File connector.
 
 === Manage Existing Email (IMAP)
 
-* link:#list[List email] (also available for POP3)
+* link:#list[List email] (also available using POP3)
 * link:#store-email[Store email]
 * link:#mark-asread[Mark as read]
 * link:#mark-as-deleted[Mark as deleted]
 * link:#expunge-folder[Expunge folder]
 
+[NOTE]
+Learn how to link:#define-filter[Define an Email Filter] with the link:#list[List operation] (POP3/IMAP)
+
 === Create and Send Email (SMTP)
 
-Operations to create and send email:
+Send email using the link:#send-email[Send Email] operation. The operation provides an "email builder" where you define recipients, email body/content, attachments, recipients, etc.
 
-* Email Builder
-* Email Body
-* Email Attachment
-* Send Email
+* link:#send-email[Send Email]
+** link:#email-builder[Email Builder]
+*** link:#email-body[Email Body]
+*** link:#email-attachment[Email Attachment]
 
+
+[TIP]
 See the link:/connector[Connector Technical Reference] for all connector operations and attributes.
 
 
 [[define-filter]]
 === Define Email Filter
 
-Set a filter to define which emails to handle with the connector.
+Define a filter that matches the emails you want to handle with the connector.
 
 Create an `<email:matcher>` element where you define the criteria.
 
 Since POP3 and IMAP differ in what they retrieve, there are two matcher implementations, one for each protocol.
 
-.POP3 Matcher
+.Example POP3 Matcher Definition
 [source,xml,linenums]
 ----
 <email:pop3-matcher
@@ -292,7 +304,7 @@ fromRegex="a?*[0-9]"
 [NOTE]
 The POP3 protocol does not ensure a received date is present, it depends on each POP3 server implementation.
 
-.IMAP Matcher
+.Example IMAP Matcher Definition
 [source,xml,linenums]
 ----
 <email:imap-matcher
@@ -373,7 +385,7 @@ until="2015-07-03T13:21:58+00:00">
 
 Parameters:
 
-`mailboxFolder`: the folder name where the emails are going to fetched. Defaults to `INBOX`
+`mailboxFolder`: the folder name from which email is fetched. Defaults to `INBOX`
 `matcher`: a matcher to filter the output emails
 `deleteAfterRetrieve`: if true, deletes the email messages after being retrieved.
 `pageSize`: Page size to be used for the fetching
@@ -426,7 +438,7 @@ Stores the specified email of `emailId` into the configured `localDirectory` as 
 
 `<email:store config-ref="config" mailboxFolder="INBOX" localDirectory="/Users/home"/>`
 
-*Parameters:*
+==== Parameters
 
 `mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to INBOX
 `emailId`: an optional email number to look up in the folder and delete.
@@ -441,9 +453,9 @@ Marks the email with the given email id as read email by setting the `SEEN` flag
 
 `<email:mark-as-read config-ref="config" emailId="123">`
 
-*Parameters*
+==== Parameters
 
-`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to `INBOX`
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to `INBOX` +
 `emailId`: an optional email number to look up in the folder and delete.
 
 [[mark-as-deleted]]
@@ -451,35 +463,122 @@ Marks the email with the given email id as read email by setting the `SEEN` flag
 
 Marks the email with the given email id as deleted by setting the `DELETED` flag on it; this way the emails are scheduled for deletion.
 
-.Marking a single email
+.Marking a single email as deleted
 `<email:mark-as-deleted config-ref="config" emailId="123">`
 
 Falling back to mark all the emails that are in the incoming `MuleMessage` if any.
 
 `<email:mark-as-deleted config-ref="config"/>`
 
-Parameters:
+==== Parameters
 
-`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to INBOX
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to `INBOX`. +
 `emailId`: an optional email number to look up in the folder and delete.
 
 [[expunge-folder]]
 === Expunge Folder Emails
 
-Eliminates from the mailbox all the messages scheduled for deletion with the DELETED flag set.
+Eliminates from the mailbox all the messages scheduled for deletion with the `DELETED` flag set.
 
 .Expunge the emails from the `RECENT` folder.
 
 `<email:expunge-folder config-ref="config" mailboxFolder="RECENT">`
 
-Parameters
+==== Parameters
 
-`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to INBOX
+`mailboxFolder`: the folder name where the emails that wants to be deleted are located. Defaults to `INBOX`.
+
+[[email-builder]]
+=== Email Builder
+
+Construct an email with attributes typically defined when
+
+.Email Builder Example
+[source,xml,linenums]
+----
+<email:email-builder>
+<email:body charset="#[flowVars.encoding]">
+   <email:content>#[payload]</email:content>
+</email:body>
+	<email:to-addresses>
+	<email:to-address value="recip@mule.com"/>
+	<email:to-address value="recip2@mule.com"/>
+<email:to-addresses>
+<email:cc-addresses> … </email:cc-addresses>
+<email:bcc-addresses> … </email:bcc-addresses>
+<email:attachments>
+	<email:attachment id="text" content="..." contentType="text-plain" />
+</email:attachments>
+</email:email-builder>
+----
+
+==== Parameters
+
+Subject: the subject of the email
+Content: the body of the email. Represented by an EmailContent object.
+Attachments: the attachments that are bounded with the email
+To addresses: the primary addresses of the email message recipients
+Cc Addresses: the carbon copy addressed of the email message recipients
+Bcc Addresses: the blind carbon copy addressed of the email message recipients
+Headers: a custom set of headers that are bounded with the email
+
+[[email-body]]
+=== Email Body
+
+In the `email-body` you can specify the body of the email, content type and character encoding of the email content.
+
+[source,xml,linenums]
+----
+<email:email-body body="Email Content" contentType="text/plain" charset="UTF-8"/>
+----
+
+* `contentType`: the content type of the email content. Of type text and one of its subtypes "text/*". Defaults to text/plain
+* `body`:  the content of the email itself.
+* `charset`: the character encoding of the email content. Defaults to the mule charset.
+
+[[email-attachment]]
+=== Email Attachment
+
+Represents and enables the construction an email attachment with content, content type and an identifier.
+
+The `<email:attachment>` element defines a message that can be sent or forwarded.
+
+[source,xml,linenums]
+----
+<email:attachments>
+<email:attachment content="#[payload]" contentType="application/octet-stream"id="3"/>
+</email:attachments>
+----
 
 
+`content`:  the content of the attachment itself, of any type.
+`contentType`: the content type of the the attachment, represented as {primaryType}/{subType}[; charset={charset}]
+`id`: the name identifier of the email attachment.
+
+[[send-email]]
+=== Send Email
+
+Sends an email message to the recipient addresses (To, Cc and Bcc) using an SMTP configuration. Various attributes of the email are specified inline.
 
 
-
+[source,xml,linenums]
+----
+<email:send config-ref="config" subject="Email Subject">
+<email:builder>
+<email:content>
+<email:email-content name="emailContent" body="Email Content"  charset="UTF-8"/>
+</email:content>
+	<email:to-addresses>
+	<email:to-address value="recip1@mule.com"/>
+	<email:to-address value="recip2@mule.com"/>
+<email:to-addresses>
+<email:cc-addresses> … <email:cc-addresses>
+<email:attachments>
+  <email:attachment id="text" content="Attachment" contentType="text-plain" />
+</email:attachments>
+</email:builder>
+</smtp:send>
+----
 
 
 == See Also
