@@ -6,10 +6,19 @@ image:dw-logo.png[dw]
 
 Whilst you can use DataWeave to construct complex transformations, you can also use it to write brief expressions that simply extract values out of any part of the Mule message. These are often used in message processors to reference a given field
 
-
+[NOTE]
 You must be familiar with the link:/mule-fundamentals/v/4.0/mule-message-structure[Mule Message Structure] to know how to navigate it, you can also see a graphical representation of this on the link:/anypoint-stuido/v/7/datasense[DataSense] pannel.
 
-Once extracted, the value will be treated as one of the supported link:/mule-user-guide/v/3.8/dataweave-types[DataWeave Value Types].
+For example, you can use an expression in a logger component to log a specific value:
+
+image:
+
+Or you can use an expression on a Twitter connector to pick the userId to querry:
+
+
+
+
+Once extracted, the value is handled as a literal value of one of the supported link:/mule-user-guide/v/4.0/dataweave-types[DataWeave Value Types].
 
 
 
@@ -19,7 +28,7 @@ Once extracted, the value will be treated as one of the supported link:/mule-use
 
 == Context Objects, Variables, and Fields
 
-The term *Context Object* forms the first part of the simplest form of a MEL expression; the second part is the *Field* (see image below, left). Use a *Variable* in a MEL expression to access information contained within a Variable on your Mule message. Itself a top-level identifier in MEL, a variable does _not_ require that you define a context object in an expression (see second image below).
+The term *Context Object* forms the first part of the simplest form of an extracting expression; the second part is the *Field* (see image below, left). Use a *Variable* in an expression to access information contained within a Variable on your Mule message. Itself a top-level identifier, a variable does _not_ require that you define a context object in an expression (see second image below).
 
 image:contextob_field.png[contextob_field]
 
@@ -34,17 +43,11 @@ The tables below list the Context Objects available for use in Mule, and the cor
 |<<Message Context Object, Message>> |Mule message.
 |===
 
-[TIP]
-====
-*Shortcut*
 
-Mule accepts the expression `#[payload]` as a shortcut for `#[message.payload]`. This shortcut only applies with the payload field.
-====
-
-In MEL, you combine a context object with a field to form an expression. The simplest expressions take the form `contextobject.field`.
+You can combine a context object with a field to form an expression. The simplest expressions take the form `contextobject.field`.
 
 This example is a simple expression: +
-`#[message.inboundProperties]`
+`#[payload.userId]`
 
 
 === Server Context Object
@@ -125,11 +128,11 @@ Create a directory named `target` in the system's temporary directory and set th
 
 [source, xml, linenums]
 ----
-<expression-component>
+<scripting-component>
     targetDir = new java.io.File(server.tmpDir, 'target');
     targetDir.mkdir();
     payload = targetDir
-</expression-component>
+</scripting-component>
 ----
 
 Set the username and password for an HTTP request at runtime based on inbound message properties:
@@ -137,7 +140,7 @@ Set the username and password for an HTTP request at runtime based on inbound me
 [source, xml, linenums]
 ----
 <http:request-config name="HTTP_Request_Configuration" host="api.acme.com/v1" port="8081" doc:name="HTTP">
-  <http:basic-authentication username="#[message.inboundProperties.username]" password="#[message.inboundProperties.password]"/>
+  <http:basic-authentication username="#[inboundProperties.username]" password="#[inboundProperties.password]"/>
   </http:request-config>
 
   <flow>
@@ -147,10 +150,6 @@ Set the username and password for an HTTP request at runtime based on inbound me
   </flow>
 ----
 
-== Variables, Integers, and Strings
-
-Mule accepts `\#[payload]` as an expression, rather than `#[message.payload]` because it knows to automatically evaluate the expression for the message context object. This shortcut only applies to the `payload` field.
-
 
 
 == Payload and Attachments
@@ -159,48 +158,26 @@ Copy the current payload in a variable named `originalPayload` then restore it:
 
 [source, xml, linenums]
 ----
-<set-variable variableName="originalPayload" value="#[message.payload]" />
-<set-payload value="#[flowVars['originalPayload']]" />
+<set-variable variableName="originalPayload" value="#[payload]" />
+<set-payload value="#[variable['originalPayload']]" />
 ----
 
 To retrieve the message payload in a particular format, using Mule's auto-transformation capability, use `payloadAs`:
 
 [source, xml]
 ----
-<logger message="#[message.payloadAs(java.lang.String)]" />
+<logger message="#[payloadAs(java.lang.String)]" />
 ----
 
 To extract all *.txt and *.xml attachments, use a filtered projection:
 
 [source, xml, linenums]
 ----
-<expression-transformer expression="#[($.value in  message.inboundAttachments.entrySet() if $.key ~= '(.*\\.txt|.*\\.xml)')]" />
-----
-
-To ask for a null payload:
-
-[source, code]
-----
-#[payload is NullPayload]
+<expression-transformer expression="#[($.value in  inboundAttachments.entrySet() if $.key ~= '(.*\\.txt|.*\\.xml)')]" />
 ----
 
 
 
-== Regex Support
-
-Several link:/mule-user-guide/v/3.8/dataweave-operators[DataWeave Operators] allow you to query your data using Regex expressions. The following operations are relevant:
-
-* link:/mule-user-guide/v/3.8/dataweave-operators#match[Match] returns an array with entire matching expressions
-* link:/mule-user-guide/v/3.8/dataweave-operators#matches[Matches] returns true or false if an entire string matches an expression.
-* link:/mule-user-guide/v/3.8/dataweave-operators#contains[Contains] returns true or false if a substring within the string matches the expression. If used on an array or list, it returns true if at least one index matches.
-* link:/mule-user-guide/v/3.8/dataweave-operators#replace[Replace] replaces a section of a string for another.
-* link:/mule-user-guide/v/3.8/dataweave-operators#find[Find] returns the index position of the matching substring
-* link:/mule-user-guide/v/3.8/dataweave-operators#scan[Scan] returns an array with all the matches in the given string, segmented by capture groups.
-
-
-== XPath3 Support
-
-???
 
 == Chained Elements ?????
 
