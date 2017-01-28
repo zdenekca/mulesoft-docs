@@ -8,36 +8,29 @@ toc::[]
 
 == Overview
 
-This document describes the general configuration for <<Configuring an Operation-Based Connector, Operation-Based>>, and 
-<<Configuring an Endpoint-Based Connector, Endpoint-Based>> connectors. For instructions on usage of a specific connector, consult the connector's documentation from the link:/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors] page.
+This document describes the general configuration for operation based connectors and those that function as message sources.
 
 
 
 == Prerequisites
 
-While you do not need full proficiency in Mule to configure connectors, you should be familiar with Mule and the link:/anypoint-studio/v/6/[Anypoint Studio interface]. If you have not done so already, cement your understanding of the Mule application design process, and Studio:
+* Mule 4 and dependencies
 
-* link:/getting-started/build-a-hello-world-application[Build a Hello World Application]
-* link:/anypoint-studio/v/6/basic-studio-tutorial[Basic Studio Tutorial]
-
-
-Further, it is best you attain a basic understanding of link:/mule-user-guide/v/3.8/mule-concepts[Mule Application Flows], link:/mule-user-guide/v/3.8/global-elements[Global Elements], and link:/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors] before moving on.
-
+[NOTE]
+For the best development experience, MuleSoft recommends you use Anypoint Design Center or Anypoint Studio to develop Mule apps.
 
 
 == Configuration Basics
 
-When you add a connector configuration for a connector it is saved by default as a link:/mule-user-guide/v/3.8/global-elements[Global Element]. This global element stores a *Connector Configuration* specific to a connector type, available from any instance of a connector of that type within the Mule app.
+Connectors often require a configuration step whether they function as message sources or not. The configuration can be referenced globally, using a global element that stores a *Connector Configuration*. The configuration is always specific to a connector type.
 
 [NOTE]
-It is typical to perform different operations from several connectors sharing the same configuration.
+Configurations can be referenced from any instance of a connector of that type across Mule apps.
 
 
 == Configuring an Operation-Based Connector
 
-At a minimum, all operation-based connectors require a *Connector Configuration* and an *Operation* to run in a flow successfully. Operations are defined at the connector scope, rather than through the global connector configuration scope.
-
-Whether you are working with the connector in the Anypoint Studio Visual Editor or are crafting the XML code by hand, you must specify both configuration and operation.
+At a minimum, all operation-based connectors require a *Connector Configuration* and an *Operation* to run in a flow successfully.
 
 [%header%autowidth.spread]
 |===
@@ -46,10 +39,8 @@ Whether you are working with the connector in the Anypoint Studio Visual Editor 
 
 |*Operation* |Select an operation from the *Operation* dropdown to specify the function that the connector should perform. In the case of the GitHub connector, you have, for example, *"Get collaborator"* or *"Get commits"*
 |===
-[tabs]
-------
-[tab, title="Anypoint Studio Visual Editor"]
-....
+
+=== Anypoint Studio and Design Center Views
 
 . *Drag and drop a connector* from the palette onto your canvas.
 . Access the connector's properties using the Studio UI. Click the plus sign next to the *Connector Configuration* dropdown.
@@ -67,9 +58,8 @@ image:github-global-element-create.png[github-global-element-create]
 .. Add or reference the credentials through the UI and click *OK*.
 .. The configuration you just created will show as available from the *Connector Configuration* dropdown.
 
-....
-[tab, title="XML Editor Approach"]
-....
+=== XML Editor View
+
 . If you decide not to use Anypoint Studio or its user interface, add the desired connector configuration to your code in the XML editor. The visual representation generates in Studio after you properly:
 .. *Include* the predefined namespace and schema location of the connector in the *XML Configuration* file's header.
 +
@@ -91,14 +81,13 @@ http://www.mulesoft.org/schema/mule/github http://www.mulesoft.org/schema/mule/g
 <github:add-collaborator config-ref="GitHub__Configuration" doc:name="GitHub" owner="" repositoryName=""/>
 ----
 .. *Select* an operation for the connector to perform.
-....
-------
+
 
 Refer to a particular connector's Technical Reference document for guidance on any fields you do not understand. You may access this material via link:https://www.mulesoft.com/exchange[Anypoint Exchange]. There you can also discover which connectors are bundled automatically in Anypoint Studio.
 
-== Configuring an Endpoint-Based Connector
+== Configuring Message Source
 
-Endpoints pass messages into and out of a Mule flow, usually to external resources such as databases, Web clients, or email servers, but they can exchange messages with other Mule flows as well. As with the operation-based connector, you normally fill out fields in a global connector configuration. However, in this case the configuration is used to set up a global endpoint.
+Endpoints pass messages into and out of a Mule flow, usually to external resources such as databases, Web clients, or email servers, but they can exchange messages with other Mule flows as well. As with the operation-based connector, you normally fill out fields in a connector configuration. However, in this case the configuration is used to set up a global endpoint.
 
 ==== Inbound Endpoints
 
@@ -183,40 +172,6 @@ image:outbound-endpoint-example-flow.png[outbound endpoint example flow]
 ....
 ------
 
-==== Composite Sources
-
-A special scope known as a *Composite Source Scope* allows you to encapsulate two or more connectors that receive the same type of data (for example, email, files, database maps, or HTML) into a single message processing block. Each embedded connector listens on its specific channel for incoming messages. Whichever connector receives a message first becomes the message source for that particular instance of the flow.
-
-[tabs]
-------
-[tab,title="Anypoint Studio Visual Editor"]
-....
-
-There are two different message sources for this example flow, a *POP3* endpoint, and a *Jetty* endpoint.
-image:composite-source-flow.png[composite source flow]
-
-In Anypoint Studio Visual Editor you drag the *Composite Source* scope onto the canvas from your palette, then drag the connectors into the Composite Source scope processing block. The composite source then allows the each embedded connector to act as a temporary, non-exclusive message source when it receives an incoming message.
-....
-[tab,title="XML Editor"]
-....
-[source, xml, linenums]
-----
-<http:request-config name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration"/>
-    <flow name="exampleflow2" >
-        <composite-source doc:name="Composite Source">
-            <pop3:inbound-endpoint host="localhost" user="${prod.user}" responseTimeout="10000" doc:name="POP3"/>
-            <jetty:inbound-endpoint exchange-pattern="one-way" address="www.example.com" doc:name="Jetty"/>
-        </composite-source>
-        <set-payload doc:name="Set Payload" value="foo"/>
-        <http:request config-ref="HTTP_Request_Configuration" path="/" method="POST" doc:name="HTTP"/>
-        <logger level="INFO" doc:name="Logger" message="bar"/>
-    </flow>
-----
-
-Add a composite-source tag into your flow, then embed multiple connectors inside the scope of the tag. The composite source then allows the each connector to act as a temporary, non-exclusive message source when it receives an incoming message.
-....
-------
-
 
 === Common Endpoint Configuration Fields
 
@@ -292,6 +247,11 @@ When you design an application, make sure you initially use an account for your 
 `<connectorName>:config` for operation-based connectors,
 
 and for endpoint-based connectors: `<connectorName>:connector`
+
+== Notes
+
+* Composite sources are not supported in Mule 4.
+* Connectors based on transports are no longer referred to as inbound or outbound-based connectors
 
 
 == See Also
