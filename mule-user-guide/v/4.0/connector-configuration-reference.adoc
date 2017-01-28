@@ -87,11 +87,11 @@ Refer to a particular connector's Technical Reference document for guidance on a
 
 == Configuring Message Source
 
-Endpoints pass messages into and out of a Mule flow, usually to external resources such as databases, Web clients, or email servers, but they can exchange messages with other Mule flows as well. As with the operation-based connector, you normally fill out fields in a connector configuration. However, in this case the configuration is used to set up a global endpoint.
+Message sources are connectors that listen for events, produce a Mule message and push it into a Mule flow. These sources are usually external resources such as databases, Web clients, or email servers. As with the operation-based connector, you normally fill out fields in a connector configuration. However, in this case the configuration is used to set up to listen at an endpoint.
 
 ==== Inbound Endpoints
 
-An *Inbound Endpoint*, which resides at the beginning of a flow and acts as a *Message Source*, triggers a new flow instance each time it receives a message.
+You can think of a connector that acts as a *Message Source* in terms of endpoints. In this scenario, a connector that can act as a message source was previously known as an inbound endpoint that triggers a new flow instance each time it receives a message.
 
 Each incoming message must follow the specific protocol supported by the receiving endpoint. For example, email can arrive on a POP3 or IMAP inbound endpoint, but files must use the FTP, File, or SFTP endpoints.
 
