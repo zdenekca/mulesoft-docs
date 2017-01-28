@@ -6,7 +6,6 @@ Connectors for Mule runtime allow you to invoke specific actions against an API,
 
 * link:/mule-user-guide/v/latest/installing-connectors[Installing and Managing Connectors]
 * link:/mule-user-guide/v/latest/connector-configuration-reference[Connector Configuration Reference]
-
 //link:/mule-user-guide/v/latest/using-a-connector-to-access-an-oauth-api[Using a Connector to Access an OAuth API]
 //link:/mule-user-guide/v/3.8/auto-paging-in-anypoint-connectors[Auto-Paging in Anypoint Connectors]
 

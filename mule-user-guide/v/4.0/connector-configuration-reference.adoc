@@ -1,5 +1,6 @@
 = Connector Configuration Reference
 :keywords: anypoint, studio, connectors, transports
+:imagesdir: ./_images
 :toc:
 :toc-title:
 
@@ -8,9 +9,7 @@ toc::[]
 
 == Overview
 
-This document describes the general configuration for operation based connectors and those that function as message sources.
-
-
+This document describes the general configuration for connectors that work on Mule 4.
 
 == Prerequisites
 
@@ -22,7 +21,7 @@ For the best development experience, MuleSoft recommends you use Anypoint Design
 
 == Configuration Basics
 
-Connectors often require a configuration step whether they function as message sources or not. The configuration can be referenced globally, using a global element that stores a *Connector Configuration*. The configuration is always specific to a connector type.
+Connectors often require a configuration step whether they function as message sources or simply perform operations. The configuration can be referenced globally, using a global element that stores what is called the *connector configuration* or simply, *configuration*. The configuration is always specific to a connector type.
 
 [NOTE]
 Configurations can be referenced from any instance of a connector of that type across Mule apps.
@@ -40,7 +39,7 @@ At a minimum, all operation-based connectors require a *Connector Configuration*
 |*Operation* |Select an operation from the *Operation* dropdown to specify the function that the connector should perform. In the case of the GitHub connector, you have, for example, *"Get collaborator"* or *"Get commits"*
 |===
 
-=== Anypoint Studio and Design Center Views
+==== Anypoint Studio and Design Center Views
 
 . *Drag and drop a connector* from the palette onto your canvas.
 . Access the connector's properties using the Studio UI. Click the plus sign next to the *Connector Configuration* dropdown.
@@ -58,7 +57,7 @@ image:github-global-element-create.png[github-global-element-create]
 .. Add or reference the credentials through the UI and click *OK*.
 .. The configuration you just created will show as available from the *Connector Configuration* dropdown.
 
-=== XML Editor View
+==== XML Editor View
 
 . If you decide not to use Anypoint Studio or its user interface, add the desired connector configuration to your code in the XML editor. The visual representation generates in Studio after you properly:
 .. *Include* the predefined namespace and schema location of the connector in the *XML Configuration* file's header.
@@ -85,22 +84,22 @@ http://www.mulesoft.org/schema/mule/github http://www.mulesoft.org/schema/mule/g
 
 Refer to a particular connector's Technical Reference document for guidance on any fields you do not understand. You may access this material via link:https://www.mulesoft.com/exchange[Anypoint Exchange]. There you can also discover which connectors are bundled automatically in Anypoint Studio.
 
-== Configuring Message Source
+== Configuring a Message Source
 
-Message sources are connectors that listen for events, produce a Mule message and push it into a Mule flow. These sources are usually external resources such as databases, Web clients, or email servers. As with the operation-based connector, you normally fill out fields in a connector configuration. However, in this case the configuration is used to set up to listen at an endpoint.
+Some connectors can listen for events, producing a Mule message then pushing it into a Mule flow. These message sources are usually listening on external resources such as databases, Web clients, or email servers. As with the operation-based connector, you normally fill out fields in a connector configuration. However, in this case the configuration is used to set up to listen at an endpoint.
 
-==== Inbound Endpoints
-
-You can think of a connector that acts as a *Message Source* in terms of endpoints. In this scenario, a connector that can act as a message source was previously known as an inbound endpoint that triggers a new flow instance each time it receives a message.
+[NOTE]
+====
+You can think of a connector that acts as a *Message Source* in terms of endpoints. In this scenario, a connector triggers a new flow instance each time it receives a message.
 
 Each incoming message must follow the specific protocol supported by the receiving endpoint. For example, email can arrive on a POP3 or IMAP inbound endpoint, but files must use the FTP, File, or SFTP endpoints.
+====
+//MG confirm above
 
-[tabs]
-------
-[tab,title="Studio Visual Editor"]
-....
 
-The POP3 component is acting as the inbound endpoint in the example flow:
+=== Anypoint Studio and Design Center Views
+
+The POP3 component is acting as the message source in the example flow:
 
 image:connector_conf_inf_3.png[connector_conf_inf_3]
 
@@ -108,9 +107,8 @@ Clicking on the POP3 connector you see the fields specific to the connector inst
 image:connector-configuration-reference-3ab8a.png[]
 When you click the plus sign, you find the dialog to set up a configuration:
 image:connector-configuration-reference-24b6a.png[]
-....
-[tab,title="XML Editor"]
-....
+
+=== XML View
 
 Note the `backupFolder` and `moveToFolder` were seen as fields in the Studio UI, and are seen in the connector configuration, which takes this form.
 
@@ -140,26 +138,22 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     </flow>
 </mule>
 ----
-....
-------
 
-==== Outbound Endpoints
 
-If an endpoint-based connector is not the first building block (i.e., the message source) in a flow, it is designated as an *outbound endpoint*, since it uses the specific transport channel it supports (such as SMTP, FTP, or JDBC) to dispatch messages to targets outside the flow, which can range from file systems to email servers to Web clients and can also include other Mule flows.
+== Email Connector as Message Source - Example
 
-In many cases, an outbound endpoint completes a flow by dispatching a fully processed message to its final, external destination. However, outbound endpoints don't always complete flow processing, because they can also exist in the middle of a flow, dispatching data to an external source, and also passing that (or some other data) to the next message processor in the flow.
+If a connector is not the first building block (i.e., the message source) in a flow, it is performing an operation. It may use a specific transport channel it supports (such as SMTP, FTP, or JDBC) to dispatch messages to targets outside the flow, which can range from file systems to email servers to Web clients and can also include other Mule flows.
 
-[tabs]
-------
-[tab,title="Anypoint Studio Visual Editor"]
-....
+In many cases, the connector completes a flow by dispatching a fully processed message to its final, external destination. However, they don't always mark the end of flow processing, because they can also exist in the middle of a flow, dispatching data to an external source, and also passing that (or some other data) to the next message processor in the flow.
+
+=== Anypoint Studio View
 
 Here we can see there is a POP3 connector being used as an inbound endpoint, but additionally, note there is a POP3 connector configured in the middle of the process side of the flow, as an _outbound_ endpoint.
 
 image:outbound-endpoint-example-flow.png[outbound endpoint example flow]
-....
-[tab,title="XML Editor"]
-....
+
+=== XML View
+
 [source, xml, linenums]
 ----
 <flow name="exampleflow2" >      
@@ -169,10 +163,9 @@ image:outbound-endpoint-example-flow.png[outbound endpoint example flow]
    <logger level="INFO" doc:name="Logger" message="bar"/>
 </flow>
 ----
-....
-------
 
 
+////
 === Common Endpoint Configuration Fields
 
 While unique properties exist for various endpoint-based connectors, most of these building blocks share common properties.
@@ -239,14 +232,12 @@ Reference this value in the connector configuration using Ant syntax - `${my.Con
 For instance, a Mule application with four different HTTP connectors may all reference the same global HTTP connector configuration which defines specifics such as security, protocol, and proxy settings. Because they all reference the same global connector configuration, all four HTTP endpoints behave *consistently* within the application.
 
 Selected global connector configurations can also be defined as *Shared Resources* for a domain and referenced by all applications for that same domain. For more information, see link:/mule-user-guide/v/3.8/shared-resources[Shared Resources].
+////
 
-=== Tips
+== Tips
 
-When you design an application, make sure you initially use an account for your test or development purposes, rather than any account for production. The corresponding connector XML tags follow a standard format most of the time:
-
-`<connectorName>:config` for operation-based connectors,
-
-and for endpoint-based connectors: `<connectorName>:connector`
+* When you design an application, make sure you initially use an account for your test or development purposes, rather than any account for production.
+* Connectors in Mule 4 support expressions defined in DataWeave language for fields supporting expressions (varies per connector)
 
 == Notes
 
