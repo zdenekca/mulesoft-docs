@@ -26,6 +26,15 @@ A flow is in essence just a chain of Message Processors. Think of each Message P
 
 image:flow.jpeg[flow]
 
+=== Connecting Flows
+
+There are two ways of connecting flows:
+
+* Via an endpoint.
+* Via a Flow-Ref component.
+
+The first option uses transports (such as HTTP, VM or JMS connectors) to connect the flow to external flows or services while the other connects flows within the mule application.
+
 == Flow Configuration
 
 A Flow is configured in XML using the <flow> element. Each flow has a name attribute, a message source (unless it's a private flow), one or more message processors and an optional exception strategy.
@@ -104,9 +113,3 @@ A private Flow differs from the use of a "Processor Chain" in that a Flow has it
   <append-string-transformer message="c"/>
 </flow>
 ----
-
-== Further Reading
-
-You can read more about the reason we added Flow for Mule 3 in the following blog posts: +
-* link:http://blogs.mulesoft.org/mule-3-architecture-part-1-back-to-basics/[Mule 3 Architecture, Part 1: Back to Basics] +
-* link:http://blogs.mulesoft.org/mule-3-architecture-part-2-introducing-the-message-processor/[Mule 3 Architecture, Part 2: Introducing the Message Processor]
