@@ -33,7 +33,7 @@ Mule 4 includes a simplified Mule message structure, composed  by:
 === Simplified Scopes
 
 link:https://docs.mulesoft.com/mule-user-guide/v/3.8/scopes[Message scopes] are no longer supported in Mule 4.0. There are only *variables*. +
-Stuff like sub-flow (??), message enrichers and polls do not exist anymore.
+Stuff like private flow (??), message enrichers and polls do not exist anymore.
 
 Before executing, Mule now gathers input context and retrieves information to parametrize the operation.
 

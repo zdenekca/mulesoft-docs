@@ -178,33 +178,21 @@ To extract all *.txt and *.xml attachments, use a filtered projection:
 
 
 
+== Accessing Values Inside a Structure
 
-== Chained Elements ?????
+If you're referencing an array or object, you can extract specific values from within the contents of this element. You can use any of the four types of selectors in DataWeave to navigate the data structure:
 
-For chained methods or properties, the expression `#[[a.b.c] == 'foo']` evaluates correctly even in the case that `c` is a null value. However, if `b` is a null value, the expression throws a `NullPointerException`.
+* *Single Value selector* .<key-name>
+* *Multi Value selector* .*<key-name>
+* *Descendants Selector* ..<key-name>
+* *Indexed Selector* [<index>]
 
-In this example, if a field named address is null, the expression throws a `NullPointerException`.
+[TIP]
+See link:/mule-user-guide/v/4.0/dataweave-selectors[DataWeave Selectors] for more details on these.
 
-[source, code]
-----
-#[payload.address.zipcode]
-----
 
-To make this same expression `null` safe, use the .? operator.
 
-[source, code]
-----
-#[payload.address.?zipcode]
-----
 
-Using this operator avoids a `NullPointerException` if address is an empty value, instead it returns `null`. 
-
-If you'd like the expression to return a different value if no address is defined, you can use a chained `or` operator.
-
-[source, code]
-----
-#[payload.address.?zipcode or 'Zipcode not set']
-----
 
 === Accessing the Cache ????
 
