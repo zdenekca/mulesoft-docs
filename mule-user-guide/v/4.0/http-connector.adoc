@@ -1,0 +1,271 @@
+= HTTP Connector
+:keywords: anypoint studio, esb, connectors, http, https, http headers, query parameters, rest, raml
+
+== Introduction
+
+The HTTP connector can *send and receive HTTP and HTTPS requests* given a selected host, port and address. Find the two important use cases for this component below.
+
+Depending on your needs, you can either:
+
+* Use the connector as an link:/mule-user-guide/v/3.8/http-listener-connector[HTTP Listener Connector] for requests that arrive at a certain address, subsequently generating an HTTP response
+* Use the connector as an link:/mule-user-guide/v/3.8/http-request-connector[HTTP Request Connector] to send requests to a certain address and receive the returned response
+
+Through additional configuration, the connector allows you to:
+
+* Use link:/mule-user-guide/v/3.8/tls-configuration[TLS] encryption to send or receive *HTTPS* requests 
+* Send link:/mule-user-guide/v/3.8/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
+
+
+[tabs]
+------
+[tab,title="Studio Visual Editor"]
+....
+
+In Studio, the HTTP connector can work in one of two ways, depending on where it's placed in a flow:
+
+* As an link:/mule-user-guide/v/3.8/http-listener-connector[HTTP Listener]
+* As an link:/mule-user-guide/v/3.8/http-request-connector[HTTP Requester]
+
+== HTTP Listener Quick Reference for Studio Users
+
+To instantiate the connector as an *HTTP listener connector*, you must place the *Listener* component onto a blank Anypoint Studio canvas into the *Source* section of a new flow (i.e. as the first element in the flow) as you design your Mule application:
+
+.New Flow Showing Source and Process Phases
+image:source-flow-new-blank.png[show source and process section of flow]
+
+.Drag the HTTP connector to the Source side
+image:http-connector-drag-to-source.png[drag to source]
+
+.See the connector populate the Source side
+image:http-connector-67263.png[http listener in source]
+
+== HTTP Requester Quick Reference
+
+To instantiate the connector as an *HTTP request connector*, you must place a *Request* component into the *Process* section of a flow (ie: anywhere except the beginning of it):
+
+.Drag the HTTP connector to the Process side
+image:http-connector-drag-to-process.png[drag to process]
+
+.Flow showing HTTP connector in Process side
+image:http-connector-c3457.png[http request conn in process side]
+
+
+....
+[tab,title="XML Editor"]
+....
+
+When writing Mule projects in XML, the HTTP connector can work in one of two ways, depending on how you create it:
+
+* As an link:/mule-user-guide/v/3.8/http-listener-connector[HTTP Listener]
+* As an link:/mule-user-guide/v/3.8/http-request-connector[HTTP Requester]
+
+To instantiate the connector as an HTTP Listener Connector, add the following XML tag at the start of a flow:
+
+[source,xml]
+----
+<httpn:listener config-ref="HTTP_Listener_config" path="/"/>
+----
+
+This element must reference a global configuration element of the following type:
+
+[source,xml]
+----
+<httpn:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" >
+		<httpn:listener-connection host="0.0.0.0" port="8081" />
+</httpn:listener-config>
+----
+
+To instantiate the connector as an HTTP Request Connector, add the following XML tag in any part of a flow:
+
+[source,xml]
+----
+<httpn:request config-ref="HTTP_Request_config" path="/" method="GET"/>
+----
+
+This element must reference a global configuration element of the following type:
+
+[source,xml]
+----
+<httpn:request-config name="HTTP_Request_config" doc:name="HTTP Request config" >
+		<httpn:request-connection host="example.com" port="8081" />
+</httpn:request-config>
+----
+
+....
+------
+
+
+== Debugging
+
+Gaining visibility into HTTP inbound and outbound behavior can be achieved by enabling underlying library loggers with log4j2. This section assumes you're comfortable adjusting log levels with log4j2. If you have not adjusted logging levels in the past, read link:/mule-user-guide/v/4.0/logging-in-mule#configuring-custom-logging-settings[configuring custom logging settings] before continuing.
+
+[TIP]
+You can edit the log4j2 configuration file to make the logging of the HTTP connector's activity a lot more verbose, if you need to. See link:/mule-user-guide/v/4.0/logging-in-mule[Logging in Mule] for instructions.
+
+=== Logging Listener and Request Activity
+
+By enabling the `DEBUG` level on `org.mule.runtime.module.http.internal.HttpMessageLogger`, activity coming from all HTTP Listener and Request components will be logged. This includes the HTTP Listener Connector's inbound request, HTTP Request Connector's outbound request, and each connector's response body.
+
+
+. Navigate to your `log4j2.xml` file in your `${MULE_HOME}/conf` directory
+. Open the file and add the following logger in the `<Loggers>` section:
++
+[source,xml,linenums]
+----
+<AsyncLogger name="org.mule.runtime.module.http.internal.HttpMessageLogger" level="DEBUG"/>
+----
+
+An output example of each connector in debug mode can be found below.
+
+
+[tabs]
+------
+[tab,title="Listener Log Output"]
+....
+
+The log output of the Listener will display metadata of the inbound request.
+
+[source,Output,linenums]
+----
+DEBUG 2017-01-31 14:10:26,118 [SchedulerService_cpuLight.01] org.mule.runtime.module.http.internal.HttpMessageLogger: LISTENER
+GET /get HTTP/1.1
+cache-control: no-cache
+User-Agent: PostmanRuntime/3.0.9
+Accept: */*
+Host: 0.0.0.0:8083
+accept-encoding: gzip, deflate
+Connection: keep-alive
+----
+
+It will also display information about the response being sent back.
+
+[source,Output,linenums]
+----
+DEBUG 2017-01-31 14:10:26,303 [SchedulerService_cpuLight.02] org.mule.runtime.module.http.internal.HttpMessageLogger: LISTENER
+HTTP/1.1 200
+Content-Length: 11
+Date: Tue, 31 Jan 2017 17:10:26 GMT
+
+Hello World
+----
+
+[TIP]
+Chunked encoding will produce a separate log record for each chunk.
+
+....
+[tab,title="Request Log Output"]
+....
+
+// TODO:  REQUEST NOT LOGGING
+// The log output of the Request will display metadata of the outbound request.
+//
+// [source,bash]
+// ----
+// DEBUG 2016-02-10 11:29:18,647 [[hello].http.requester.HTTP_Request_Configuration(1) SelectorRunner] org.mule.module.http.internal.HttpMessageLogger: REQUESTER
+// GET /v3/hello HTTP/1.1
+// Host: mocker-server.cloudhub.io:80
+// User-Agent: AHC/1.0
+// Connection: keep-alive
+// Accept: */*
+// ----
+//
+// It will also display information about the response sent back from the target.
+//
+// [source,bash]
+// ----
+// DEBUG 2016-02-10 11:29:18,729 [[hello].http.requester.HTTP_Request_Configuration.worker(1)] org.mule.module.http.internal.HttpMessageLogger: REQUESTER
+// HTTP/1.1 200
+// Content-Type: application/json
+// Date: Wed, 10 Feb 2016 19:29:18 GMT
+// Server: nginx
+// Content-Length: 10940
+// Connection: keep-alive
+//
+// {
+//   "message" : "Hello, world"
+// }
+----
+
+....
+------
+
+=== Logging Packet Metadata
+
+At a lower level, it can be desirable to log the actual request and response packets transmitted over HTTP. This is achieved by enabling the `DEBUG` level on `com.ning.http.client.providers.grizzly`. +
+This will log the metadata of the request packets from `AsyncHTTPClientFilter` and the response packets from `AhcEventFilter`. Unlike the `HttpMessageLogger`, this will not log request or response bodies.
+
+. Navigate to your `log4j2.xml` file in your `${MULE_HOME}/conf` directory
+. Open the file and add the following logger in the `<Loggers>` section:
++
+[source,xml,linenums]
+----
+<AsyncLogger name="org.mule.runtime.module.http.internal.HttpMessageLogger" level="DEBUG"/>
+----
+
+An output example of each connector in debug mode can be found below.
+
+[tabs]
+------
+[tab,title="Request Log Output"]
+....
+
+The log output of the request packet's metadata is as follows.
+
+[source,Output,linenums]
+----
+DEBUG 2017-01-31 14:46:32,104 [SchedulerService_io.08] com.ning.http.client.providers.grizzly.AsyncHttpClientFilter: REQUEST: HttpRequestPacket (
+   method=GET
+   url=/get
+   query=null
+   protocol=HTTP/1.1
+   content-length=-1
+   headers=[
+      Host=0.0.0.0:8083
+      User-Agent=AHC/1.0
+      Connection=keep-alive
+      Accept=*/*]
+)
+----
+
+....
+[tab,title="Response Log Output"]
+....
+
+// TODO: Response not logging.
+// The log output of the response packet's metadata is as follows.
+//
+// [source,bash]
+// ----
+// DEBUG 2016-02-10 11:16:29,508 [[hello].http.requester.HTTP_Request_Configuration.worker(1)] com.ning.http.client.providers.grizzly.AhcEventFilter: RESPONSE: HttpResponsePacket (
+//   status=200
+//   reason=
+//   protocol=HTTP/1.1
+//   content-length=10940
+//   committed=false
+//   headers=[
+//       content-type=application/json
+//       date=Wed, 10 Feb 2016 19:16:29 GMT
+//       server=nginx
+//       content-length=10940
+//       connection=keep-alive]
+// )
+----
+
+....
+------
+
+// TODO: Check Non-blockin processing strategy
+// == Non-blocking Processing
+//
+// The HTTP Connector (both the HTTP Listener and the HTTP Request connector) can be used with a non-blocking processing strategy. +
+// This means that whenever a message is pending a response from an external source, the message processor will still be free to process other messages that keep arriving to it. Read more about this in link:/mule-user-guide/v/3.8/flow-processing-strategies#non-blocking-processing-strategy[Non-Blocking Processing Strategy].
+//
+// To enable the non-blocking processing strategy, you must set this as a property in the '<flow>' element on which the HTTP Connector sits.
+//
+// [NOTE]
+// Note that link:/mule-user-guide/v/3.8/flow-processing-strategies#supported-non-blocking-components[not all Mule components] currently support the non-blocking processing strategy, if there are any unsupported components in a flow, they will cause the flow to fall back to synchronous processing.
+
+
+== See Also
+
+* See the link:/mule-user-guide/v/3.8/http-connector-reference[full reference]﻿ for the available XML configurable options in this connector.
