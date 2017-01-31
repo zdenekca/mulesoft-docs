@@ -20,7 +20,7 @@ Both custom and core connectors are created and managed using the *Mule SDK*.
 
 Introducing *_Smart Connectors_*: Modules designed using XML to manipulate connections. +
 Users can define the module, set configurations and define operations that can later be invoked in the mule application to manipulate connections.
-// Need confirmation and more info around this.
+// TODO: Need confirmation about private flows going away.
 
 == Simplified Mule Message Structure
 

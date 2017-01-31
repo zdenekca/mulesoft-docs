@@ -124,9 +124,16 @@ Not Focusing on Installation instructions yet
 *** link:/mule-user-guide/v/4.0/hardening-your-mule-installation[Hardening your Mule Installation]
 ////
 +
+** link:/mule-user-guide/v/4.0/reference[Reference]
+**** link:/mule-user-guide/v/4.0/http-connector[HTTP Connector]
+***** link:/mule-user-guide/v/4.0/http-listener-connector[HTTP Listener Connector]
+***** link:/mule-user-guide/v/4.0/http-request-connector[HTTP Request Connector]
+***** link:/mule-user-guide/v/4.0/authentication-in-http-requests[Authentication in HTTP Requests]
+***** link:/mule-user-guide/v/4.0/http-connector-reference[HTTP Connector Reference]
+***** link:/mule-user-guide/v/4.0/tls-configuration[TLS Configuration]
++
 ////
 Not Focusing on References Docs yet
-** link:/mule-user-guide/v/4.0/reference[Reference]
 *** link:/mule-user-guide/v/4.0/flows-and-subflows[Flows and Subflows]
 **** link:/mule-user-guide/v/4.0/flow-references[Flow References and Properties]
 **** link:/mule-user-guide/v/4.0/flow-processing-strategies[Flow Processing Strategies]
