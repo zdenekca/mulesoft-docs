@@ -1,24 +1,31 @@
-= HTTP Components
+= HTTP Connectors
 :keywords: anypoint studio, esb, connectors, http, https, http headers, query parameters, rest, raml
 :toc:
-:toc-title: Page Contents
+:toc-title:
 
 
 
 toc::[]
 
 
-HTTP support for Mule includes two connectors, which are the *HTTP listener*, *HTTP requester*, and a *load static resource* operation. All are accessible from your Mule application design palette, typing "HTTP". The connectors require reference to a *connector configuration* global element. Define attributes there for reuse across HTTP connectors in your Mule application.
+HTTP connectors for Mule include:
 
-=== How to Use an HTTP Listener
+* *HTTP listener*
+* *HTTP requester*
+* *Load static resource*
+* *Basic auth security filter*
 
-Listen for requests that arrive at a certain address by placing the HTTP connector in the source (left) side of a Mule flow. Get back the generated HTTP response.
+All are accessible from your Mule application design palette, typing "HTTP". The listener and requester require a *connector configuration*.
+
+=== About HTTP Listener
+
+Use the HTTP listener in the source (left) side to listen for requests that should trigger a Mule flow. Get back the generated HTTP response.
 
 * link:/mule-user-guide/v/latest/http-listener-reference[HTTP Listener Reference]
 * link:/http-listener-how-to[How to Use an HTTP Listener]
 // List special configuration procedures from above doc below
 
-=== How to Use an HTTP Requester
+=== About HTTP Requester
 
 Send requests to a certain address and receive the returned response by placing the HTTP connector in the process side of the flow.
 
@@ -29,18 +36,85 @@ The request will return a `MuleMessage` with specific `HttpResponseAttributes`.
 * link:/http-listener-how-to[How to Use an HTTP Requester]
 // List special configuration procedures from above doc below
 
-=== How to Load a Static HTTP Resource
+=== About Load Static HTTP Resource
 
 Select the `<load-static-resource>` operation and define the required attributes.
 
 link:/load-static-resource-reference[Load Static Resource Reference]
 
-== Additional Configuration Options
+=== About Basic Security Filter
 
-Through additional configuration, the connector allows you to:
+Requires the status code and headersRef fields of a error-response-builder to be set as flow variables, so that the filter can set those. This option will allow the gateway to keep applying their basic auth policy in any order.
 
-* Use link:/mule-user-guide/v/3.8/tls-configuration[TLS] encryption to send or receive *HTTPS* requests 
-* Send link:/mule-user-guide/v/3.8/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
+== How to Route Incoming Requests to HTTP Listeners
+
+== How to Implement Basic Authentication when Listening for Responses
+
+== How to Configure Connection Attributes
+
+Set maximum idle time and connection persistence
+
+== How to Map HTTP Responses to Mule Messages
+
+== How to Process Different Types of HTTP Response Body
+
+x-www-form-urlencoded
+multipart/form-data
+
+== How to Process HTTP Response Headers
+
+response headers
+prevent headers from being passed to the flow
+disable outbound properties as headers in response
+
+== How to Stream HTTP Requests or Responses through Listener
+
+The transfer-encoding header is used to stream data through the HTTP connection so as not to read all into memory.
+
+Transfer-encoding header is used to send the HTTP message body in chunks, saving us from having to know the body length in advance. Each chunk is separated by a predefined line separator, which contains the length of the particular chunk
+
+For streaming using the HTTP Requester, see link:/#stream-requester[How to Stream through Requester]
+
+== How to Customize HTTP Response Attributes
+
+Set up the response so that it contains the desired body, attachment, headers and status.
+
+== How to Send or Receive HTTPS requests
+
+[NOTE]
+Configuration depends on whether you have a HTTP server or client and whether or not you need two-way authentication.
+
+Configure a TLS Context - see
+link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]. If your configuration includes both a trust store and a key store, then it implements two-way TLS.
+
+One-way scenarios:
+
+Server implements key store to enforce client authentication
+Client implements trust store (JVM's will be used if not provided)
+
+
+== How to Send Authenticated Requests
+
+link:/mule-user-guide/v/3.8/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
+
+== How to Send Multipart HTTP Requests
+
+== How to Customize HTTP Requests
+
+* Customize the body of the request using the `source` and `target` attributes
+* For `GET`, `HEAD` and `OPTIONS` methods, override the default empty body. Send a body with a request `sendBodyMode`
+* Set headers, URI parameters explicitly or dynamically, using DataWeave language.
+* Send form parameters in `POST` request
+
+[[stream-requester]]
+== How to Stream through the HTTP Requester
+
+* Set the attribute `requestStreamingMode`
+
+
+== How to Validate HTTP Responses
+
+
 
 
 ////
@@ -269,7 +343,7 @@ To enable the non-blocking processing strategy, you must set this as a property 
 Note that link:/mule-user-guide/v/3.8/flow-processing-strategies#supported-non-blocking-components[not all Mule components] currently support the non-blocking processing strategy, if there are any unsupported components in a flow, they will cause the flow to fall back to synchronous processing.
 ////
 
-== Migrating from Mule 3 HTTP Connectors
+== How to Migrate from Mule 3 HTTP Connectors
 
 
 == See Also
