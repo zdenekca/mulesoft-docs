@@ -8,7 +8,8 @@ The HTTP Listener Connector provides the most practical way to *listen for HTTP 
 The connector can be configured to accept any request, or to accept only those requests addressed to a specific URI. You can choose what methods the connector accepts: GET, POST, etc.
 
 The *request body* is passed on to the next element of the Mule flow as the _message payload_ of a Mule Message, while headers, query parameters, URI parameters and other elements of the HTTP Request are passed on as _attributes_.
-// TODO: Verify how to access message attributes.
+// TODO: Accessing Message attributes using DataWeave.
+
 These properties are accessible within a Mule message from your Mule application.
 
 This connector can also use HTTPS protocol and encrypt your communications via TLS.
