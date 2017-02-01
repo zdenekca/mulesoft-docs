@@ -46,28 +46,36 @@ link:/load-static-resource-reference[Load Static Resource Reference]
 
 Requires the status code and headersRef fields of a error-response-builder to be set as flow variables, so that the filter can set those. This option will allow the gateway to keep applying their basic auth policy in any order.
 
-== How to Route Incoming Requests to HTTP Listeners
+== How to
 
-== How to Implement Basic Authentication when Listening for Responses
+=== Route Incoming Requests to HTTP Listeners
 
-== How to Configure Connection Attributes
+=== Map HTTP Responses to Mule Messages
+
+=== Implement Basic Authentication when Listening for Responses
+
+=== Configure Connection Attributes
 
 Set maximum idle time and connection persistence
 
-== How to Map HTTP Responses to Mule Messages
+=== Customize HTTP Response
 
-== How to Process Different Types of HTTP Response Body
+Set up the response so that it contains the desired body, attachment, headers and status.
+
+
+
+=== Process Different HTTP Response Body Types
 
 x-www-form-urlencoded
 multipart/form-data
 
-== How to Process HTTP Response Headers
+=== Process HTTP Response Headers
 
 response headers
 prevent headers from being passed to the flow
 disable outbound properties as headers in response
 
-== How to Stream HTTP Requests or Responses through Listener
+=== Stream HTTP Requests or Responses through Listener
 
 The transfer-encoding header is used to stream data through the HTTP connection so as not to read all into memory.
 
@@ -75,44 +83,52 @@ Transfer-encoding header is used to send the HTTP message body in chunks, saving
 
 For streaming using the HTTP Requester, see link:/#stream-requester[How to Stream through Requester]
 
-== How to Customize HTTP Response Attributes
 
-Set up the response so that it contains the desired body, attachment, headers and status.
 
-== How to Send or Receive HTTPS requests
+=== Send or Receive HTTPS requests
 
 [NOTE]
 Configuration depends on whether you have a HTTP server or client and whether or not you need two-way authentication.
 
-Configure a TLS Context - see
-link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]. If your configuration includes both a trust store and a key store, then it implements two-way TLS.
+Configure a TLS Context (keystore and/or trust store) to set up HTTPS (see
+link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]). Setting both a trust store and a key store means having two-way TLS.
 
-One-way scenarios:
+*One-way scenarios*
 
-Server implements key store to enforce client authentication
-Client implements trust store (JVM's will be used if not provided)
+- Server implements *key store* to enforce client authentication
+- Client implements *trust store* (JVM's will be used if not provided)
 
 
-== How to Send Authenticated Requests
+=== Send Authenticated Requests
 
 link:/mule-user-guide/v/3.8/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
 
-== How to Send Multipart HTTP Requests
+=== Send Multipart HTTP Requests
 
-== How to Customize HTTP Requests
+=== Customize HTTP Requests and Parameters
 
+The HTTP Requester allows you to include the following types of parameters and maps of these:
+
+* query params
+* URI params
+* headers
+
+*Notes*
+* Send form parameters with your request, included in the Mule message payload
+* Include attachments in your request by adding an Attachment building block to your flow.
 * Customize the body of the request using the `source` and `target` attributes
 * For `GET`, `HEAD` and `OPTIONS` methods, override the default empty body. Send a body with a request `sendBodyMode`
 * Set headers, URI parameters explicitly or dynamically, using DataWeave language.
 * Send form parameters in `POST` request
 
 [[stream-requester]]
-== How to Stream through the HTTP Requester
+=== Stream through the HTTP Requester
 
 * Set the attribute `requestStreamingMode`
 
+=== Disable HTTP Response Body Parsing
 
-== How to Validate HTTP Responses
+=== Validate HTTP Responses
 
 
 
@@ -343,7 +359,7 @@ To enable the non-blocking processing strategy, you must set this as a property 
 Note that link:/mule-user-guide/v/3.8/flow-processing-strategies#supported-non-blocking-components[not all Mule components] currently support the non-blocking processing strategy, if there are any unsupported components in a flow, they will cause the flow to fall back to synchronous processing.
 ////
 
-== How to Migrate from Mule 3 HTTP Connectors
+=== Migrate from Mule 3 HTTP Connectors
 
 
 == See Also
