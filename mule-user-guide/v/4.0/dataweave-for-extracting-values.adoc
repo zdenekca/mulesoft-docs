@@ -4,7 +4,7 @@
 image:dw-logo.png[dw]
 
 
-Whilst you can use DataWeave to construct complex transformations, you can also use it to write brief expressions that simply extract values out of any part of the Mule message. These are often used in message processors to reference a given field
+Whilst you can use DataWeave to construct complex transformations, you can also use it to write brief expressions that simply extract values out of any part of the Mule message. These are often used in message processors to reference a given field.
 
 [NOTE]
 You must be familiar with the link:/mule-fundamentals/v/4.0/mule-message-structure[Mule Message Structure] to know how to navigate it, you can also see a graphical representation of this on the link:/anypoint-stuido/v/7/datasense[DataSense] pannel.
@@ -20,12 +20,51 @@ Or you can use an expression on a Twitter connector to pick the userId to querry
 
 Once extracted, the value is handled as a literal value of one of the supported link:/mule-user-guide/v/4.0/dataweave-types[DataWeave Value Types].
 
+== Referencing Basic Components
+
+If you want to reference an element in the incoming Mule message or its variables, the syntax is very straight forward:
+
+=== To Reference the Payload
+
+The payload of the message is the easiest element to call, simply write:
+
+`#[payload]`
+
+=== To Reference Properties
+
+Properties are grouped in the `properties` bucket, and so called like this:
+
+`#[properties.<propertyName>]`
+
+
+=== To Reference Variables
+
+Variables are stored outside the message. You can simply refer to a variable by its name like this:
+
+`#[<variableName>]`
+
+You can also call variables as shown below, by first referencing the `variable` bucket. This is useful to disambiguate in case a variable's name coincides with something else in the context.
+
+`#[variables.<variableName>]`
+
+
+
+== Accessing Values Inside a Structure
+
+If you're referencing an array or object, you can extract specific values from within the contents of this element. You can use any of the four types of selectors in DataWeave to navigate the data structure:
+
+* *Single Value selector* .<key-name>
+* *Multi Value selector* .*<key-name>
+* *Descendants Selector* ..<key-name>
+* *Indexed Selector* [<index>]
+
+[TIP]
+See link:/mule-user-guide/v/4.0/dataweave-selectors[DataWeave Selectors] for more details on these.
 
 
 
 
-
-
+////
 == Context Objects, Variables, and Fields
 
 The term *Context Object* forms the first part of the simplest form of an extracting expression; the second part is the *Field* (see image below, left). Use a *Variable* in an expression to access information contained within a Variable on your Mule message. Itself a top-level identifier, a variable does _not_ require that you define a context object in an expression (see second image below).
@@ -119,7 +158,9 @@ This example is a simple expression: +
 |`outboundProperties` ||x |Map representing the message's mutable outbound properties
 |`outboundAttachments` ||x |Map representing the message's outbound attachments
 |===
+////
 
+////
 == Server, Mule, Application, and Message Variables
 
 
@@ -149,8 +190,10 @@ Set the username and password for an HTTP request at runtime based on inbound me
     ...
   </flow>
 ----
+////
 
 
+////
 
 == Payload and Attachments
 
@@ -159,7 +202,7 @@ Copy the current payload in a variable named `originalPayload` then restore it:
 [source, xml, linenums]
 ----
 <set-variable variableName="originalPayload" value="#[payload]" />
-<set-payload value="#[variable['originalPayload']]" />
+<set-payload value="#[originalPayload]" />
 ----
 
 To retrieve the message payload in a particular format, using Mule's auto-transformation capability, use `payloadAs`:
@@ -173,26 +216,11 @@ To extract all *.txt and *.xml attachments, use a filtered projection:
 
 [source, xml, linenums]
 ----
-<expression-transformer expression="#[($.value in  inboundAttachments.entrySet() if $.key ~= '(.*\\.txt|.*\\.xml)')]" />
+<expression-transformer expression="#[($.value in properties.entrySet() if $.key ~= '(.*\\.txt|.*\\.xml)')]" />
 ----
+////
 
-
-
-== Accessing Values Inside a Structure
-
-If you're referencing an array or object, you can extract specific values from within the contents of this element. You can use any of the four types of selectors in DataWeave to navigate the data structure:
-
-* *Single Value selector* .<key-name>
-* *Multi Value selector* .*<key-name>
-* *Descendants Selector* ..<key-name>
-* *Indexed Selector* [<index>]
-
-[TIP]
-See link:/mule-user-guide/v/4.0/dataweave-selectors[DataWeave Selectors] for more details on these.
-
-
-
-
+////
 
 === Accessing the Cache ????
 
@@ -218,7 +246,7 @@ The expression below obtains the size of the cache by invoking `allKeys()`, whi
 
 If you need to manipulate the registry in a Java class, you can access it through `muleContext.getRegistry()`.
 
-
+////
 
 
 
