@@ -15,25 +15,24 @@ HTTP connectors for Mule include:
 * *Load static resource*
 * *Basic auth security filter*
 
-All are accessible from your Mule application design palette, typing "HTTP". The listener and requester require a *connector configuration*.
+All are accessible from your Mule application design palette, typing "HTTP". The listener and requester require a *connector configuration*. With the connectors you can handle and customize HTTP responses, set up authentication with a *TLS Context* and send customized requests.
 
 === About HTTP Listener
 
-Use the HTTP listener in the source (left) side to listen for requests that should trigger a Mule flow. Get back the generated HTTP response.
+Use the HTTP listener in the source (left) side of a flow to listen for requests that should trigger a Mule flow, and then return the response to the requester after flow processing.
 
 * link:/mule-user-guide/v/latest/http-listener-reference[HTTP Listener Reference]
-* link:/http-listener-how-to[How to Use an HTTP Listener]
 // List special configuration procedures from above doc below
 
 === About HTTP Requester
 
-Send requests to a certain address and receive the returned response by placing the HTTP connector in the process side of the flow.
+Use to send requests to a certain address and receive the returned response. Place the HTTP requester in the process (right) side of the flow.
 
 The request will return a `MuleMessage` with specific `HttpResponseAttributes`.
 
 * link:/mule-user-guide/v/latest/http-request-reference[HTTP Requester Reference]
 * link:/mule-user-guide/v/3.8/http-listener-connector#mapping-between-http-requests-and-mule-messages[Mapping HTTP Requests to MuleMessage]
-* link:/http-listener-how-to[How to Use an HTTP Requester]
+
 // List special configuration procedures from above doc below
 
 === About Load Static HTTP Resource
@@ -44,36 +43,91 @@ link:/load-static-resource-reference[Load Static Resource Reference]
 
 === About Basic Security Filter
 
-Requires the status code and headersRef fields of a error-response-builder to be set as flow variables, so that the filter can set those. This option will allow the gateway to keep applying their basic auth policy in any order.
+Requires the status code and `headersRef` fields of a error-response-builder to be set as flow variables, so that the filter can set those. This option will allow the gateway to keep applying their basic auth policy in any order.
 
-== How to
+== HTTP Listener Tasks
 
 === Route Incoming Requests to HTTP Listeners
 
-=== Map HTTP Responses to Mule Messages
+* link:/#route-path[Route Requests Based on URI] by setting *Path*.
+* Route based on HTTP method be setting the *Allowed Methods* for each listener, `GET`, `POST`, `UPDATE`, etc.
+
+[IMPORTANT]
+To host your application on CloudHub, set all listeners' *Host* to `0.0.0.0`.
+
+[[route-path]]
+==== Route Requests Based on URI
+
+To route requests to different listeners that trigger different flows, set the *Path* for each listener to a different valid subpath in the domain.
+
+To route to `+http://localhost:8081/employee+` or `+http://localhost:8081/account+`, set up the listeners as follows:
+
+* Set one listener's *Path* to `account` and the other listener's to `employee`
+* Set *Host* to `localhost`
+* Set *Port* to `8081`
+
+
+===== Ways to Set the Path
+
+* Wildcards such as * are accepted in paths, for example a *Path* of `/regions/us/prospects` is valid.
+
+[NOTE]
+====
+Listeners with a more specific path are always given priority in routing.
+
+Given a listener for *Path* `account/\*` and another on `account/*/main-contact`, if a request arrives for `account/mulesoft/main-contact`, it arrives on the listener for `account/*/main-contact`.
+====
+
+* Use a variable for a URI parameter like `{accountId}` to use the value of an inbound property `accountId` accessed from Mule Expression Language. `#[message.inboundProperties.'http.uri.params'.accountId]`
 
 === Implement Basic Authentication when Listening for Responses
 
+//TODO
 === Configure Connection Attributes
 
 Set maximum idle time and connection persistence
 
-=== Customize HTTP Response
+=== Generate the HTTP Response
 
-Set up the response so that it contains the desired body, attachment, headers and status.
+Optionally set up the HTTP response so that it contains the desired body, attachment, headers and status. The response body is generates from the Mule message payload.
 
+==== Generating HTTP Response Body Types
 
+.Response properties for payload of type `Map`
+[%header]
+|===
+|Payload |Response Body |Response Header
+|Map |`application/x-www-form-urlencoded` | Content-Type: `application/x-www-form-urlencoded`
+|===
 
-=== Process Different HTTP Response Body Types
+.Response properties for Mule Message with Attachments
+[%header]
+|===
+|Payload |Response Body |Response Header
+|Not used |`multipart/form-data` | Set the header explicitly
+|===
 
-x-www-form-urlencoded
-multipart/form-data
+=== Generate HTTP Response Headers
 
-=== Process HTTP Response Headers
+* link:/#set-header-ex[Set Header Explicitly using Properties]
+Response headers are generated from outbound properties which the exception of an outbound property named "Connection", "Host", or "Transfer-Encoding".
+* link:/#disable-headers[Disable outbound properties as headers] in response
+* Set in the Listener Configuration
+//TODO confirm
 
-response headers
-prevent headers from being passed to the flow
-disable outbound properties as headers in response
+[[set-header-ex]]
+==== Set Header Explicitly
+
+* Set a header using the Property Transformer `<set-property>`.
+* Use Response Builder to set headers, even dynamically
+* Set the HTTP status code and reason phrase using Property Transformer
+//TODO confirm how to set headers
+
+[[disable-headers]]
+==== Disable Outbound Properties as Headers
+
+In the HTTP Listener properties editor, in the *Response Settings* section, tick the box labeled *Disable Properties*
+//TODO confirm
 
 === Stream HTTP Requests or Responses through Listener
 
@@ -84,20 +138,7 @@ Transfer-encoding header is used to send the HTTP message body in chunks, saving
 For streaming using the HTTP Requester, see link:/#stream-requester[How to Stream through Requester]
 
 
-
-=== Send or Receive HTTPS requests
-
-[NOTE]
-Configuration depends on whether you have a HTTP server or client and whether or not you need two-way authentication.
-
-Configure a TLS Context (keystore and/or trust store) to set up HTTPS (see
-link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]). Setting both a trust store and a key store means having two-way TLS.
-
-*One-way scenarios*
-
-- Server implements *key store* to enforce client authentication
-- Client implements *trust store* (JVM's will be used if not provided)
-
+== HTTP Requester Tasks
 
 === Send Authenticated Requests
 
@@ -114,6 +155,7 @@ The HTTP Requester allows you to include the following types of parameters and m
 * headers
 
 *Notes*
+
 * Send form parameters with your request, included in the Mule message payload
 * Include attachments in your request by adding an Attachment building block to your flow.
 * Customize the body of the request using the `source` and `target` attributes
@@ -128,239 +170,34 @@ The HTTP Requester allows you to include the following types of parameters and m
 
 === Disable HTTP Response Body Parsing
 
+//TODO
+
 === Validate HTTP Responses
 
+//TODO
 
+== Additional Reference
 
-
-////
-[tabs]
-------
-[tab,title="Studio Visual Editor"]
-....
-
-In Studio, the HTTP connector can work in one of two ways, depending on where it's placed in a flow:
-
-* As an link:/mule-user-guide/v/3.8/http-listener-connector[HTTP Listener]
-* As an link:/mule-user-guide/v/3.8/http-request-connector[HTTP Requester]
-
-== HTTP Listener Quick Reference for Studio Users
-
-To instantiate the connector as an *HTTP listener connector*, you must place it onto a blank Anypoint Studio canvas into the *Source* section of a new flow (i.e. as the first element in the flow) as you design your Mule application:
-
-.New Flow Showing Source and Process Phases
-image:source-flow-new-blank.png[show source and process section of flow]
-
-.Drag the HTTP connector to the Source side
-image:http-connector-drag-to-source.png[drag to source]
-
-.See the connector populate the Source side
-image:http-connector-67263.png[http listener in source]
-
-== HTTP Requester Quick Reference
-
-To instantiate the connector as an *HTTP request connector*, you must place it into the *Process* section of a flow (ie: anywhere except the beginning of it):
-
-.Drag the HTTP connector to the Process side
-image:http-connector-drag-to-process.png[drag to process]
-
-.Flow showing HTTP connector in Process side
-image:http-connector-c3457.png[http request conn in process side]
-
-
-....
-[tab,title="XML Editor"]
-....
-
-When writing Mule projects in XML, the HTTP connector can work in one of two ways, depending on how you create it:
-
-* As an link:/mule-user-guide/v/3.8/http-listener-connector[HTTP Listener]
-* As an link:/mule-user-guide/v/3.8/http-request-connector[HTTP Requester]
-
-To instantiate the connector as an HTTP Listener Connector, add the following XML tag at the start of a flow:
-
-[source,xml]
-----
-<http:listener config-ref="HTTP_Listener_Configuration" path="/" />
-----
-
-This element must reference a global configuration element of the following type:
-
-[source,xml]
-----
-<http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="8081" />
-----
-
-To instantiate the connector as an HTTP Request Connector, add the following XML tag in any part of a flow:
-
-[source,xml]
-----
-<http:request config-ref="HTTP_Request_Configuration" path="/" method="GET" />
-----
-
-This element must reference a global configuration element of the following type:
-
-
-[source,xml]
-----
-<http:request-config name="HTTP_Request_Configuration" host="example.com" port="8081"/>
-----
-
-....
-------
-
-[TIP]
-To migrate a project that uses the old link:/mule-user-guide/v/3.8/deprecated-http-transport-reference[HTTP endpoint-based connector] to the new HTTP operation-based connector, see link:/mule-user-guide/v/3.8/migrating-to-the-new-http-connector[Migrating to the New HTTP Connector]. The old HTTP endpoint-based connector still works with Mule runtime 3.6, but it's deprecated and will eventually be removed.
-
-[TIP]
-You can edit the log4j2 configuration file to make the logging of the HTTP connector's activity a lot more verbose, if you need to. See link:/mule-user-guide/v/3.8/logging-in-mule[Logging in Mule] for instructions.
-
-== Debugging
-
-Gaining visibility into HTTP inbound and outbound behavior can be achieved by enabling underlying library loggers with log4j2. This section assumes you're comfortable adjusting log levels with log4j2. If you have not adjusted logging levels in the past, read link:/mule-user-guide/v/3.8/logging-in-mule#configuring-custom-logging-settings[configuring custom logging settings] before continuing.
-
-=== Logging Listener and Request Activity
-
-By enabling the `DEBUG` level on `org.mule.module.http.internal.HttpMessageLogger`, activity coming from all HTTP Listener and Request components will be logged. This includes the HTTP Listener Connector's inbound request, HTTP Request Connector's outbound request, and each connector's response body. An example of each can be found below.
-
-
-[tabs]
-------
-[tab,title="Listener Log Output"]
-....
-
-The log output of the Listener will display metadata of the inbound request.
-
-[source,bash]
-----
-DEBUG 2016-02-10 10:55:03,234 [[hello].HTTP_Listener_Configuration.worker.01] org.mule.module.http.internal.HttpMessageLogger: LISTENER
-GET / HTTP/1.1
-Host: localhost:8081
-User-Agent: curl/7.43.0
-Accept: */*
-----
-
-It will also display information about the response being sent back.
-
-[source,bash]
-----
-LISTENER
-HTTP/1.1 200
-Transfer-Encoding: chunked
-Content-Type: application/json; charset=UTF-8
-Date: Wed, 10 Feb 2016 18:55:03 GMT
-
-2000
-{
-  "message" : "hello, world"
-}
-----
-
-[TIP]
-Chunked encoding will produce a separate log record for each chunk.
-
-....
-[tab,title="Request Log Output"]
-....
-
-The log output of the Request will display metadata of the outbound request.
-
-[source,bash]
-----
-DEBUG 2016-02-10 11:29:18,647 [[hello].http.requester.HTTP_Request_Configuration(1) SelectorRunner] org.mule.module.http.internal.HttpMessageLogger: REQUESTER
-GET /v3/hello HTTP/1.1
-Host: mocker-server.cloudhub.io:80
-User-Agent: AHC/1.0
-Connection: keep-alive
-Accept: */*
-----
-
-It will also display information about the response sent back from the target.
-
-[source,bash]
-----
-DEBUG 2016-02-10 11:29:18,729 [[hello].http.requester.HTTP_Request_Configuration.worker(1)] org.mule.module.http.internal.HttpMessageLogger: REQUESTER
-HTTP/1.1 200
-Content-Type: application/json
-Date: Wed, 10 Feb 2016 19:29:18 GMT
-Server: nginx
-Content-Length: 10940
-Connection: keep-alive
-
-{
-  "message" : "Hello, world"
-}
-----
-
-....
-------
-
-=== Logging Packet Metadata
-
-At a lower level, it can be desirable to log the actual request and response packets transmitted over HTTP. This is achieved by enabling the `DEBUG` level on `com.ning.http.client.providers.grizzly`. This will log the metadata of the request packets from `AsyncHTTPClientFilter` and the response packets from `AhcEventFilter`. Unlike the `HttpMessageLogger`, this will not log request or response bodies.
-
-[tabs]
-------
-[tab,title="Request Log Output"]
-....
-
-The log output of the request packet's metadata is as follows.
-
-[source,bash]
-----
-DEBUG 2016-02-10 11:16:29,421 [[hello].http.requester.HTTP_Request_Configuration(1) SelectorRunner] com.ning.http.client.providers.grizzly.AsyncHttpClientFilter: REQUEST: HttpRequestPacket (
-   method=GET
-   url=/v3/hello
-   query=null
-   protocol=HTTP/1.1
-   content-length=-1
-   headers=[
-      Host=mocker-server.cloudhub.io:80
-      User-Agent=AHC/1.0
-      Connection=keep-alive
-      Accept=*/*]
-)
-----
-
-....
-[tab,title="Response Log Output"]
-....
-
-The log output of the response packet's metadata is as follows.
-
-[source,bash]
-----
-DEBUG 2016-02-10 11:16:29,508 [[hello].http.requester.HTTP_Request_Configuration.worker(1)] com.ning.http.client.providers.grizzly.AhcEventFilter: RESPONSE: HttpResponsePacket (
-  status=200
-  reason=
-  protocol=HTTP/1.1
-  content-length=10940
-  committed=false
-  headers=[
-      content-type=application/json
-      date=Wed, 10 Feb 2016 19:16:29 GMT
-      server=nginx
-      content-length=10940
-      connection=keep-alive]
-)
-----
-
-....
-------
-
-== Non-blocking Processing
-
-The HTTP Connector (both the HTTP Listener and the HTTP Request connector) can be used with a non-blocking processing strategy. +
-This means that whenever a message is pending a response from an external source, the message processor will still be free to process other messages that keep arriving to it. Read more about this in link:/mule-user-guide/v/3.8/flow-processing-strategies#non-blocking-processing-strategy[Non-Blocking Processing Strategy].
-
-To enable the non-blocking processing strategy, you must set this as a property in the `<flow>` element on which the HTTP Connector sits.
+=== Send or Receive HTTPS requests
 
 [NOTE]
-Note that link:/mule-user-guide/v/3.8/flow-processing-strategies#supported-non-blocking-components[not all Mule components] currently support the non-blocking processing strategy, if there are any unsupported components in a flow, they will cause the flow to fall back to synchronous processing.
-////
+Configuration depends on whether you have a HTTP server or client and whether or not you need two-way authentication.
+
+Configure a TLS Context (keystore and/or trust store) to set up HTTPS (see
+link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]). Setting both a trust store and a key store means having two-way TLS.
+
+*One-way scenarios*
+
+- Server implements *key store* to enforce client authentication
+- Client implements *trust store* (JVM's will be used if not provided)
 
 === Migrate from Mule 3 HTTP Connectors
 
+//TODO
+
+=== Map HTTP Responses to Mule Messages
+
+//TODO
 
 == See Also
 
