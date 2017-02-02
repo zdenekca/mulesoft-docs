@@ -9,10 +9,8 @@ The *Mule message* is the data that passes through link:/mule-user-guide/v/4.0
 It consists of two main parts:
 
 * The message *attributes*, which contains metadata from and attributes of the Mule message.
-* The message *data type*, which describes the message format
 * The message *payload*, which contains the core information of the Mule message.
 
-A Mule message is, itself, embedded within a *Mule message object*. Some Mule message objects may contain variables, attachments, and exception payloads.
 
 image:message_object.png[message_object]
 
