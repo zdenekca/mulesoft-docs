@@ -84,6 +84,7 @@ Mule 4.0 does not include any connector by default.
 
 Mule API
 
+// TODO: Brief description of each API:
 * Tooling API
 * Core API
 * Extension API
@@ -91,7 +92,7 @@ Mule API
 
 == DataWeave: The Mule Language
 
-MEL is being deprecated, and *Dataweave* is now the language used within the runtime.
+MEL is being deprecated, and *Dataweave* is now the default expression language within the runtime.
 
 [NOTE]
 Some operations are not available outside EE
