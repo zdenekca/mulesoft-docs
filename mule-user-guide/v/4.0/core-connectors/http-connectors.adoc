@@ -39,15 +39,17 @@ The request will return a `MuleMessage` with specific `HttpResponseAttributes`.
 
 === About Load Static HTTP Resource
 
-Select the `<load-static-resource>` operation and define the required attributes.
+Add the Load Static Resource operation to return to a requester a static HTTP resource, such as .html, CSS, scripts, etc. This gets sent back automatically with the response.
+
+Put the Load Static Resource component in the flow and define the resource to send, or a default resource in case of failure.
 
 link:/load-static-resource-reference[Load Static Resource Reference]
 
-=== About Basic Security Filter
+=== About Basic Auth Security Filter
 
-Requires the status code and `headersRef` fields of a error-response-builder to be set as flow variables, so that the filter can set those. This option will allow the gateway to keep applying their basic auth policy in any order.
+Put a listener and then security filter to secure and authenticate requests to your service.
 
-== HTTP Listener Tasks
+== HTTP Listener Use Cases
 
 === Route Incoming Requests to HTTP Listeners
 
@@ -80,7 +82,10 @@ Listeners with a more specific path are always given priority in routing.
 Given a listener for *Path* `account/\*` and another on `account/*/main-contact`, if a request arrives for `account/mulesoft/main-contact`, it arrives on the listener for `account/*/main-contact`.
 ====
 
-* Use a variable for a URI parameter like `{accountId}` to use the value of an inbound property `accountId` accessed from Mule Expression Language. `#[message.inboundProperties.'http.uri.params'.accountId]`
+* Use a variable for a URI parameter to get the value from a part of a path that may vary depending on the request `accountId`.
+
+Old: `#[message.inboundProperties.'http.uri.params'.accountId]`
+
 
 === Implement Authentication when Listening for Requests
 
@@ -184,7 +189,7 @@ Normally, HTTP Listener computes the length of the payload and sets the value of
 For streaming options in the HTTP Requester, see link:/#stream-requester[How to Stream through Requester]
 
 
-== HTTP Requester Tasks
+== HTTP Requester Use Cases
 
 === Send Authenticated Requests
 
@@ -255,6 +260,9 @@ link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]). Setting both 
 
 === Migrate from Mule 3 HTTP Connectors
 
+Mule 3.0
+Mule 3.6
+Mule 4
 //TODO
 
 === Map HTTP Responses to Mule Messages
