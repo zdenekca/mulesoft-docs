@@ -71,7 +71,7 @@ To route to `+http://localhost:8081/employee+` or `+http://localhost:8081/accoun
 
 ===== Ways to Set the Path
 
-* Wildcards such as * are accepted in paths, for example a *Path* of `/regions/us/prospects` is valid.
+* Wildcards such as * are accepted in paths, for example a *Path* of `/regions/*/prospects` is valid.
 
 [NOTE]
 ====
