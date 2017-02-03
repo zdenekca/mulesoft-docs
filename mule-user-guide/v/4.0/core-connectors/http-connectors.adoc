@@ -19,14 +19,16 @@ All are accessible from your Mule application design palette, typing "HTTP". The
 
 === About HTTP Listener
 
-Use the HTTP listener in the source (left) side of a flow to listen for requests that should trigger a Mule flow, and then return the response to the requester after flow processing.
+Use the HTTP listener in the source (left) side of a flow to listen for requests that should trigger a Mule flow.
 
+* Process the HTTP request(s) and process needed values
+* Build a response for the HTTP client that sent the request
 * link:/mule-user-guide/v/latest/http-listener-reference[HTTP Listener Reference]
 // List special configuration procedures from above doc below
 
 === About HTTP Requester
 
-Use to send requests to a certain address and receive the returned response. Place the HTTP requester in the process (right) side of the flow.
+Use to send requests to a certain address. Receive and process the returned response. Place the HTTP requester in the process (right) side of the flow.
 
 The request will return a `MuleMessage` with specific `HttpResponseAttributes`.
 
@@ -80,40 +82,82 @@ Given a listener for *Path* `account/\*` and another on `account/*/main-contact`
 
 * Use a variable for a URI parameter like `{accountId}` to use the value of an inbound property `accountId` accessed from Mule Expression Language. `#[message.inboundProperties.'http.uri.params'.accountId]`
 
-=== Implement Basic Authentication when Listening for Responses
+=== Implement Authentication when Listening for Requests
 
+Add a Basic Security filter after a listener. This requires you to reference the HTTP status code and a reference to the header in the response.
+
+[source,xml,linenums]
+----
+<flow name="listenerBasicAuth">
+   <http:listener config-ref="listenerConfigBasicAuth" path="/basic">
+       <http:error-response-builder>
+           <http:http-response-builder statusCode="#[statusCode]" headersRef="#[headers]"/>
+       </http:error-response-builder>
+   </http:listener>
+   <http:basic-security-filter realm="mule-realm"/>
+   <set-payload value="TestBasicAuthOk"/>
+</flow>
+----
+
+
+Another option is to add a Spring security component. See Spring Security manager.
 //TODO
-=== Configure Connection Attributes
 
-Set maximum idle time and connection persistence
+=== Configuring Connection Attributes
 
-=== Generate the HTTP Response
+Set maximum connection idle time and enable/disable connection persistence through the listener configuration.
 
-Optionally set up the HTTP response so that it contains the desired body, attachment, headers and status. The response body is generates from the Mule message payload.
+=== Streaming a File
 
-==== Generating HTTP Response Body Types
+To stream the file content through the HTTP connection, the `Transfer-Encoding` header is used to send the HTTP message body in chunks, avoiding having to know the body length in advance. Each chunk is separated by a predefined line separator, which contains the length of the particular chunk.
 
-.Response properties for payload of type `Map`
+=== Processing Transfer-Encoding:chunked Request Body
+
+* When HTTP request has a `Transfer-Encoding:chunked` header, the listener decodes the body into an `InputStream` automatically.
+* `Transfer-encoding` header is used to send the HTTP message body in chunks, so you do not need to know the body length in advance. Each chunk is separated by a predefined line separator, which contains the length of the particular chunk
+
+=== Parsing HTTP Request Body
+
+The *Parse request* field can be toggled to *true* or set dynamically using an expression.
+
+=== Generating the HTTP Response
+
+Optionally set up the HTTP response so that it contains the desired body, attachment, headers and status. The response body is generated from the Mule message payload.
+
+The only exceptional scenarios are when the payload is a `Map` or there are attachments `multipart/form-data` in the message.
+
+==== Generating the Response Body
+
+.Response properties when payload of type `Map`
 [%header]
 |===
 |Payload |Response Body |Response Header
-|Map |`application/x-www-form-urlencoded` | Content-Type: `application/x-www-form-urlencoded`
+|Map |`application/x-www-form-urlencoded` | `Content-Type: application/x-www-form-urlencoded`
 |===
 
-.Response properties for Mule Message with Attachments
+==== Generating Response with Attachments
+
+Message outbound attachments are used. Message payload is not used.
+
+.Response properties when Mule Message has Attachments
 [%header]
 |===
 |Payload |Response Body |Response Header
-|Not used |`multipart/form-data` | Set the header explicitly
+|Not used |`multipart/form-data` | link:/#gen-header[Set the header explicitly]
 |===
 
-=== Generate HTTP Response Headers
+[[gen-header]]
+==== Generating HTTP Response Headers
+
+Response headers are generated from outbound properties which the exception of an outbound property named "Connection", "Host", or "Transfer-Encoding".
+//TODO
+
+*Other topics*:
 
 * link:/#set-header-ex[Set Header Explicitly using Properties]
-Response headers are generated from outbound properties which the exception of an outbound property named "Connection", "Host", or "Transfer-Encoding".
 * link:/#disable-headers[Disable outbound properties as headers] in response
-* Set in the Listener Configuration
-//TODO confirm
+* Set Headers in the Listener Configuration
+//TODO confirm use of properties in Mule 4? Are these set in Configuration?
 
 [[set-header-ex]]
 ==== Set Header Explicitly
@@ -126,59 +170,77 @@ Response headers are generated from outbound properties which the exception of a
 [[disable-headers]]
 ==== Disable Outbound Properties as Headers
 
-In the HTTP Listener properties editor, in the *Response Settings* section, tick the box labeled *Disable Properties*
-//TODO confirm
+In the HTTP Listener properties editor, in the *Response Settings* section.
+//TODO confirm what should be done "Create child?"
 
-=== Stream HTTP Requests or Responses through Listener
+==== Other Response Details
 
-The transfer-encoding header is used to stream data through the HTTP connection so as not to read all into memory.
+Normally, HTTP Listener computes the length of the payload and sets the value of the `Content-Length` header.
 
-Transfer-encoding header is used to send the HTTP message body in chunks, saving us from having to know the body length in advance. Each chunk is separated by a predefined line separator, which contains the length of the particular chunk
+* If the payload is an `InputStream`, the HTTP listener adds a `Transfer-Encoding:chunked` header to the response
+** For all other cases, HTTP listener computes the length of the payload and sets the value of the `Content-Length`
+* Override the listener's attempts to set `Content-Length` or `Transfer-Encoding` by setting the *Response streaming mode*.
 
-For streaming using the HTTP Requester, see link:/#stream-requester[How to Stream through Requester]
+For streaming options in the HTTP Requester, see link:/#stream-requester[How to Stream through Requester]
 
 
 == HTTP Requester Tasks
 
 === Send Authenticated Requests
 
-link:/mule-user-guide/v/3.8/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
+link:/mule-user-guide/v/latest/authentication-in-http-requests[Authenticated Requests], via *Basic Authentication, Digest and OAuth*
 
 === Send Multipart HTTP Requests
 
-=== Customize HTTP Requests and Parameters
+Use an Attachment component from the palette to upload the file in a POST request with `ContentType: multipart/form-data`. Each attachment is sent in parts.
+//TODO how to?
 
-The HTTP Requester allows you to include the following types of parameters and maps of these:
+=== Adding Custom Parameters
+
+The HTTP requester allows you to include maps or singles of the following parameter types:
 
 * query params
 * URI params
 * headers
 
-*Notes*
+=== Changing Default Behavior for Sending Request Body
+
+
+The message *payload* is the body of the request, except for with methods `GET`, `HEAD` and `OPTIONS`, which mean sending HTTP requests with an empty body (the payload of the Mule message won’t be used at all). If you need to change this default behavior, you can specify in the *Request Builder*.
+//TODO: confirm
+
+Customize the body of the request using the `source` and `target` attributes.
+//TODO how to access now?
+
+==== Additional Custom Parameters
 
 * Send form parameters with your request, included in the Mule message payload
 * Include attachments in your request by adding an Attachment building block to your flow.
-* Customize the body of the request using the `source` and `target` attributes
-* For `GET`, `HEAD` and `OPTIONS` methods, override the default empty body. Send a body with a request `sendBodyMode`
+//TODO how else to send attachments?
 * Set headers, URI parameters explicitly or dynamically, using DataWeave language.
 * Send form parameters in `POST` request
 
 [[stream-requester]]
-=== Stream through the HTTP Requester
+=== Streaming through the HTTP Requester
 
-* Set the attribute `requestStreamingMode`
+To do so, set the attribute *Request streaming mode*. When streaming, request contains `Transfer-Encoding` header and sends body in chunks until stream consumed; it does not contain the `Content-Length` header.
 
-=== Disable HTTP Response Body Parsing
+=== Parsing HTTP Response Body
 
-//TODO
+As with the listener, when HTTP responses have a content type of `application/x-www-form-urlencoded` or `multipart/form-data`, the HTTP Requester automatically parses the message. You can disable this parsing functionality.
 
-=== Validate HTTP Responses
+=== Validating HTTP Responses
 
-//TODO
+You can set an expression to do this from *Response Settings*.
+//TODO how to do this now. Before was done from Success Status Code Validator?
 
 == Additional Reference
 
+Other attributes in this connector allow you to set up more advanced functionality such as response timeout, set whether redirects are followed, cookies gathered from responses and if responses are parsed.
+
 === Send or Receive HTTPS requests
+
+Set the protocol to HTTP in the configuration.
 
 [NOTE]
 Configuration depends on whether you have a HTTP server or client and whether or not you need two-way authentication.
@@ -197,7 +259,18 @@ link:/mule-user-guide/v/3.8/tls-configuration[TLS Configuration]). Setting both 
 
 === Map HTTP Responses to Mule Messages
 
-//TODO
+An HTTP response is mapped to the Mule message in exactly the same way that the HTTP request is mapped to a Mule message in the HTTP Listener Connector, except that the following elements don’t apply to HTTP responses:
+
+* Query parameters
+* URI parameters
+* All inbound properties related to the HTTP request URI
+
+In addition, the HTTP Request Connector adds the following inbound properties to the Mule message when receiving a response:
+
+`http.status`: Status code of the HTTP response
+`http.reason`: Reason phrase of the HTTP response
+
+
 
 == See Also
 
