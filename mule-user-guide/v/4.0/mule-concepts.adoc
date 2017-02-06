@@ -1,59 +1,125 @@
 = Key Concepts
 :keywords: studio, server, components, connectors, elements, big picture, architecture
 
-Mule works by responding to _events_ initiated by external resources.
+At the simplest level, Mule works by receiving _events_, processing them and routing them to other _endpoints_. +
+A _resource_ would trigger an _event_ that reaches an *Event source* in your Mule application and the produced *Mule event* would be processed by the runtime following the logic set up through other *Components*.
 
-At the simplest level, Mule applications accept and process events as *Mule Events* through several operations.
+== Mule Event
+
+A *Mule event* is an object containing the core information processed by the runtime. It travels through *Components* inside your Mule application following the configured application logic.
+A *Mule event* is generated in the *Event source* of your application, which receives an event triggered by a _resource_ that could be external to the Mule Runtime.
+
+[TIP]
+Exampels of an _event_ could be a client request, or a request to change data in a database.
 
 The *Mule Event* represents the _context of information_ of the event that triggers the Mule application's logic. +
-The *Mule event* travels through the *Flow* containing a *Mule Message* composed by:
+The *Mule event* travels through the *Flow* containing:
 
-* A *payload* with the main data that the mule application processes.
-* A collection of *Attributes* with metadata about the message's payload.
-
-And *Variables*, which are pieces of information about the *Mule Event* meant to be used by the application that is processing it.
+* A *Mule Message* composed by:
+** A *payload* with the main data that the mule application processes.
+** A collection of *Attributes* with metadata about the message's payload.
+* *Variables*, which are pieces of information about the *Mule Event* meant to be used by the application that is processing it.
 
 [NOTE]
 Alternatively, large or streaming messages can be processed as *records* in a *batch job*.
+
+=== Mule Message
+
+The *Mule Message* contains the core business specific information of a *Mule event*. It contains *attributes* and a *payload*:
+
+==== Payload
+
+The *payload* is the core information of a *Mule message* and it contains the _actual data_ to be processed.
+
+==== Attributes
+
+//TODO: are attributes accessible from the application?
+The *attributes* are _metadata_ around the *payload*.
+
+[TIP]
+Sending a _POST_ HTTP Request with an XML file to a Mule application generates a *Mule Message* whose *attributes* are the HTTP headers, and its *payload* is the XML file being POSTed.
+
+=== Variables
+
+// TODO: Require more context around variables.
+Generally speaking, variables are user-defined metadata about the *Mule event*.
+
+They can store metadata resulting from different *operations* or to add metadata to a processing *mule event*.
 
 // TODO: Would it make sense to show Event Context (ExecutionContext) ?
 // === Event Context
 //The ExecutionContext that does not change within the scope of a single request and has the orginalPayload, MEP, credentials as well as reference to txContext and muleContext.
 
-contain multiple linked flows and/or batch jobs, which, in combination, perform the integration required for your use case.
+== Components
 
-== Flows
+Mule uses *components* to _compose_  Mule applications and determine its logic to process the *Mule event*.
 
-// TODO: Review Flow.
-A flow is the construct within which you link together several individual elements to handle the receipt, processing, and eventual routing of a message. You can connect many flows together to build a complete application which you can then deploy on premise, on Mule or another application server, or in the cloud. 
+Any of the following *components* can be found in a Mule application:
 
-// TODO: review message processor renaming to Operation
-At the simplest level, flows are sequences of _operation_. A *Mule Event* that enters a flow may pass through a wide variety of processors.
+=== Flows
 
-// TODO: review building blocks renaming to Components
-The units that make up flows may be referred to as *Components* (in Studio's graphical representation of a flow) or elements (in an XML flow representation). +
+At the simplest level, flows are sequences of ordered _logical processes_ that handle the *Mule Event*.
 
-// TODO: Review studio pallets containing only operations as opposed to building blocks.
-// In general, a building block corresponds to an icon in the Anypoint Studio GUI, which in turn represents a message source, processor, _or_ component. A building block is a visual representation of an XML element within the Mule application's XML configuration file.
+A *flow* is the construct within which you link together several individual elements to handle the receipt, processing, and eventual routing of a *Mule Event*. +
+Typically, a *Flow* starts with an *Event Source* that receives the triggering event, and passes the now *Mule event* through *Event Processors* that could _transform_, _enrich_ and _filter_ the Mule event.
 
-// TODO: Review the idea of adding message sources as a key concept
-// == Message Sources
-//
-// Mule processes *messages*, also known as *events*, which may be transmitted from resources external to Mule. For example, a message can be initiated by an event such as a consumer request from a mobile device, or a change to data in a database, or the creation of a new customer ID in a SaaS application.
-//
-// The first building block of most flows or batch jobs is a receiver which receives new messages and places them in the queue for processing. This *message source* – in the example above, an inbound HTTP endpoint – receives messages from one or more external sources, thus triggering the execution of a flow or batch job. Message sources in Mule are usually Anypoint Connectors, elements which provide connectivity to a specific external source, either via a standard protocol (such as HTTP, FTP, SMTP) or a third-party API (such as Salesforce.com, Twitter, or MongoDB.)
+=== Event Source
 
-// TODO: Review Message Processors
-// == Message Processors
-//
-// In Mule, message processors are grouped together by category.
-//
-// Mule *transformers* are the key to exchanging data between nodes, as they allow Mule to convert message payload data to a format that another application can understand. Mule also enables content enrichment of messages which allows you to retrieve additional data during processing and attach it to the message.
-//
-// Mule uses *components* to conduct backend processes for specific business logic such as checking customer and inventory databases. Components route messages to the correct application, such as an order fulfillment system. Mule uses link:http://en.wikipedia.org/wiki/Staged_event-driven_architecture[Staged Event-Driven Architecture (SEDA)] for core asynchronous message processing in flows. Importantly, components don't have to have any Mule-specific code; they can simply be POJOs, Spring beans, Java beans, Groovy scripts, or web services containing the business logic for processing data. Components can even be developed in other languages such as Python, JavaScript, Ruby, and PHP. Mule’s catalog of building blocks support the most commonly used Enterprise Integration Patterns.
-//
-// Flows and batch jobs can also include *filters*, *scopes*, and *routers*. For example, you can use a filter to whitelist IP addresses from which your application accepts messages; you can use a scope to "wrap" around several message processors and cache the result of the processing they perform; you can use a router to send messages down different paths in your application depending on the content of the message payload. Mule includes a variety of filters, scopes, and routers to customize how a flow or batch job processes messages.
-//
+An *Event Source* receives a triggering event and forwards it to the next *Component* in the flow, along with some metadata around the received event conforming the *Mule Event* that the *flow* will process.
+
+Examples of *event sources* can be the _HTTP Listener_ or a _File Directory Watcher_.
+
+=== Event Processors
+
+*Event Processors* are the *Components* used to conduct backend processes for specific business logic around the *Mule event*. +
+They are grouped based on their specific actions around the *Mule event*:
+
+==== Operations
+
+*Operations* apply specific actions in the Mule application. They can be used to generate a request to an external source, or to point to local resources within an application's package structure.
+
+Examples of *operations* are the _HTTP Listener_ and _HTTP Requester_
+
+==== Scopes
+
+*Scopes* can wrap *operations* to define them a fine-grained behavior within a *flow*. They can be used to set up a poll frequency in which certain *operation* must trigger in your application, or to specify that certain group of *operations* needs to process asynchronously.
+
+// TODO: is async a scope or a router?
+Some examples of *scopes* are _Poll_ and _Async_.
+
+//TODO: Can I use a scope to enrich a message payload?
+
+==== Routers
+
+*Routers* can control the application's logic to route, resequence, or split and aggregate *Mule Events* in a flow.
+
+Some examples of *routers* are _splitter_, _scatter-gather_ and _resequencer_.
+
+==== Transformers
+
+[CAUTION]
+Transformers are included in Mule 4 Beta for compatibility reasons. They will be deprecated for future releases. +
+Transformation should be carried by DataWeave expressions.
+
+*Transformers* are *components* that transform the *payload* of a *mule message*.
+
+Some examples of *transformers* are _Object to XML_ and the _Object to String_.
+
+=== Modules
+
+*Modules* are a collection of *Event sources* and *operations* along with its specific *module configurations*.
+
+Each *Module* can extend the runtime capabilities allowing users to configure connections to different services almost automatically.
+
+// TODO: Determine if this is technically accurate
+Importantly, *modules* don't have to have any Mule-specific code; they can simply be POJOs, Spring beans, Java beans, Groovy scripts, or web services containing the business logic for processing data. Components can even be developed in other languages such as Python, JavaScript, Ruby, and PHP. Mule’s catalog of *components* support the most commonly used Enterprise Integration Patterns.
+
+Some examples of *modules* are the _SalesForce Connector_ and the _SAP Connector_.
+
+=== Module configurations
+
+Set global configurations for a specific *module*.
+
 
 == DataWeave
 
@@ -61,6 +127,7 @@ Dataweave is the primary language used for formulating expressions in Mule, al
 
 At runtime, Mule evaluates expressions while executing a flow to:
 
+* Define a filters to allow certain *Mule events* to continue to be processed in a *flow* based on certain criteria.
 * Extract information that it can use to process the current message.
 * Set or manipulate a value in the message header or payload.
 * Perform an operation on information in the message, application, Mule instance, or server.
