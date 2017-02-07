@@ -1,8 +1,17 @@
 = Key Concepts
 :keywords: studio, server, components, connectors, elements, big picture, architecture
+:toc: macro
+:toc-title:
+:toclevels: 3
 
-At the simplest level, Mule works by receiving _events_, processing them and routing them to other _endpoints_. +
+
+At the simplest level, Mule is the core engine that powers _applications_ that receive _events_, process them and route them to other _endpoints_.
+
 A _resource_ would trigger an _event_ that reaches an *Event source* in your Mule application and the produced *Mule event* would be processed by the runtime following the logic set up through other *Components*.
+
+This document gives a quick glimpse of all the key concepts around the *Mule Runtime*:
+
+toc::[]
 
 == Mule Event
 
