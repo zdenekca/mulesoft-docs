@@ -136,7 +136,8 @@ Dataweave is the primary language used for formulating expressions in Mule, al
 
 At runtime, Mule evaluates expressions while executing a flow to:
 
-* Define a filters to allow certain *Mule events* to continue to be processed in a *flow* based on certain criteria.
-* Extract information that it can use to process the current message.
-* Set or manipulate a value in the message header or payload.
-* Perform an operation on information in the message, application, Mule instance, or server.
+* Extract information from the Mule event
+* Restructure or manipulate any part of the Mule event.
+* Define a filter, to allow certain *Mule events* to continue to be processed in a *flow* based on certain criteria. (?)
+* Set or manipulate a value in the message header, the payload or a variable.
+* Perform an operation on information in the Mule event, application, Mule instance, or server.
