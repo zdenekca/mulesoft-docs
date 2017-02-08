@@ -15,7 +15,7 @@ image:
 
 Or you can use an expression on a Twitter connector to pick the userId to querry:
 
-
+image:
 
 
 Once extracted, the value is handled as a literal value of one of the supported link:/mule-user-guide/v/4.0/dataweave-types[DataWeave Value Types].
