@@ -28,7 +28,7 @@ In the Mule 4.0 ecosystem, we refer to connectors as Modules. +
 After all, a _Connector_ is just a Module with connection capabilities.
 
 
-// TODO: Smart connectors are not going to be available for BETA
+// COMBAK: Smart connectors are not going to be available for BETA
 // Introducing *_Smart Connectors_*: Modules designed using XML to manipulate connections. +
 // Users can define the module, set configurations and define operations that can later be invoked in the mule application to manipulate connections.
 

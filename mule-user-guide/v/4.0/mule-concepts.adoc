@@ -120,6 +120,8 @@ Some examples of *transformers* are _Object to XML_ and the _Object to String_.
 
 Each *Module* can extend the runtime capabilities allowing users to configure connections to different services almost automatically.
 
+// TODO: Modules to use to validate
+
 // TODO: Determine if this is technically accurate
 Importantly, *modules* don't have to have any Mule-specific code; they can simply be POJOs, Spring beans, Java beans, Groovy scripts, or web services containing the business logic for processing data. Components can even be developed in other languages such as Python, JavaScript, Ruby, and PHP. Mule’s catalog of *components* support the most commonly used Enterprise Integration Patterns.
 
