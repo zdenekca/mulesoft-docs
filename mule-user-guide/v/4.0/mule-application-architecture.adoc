@@ -1,6 +1,11 @@
 = Flow Architecture in a Mule Application
 :keywords: studio, server, architecture, big picture, deploy
 
+////
+we should get rid of this and re-arrange this content somewhere else.
+**** link:/mule-user-guide/v/4.0/mule-application-architecture[Flow Architecture in a Mule Application]
+////
+
 [NOTE]
 This page describes Mule application architecture in terms of link:/mule-fundamentals/v/3.8/flows-and-subflows[flows], the default structure with which you build applications in Mule. Note, however, that Mule also supports batch jobs for large and streaming messages. Batch jobs can be combined with flows in the same application, but their structure and functionality differs from that described here. To learn more, see link:/mule-user-guide/v/3.8/batch-processing[Batch Processing].
 
