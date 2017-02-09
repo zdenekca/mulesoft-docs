@@ -1,3 +1,0 @@
-= Reference 
-
-This section shows reference documentation for Mule runtime components.
