@@ -1,4 +1,4 @@
-= About Dependency Injection Annotations
+= To Inject a Dependency in a Field
 
 All configurations and operations support dependency injection at the field level. To inject a dependency use the `@Inject` annotation. Any object in the Mule registry can be injected.
 
