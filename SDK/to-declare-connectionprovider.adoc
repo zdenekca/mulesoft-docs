@@ -1,0 +1,85 @@
+= To Declare a ConnectionProvider for an Extension
+
+. Code the class that provides link:/SDK/about-connections-connectionproviders[connections] to your extension.
+. In the Extension main class, reference the `ConnectionProvider` class(es) with the `@ConnectionProviders` annotation.
+
+[NOTE]
+This referencing mechanism is the practically same as for `@Configurations` and `@Operations`. For a refresher see link:#how-referenced[]
+
+== Example: Base Class for FTP ConnectionProvider
+
+An example setup for the `AbstractFtpConnectionProvider` for the FTP connector, which the actual connection providers extend. These are for the FTP connector.
+
+[source,java,linenums]
+----
+/**
+ * Base class for {@link ConnectionProvider} implementations which take a {@link FtpConnector} as a config and provides a
+ * {@link FtpFileSystem}
+ *
+ * @param <C> the generic type of the connection object
+ * @since 4.0
+ */
+public abstract class AbstractFtpConnectionProvider<C extends FtpFileSystem>
+    extends FileSystemProvider<C> implements PoolingConnectionProvider<C> {
+
+  private static final String TIMEOUT_CONFIGURATION = "Timeout Configuration";
+
+  @Inject
+  protected MuleContext muleContext;
+
+...
+
+}
+----
+
+== Example: ClassicFtpConnectionProvider Extending the Base Class
+
+[source,java,linenums]
+----
+/**
+ * An {@link AbstractFtpConnectionProvider} which provides instances of {@link ClassicFtpFileSystem} from instances of
+ * {@link FtpConnector}
+ *
+ * @since 4.0
+ */
+@DisplayName("FTP Connection")
+@Summary("Connection to connect against an FTP server")
+public class ClassicFtpConnectionProvider extends AbstractFtpConnectionProvider<ClassicFtpFileSystem> {
+
+  private static final String COULD_NOT_ESTABLISH_FTP_CONNECTION = "Could not establish FTP connection";
+
+  @ParameterGroup(name = CONNECTION)
+  private FtpConnectionSettings connectionSettings;
+  ...
+}
+----
+
+[[how-referenced]]
+== How Referenced in Extension Main Class
+
+This line specifies the two specific connection providers, one of which is shown above. Note that the base class is not specified as a `ConnectionProvider`
+
+`@ConnectionProviders({ClassicFtpConnectionProvider.class, SftpConnectionProvider.class})`
+
+[source,java,linenums]
+----
+@Extension(name = "FTP", description = "Connector to manipulate Files on a FTP/SFTP server")
+@Operations({FtpOperations.class})
+@SubTypeMapping(baseType = FilePredicateBuilder.class, subTypes = FtpFilePredicateBuilder.class)
+@ConnectionProviders({ClassicFtpConnectionProvider.class, SftpConnectionProvider.class})
+@Export(classes = {SftpFileAttributes.class, ClassicFtpFileAttributes.class, FtpFileAttributes.class})
+@ErrorTypes(FileError.class)
+@Xml(namespace = "ftp")
+public class FtpConnector extends FileConnectorConfig {
+  ...
+}
+----
+
+== Guidelines
+
+* If an extension contains more than one Connection Provider, then use to `@Alias` annotation to give each one a meaningful name, and optionally, a description.
+* All the defined providers must be instantiable, be public and have a default constructor.
+* It can be used at the `@Extension` or `@Configuration` level
+
+[NOTE]
+The XML name of that connection provider will have the “-connection” suffix.

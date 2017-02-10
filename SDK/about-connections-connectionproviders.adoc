@@ -1,0 +1,77 @@
+= About Connections and ConnectionProviders
+
+== About Connection
+
+No specific `Connection` interface or contract is enforced, so you are not required to create a strict definition for a connection.
+
+Connection does not necessarily reference the socket connection itself. It can simply be a client.
+
+All the operations need to be independent of the connection class. Use the `@Connection` annotation to inject a connection.
+
+== About Abstracting the Connection Definition
+
+You must provide some level of abstraction common to all sorts of connections, capable of serving all operations. Again, no type restrictions should be put into this abstraction. There is no connection interface that must be implemented.
+
+Each `ConnectionProvider` implementation can be annotated with `@Alias` to customize the provider’s name on any supported DSL.
+
+Note that for whatever alias you provide, the “-connection” suffix is added. If no `@Alias` is given, then a default name is inferred using the name of the annotated method.
+
+== About @Connection
+
+The connection can be injected into the operation just like the configurations can with the `@UseConfig`.
+
+The advantages of this are:
+
+* operations are not responsible for knowing how to obtain the connection
+* operations do not need to depend on the configuration to obtain their connections. This offers flexibility not only in terms of connection provisioning but in any other layer of functionality we want to add in the future
+* Facilitates MUnit tests
+
+== About Connections in Message Sources
+
+In message sources, the `@Connection` annotation is applied at a field level, not an argument level.
+//MG what is argument level vs. field level
+
+When pooling, one connection is taken from the pool and kept by the source until it is stopped. Only then the connection is returned to the pool.
+
+
+== How SDK Instantiates Connection Providers
+
+The providers also share the same “implicit” behavior as the configurations. If a configuration requires a connection provider but one is not specifically declared, then all the provider models will be traversed looking for the first one which can be instantiated implicitly (using the same rules as with the configurations). If found, then the provider is created and assigned.
+
+The `ConnectionProvider` defined in an extension must be compatible with all configurations and operations in its scope. This means that:
+
+* It is mandatory to actually declare the generics in the `ConnectionProvider`
+* The Config generic has to be resolved to a type which is assignable from all the configuration types in the extension
+* The `Connection` generic has to be resolved to a type which is assignable from all the argument types annotated with `@Connection`
+//MG not sure what we mean be assignable
+
+Simply put, if the provider is available at the extension level, then it has to be compatible with every single configuration type in the extension and it has to work with every defined operation. If it is declared at the configuration level, then it is only required to work with that configuration and with the operations available to it.
+
+== About Implicit Connection Providers
+
+Like configurations, connection providers are not required to be explicitly defined.
+
+If a connection provider is required but not defined in the configuration, then the runtime searches the `ExtensionModel` for a `ConnectionProviderModel` which has optional parameters or no parameters at all. The first compliant `ConnectionProviderModel` is used to instantiate a default connection provider.
+
+[NOTE]
+If any of these parameters have default values, they are honored.
+Models defined at a configuration level will take precedence over those defined at the extension level.
+
+
+== About the Connection Providers-Configuration Binding
+
+
+There is a 1:1 relationship between the lifecycle of a configuration and its connection provider. A `ConnectionProvider` instance is bound to a configuration instance. Therefore, all configuration lifecycle events are propagated to its connection provider.
+
+What happens if a connection provider is defined using expressions like this?
+
+[source,xml,linenums]
+----
+<ftp:config name="ftp" transferMode="BINARY">
+	<ftp:connection user="#[user]" password="#[password]" />
+</ftp:config>
+----
+
+In the example above, the parameters which strictly belong to the configuration are *static*, but the connection provider ones are *dynamic*.
+
+*If a connection provider is dynamic, the entire configuration is assumed to be dynamic.* This is so each dynamic configuration instance can always obtain connections from the same predictable source.

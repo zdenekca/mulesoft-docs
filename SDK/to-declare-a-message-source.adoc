@@ -1,0 +1,26 @@
+= To Declare a Message Source for an Extension
+
+_(Only for extensions that must generate messages for the flow)_
+
+
+Implement the `Source` class, which takes two generics:
+
+* one for the type of the generated event payload and,
+* another for the type of the attributes
+
+.Example implementation in the HTTP Extension
+include::defining-sources.adoc[tags=msg-source-example]
+
+
+== To Signal the Message Source Emits a Response
+
+Annotate the class with `@EmitsResponse`. The runtime does not validate that a response is actually emitted.
+
+== To Obtain a Response From the Flow
+
+Declare methods annotated with `@OnSuccess` or `@OnError`.
+
+include::defining-sources.adoc[tags=on-success-error]
+
+== See Also
+* For background information on message source implementation in SDK Extensions, see link:/SDK/defining-sources[Defining Sources].
