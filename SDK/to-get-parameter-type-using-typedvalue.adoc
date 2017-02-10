@@ -1,0 +1,32 @@
+== To Retrieve the Type using TypedValue
+
+`TypedValue<T>`
+
+
+Use to retrieve the type (`DataType`) of the value of a certain parameter.
+
+Use to get the DataType of the parameter value, retrieve the `MimeType` and encoding, and get the resolved value for the parameter.
+
+=== Example Operation Using TypedValue
+
+This an example operation where a `String` parameter is declared:
+
+[source,java,linenums]
+----
+public void someOperation(String someParameter) {
+ ...
+}
+----
+
+To retrieve a `TypedValue` but keeping the `String` value as the parameter type for the operation model, change parameter type from `String` to `TypedValue`, but declare `String` as the generic type:
+
+[source,java,linenums]
+----
+public void someOperation(TypedValue<String> someParameter) {
+ ...
+}
+----
+
+== See Also
+
+* link:/SDK/to-implement-a-parameterresolver[To Implement a ParameterResolver]

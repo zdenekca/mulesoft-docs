@@ -1,0 +1,135 @@
+= About Content and Behavior Parameters
+
+Consider the following example operation:
+
+`<file:write path="hello.txt" overwrite="true" content="#[payload]" />`
+
+Notice that the parameters that compose them often play different roles.
+
+//MG need example here
+
+=== Behavior Parameters
+
+These are parameters which manage settings regarding how the operation is going to behave. In the example above the `overwrite` parameter configures what to do if the file already exists. The `path` parameter configures where the content is going to be written. They configure the behavior of the `write` operation. They do not represent the data to be written.
+
+There are also examples of operations which are exclusively formed by behavior parameters. For example:
+
+`<file:copy from="somePath" to="anotherPath" />`
+
+Both of these parameters are behavior oriented since this operation doesn’t take any `content` parameter. The content is in the file being copied.
+
+
+=== Content Parameter Characteristics
+
+Considering the explained above, the definition of content parameter is at this point obvious. In the `file:write` example, the content is a content parameter.
+
+Content parameters have the following characteristics:
+
+* They must accept expressions. Both SUPPORTS_EXPRESSIONS and EXPRESSION_REQUIRED are supported, but compilation will fail if @Expression(NOT_SUPPORTED) is used.
+* Each content parameter allows embedding it’s very own DW script to generate it. Therefore, inline definition of content parameters is not allowed
+* Content parameters always translate to the DSL as a text element, precisely to enable the embedded DW script
+
+Consider the `file:write` operation without using pseudocode. Suppose that you’re using this operation in a flow and by the time you’re using this operation the message payload is JSON and you want to store it as XML.
+
+[source,xml,linenums]
+----
+<file:copy from="somePath" to="anotherPath">
+	<file:content>
+		<![CDATA[
+		#[dw:{
+			// your DW transformation
+}
+]]>
+	</file:content>
+</file:copy>
+----
+
+On the connector’s code side, the content parameter is marked using the `@Content` annotation:
+
+[source,java,linenums]
+----
+public void write(String path, boolean overwrite, @Content Object content) {
+}
+----
+
+Noteif you try to combine `@Content` with `@Expression(NOT_SUPPORTED)` on the same argument, it will result in an error.
+
+=== Primary Content Parameter
+
+That explained above works fine when the operation has only one content parameter, but there are cases in which the operation has many content parameters. For example:
+
+[source,xml,linenums]
+----
+<http:request path="/my/api">
+	<http:request-builder>
+		<http:body>
+			#[dw:body..]
+		</http:body>
+		<http:uri-params>
+			#[dw:uri-params …]
+		</http:uri-params>
+		<http:headers>
+			#[dw:you get the picture..]
+		</http:headers>
+	</http:request-builder>
+</http:request>
+----
+
+As you can see, you can have as many content parameters as you want (which means, that the `@Content` annotation can be used on more than one method argument). However, consider i nthe example that the body parameter is more important than the rest of the parameters. Although headers are part of the content being sent in the HTTP request, the headers are complementary to the actual body being sent. *When an operation has more than one content parameter, one of them must be marked as primary content.* Do this by setting `@Content`(primary = true).
+
+The primary content parameter has all of the same characteristics as the regular content parameters, plus two additional criteria:
+
+* Primary content is automatically designated as "optional"
+* Its default is `#[payload]`
+
+These two criteria are automatically added to the parameter by the runtime and you configure otherwise. If you try to explicitly set a primary content parameter to a different default, compilation will fail.
+
+[NOTE]
+====
+*Gotcha*
+
+Going back to the `file:write` example, in which there was only one content parameter, is it primary? YES. When an operation has only one content parameter, the runtime will automatically consider it as primary even if the user explicitly said so. That means that the content parameter in the file:write operation is automatically made optional and defaults to #[payload]. This helps enforcing consistency across modules.
+====
+
+=== Changing the Default of Primary Content
+
+There are edge cases in which primary content should default to something else than the payload. This tends to happen when the operation has only one content parameter and that parameter is not always needed. For example consider the Database connector. The `inputParameters` of a query are primary content, but not all queries require input parameters. So the real default here should be an empty Map
+
+You can do that by combining the `@Content` and `@Optional` annotations:
+
+[source,java,linenums]
+----
+public List<Map> select(String sql, @Optional(defaultValue="bleh()") @Content Map<String, Object> inputParameters) {
+	….
+}
+----
+
+=== Embedding Content Parameters in Complex Objects
+
+Looking closely at the `http:request` operation, you see that the content parameters are contained in an element called `request-builder`. For the purpose of usability, the author of the connector chose to group all the request-related attributes into an enclosing object. This is supported by the SDK in the following manner:
+
+[source,java,linenums]
+----
+public void request(String path, HttpRequestBuilder requestBuilder) {
+}
+----
+
+As you can see, there are no content parameters here. However, if we look inside the `HttpRequestBuilder` class, you see them:
+
+[source,java,linenums]
+----
+public class HttpRequestBuilder {
+
+@Parameter
+@Content(primary = true)
+private Object body;
+
+@Parameter
+@Content
+private Map<String, String> uriParams;
+
+@Parameter
+@Content
+private Map<String, String> uriParams;
+}
+----

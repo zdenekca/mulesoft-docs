@@ -1,0 +1,36 @@
+= To Implement a ParameterResolver
+
+Operations or source callback parameters can be defined from some special types like `ParameterResolver` to be able to retrieve values from the event or the resolved value:
+
+`ParameterResolver<T>`
+
+This parameter type is useful to obtain the used expression for a parameter.
+
+=== Why Use ParameterResolver
+
+Using this kind of parameter you can alter the expression resolution if an expression was used, or get the used expression.
+//MG don't understand use case when not expression, can't expressions resolve automatically
+
+== Example of ParameterResolver
+
+This an example operation where a `String` parameter is declared:
+
+[source,java,linenums]
+----
+public void someOperation(String someParameter) {
+ ...
+}
+----
+
+To retrieve a `ParameterResolver` but keeping the String value as the parameter type for the operation model, change the parameter type from `String` to `ParameterResolver` but declaring String as the generic type of it:
+
+[source,java,linenums]
+----
+public void someOperation(ParameterResolver<String> someParameter) {
+ ...
+}
+----
+
+== See Also
+
+* link:/SDK/to-get-parameter-type-using-typedvalue[Get Parameter Type Using TypedValue]

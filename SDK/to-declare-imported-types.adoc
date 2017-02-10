@@ -1,0 +1,23 @@
+= To Declare Imported Types
+
+If an extension is required to use a type defined in a different module, then the developer will be able to declare that type as an imported type. Then, whenever that type is used, a reference to its original declaration will be provided in the XML support, instead of redefining the type as if it was declared in the current extension.
+
+[source,java,linenums]
+----
+@Extension(name = "petstore")
+@Import(type = Ricin.class, from = HeisenbergExtension.class)
+public class PetstoreExtension
+----
+
+When the import is declared, the user will be able to reference the original `heisenberg:ricin` element:
+
+[source,xml,linenums]
+----
+<petstore:banned-items>
+	<petstore:item>
+<heisenberg:ricin microgramsPerKilo="22">
+   <heisenberg:destination victim="Lidia" address="Stevia coffe shop" />
+</heisenberg:ricin>
+</petstore:item>
+</petstore:banned-items>
+----

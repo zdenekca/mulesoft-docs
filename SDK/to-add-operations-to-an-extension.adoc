@@ -1,0 +1,18 @@
+= To Add Operations to an Extension
+
+
+toc::[]
+
+
+== Before Proceeding
+
+Since operations frequently make use of configuration parameters, make sure you have already:
+
+* Created the Extension class
+* Added any global attributes
+* Created a configuration with its specific user configurable attributes
+
+
+== To Declare Operations
+
+Declare the operations at the extension if they are global operations. Otherwise declare them at the configuration level. Define operations in one or several classes. Mark operation classes with `@Operations`.

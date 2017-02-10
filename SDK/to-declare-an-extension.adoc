@@ -1,0 +1,16 @@
+=== To Declare an Extension
+
+Use the `@Extension` annotation to declare your extension.
+
+[source,java,linenums]
+----
+@Extension(name = "myext", description = my extension”)
+public class MyExtension
+{
+----
+
+[NOTE]
+`@Extension` marks a discoverable entry point for your extension and can be validated for use with Mule.
+
+
+*Next*: link:/SDK/to-create-configuration[How to create a configuration]

@@ -1,0 +1,35 @@
+== To Declare a Configuration
+
+
+If you created the class for your extension in the link:/mule-sdk-intro[Mule SDK Intro], you already have an _implicit_ configuration. However, the normal practice is to declare configurations explicitly.
+
+. Create a new Java class in another file.
+. It should use parameters or some logic to populate required attributes for the configuration.
++
+.HttpRequesterConfig.java Configuration class
+----
+public interface HttpRequesterConfig extends NamedObject, AnnotatedObject, Startable, Stoppable {
+
+  /**
+   * @return the base path
+   */
+  String getBasePath();
+...
+----
++
+. Use the `@Configurations` from the Extension main class reference the configuration(s).
++
+[source,java,linenums]
+----
+@Extension(name = "HTTP", description = "Connector to handle and perform HTTP requests")
+@Configurations({HttpListenerConfig.class, HttpRequesterConfig.class})
+@Operations(HttpOperations.class)
+...
+public class HttpConnector {
+
+}
+----
+[NOTE]
+These are the steps for setting up the configuration. The parameters that the configuration uses may require some annotations as well.
+
+*Next*: link:/to-declare-parameters[Declare Parameters for the Configuration]

@@ -1,0 +1,36 @@
+= About Operations Lifecycle
+
+Classes which define operations can have the following characteristics:
+
+* Can hold state, but must be thread safe
+* Part of that state can be made of dependencies injected through the `@Inject` annotation
+* Can implement Mule’s lifecycle annotations
+//MG how does developer ensure ops are thread safe? what are the Mule lifecycle annotations?
+
+
+An instance of the `@Operations` annotated class is created each time an operation is defined in a pipeline. For example, the `create` operation is called three times, thus creating three instances of the `@Operations` annotated class:
+
+[source,xml,linenums]
+----
+<mule>
+	<my-extension:config name="my-extension" myName="#[name]" />
+
+
+<flow name="flow1">
+	<set-payload value="blah" />
+	<my-extension:create purity="100" />
+</flow>
+
+
+<flow name="flow2">
+<my-extension:create purity="100"/>
+<my-extension:create purity="90" />
+</flow>
+</mule>
+----
+
+For this sample configuration, three instances of the operations class are created. One for `flow1` and two for `flow2`.
+
+Notice however that the `my-extension` configuration is dynamic, so potentially each execution of the operation can receive a different instance of the configuration.
+
+At the same time, it should be possible for the operations class to keep state if, for example, it wanted to keep track of how many invocations it received. For that reason, it is not possible to keep the configuration as part of the operations instance state and must be passed by argument each time.

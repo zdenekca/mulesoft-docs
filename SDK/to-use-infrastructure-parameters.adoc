@@ -1,0 +1,62 @@
+= To Declare Infrastructure Parameters
+
+To allow connection pooling, a retry policy or TLS, you need to use one or many infrastructure parameters. A configuration may only have _one_ of each type of infrastructure parameter.
+
+At the "configurable" and "connection provider" levels of an extension these types that can be leveraged from the Mule core infrastructure:
+
+* `PoolingProfile`
+* `RetryPolicyTemplate`
+* `TlsContextFactory`
+
+Declare a parameter as one of these types for any configuration or connection provider that needs to use one of these types.
+
+[source,java,linenums]
+----
+public class MyExtension {
+
+
+	@Parameter
+	private PoolingProfile poolingProfile;
+
+
+	@Parameter
+private RetryPolicyTemplate retryPolicy;
+
+
+@Parameter
+private TlsContextFactory tlsContext;
+}
+----
+
+== User Point of View in XML
+
+The resulting XML block with the infrastructure parameters would look like:
+
+[source,xml,linenums]
+----
+<my-extension:config>
+	<pooling-profile />
+	<reconnect />
+	<tls:context />
+</my-extension:config>
+----
+
+[NOTE]
+The elements are not generated using the name of the annotated field.
+
+== User Point of View of TLS Context
+
+`TlsContextFactory` supports the XML element being a global element, and it is also possible to configure it as a reference parameter. The name of the attribute is always generated as `tlsContext`. You can see in the example that the `petstore` configuration references the `tlsContext` by name.
+
+[source,java,linenums]
+----
+<tls:context name="globalTlsContext">
+   <tls:trust-store path="ssltest-cacerts.jks" password="changeit"/>
+   <tls:key-store path="ssltest-keystore.jks" keyPassword="changeit" password="changeit"/>
+</tls:context>
+
+
+<petstore:config name="globalTls" tlsContext="globalTlsContext" />
+----
+
+`TlsContextFactory` implements the `Initialisable` interface. The injected instance will not be automatically initialized, therefore the extension must apply a lifecycle.

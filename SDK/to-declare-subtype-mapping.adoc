@@ -1,0 +1,23 @@
+= To Declare a Subtype Mapping for a Parameter
+
+When a `@Parameter` or operation argument is of a general type with multiple implementations, any of those implementations can be used to populate the parameter. In order to provide better XML support for type hierarchies, the Extension developer can declare how a base type should be mapped to its subtypes whenever that base type appears as a parameter.
+
+If the developer declares:
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+@SubTypeMapping(baseType = Shape.class, subTypes = {Square.class, Triangle.class})
+public class HeisenbergExtension
+----
+
+Then, for any parameter of `Shape` type, the user will have XML support to create a `Square`, a `Triangle` or a `Shape` (if shape is not an abstract type):
+
+[source,xml,linenums]
+----
+<heisenberg:my-operation>
+	<heisenberg:shape-param>
+<heisenberg:square side="4" area="16"/>
+</heisenberg:shape-param>
+</heisenberg:my-operation>
+----

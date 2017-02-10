@@ -1,0 +1,33 @@
+= About Operation Execution Types
+
+As explained in the non-blocking operations section, Mule 4 now has a reactive execution engine. That means that unlike in Mule 3.x where each flow had its own thread pool, SEDA queues, etc, now the runtime has a few global executors through which all tasks are run.
+
+In order to schedule those tasks correctly, the runtime needs to know which kind of processing each application is going to perform.
+
+== Execution Types
+
+Operation requires connection and is blocking: `BLOCKING` +
+Operation requires connection and is non blocking: `CPU_LITE` +
+None of the above: `CPU_LITE`
+//MG
+
+=== Specifying Execution Type Example
+
+In order to specify an operation’s execution type, the `@Execution` annotation is used:
+
+[source,java,linenums]
+----
+@Execution(CPU_INTENSIVE)
+public void computeFlightPlan() { .. }
+----
+
+== Inferring Execution Types Automatically
+
+If not provided, the SDK will automatically perform a best guess as to the execution type.
+
+Always pay attention to which execution type your operation corresponds to, and if it doesn’t match with the best guess then you should specify the correct one.
+
+[IMPORTANT]
+Failing to understand the execution requirements of the operation will negatively impact the performance of any application using your module.
+
+Mule runtime will never estimate an operation as a `CPU_INTENSIVE` type. If you require that type, do specify it

@@ -1,0 +1,45 @@
+= To Declare Parameters for an Extension
+
+Configurations are scanned for fields annotated with `@Parameter`, which define the attributes that the module configuration requires or may be configured by the end user to get the extension working in their project. Getters and setters are not required to set attributes.
+
+== What Types are Supported as Parameters?
+
+Lists, Maps, Sets, complex POJOs and simple types are supported as parameters.
+
+== To Declare Optional Parameters
+
+The `@Optional` annotation can be used to indicate that a parameter is not required and optionally can also be used to provide a default value.
+
+== To Specify Support for Expressions
+
+All configuration attributes support Mule variables and DataWeave expressions by default unless the module’s developer specifically makes the design decision not to support them.
+
+You can choose from three levels of expression support:
+
+----
+SUPPORTED
+NOT_SUPPORTED
+REQUIRED
+----
+
+Use the `@Expression` annotation on the `@Parameter` to specify how expressions are supported if at all.
+
+[source,java,linenums]
+----
+@Parameter
+@Expression(REQUIRED)
+@Optional
+private String labAddress;
+
+
+@Parameter
+@Expression(NOT_SUPPORTED)
+@Optional
+private String firstExperiment;
+----
+
+== More Basic Parameter Annotations
+
+* `@NullSafe`, i.e. can be populated with default if found null
+* Supports Mule expressions. Use either `@Expression(REQUIRED)` or `@Expression(NOT_SUPPORTED)`
+* use `@DefaultEncoding` if optional, `String` and should use Mule runtime encoding by default

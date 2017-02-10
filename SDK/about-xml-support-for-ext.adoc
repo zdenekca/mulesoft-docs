@@ -1,0 +1,217 @@
+= About XML Support for Extension
+
+XML support for Mule is made possible through the Spring framework. This means a Mule component/extension must have an XSD schema, `NamespaceHandler` and a set of `BeanDefinitionParsers` and or `FactoryBeans`.
+
+You can customize the `schemaLocation`, `schemaVersion`, and namespace prefix, but SDK will calculate defaults for all of them. For the schema version, the Maven artifact version is used.
+
+[NOTE]
+See how to link:/SDK/to-set-xml-namespace-details[Set XML and namespace explicitly]
+
+=== Customizing XML Schema Generation
+
+SDK prefers consistency when it comes to schema generation for extensions. However, you can in fact customize how the XML is organized to support parameters of complex types (POJO, lists, maps, etc). SDK provides the `@XmlHints` annotation giving access to two booleans whose values you can toggle.
+//MG: what does "hints" mean in this context? It is not clear to me.
+
+* `allowInlineDefinition` - SDK determines through the types if it is possible to define them explicitly through XML (normally defined through child elements)
+//MG: is `allowTopLevelDefinition` supported?
+* `allowReferences` - when true, this targets the complex type parameters. Regardless of the complex parameters having a child element or not, there will always be an attribute allowing the user to provide a reference to a MEL expression or a static reference to the Mule registry.
+//MG: so MEL and DW are supported at the operation level. There may be cases when a static value in an attribute that allows references to be interpreted as the actual value, and a not a reference to the registry.
+
+A typical example of this is an outbound operation (`socket:send`, `file:write`, etc), in which the input parameter is of type `Object` (because many input types are supported):
+
+`<file:write data="Hello" />`
+
+This should not match the attribute data to a registry entry of key "Hello", but should map to the actual “Hello” String, which, can be achieved by the following code:
+
+`public void write(@XmlHints(allowReferences=false) Object data) {
+}`
+
+=== Schema Generation
+
+While there does exist a link:https://www.mulesoft.org/docs/site/3.8.0/apidocs/org/mule/module/extension/internal/capability/xml/SpringBundleResourceContributor.html[GenerableResourceContributor] which generates the Spring bundle and XSD schema for extensions, the XSD schema needs to contain documentation explaining what each attribute, operation and type does, just like the XSD files provided in the Mule distribution.
+
+
+=== XML Support Takeaways
+
+Because parsers and schemas are automatically generated, consistency is easily achieved
+The parsers know how to deal with all the `DataType` qualifiers, including POJO. These parsers know how to deal with POJOs that are compliant with the bean contract and are capable of handling:
+
+* simple attributes
+* acyclic bean composition
+* list and maps of simple types and beans
+
+All of the above can be defined in line or through spring references.
+
+=== Inline Configuration Example
+
+Parameters declared inline can be of complex types like List, Maps, POJOs and also they can be combined. All the “simple” values, like String or Integer will be declared as a value attribute of the element, while complex structures will be supported as child elements.
+
+Type references as child-elements are not allowed to declare its own name attribute, since it is reserved for top level elements only.
+
+[source,java,linenums]
+----
+<heisenberg:config name="heisenberg" cancer="true" dateOfBirth="1959-09-07T00:00:00"
+                       dateOfDeath="2011-09-07T00:00:00-05:00" money="1000000">
+	 <!-- List<String> -->
+        <heisenberg:enemies>
+            <heisenberg:enemy value="Gustavo Fring"/>
+            <heisenberg:enemy value=""/>
+        </heisenberg:enemies>
+
+  <!-- Set<Ricin> with inline Ricin -->
+        <heisenberg:ricin-packs>
+            <heisenberg:ricin-pack microgramsPerKilo="22">
+                <heisenberg:destination victim="Lidia" address="Stevia coffe shop"/>
+            </heisenberg:ricin-pack>
+            <heisenberg:ricin-pack microgramsPerKilo="10">
+                <heisenberg:destination victim="Paul" address="Downtown pet shop"/>
+            </heisenberg:ricin-pack>
+        </heisenberg:ricin-packs>
+
+	 <!-- KnockeableDoor -->
+        <heisenberg:next-door address="pollos hermanos" victim="Gustavo Fring">
+            <heisenberg:previous victim="Krazy-8" address="Jesse's"/>
+        </heisenberg:next-door>
+
+	 <!-- Map<String, KnockeableDoor> with door as ref -->
+        <heisenberg:candidate-doors>
+            <heisenberg:candidate-door key="skyler" value="skylerDoor"/>
+            <heisenberg:candidate-door key="saul" value="saulDoor"/>
+        </heisenberg:candidate-doors>
+
+	 <!-- Map<String, List<String>> -->
+<heisenberg:deaths-by-seasons>
+   	     <!-- Entry with List<String> inline -->
+            <heisenberg:deaths-by-season key="s01">
+                <heisenberg:deaths-by-season-item value="emilio"/>
+                <heisenberg:deaths-by-season-item value="domingo"/>
+            </heisenberg:deaths-by-season>
+   	     <!-- Entry with List<String> as expression-->
+            <heisenberg:deaths-by-season key="s02" value="#[['some', 'other']]"/>
+            <heisenberg:deaths-by-season key="s02" value="#[['tuco', 'tortuga']]"/>
+        </heisenberg:deaths-by-seasons>
+
+	 <!-- Map<String, Ricin> with inline Ricin-->
+        <heisenberg:labeled-ricins>
+            <heisenberg:labeled-ricin key="pojo">
+                <heisenberg:ricin microgramsPerKilo="22">
+                    <heisenberg:destination victim="Lidia" address="Stevia coffe shop"/>
+                </heisenberg:ricin>
+            </heisenberg:labeled-ricin>
+        </heisenberg:labeled-ricins>
+
+	 <!-- Map<String, Long> -->
+        <heisenberg:recipes>
+            <heisenberg:recipe key="methylamine" value="75"/>
+            <heisenberg:recipe key="pseudoephedrine" value="0"/>
+        </heisenberg:recipes>
+    </heisenberg:config>
+----
+
+=== Top Level Parameters
+
+For every POJO type with support for inline definition, top-level support is added. So, for example, in the same way that a Door object is declared inline above, There’s also a top level element for which you can define this:
+
+[source,xml,linenums]
+----
+<mule>
+<heisenberg:door victim="Skyler" address="308 Negra Arroyo Lane" name="skylerDoor" />
+</mule>
+----
+
+Notice how the name attribute which wasn’t available on the inline definition schema is not available. The platform will parse that Door object and will add it to the registry under the name “skylerDoor”.
+
+
+=== Configuration Example Using References
+
+You can also build a configuration using only references to things in the Mule registry. Here’s an example:
+
+[source,xml,linenums]
+----
+<heisenberg:config name="expressionHeisenbergByRef"
+                  myName="#[myName]"
+                  age="#[age]"
+                  cancer="#[true]"
+                  initialHealth="#[initialHealth]"
+                  finalHealth="#[finalHealth]"
+               dateOfBirth="#[org.mule.module.extensions.internal.ConfigParserTestCase.getDateOfBirth().getTime()]"
+                  dateOfDeath="#[org.mule.module.extensions.internal.ConfigParserTestCase.getDateOfDeath()]"
+                  money="#[money]"
+                  recipe="#[app.registry.recipes]"
+                  candidateDoors="#[app.registry.candidateDoors]"
+                  enemies="#[app.registry.enemies]"
+                  ricinPacks="#[app.registry.ricinPacks]"
+                  nextDoor="#[app.registry.door]">
+</heisenberg:config>
+
+<spring:beans>
+   <util:map id="recipes" value-type="java.lang.Long">
+       <spring:entry key="methylamine" value="75"/>
+       <spring:entry key="pseudoephedrine" value="0"/>
+       <spring:entry key="P2P" value="25"/>
+   </util:map>
+
+   <util:map id="candidateDoors">
+       <spring:entry key="skyler" value-ref="skylerDoor"/>
+       <spring:entry key="saul" value-ref="saulDoor"/>
+   </util:map>
+
+   <util:list id="enemies">
+       <spring:value>Gustavo Fring</spring:value>
+       <spring:value>Hank</spring:value>
+   </util:list>
+
+   <util:set id="ricinPacks">
+       <spring:ref bean="ricin"/>
+   </util:set>
+   </spring:beans>
+
+<heisenberg:door victim="Gustavo Fring" address="pollos hermanos" name="door">
+   <heisenberg:previous victim="Krazy-8" address="Jesse's" />
+</heisenberg:door>
+
+<heisenberg:ricin microgramsPerKilo="22" name="ricin">
+   <heisenberg:destination victim="Lidia" address="Stevia coffee shop" />
+</heisenberg:ricin>
+
+<heisenberg:door victim="Skyler" address="308 Negra Arroyo Lane" name="skylerDoor" />
+
+<heisenberg:door victim="Saul" address="Shopping Mall" name="saulDoor" />
+----
+
+
+
+
+=== Platform-Provided NamespaceHandler
+
+Because `NamespaceHandlers` are java classes and not static resources like the spring bundles and the XSD schemas, these don’t require code generation and can be coded once in a generic way.
+
+The `ExtensionsNamespaceHandler` class queries the `ExtensionManager` for any XML capable extensions matching a given namespace, and by using the introspection model is capable of handling any extension in a generic way. It then registers `BeanDefinitionParsers` for multiple purposes:
+
+* Parsing configurations
+* Parsing top level pojos
+* Parsing operations
+
+=== Platform-Provided Definition Parsers
+
+The platform also provides a set of definition parsers to parse extensions and their components in a generic way without relying on generated code.
+
+==== ConfigurationBeanDefinitionParser
+
+The `configurationBeanDefinitionParser` parses configuration objects and their attributes by navigating the DOM Element and the configuration metamodel side-by-side. Because the extensions’s API supports expressions on every attribute, what it registers in the Mule registry is not the actual configuration but a `ValueResolver` which returns the correct configuration for each event. It does so by building a `ResolverSet` for each attribute and then obtains a `ResolverSetResult` from the invoking event. Those results are cached and associated to a configuration instance.
+
+==== ConfigurationProviderFactoryBean
+
+This definition parser doesn’t build the instance on its own, but collaborates with a `FactoryBean`. Because the registered object is a `ConfigurationProvider` and the config attributes are also resolved through `ValueResolvers`, Spring is not 100% in charge of the creation of the object. The problem of that is the resolution of the property placeholders that the user might use on the configuration or any of its nested attributes. To solve this problem, an `ElementDescriptor` class was created. This class is basically a `ValueObject` containing the most valuable information of the DOM element. The trick is that the `ElementDescriptor` is created through a `BeanDefinition` and then passed to the `FactoryBean` as a constructor value. In that way, the `ElementDescriptor` that reaches the `FactoryBean` has resolved property placeholders and then the factory bean completes the object creation.
+
+==== OperationBeanDefinitionParser
+
+The same pattern is applied to operations. There is also an operations bean definition parser which parses the operations and outputs instances of OperationMessageProcessor.
+
+==== OperationMessageProcessorFactoryBean
+
+Operation elements and their child elements can also contain property placeholders and have the same problems as the configurations. The same pattern of using an ElementDescriptor with a FactoryBean is repeated just like with configurations.
+
+==== TopLevelParameterTypeBeanDefinitionParser
+
+Finally, this definition parser is used to parse top level pojos and make them available through the Mule registry. It reuses the logic previously used for parsing configurations.
