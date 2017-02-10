@@ -1,0 +1,7 @@
+= About Tests Using Extensions 
+
+Tests using extensions should extend the `MuleArtifactFunctionalTestCase` class. This specialization of the traditional `FunctionalTestCase` TCK component still requires the user to provide the path to configuration file(s) with your tests flows, component, etc., but also provides the following services:
+
+* It automatically discovers, creates and registers all the Mule modules in the test classpath
+* It generates all resources needed for such modules to function
+* It executes the tests using a classloading isolation schema similar to the one that the runtime will use when actually running in production.

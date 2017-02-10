@@ -44,7 +44,7 @@ All of the above can be defined in line or through spring references.
 
 === Inline Configuration Example
 
-Parameters declared inline can be of complex types like List, Maps, POJOs and also they can be combined. All the “simple” values, like String or Integer will be declared as a value attribute of the element, while complex structures will be supported as child elements.
+Parameters declared inline can be of complex types like `List`, `Map`, POJOs and also they can be combined. All the “simple” values, like `String` or `Integer` will be declared as a value attribute of the element, while complex structures will be supported as child elements.
 
 Type references as child-elements are not allowed to declare its own name attribute, since it is reserved for top level elements only.
 
@@ -178,9 +178,6 @@ You can also build a configuration using only references to things in the Mule r
 
 <heisenberg:door victim="Saul" address="Shopping Mall" name="saulDoor" />
 ----
-
-
-
 
 === Platform-Provided NamespaceHandler
 

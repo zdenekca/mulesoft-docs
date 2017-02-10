@@ -1,0 +1,18 @@
+= To Obtain a Configuration Name Programmatically
+
+SDK takes care of XML parsing automatically. The downside of it is that you lose some degree of control regarding which information you can actually obtain.
+
+One particular case is obtaining the name that a configuration has in the XML. Obtaining such a name is useful for logging purposes or to give descriptive names to any threads that the config starts.
+
+To do that, use the `@ConfigName` annotation:
+
+[source,java,linenums]
+----
+@ConfigName
+private String configName;
+----
+
+That annotation can be used on fields of classes from which a configuration is derived.
+
+[NOTE]
+Must be of type `String`, does not require setters.

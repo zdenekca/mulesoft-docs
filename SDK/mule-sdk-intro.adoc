@@ -15,10 +15,6 @@ An extension is a module that facilitates predictable interaction between a Mule
 
 SDK facilitates integration with SaaS, web services and other data sources. In Mule 4, extensions that are connectors to SaaS applications are still called *connectors*.
 
-== How Does Mule Discover an Extension?
-
-*Extensions API* is the set of interfaces and classes that define the contract between an extension and the Mule 4 runtime environment. At deployment of a Mule application, the API handles communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
-
 == Development Environment Requirements
 
 Ensure your development environment is equipped with the following:
@@ -31,6 +27,10 @@ Ensure your development environment is equipped with the following:
 == Available SDK Annotations
 
 SDK is an annotations-based framework allowing you as the developer to build features. For a complete list of SDK annotations, see the link:/annotation-reference[Annotation Reference].
+
+== How Does Mule Discover an Extension?
+
+*Extensions API* is the set of interfaces and classes that define the contract between an extension and the Mule 4 runtime environment. At deployment of a Mule application, the API handles communication between an SDK-built extension and the Mule runtime, effectively decoupling their respective tasks. The Extensions API has no dependency on Mule core.
 
 === Extension Code Organization
 

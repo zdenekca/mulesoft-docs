@@ -1,0 +1,24 @@
+= To Declare Operations
+
+Operations are declared in a similar way as configurations.
+
+. From the Extension main class use the `@Operations` annotation to point to a class which holds the operations.
+. Code your logic in various methods of this class.
+* Every _public_ method of the `@Operations` class is assumed to be a valid operation, therefore there is no need to use any annotation.
+* Any public method you do not want exposed as an operation should be annotated with `@Ignore`
+* Every method argument is translated as a `ParameterModel`
+//MG need to mention ParameterModel? What does this model allow Extensions API to do?
+* Arguments of each operation (`@Operations` class method) can be annotated with `@Optional` and with `@Expression`
+
+== Example @Operations Declaration
+
+See how you can declare available operations from the `@Extension` annotated class.
+
+[source,java,linenums]
+----
+@Extension(name = "my-extension", description = my very own Mule extension”)
+@Operations({MyOperations.class, NeatOperation.class})
+public class MyExtension
+{
+}
+----

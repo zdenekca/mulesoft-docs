@@ -1,0 +1,39 @@
+= About Annotations for UI Customization
+
+The platform tooling requires rendering UIs for a user to configure extensions and their operations. As the platform goes, this tooling goes beyond Anypoint Studio. It is possible to enrich the ExtensionModel with generic, technology agnostic, hints about how should that UI be rendered.
+
+=== @Placement
+
+https://github.com/mulesoft/mule-extensions-api/blob/72d2ae3ec8d9d480bd4318ce6c0e84b18f866bc7/src/main/java/org/mule/extension/api/annotation/param/display/Placement.java#L26-L26
+
+The Placement annotation can be used at a parameter level on configs, operations and sources. It allows to assign parameters to specific tabs and/or specify the order in which it should appear in the tooling. This not only allows for a more clear and descriptive UI, it also allows putting cohesive parameters together regardless of how/where they’re defined in the source code.
+
+=== @DisplayName
+
+Allows giving a parameter a UI name which is different from the model one. It can be applied to any parameter, at any level.
+
+https://github.com/mulesoft/mule-extensions-api/blob/aa0ee5622ab258c159664cbfb9508f20e30f95c2/src/main/java/org/mule/extension/api/annotation/param/display/DisplayName.java#L30-L30
+
+=== @Text
+
+https://github.com/mulesoft/mule-extensions-api/blob/9bb020798dfb3936ff1245e086e70ac47faa3f8f/src/main/java/org/mule/extension/api/annotation/param/display/Text.java#L27-L27
+
+Specifies that a parameter should be rendered as a multi line text box. It can be applied to any parameter, at any level.
+
+=== @Password
+
+https://github.com/mulesoft/mule-extensions-api/blob/9bb020798dfb3936ff1245e086e70ac47faa3f8f/src/main/java/org/mule/extension/api/annotation/param/display/Password.java#L27-L27
+
+Specifies that a parameter represents a password and should be masked in the UI. It can be applied to any parameter, at any level.
+
+=== @Summary
+
+https://github.com/mulesoft/mule-extensions-api/blob/a839fead7f1a5d80c90e1e509930b5ace23bba1a/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/annotation/param/display/Summary.java#L32
+
+Allows a brief summary about the parameter describing its purpose. This annotation is meant to be used for the content of a tooltip which adds a short but meaningful explanation of the parameter.
+
+=== @Example
+
+https://github.com/mulesoft/mule-extensions-api/blob/0345b700213ab38351ef3803b682ec58a8aad908/mule-extensions-api/src/main/java/org/mule/runtime/extension/api/annotation/param/display/Example.java#L28
+
+Allows giving an example of how the value of the parameter should look like.
