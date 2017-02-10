@@ -4,7 +4,7 @@
 . In the Extension main class, reference the `ConnectionProvider` class(es) with the `@ConnectionProviders` annotation.
 
 [NOTE]
-This referencing mechanism is the practically same as for `@Configurations` and `@Operations`. For a refresher see link:#how-referenced[]
+This referencing mechanism is the practically same as for `@Configurations` and `@Operations`. For a refresher see link:#how-referenced[How Referenced in the Main Extension Class].
 
 == Example: Base Class for FTP ConnectionProvider
 

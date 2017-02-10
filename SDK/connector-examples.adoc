@@ -1,8 +1,13 @@
-== SDK Built Connector Examples
+= SDK Built Connector Structure
 
-Some examples:
+Let's use the PetStore connector to illustrate the extension code structure.
 
 
-PetStoreConnector: Test case extension
-Cached Connection: Look at the File connector
-Pooled Connections: Look at the FTP connector
+== What is in the PetStore Connector?
+
+* *PetStoreConnector.java* - `Connector.java` file has the main class for the Extension. `@Extension` marks the `PetStoreConnector` class as the main class.
+[NOTE]
+`PetStoreConnector` specifies the locations of the *Operations*, *Connection Providers*, *Message Sources* and required/optional parameters.
+* *PetStoreOperations.java* - a class for the operations the Petstore connector offers the end user.
+* *PetStoreSource.java* - permits the connector to be used in the source side of a flow, as a message producer for the flow.
+*

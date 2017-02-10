@@ -8,6 +8,9 @@ Connection does not necessarily reference the socket connection itself. It can s
 
 All the operations need to be independent of the connection class. Use the `@Connection` annotation to inject a connection.
 
+[NOTE]
+See an link:/SDK/example-connection-definition[example connection interface] for an extension.
+
 == About Abstracting the Connection Definition
 
 You must provide some level of abstraction common to all sorts of connections, capable of serving all operations. Again, no type restrictions should be put into this abstraction. There is no connection interface that must be implemented.
