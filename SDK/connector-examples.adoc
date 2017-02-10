@@ -1,13 +1,29 @@
 = SDK Built Connector Structure
 
-Let's use the PetStore connector to illustrate the extension code structure.
+Let's use the PetStore connector to illustrate the extension code structure. Some basic vocabulary is used, such as extension, connector, connection provider.
 
 
-== What is in the PetStore Connector?
+== What is the PetStore Connector?
 
-* *PetStoreConnector.java* - `Connector.java` file has the main class for the Extension. `@Extension` marks the `PetStoreConnector` class as the main class.
+A connector allowing you to perform operations like `getBreeder` or `getPets`, to get fictitious people or pets from a fictitious pet store. These operations can require information or connections defined in code across the extension. Java annotations are used to inject this information as attributes for the operations.
+
+* *Main Class*
+** `PetStoreConnector.java` - has the main class for the Extension. `@Extension` marks the `PetStoreConnector` class as the main class.
 [NOTE]
 `PetStoreConnector` specifies the locations of the *Operations*, *Connection Providers*, *Message Sources* and required/optional parameters.
-* *PetStoreOperations.java* - a class for the operations the Petstore connector offers the end user.
-* *PetStoreSource.java* - permits the connector to be used in the source side of a flow, as a message producer for the flow.
-*
+* *Operations*
+** `PetStoreOperations.java` - a class for the operations the Petstore connector offers the end user of the PetStore connector.
+* *Connection Providers*
+** `PetStoreConnectionProvider.java` - abstract class from which other connection providers are derived:
+** `SimplePetStoreConnectionProvider.java`
+** `PooledPetStoreConnectionProvider.java`
+** `TransactionalPetStoreConnectionProvider.java`
+* *Message Source*
+** `PetStoreSource.java` - permits the connector to be used in the source side of a flow, as a message producer for the flow. If we see `ExclusivePetBreeder.java`, we find out the types this source can produce.
+* *Connections / Clients*
+** `PetStoreClient.java` - getters for information to open connections, provides connection logic
+** `TransactionalPetStoreClient.java` - implements `PetStoreClient` to govern transactional connections and logic.
+* *Other classes*
+** `Pet.java` - defines parameters around possible pets
+** `PetCage.java` - defines some logic to get animals
+** `ExclusivePetBreeder.java` - class encapsulating information on animals the breeder has
