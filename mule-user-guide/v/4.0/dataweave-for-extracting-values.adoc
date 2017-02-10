@@ -3,17 +3,18 @@
 
 image:dw-logo.png[dw]
 
+== Overview
 
 Whilst you can use DataWeave to construct complex transformations, you can also use it to write brief expressions that simply extract values out of any part of the Mule message. These are often used in message processors to reference a given field.
 
 [NOTE]
-You must be familiar with the link:/mule-fundamentals/v/4.0/mule-message-structure[Mule Message Structure] to know how to navigate it, you can also see a graphical representation of this on the link:/anypoint-stuido/v/7/datasense[DataSense] pannel.
+You must be familiar with the link:/mule-fundamentals/v/4.0/mule-message-structure[Mule Message Structure] to know how to navigate it.
 
 For example, you can use an expression in a logger component to log a specific value:
 
 image:
 
-Or you can use an expression on a Twitter connector to pick the userId to querry:
+Or you can use an expression on a Twitter connector to pick the userId to query:
 
 image:
 
@@ -34,29 +35,40 @@ The payload of the message is the easiest element to call, simply write:
 
 Properties are grouped in the `properties` bucket, and so called like this:
 
-`#[properties.<propertyName>]`
+`#[properties.<myPropertyName>]`
 
 
 === To Reference Variables
 
-Variables are stored outside the message. You can simply refer to a variable by its name like this:
+Variables are a part of the Mule event that is stored outside the Mule message. You can simply refer to a variable by its name like this:
 
-`#[<variableName>]`
+`#[<myVariableName>]`
 
 You can also call variables as shown below, by first referencing the `variable` bucket. This is useful to disambiguate in case a variable's name coincides with something else in the context.
 
-`#[variables.<variableName>]`
+`#[variables.<myVariableName>]`
 
 
 
 == Accessing Values Inside a Structure
 
-If you're referencing an array or object, you can extract specific values from within the contents of this element. You can use any of the four types of selectors in DataWeave to navigate the data structure:
+If you're referencing an array or object, you can extract specific values from within the contents of this element. You can use any of the four types of selectors available in DataWeave to drill down the data structure:
 
 * *Single Value selector* .<key-name>
++
+`#[payload.users]`
+
 * *Multi Value selector* .*<key-name>
++
+`#[payload.users.*user]`
+
 * *Descendants Selector* ..<key-name>
++
+`#[payload.users..userName]`
+
 * *Indexed Selector* [<index>]
++
+`#[payload.users[2]]`
 
 [TIP]
 See link:/mule-user-guide/v/4.0/dataweave-selectors[DataWeave Selectors] for more details on these.
