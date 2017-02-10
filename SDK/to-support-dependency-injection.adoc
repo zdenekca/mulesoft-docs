@@ -1,0 +1,22 @@
+= About Dependency Injection Annotations
+
+All configurations and operations support dependency injection at the field level. To inject a dependency use the `@Inject` annotation. Any object in the Mule registry can be injected.
+
+If many candidates of the same type are available, then apply the `@Named` annotation or `@Qualifier`.
+
+[source,java,linenums]
+----
+@Extension(name = "heisenberg", description = "heisenberg extension")
+public class HeisenbergExtension
+{
+@Inject
+private ExtensionManager extensionManager;
+}
+
+public class HeisenbergOperations
+{
+
+   @Inject
+   private ExtensionManager extensionManager;
+}
+----

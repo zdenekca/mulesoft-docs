@@ -5,7 +5,7 @@ Before moving on, see the basic formula for link:/to-declare-parameters[Declarin
 
 We recommend you annotate the parameters of your extension configurations and operations as per the guidance on setting configuration attributes with `@Parameter`, whenever possible. However, consider this before further coding.
 
-== POJO Type Parameters
+== Mechanisms for Introspecting POJO Type Parameters
 
 POJO type parameters are introspected in order to determine which parameters they contain. There are two ways this is done.
 
@@ -14,7 +14,7 @@ POJO type parameters are introspected in order to determine which parameters the
 The default and recommended approach is to annotate the fields of a POJO with the same set of annotations as a config would. This provides the greatest level of control, is consistent with the rest of the extension development model and works with field level "injection".
 
 
-=== Getters and Setters
+=== JDK Introspector Mechanism
 
 In cases where your extension must access a POJO that is defined in another .jar stored elsewhere, is shared with other projects or which cannot depend on extension annotations, the POJO is introspected using the JDK's "Introspector" class getters and setters to obtain its properties. Those properties are then turned into parameters. The downsides to this are:
 
@@ -24,7 +24,7 @@ In cases where your extension must access a POJO that is defined in another .jar
 //MG the setter of the JDK operates on the parameter, not the Extensions API?
 
 
-== Parameter Groups
+== Group Codependent Parameters
 
 Groups of parameters which have a logical dependency on one another can be grouped; for example, connection parameters like "host", "port", "username" and "password" could be grouped in a single class using `@ParameterGroup`.
 
@@ -66,7 +66,7 @@ public void sendMessage(@Content payload, @ParameterGroup(name = "Connection) co
 [IMPORTANT]
 Do not use a `@ParameterGroup` annotation inside a complex object which is being used as a parameter group.
 
-=== Exclusive Parameter Groups
+=== Restrain Parameters within Parameter Groups
 
 When imposing restrictions on which parameters cannot be set at the same time as others, use `@ExclusiveOptionals` on the parameter group class. Notice how the `@Optional` is used to indicate the specific parameter to exclude.
 //MG: in spec the example does not have the @ParameterGroup annotation, is this correct?
