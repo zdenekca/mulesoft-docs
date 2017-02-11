@@ -1,11 +1,15 @@
 = SDK Built Connector Structure
 
-Let's use the PetStore connector to illustrate the extension code structure. Some basic vocabulary is used, such as extension, connector, connection provider.
+You can use this document as an introduction to the Java code structure behind an extension that opens connections to a service, like the PetStore Connector.
+
+Let's use the PetStore connector to illustrate the extension code structure. Before proceeding, go over the basics to learn about the link:/SDK/mule-sdk-intro[SDK and extensions], as well as the concepts of link:/SDK/about-connections-connectionproviders[connection and connection provider].
 
 
-== What is the PetStore Connector?
+== What is the PetStore Connector code?
 
-A connector allowing you to perform operations like `getBreeder` or `getPets`, to get fictitious people or pets from a fictitious pet store. These operations can require information or connections defined in code across the extension. Java annotations are used to inject this information as attributes for the operations.
+A main class, and logic that support operations like `getBreeder` or `getPets`, to get fictitious people or pets from a fictitious pet store.
+
+These operations may depend on information or connections defined in code across the extension. Java annotations are used to inject this information as input for the operations.
 
 * *Main Class*
 ** `PetStoreConnector.java` - has the main class for the Extension. `@Extension` marks the `PetStoreConnector` class as the main class.
@@ -27,3 +31,5 @@ A connector allowing you to perform operations like `getBreeder` or `getPets`, t
 ** `Pet.java` - defines parameters around possible pets
 ** `PetCage.java` - defines some logic to get animals
 ** `ExclusivePetBreeder.java` - class encapsulating information on animals the breeder has
+
+== See Also

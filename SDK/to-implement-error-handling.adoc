@@ -1,0 +1,11 @@
+= To Implement Error Handling in an Extension
+:toc:
+
+Follow the steps below and see link:/SDK/example-error-handling-support[Example Error Handling Support in Email Connector] to see the steps illustrated in code.
+
+== Steps
+
+. Implement the Mule error type definition interface `ErrorTypeDefinition` to leverage existing error types for your extension. Additionally, you may define others.
+. Implement the `ErrorTypeProvider` interface to provide operations with errors they can throw.
+. On the operations class use the `@Throws` annotation with the error type provider class as an argument (that is, the argument is the class where you implemented `ErrorTypeProvider`)
+. For error types that could be handled at the global level for the extension, place `@ErrorTypes` on the Extension main class, which requires an argument: the enum class implementing `ErrorTypeDefinition`.

@@ -1,0 +1,111 @@
+= Example Error Handling Support in Email Connector
+
+== EmailError Type Definition
+
+Email connector defines an `enum` that implements `ErrorTypeDefinition`.
+
+.EmailError.java
+[source,java,linenums]
+----
+/**
+ * Errors for the {@link EmailConnector}
+ *
+ * @since 4.0
+ */
+public enum EmailError implements ErrorTypeDefinition<EmailError> {
+  ATTACHMENT, ACCESSING_FOLDER, FETCHING_ATTRIBUTES, EMAIL_NOT_FOUND, CONNECTIVITY(MuleErrors.CONNECTIVITY), INVALID_CREDENTIALS(
+      CONNECTIVITY), UNKNOWN_HOST(
+          CONNECTIVITY), CONNECTION_TIMEOUT(CONNECTIVITY), DISCONNECTED(CONNECTIVITY), SSL_ERROR(CONNECTIVITY);
+
+  private ErrorTypeDefinition<? extends Enum<?>> error;
+
+  EmailError(ErrorTypeDefinition<? extends Enum<?>> error) {
+    this.error = error;
+  }
+
+  EmailError() {
+
+  }
+
+  @Override
+  public Optional<ErrorTypeDefinition<? extends Enum<?>>> getParent() {
+    return Optional.ofNullable(error);
+  }
+  ...
+}
+----
+
+== Email Sender Error Type Provider
+
+.Example from EmailSenderErrorTypeProvider.java
+[source,java,linenums]
+----
+public class EmailSenderErrorTypeProvider implements ErrorTypeProvider {
+
+  @Override
+  public Set<ErrorTypeDefinition> getErrorTypes() {
+    return ImmutableSet.<ErrorTypeDefinition>builder()
+        .add(ATTACHMENT)
+        .build();
+  }
+}
+----
+
+[NOTE]
+The provider, when executing the `getErrorTypes()` method should return values of the Enum declared in the `@ErrorTypes` annotation at module level.
+
+== Send Email Operation that Throws Error
+
+Note that the `@Throws` annotation references the `ErrorTypeProvider` implementation.
+
+[source,java,linenums]
+----
+/**
+ * Basic set of operations which perform send email operations over the SMTP or SMTPS protocol.
+ *
+ * @since 4.0
+ */
+public class SenderOperations {
+
+  private final SendCommand sendOperation = new SendCommand();
+
+  /**
+   * Sends an email message. The message will be sent to all recipient {@code toAddresses}, {@code ccAddresses},
+   * {@code bccAddresses} specified in the message.
+   * <p>
+   * The content of the message aims to be some type of text (text/plan, text/html) and its composed by the body and it's content
+   * type. If no content is specified then the incoming payload it's going to be converted into plain text if possible.
+   *
+   * @param connection    Connection to use to send the message
+   * @param configuration Configuration of the connector
+   * @param emailBuilder  The builder of the email that is going to be send.
+   */
+  @Summary("Sends an email message")
+  @Throws(EmailSenderErrorTypeProvider.class)
+  public void send(@Connection SenderConnection connection,
+                   @UseConfig SMTPConfiguration configuration,
+                   EmailBuilder emailBuilder) {
+    sendOperation.send(connection, configuration, emailBuilder);
+  }
+----
+
+== Error Types for Global Level
+
+[source,java,linenums]
+----
+/**
+ * Email connector used to list and send emails and perform operations in different mailboxes, such as delete and mark as read.
+ * <p>
+ * This connector supports the SMTP, SMTPS, IMAP, IMAPS, POP3 and POP3s protocols.
+ *
+ * @since 4.0
+ */
+@Configurations({SMTPConfiguration.class, POP3Configuration.class, IMAPConfiguration.class})
+@Extension(name = "Email", description = "Connector to send and list email messages to and from mailboxes")
+@ErrorTypes(EmailError.class)
+@Export(classes = EmailException.class)
+public class EmailConnector {
+
+  public static final String TLS_CONFIGURATION = "TLS Configuration";
+}
+----

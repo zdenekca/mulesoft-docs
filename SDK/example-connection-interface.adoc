@@ -1,6 +1,6 @@
-= Example Connection Definition
+= Example of a Connection Interface
 
-The interface that is extended by different connection types for the Sockets extension.
+The interface that is extended by different connection types used by the Sockets extension.
 
 [source,java,linenums]
 ----

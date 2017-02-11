@@ -1,6 +1,6 @@
-= About Connections and ConnectionProviders
+= About Connections and Connection Providers
 
-== About Connection
+== Connection Concept
 
 No specific `Connection` interface or contract is enforced, so you are not required to create a strict definition for a connection.
 

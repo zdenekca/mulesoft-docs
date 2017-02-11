@@ -1,4 +1,4 @@
-= Error Handling Support
+= About Error Handling Support
 :toc-macro:
 :toclevels: 3
 
@@ -84,7 +84,7 @@ Each error should have an error types definition implementing the interface `Err
 To declare error types that a module handles, the module developer should declare at the `@Module` level the error types definition class with an `@ErrorTypes` annotation which requires as value a Enum Class implementing ErrorTypeDefinition.
 //reuires as value?
 
-Error types are declared at the `@Module` level referencing the class with the error types definition.
+Error types are declared at the `@Extension` level referencing the class with the error types definition.
 
 Below is the class you implement to create your error types definition. You annotate your class with `@ErrorTypes`.
 
