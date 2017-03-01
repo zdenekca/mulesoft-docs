@@ -134,7 +134,7 @@ Adds a timestamp entry to the outgoing message, it only contains two attributes:
 </wsc:connection>
 ----
 
-* `timeToLive`: Length of time the message is valid. This attributes is qualified by the `timeToLiveUnit` attribute. The default value is 60 (seconds, qualified by the time unit `timeToLiveUnit`).  +
+* `timeToLive`: Length of time the message is valid. This attributes is qualified by the `timeToLiveUnit` attribute. The default value is 60 (seconds, qualified by the time unit `timeToLiveUnit`).
 * `timeToLiveUnit`: Unit of time which qualifies the `timeToLive` attribute. The default is `SECONDS`.
 
 ==== Signature
@@ -177,7 +177,7 @@ Validates the signature of an incoming SOAP message using the truststore configu
 
 ==== Encrypt
 
-Encrypts the body of an outgoing SOAP message using the keystore configuration provided
+Encrypts the body of an outgoing SOAP message using the keystore configuration provided.
 
 [source,xml,linenums]
 ----
@@ -195,7 +195,7 @@ Encrypts the body of an outgoing SOAP message using the keystore configuration p
 
 ==== Decrypt
 
-Decrypts the body of an incoming soap message using the Keystore configuration provided.
+Decrypts the body of an incoming SOAP message using the Keystore configuration provided.
 
 [source,xml,linenums]
 ----
@@ -220,11 +220,11 @@ The following sections provide Keystore and Truststore configurations.
 
 Enables the configuration of keystore for signing, encrypting or decrypting. It's basically a simple POJO with 5 fields:
 
-* `keyStorePath`: the location of the keyStoreFile.
-* `password`: the password used to access the store.
-* `alias`: the alias of the private key to use.
-* `keyPassword`: the password used to access the private key. If required.
-* `type`: the type of store (jks, pkcs12, jceks). Defaults to `jks`.
+* `keyStorePath`: The location of the keyStoreFile.
+* `password`: The password used to access the store.
+* `alias`: The alias of the private key to use.
+* `keyPassword`: The password used to access the private key, if required.
+* `type`: The type of store (jks, pkcs12, jceks). Defaults to `jks`.
 
 [source,xml,linenums]
 ----
@@ -240,9 +240,9 @@ Enables the configuration of keystore for signing, encrypting or decrypting. It'
 
 Enables the configuration of truststore for verifying signatures. It's basically a simple POJO with 3 fields:
 
- * `trustStorePath`: the location of the trustStore file.
- * `password`: the password used to access the store.
- * `type`: the type of store (jks, pkcs12, jceks). Defaults to `jks`.
+ * `trustStorePath`: The location of the trustStore file.
+ * `password`: The password used to access the store.
+ * `type`: The type of store (jks, pkcs12, jceks). Defaults to `jks`.
 
 [source,xml,linenums]
 ----
@@ -251,7 +251,7 @@ password="enterpassword"
 type="jks"/>
 ----
 
-Both keystore and truststore configuration can be defined as global elements so they can be reused in different configurations.
+Both the keystore and truststore configurations can be defined as global elements so they can be reused in different configurations.
 
 [source,xml,linenums]
 ----
@@ -316,9 +316,9 @@ The *Consume* operation requires only two parameters:
 
 The SOAP message consist of three parameters:
 
- * `headers`: A set of XML headers
- * `body`: The XML body, or null, if no body elements are required
- * `attachments`:  A set of attachments
+ * `headers`: A set of XML headers.
+ * `body`: The XML body, or null, if no body elements are required.
+ * `attachments`:  A set of attachments.
 
 The output can be of two different types dependending whether the response contains attachments or not. 
 If the response does not carry any attachments the resulting type is a plain XML with the information returned by the service, but if the response does return at least one attachment the output type is a Multipart payload that carries the plain XML response in the body, and contains another part for each retrieved attachment by the service.
