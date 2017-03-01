@@ -7,7 +7,7 @@ toc::[]
 
 
 
-Use the web service consumer to configure a connection to a SOAP service, where no Anypoint Connector for the service.
+Use the web service consumer to configure a connection to a SOAP service, when there is not an Anypoint Connector available for a service.
 
 
 == What is the Web Service Consumer?
@@ -21,23 +21,23 @@ The connector is based on CXF to handle all the SOAP message parsing and buildin
 The web service consumer has a single operation, the *Consume* operation. It provides all the available operations for the given connection and only accepts a SOAP message valid for the selected SOAP operation.
 
 [NOTE]
-As with the old module, the underlying transport can be configured. By default, it uses HTTP with a simple configuration, however both JMS and HTTP can be configured.
+As with the old module, the underlying transport can be configured. By default, it uses HTTP, however you can configure both JMS and a more complex HTTP setup.
 //MG what do we mean by simple configuration
 
 
 == Features
 
-* Full metadata support for headers, body and attachments (including for multipart soap message operations) for both input and output.
-* MTOM attachments
+* Full metadata support for headers, body and attachments (including for multipart SOAP message operations) for both input and output.
+* Message Transmission Optimization Mechanism (MTOM) attachments
 * SOAP attachments
 * SOAP multipart messages
-* SOAP Headers
+* SOAP headers
 * Web Service Security (Timestamp, UsernameToken, Signature, Encryption)
 * Custom transport configuration (HTTP, JMS)
 
 == How to Configure the Web Service Consumer
 
-Configuring the WSC means entering the connection details. The configuration for the web service consumer is basically a container for the connection. It only has one optional attribute: the *encoding*. The provided encoding will be used in all the requests and responses managed by the *Consume* operation. If none specified, the web service consumer uses Mule's default encoding.
+Configuring the WSC means entering the connection details. The configuration for the web service consumer is basically a container for the connection. It only has one optional attribute, the *encoding*. The provided encoding is used in all  requests and responses managed by the *Consume* operation. If no encoding is specified, the web service consumer uses Mule's default encoding.
 //configuration/container and the connection. Configuring the WSC means entering the connection details.
 
 [source,xml,linenums]
@@ -66,27 +66,25 @@ By default, the service looks for the address in the *WSDL* with the binding tha
   soapVersion="SOAP12"/>
 ----
 
-The connection parses the provided WSDL file and loads all the referenced schemas to find the types and elements as needed.
+The connection parses the WSDL file you specify and loads all the referenced schemas to find the types and elements as needed.
 //MG a connection parses the wsdl?
 
-If the SOAP server supports MTOM the connection can have MTOM enabled using the `mtomEnabled` flag. What this does is send all the attachments for the operations in an HTTP multipart message (if JMS is configured as the underlying transport this is not possible). MTOM is disabled by default.
+If the SOAP server supports MTOM, the connection can have MTOM enabled using the `mtomEnabled` flag. This sends all the attachments for the operations in an HTTP multipart message (if JMS is configured as the underlying transport, this is not possible). MTOM is disabled by default.
 
-[source,xml,linenums]
+[source,xml]
 ----
 <wsc:connection service="aService" port="aPort" wsdlLocation="...?wsdl" mtomEnabled="true"/>
 ----
-//If JMS is enabled, what does this mean for MTOM then? Are these two features mutually exclusive
-
+//If JMS is enabled, what does this mean for MTOM then? Are these two features mutually exclusive?
 
 All connections created by the web service consumer are reusable and the provider is implemented as a `PoolingConnectionProvider`.
 
-
-
 === How to Configure Web Service Security
+
 //MG what is WS-security, under the hood?
 Define `<wsc:security-strategies>` supporting one or many of the below security strategies.
 
-The web service consumer provides the capability to add security for the outgoing and incoming SOAP messages, the supported security mechanisms that provides are:
+The web service consumer provides the capability to add security for the outgoing and incoming SOAP messages, the supported security mechanisms are:
 
  * Timestamp
  * Sign
@@ -136,8 +134,8 @@ Adds a timestamp entry to the outgoing message, it only contains two attributes:
 </wsc:connection>
 ----
 
-`timeToLive`: length of time the message is valid. This attributes is qualified by the `timeToLiveUnit` attribute. The default value is 60 (seconds, qualified by the time unit `timeToLiveUnit`).  +
-`timeToLiveUnit`: unit of time which qualifies the `timeToLive` attribute. The default is `SECONDS`.
+* `timeToLive`: Length of time the message is valid. This attributes is qualified by the `timeToLiveUnit` attribute. The default value is 60 (seconds, qualified by the time unit `timeToLiveUnit`).  +
+* `timeToLiveUnit`: Unit of time which qualifies the `timeToLive` attribute. The default is `SECONDS`.
 
 ==== Signature
 
@@ -214,7 +212,9 @@ Decrypts the body of an incoming soap message using the Keystore configuration p
 </wsc:connection>
 ----
 
-==== Truststore and Keystore Configurations
+==== Keystore and Truststore Configurations
+
+The following sections provide Keystore and Truststore configurations.
 
 ==== Keystore Configuration
 
@@ -307,20 +307,21 @@ Here is an example of a WSC consumer connection secured with encryption, decrypt
 
 The *Consume* operation is the only web service consumer operation. It enables the execution of a web service operation providing the required information for the specific operation to execute.
 
-Basically the idea behind the operation is that for the given connection, exposes a set of soap operations that can be executed, and selecting the one it's wanted to consume describes the required headers types, the body type and the attachments if has any; and will also describe the output message of the operation.
+Basically the idea behind the operation is that for a connection, expose a set of SOAP operations to execute. For the connection you want to consume, select the required header types, body type, and attachments it has if any; and also describe the output message of the operation.
 
 The *Consume* operation requires only two parameters:
 
-* the operation and
-* message that represents the SOAP Message that is going to be built.
+* Operation
+* Message that represents the SOAP Message that is going to be built
 
 The SOAP message consist of three parameters:
 
- * `headers`: a set of XML headers.
- * `body`: the XML body or null if no body elements are required.
- * `attachments`:  a set of attachments
+ * `headers`: A set of XML headers
+ * `body`: The XML body, or null, if no body elements are required
+ * `attachments`:  A set of attachments
 
-And the output can be of two different types dependending whether the response contains attachments or not. If the response does not carry any attachments the resulting type will be a plain XML with the information returned by the service, but if the response does return at least one attachment the output type will be a Multipart payload that carries the plain XML response in the body and another part for each retrieved attachment by the service.
+The output can be of two different types dependending whether the response contains attachments or not. 
+If the response does not carry any attachments the resulting type is a plain XML with the information returned by the service, but if the response does return at least one attachment the output type is a Multipart payload that carries the plain XML response in the body, and contains another part for each retrieved attachment by the service.
 
 
 [source,xml,linenums]
@@ -341,11 +342,11 @@ And the output can be of two different types dependending whether the response c
 
 === Operation Input
 
-The input consist of a *Message* that represents a SOAP message. Input is composed of the body, a set of headers and a set of attachments, all of them optional parameters.
+The input consist of a *Message* that represents a SOAP message. Input is composed of the body, a set of headers, and a set of attachments, all of them optional parameters.
 
 ==== Body
 
-The input body for an operation is XML that follows the element definition pointed to by the message part in the provided WSDL.
+The `input` body for an operation is XML that follows the element definition pointed to by the `message` block in the provided WSDL.
 
 For example given a SOAP operation definition (extracted from a WSDL file) like this one:
 
@@ -374,7 +375,7 @@ For example given a SOAP operation definition (extracted from a WSDL file) like 
 </xs:sequence>
 ----
 
-The body expects content like this in order to generate a correct SOAP envelope:
+The body expects content like this to generate a correct SOAP envelope:
 
 [source,xml,linenums]
 ----
@@ -389,11 +390,12 @@ The body expects content like this in order to generate a correct SOAP envelope:
 </con:echoAccount>
 ----
 
-Metadata is provided to build the XML body using dataweave.
+Metadata is provided to build the XML body using link:/mule-user-guide/v/3.8/dataweave[DataWeave].
 
 ===== No Body Required
 
-When an operation hasn't a required body the Consume Operation accepts a null value as body and generates the required body part without parameters to fulfill the SOAP request.
+When an operation doesn't have a required body, use the Consume operation to accept a null value as body, 
+and to generate the required body part without parameters to fulfill the SOAP request.
 
 An example autogenerated body:
 
@@ -406,13 +408,13 @@ We only need the operation's *Qname* to generate the empty body request.
 
 ===== Body Attachment Elements
 
-In a soap context the attachments are part of the body, the attachment could travel encoded to base64 right in the body or have a reference to a part of a multipart http message for example (MTOM). For the Consume operation this is not a concern and the body is agnostic of the attachments, they are handled internally and the user does not need to worry about adding that attachments elements to the request body.
+In a SOAP context, the attachments are part of the body, the attachment could travel encoded to base64 right in the body or have a reference to a part of a multipart HTTP message for example, using MTOM. For the Consume operation, this is not a concern and the body is agnostic of the attachments. They are handled internally and the user does not need to worry about adding that attachment elements to the request body.
 
 ==== Headers
 
 The headers are defined as a Map where each entry represents a header, the key of the entry defines the name of the header and the value is the header XML element.
 
-For example having a header defined like this:
+For example if a header is defined like this:
 
 [source,xml,linenums]
 ----
@@ -423,15 +425,16 @@ For example having a header defined like this:
 </wsc:message>
 ----
 
-Where the payload carries this header:
+The payload carries this header:
 
-[source,xml,linenums]
+[source,xml]
 ----
 <con:headerIn  xmlns:con="http://service.ns/">Header In Value</con:headerIn>
 ----
 
-Of course, metadata is provided to build the headers using dataweave and all keys should be auto populated with their values so the user should only set the content for each one of the headers.
+Metadata is provided to build the headers using DataWeave. All keys should be auto populated with their values so the user should only set the content for each one of the headers.
 
+[source,xml]
 ----
 {
   headerIn: "<con:headerIn  xmlns:con="http://service.ns/">Header In Value</con:headerIn>",
@@ -441,7 +444,7 @@ Of course, metadata is provided to build the headers using dataweave and all key
 
 ==== Attachments
 
-The SOAP protocol attachments are carried in the body. The WSC supports Soap with attachments that encodes the body to base64 and travels embedded into the body request and also supports *MTOM* (_Message Transmission Optimization Mechanism_) a method of efficiently sending binary data to and from Web services. Mtom introduces the concept of sending the binary data separately from the XML body by including an XML-binary Optimized Packaging (XOP) in place of the binary data that references the data that travels in a *multipart/related message*.
+The SOAP protocol attachments are carried in the body. The WSC supports SOAP with attachments that encode the body to base64 and travel embedded into the body request and also support *MTOM*, a method of efficiently sending binary data to and from Web services. MTOM introduces the concept of sending the binary data separately from the XML body by including an XML-binary Optimized Packaging (XOP) in place of the binary data that references the data that travels in a *multipart/related message*.
 
 .SOAP with attachments
 [source,xml,linenums]
@@ -461,7 +464,7 @@ The SOAP protocol attachments are carried in the body. The WSC supports Soap wit
 </con:echoAccount>
 ----
 
-*With a MIME-attachment like this one*
+*With a MIME attachment:*
 
 ----
 Content-id: "SomeUniqueID"
@@ -470,7 +473,7 @@ Content-Type: image/png
 VGhpcyBpcyBhIHBpY3R1cmUgY29udGVudA==
 ----
 
-For both cases the attachments are handled the same way, the WSC adds the information that is required to the body depending on the connection that is being used.
+For both cases the attachments are handled the same way, the WSC adds the information that is required to the body, depending on the connection you use.
 
 === Operation Output
 
