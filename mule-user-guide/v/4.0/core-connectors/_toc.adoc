@@ -7,3 +7,8 @@
 ** link:/mule-user-guide/v/latest/email-connector[Email Connector]
 ** link:/mule-user-guide/v/latest/file-connector[File Connector]
 ** link:/mule-user-guide/v/latest/jms-connector[JMS Connector]
+** link:/mule-user-guide/v/latest/web-service-consumer[Web Service Consumer Connector]
+*** link:/mule-user-guide/v/latest/wsc-to-configure[To Configure]
+*** link:/mule-user-guide/v/latest/wsc-to-configure-security[To Configure Security]
+*** link:/mule-user-guide/v/latest/wsc-to-create-connection[To Create a Connection]
+*** link:/mule-user-guide/v/latest/wsc-to-consume[To Consume from the Connector]
