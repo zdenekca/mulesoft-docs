@@ -9,7 +9,7 @@ Configuring the Web Service Consumer connector means entering the connection det
 
 Configuration topics:
 
-* link:/mule-user-guide/v/4.0/core-connectors/wsc-to-configure-security[To Configure security]
+* link:/mule-user-guide/v/4.0/core-connectors/wsc-to-configure-security[To Configure Security]
 * link:/mule-user-guide/v/4.0/core-connectors/wsc-to-create-connection[To Create a Connection]
 
 [source,xml,linenums]
