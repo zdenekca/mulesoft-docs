@@ -1,0 +1,28 @@
+= About the HTTP Connector
+:keywords: connectors, http, https
+
+Using the HTTP or HTTPS protocol, the HTTP connector listens for a message or processes a request, depending on its configuration:
+
+* Listener
++
+Starts executing the Mule flow upon receiving a message from a source.
++
+* Requester
++
+Processes an HTTP operation.
+
+Mule preconfigures a left-justified HTTP connector in a flow as a listener. You can set up the following operations for the second, or any subsequent, HTTP connector in the same flow:
+
+* Make an HTTP request, such as GET.
+* Load a static resource.
+* Execute basic security filtering.
+
+These operations return a Mule message with `HttpResponseAttributes`.
+
+== See Also
+
+* To Make an HTTP Request
+* About HTTP Connector Migration
+* HTTP Connector Reference
+* HTTP Connector Documentation Reference
+

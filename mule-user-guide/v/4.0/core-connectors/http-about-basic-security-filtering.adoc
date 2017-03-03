@@ -1,0 +1,6 @@
+= About Basic Security Filtering
+:keywords: connectors
+
+Put a listener and then security filter to secure and authenticate requests to your service.
+
+// TBD, pending answers to questions (coming week of 3/6)
