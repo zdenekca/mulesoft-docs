@@ -13,7 +13,6 @@
 . In General, set Path to `/`.
 . Accept the other default listener settings, and close the connector.
 . Click + to add another component to the flow, select HTTP, and select the Load Static Resource operation.
-. Select the load static resource operation. 
 . Set the resource base path to the path and file name of the resource. For example, set the path to `/Users/max/Sites/index.html`.
 . Set the default file to the name of a backup file.
 . Accept the other default request settings, save the configuration, and close the HTTP request dialog.
