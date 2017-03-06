@@ -5,9 +5,9 @@
 
 toc::[]
 
-The *Consume* operation is the only web service consumer operation. It enables the execution of a web service operation providing the required information for the specific operation to execute.
+You can consume data from the connector using the *Consume* operation that you set in the properties screen for the connector. After you have installed and configured the connector, click the connector in the Anypoint Studio Canvas and set the operation on the connector's properties screen.
 
-For a connection, the web services consumer connector exposes a set of SOAP operations that can be executed, and selects the ones it wants to consume.  The connector also describes the required headers types, the body type, and the attachments if has any; and also describes the output message of the operation.
+The *Consume* operation is the only web service consumer operation. For a specified connection, the Consume operation lets you consume header types, the body type, and the attachments if any, and provides output messages about the operation.
 
 For input information, see <<Operation Input>>.
 
