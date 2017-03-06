@@ -8,8 +8,8 @@ toc::[]
 Anypoint Studio, Design Center connector
 
 [[short_description]]
-The FTP connector handles file transfers over FTP, _[TODO: VERIFY FTPS,]_ and SFTP protocols.
-// TODO: VERIFY FTPS
+The FTP connector handles file transfers over FTP and SFTP protocols.
+// NOTE FROM MARIANO: "Ftps is a separate EE only connector"
 
 == Configuration
 You can create one or more connection profiles and other settings for the connector's operations:
@@ -18,10 +18,7 @@ include::include_link_list.adoc[tags=ftp-set-up]
 
 include::include_link_list.adoc[tags=sftp-set-up]
 
-include::include_link_list.adoc[tags=ftps-set-up]
-//TODO: VERIFY FTPS ABOVE
-
-=== Settings Available to FTP _[TODO: and FTPS?]_
+=== Settings Available to FTP
 * Connection profile for the host, port, username, and password
 * General settings:
   ** Working directory
