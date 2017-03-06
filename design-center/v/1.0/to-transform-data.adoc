@@ -71,25 +71,18 @@ These functions can also be removed by clicking on the trash-can icons on them.
 
 === Defining Data Shape
 
-The _shape_ of data refres to its *metadata*, this is the representation of the structure of data, regardless of its format.
 
-For example, the metadata of a message may say that the 'user' element has two child elements: 'name' and 'address'; it doesn't matter if the message is of type JSON or XML, the structure is beyond that.
+You should have both the known input and the expected output as already defined before you deal with the Transform card, to learn how to provide this information, see link:/design-center/v/1.0/to-handle-data-shapes[To Handle Data Shapes].
 
-
-Many elements you can use in your projects expose the shape of their input and output data to the rest of the flow. For example, when a connector is configured to carry out a specific operation, its output structure is known, and this is expected to be the input received by following component in the flow. When this information is available to the *Transform Message* card,  it is interpreted as the expected input or the required output, depending on where each are placed relative to each other on the flow. This metadata is then displayed in the input or output structures in the UI.
-
-Ideally you should have both the known input and the expected output as already defined before you deal with the Transform card. If the data shape definition is missing for the input or output, a notification on the corresponding section of the Graphical UI will advise you to provide it.
-
-image: (input and output)
+If the data shape definition is missing for the input or output, a notification on the corresponding section of the Graphical UI will advise you to provide it.
 
 
-There are several ways you can deal with this:
+There are several ways in which you can provide this information. See link:/design-center/v/1.0/to-handle-data-shapes#data-types-in-the-transform-card[Data Types in the Transform Card] for details on how to do this.
 
-* Make sure that other elements in the flow are fully configured. For example, a connector can't expose its output structure until a given operation is chosen, as its output might differ depending on this.
-* You can manually define the output of a Mule component via its link:/design-center/v/1.0/to-define-data-types[To Define Data Types].
-* You can manually define the input of the Transform component by clicking on the *Define Data Shape* link that appears in the notification that warns you about missing input metadata, or by clicking on the target picker above the output section and selecting *Edit Current Data Shape*.
+Once defined, this metadata is displayed in the input or output structures in the UI.
 
-See link:/design-center/v/1.0/to-define-data-types[To Define Data Types] for details on how to specify the properties of the metadata in either of the above cases.
+image:to-transform-data-da5b0.png[]
+
 
 
 [NOTE]

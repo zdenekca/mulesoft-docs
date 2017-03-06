@@ -3,21 +3,25 @@
 
 == Overview
 
-The flow designer is one of the tools in the link:/design-center[Design Center]. It is a simplified web-based visual design tool that allows you to create and deploy Mule applications very easily. It can be thought of as a subset of link:/anypoint-studio[Anypoint Studio] (the desktop IDE) that is streamlined to require minimum configuration. With a strong focus on usability, the flow designer allows you to get things done with very little effort and without needing to go deep into learning the underlying concepts. It's oriented towards users that, whilst having a general technical background, don't need to understand Java or advanced connectivity concepts.
+The flow designer is one of the tools in the link:/design-center[Design Center]. It's a simplified web-based visual design tool that allows you to create and deploy Mule applications very easily. It can be thought of as a subset of link:/anypoint-studio[Anypoint Studio] (the desktop IDE) that is streamlined to require minimum configuration. With a strong focus on usability, the flow designer allows you to get things done with very little effort and without needing to go deep into learning the underlying concepts. It's oriented towards users that, whilst having a general technical background, don't need to understand Java or advanced connectivity concepts.
 
 image:flow-designer-e141b.png[]
 
-The flow designer allows you to build upon reusable assets, enabling anyone who needs to put together an integration to compose applications in a self-serve manner. They can combine both out-of-the-box components and those that have been created by integration specialists in your organization.
+The flow designer allows you to build upon reusable assets, enabling anyone who needs to put together an integration to compose applications in a self-serve manner. You can combine both out-of-the-box components and those that have been created by integration specialists in your organization.
 
-The flow designer's editor allows you to directly deploy your applications to CloudHub without ever leaving the screen. You might want to periodically deploy your project to a Dev environment while building and debugging, and then – when ready – simply change the deployment target to the Production environment, all without ever leaving the editor.
+The flow designer's editor allows you to directly deploy your applications to CloudHub without ever leaving the screen. It also periodically deploys your project to a sandbox environment for debugging purposes. When ready, simply promote the application to the Production environment, all without ever leaving the editor.
 
-[TIP]
-====
-In future releases, applications built in the flow designer will also be exportable to Anypoint Studio (the desktop IDE) for configuring advanced settings. With that feature, you could have a workflow where the desired overall functionality is drafted by line-of-business users on Design Center, and then the project can be exported to Anypoint Studio, where additional details that bring robustness to the application are implemented by specialized integration developers.
-====
 
 [NOTE]
 To use the flow designer, your Anypoint organization needs to have at least one CloudHub sandbox link:/access-management/environments[environment] in it. This is required to deploy and test applications as you develop them, before they're ready to promote to a production environment.
+
+[TIP]
+====
+In future releases, applications built in the flow designer will also be exportable to Anypoint Studio (the desktop IDE) for configuring advanced settings.
+
+With that feature, you could have a workflow where the desired overall functionality is drafted by line-of-business users on Design Center, and then the project can be exported to Anypoint Studio, where additional details that bring robustness to the application are implemented by specialized integration developers.
+====
+
 
 == Use Cases
 
@@ -27,7 +31,7 @@ In spite of being simple, the flow designer is still quite powerful, you can bui
 * Run tasks at regular intervals.
 * Orchestrate processes across APIs, such as Salesforce, Twitter, Facebook, GitHub, Zendesk, and many more.
 * Send automatic emails.
-* Can powerfully map fields through link:/mule-user-guide/v/4.0/dataweave[DataWeave] transformations to make virtually any two data formats compatible
+* Powerfully map fields through link:/mule-user-guide/v/4.0/dataweave[DataWeave] transformations to make virtually any two data formats compatible
 
 Just like with link:/anypoint-studio[Anypoint Studio], the resulting application is meant for deploying to a Mule Runtime, either in link:/runtime-manager/deploying-to-cloudhub[CloudHub] or in a link:/runtime-manager/deploying-to-your-own-servers[customer-managed server].
 
@@ -62,7 +66,6 @@ image:flow-designer-6c883.png[]
 
 You can then build up the rest of your flow, by adding more components that are executed after the first one is triggered. The order in which they are placed matters, as information flows through them from left to right. To view the metadata that describes this information at every point of the way, see link:/design-center/v/1.0/about-metadata[About Metadata].
 
-
 You add steps to a flow by clicking the plus icons that exist in between two existing cards (hover over the arrows in between them to reveal plus icons).
 
 image:flow-designer-c760b.png[]
@@ -83,46 +86,16 @@ image:flow-designer-d095a.png[]
 
 == Card Configuration
 
-You can click on any card to open its settings panel. There, you'll find specific settings that pertain to that element in your flow (if your project includes multiple instances of the same type of card, each is configured separately).
+You can click on any card to open its settings panel. There, you'll find specific settings that pertain to that element in your flow.
 
 image:flow-designer-2765a.png[]
 
-[TIP]
-See link:/design-center/v/1.0/to-populate-fields[To Populate Fields] for details on how the Flow Designer UI can make this easier.
 
-== Global Configurations
-
-By design, Mule applications keep the reusable configurations of connectors separate from the definition of individual instances of them. This is achieved through link:/mule-user-guide/v/4.0/global-elements[Global Elements], which exist outside any flow, but that can be referenced by elements in them.
-
-Many components require that you reference one of these global configurations. If the card requires one, it will notify you with an error message on the top margin, which includes a link that automatically creates a new global message instance.
-
-image:about-flow-designer-6a4c6.png[]
-
-In this way, when creating a project that utilizes several instances of a same card, these parameters only need to be provided once and can easily be globally changed.
-
-For example, you could have multiple HTTP connectors in your project, all of them relying on the same host and port and implementing the same SSL certificates, but each triggering a different flow via a different subpath.
-
-When you create a new card that requires a global configuration, such as an HTTP Listener, note how you're prompted to set up a configuration, and that an error message is displayed until you do.
-
-image:flow-designer-30203.png[]
-
-By clicking on the *Set up* link, you open a new global configuration, which is automatically applied to the currently selected card.
-
-image:flow-designer-52a43.png[]
-
-Once you have provided the necessary fields and clicked *Save*, the global configuration is set. If you create any new cards in your flow, these will automatically reference any existing relevant global elements.
-
-Once the component has an assigned global configuration you can click the *Change* link on the component's top bar to then, select a different configuration, or edit the existing one.
-
-
-image:flow-designer-51852.png[]
-
-All global configurations in your project are listed on the menu on the left, under *Connectors & Modules*. You can edit or delete these directly from this menu.
-
-image:flow-designer-7b549.png[]
+Many components require that you reference global configuration elements, see link:/design-center/v/1.0/to-set-up-global-configurations[To Set Up Global Configurations] to learn how to create and reference these.
 
 [TIP]
 See link:/design-center/v/1.0/to-populate-fields[To Populate Fields] for details on how the Flow Designer UI can make this easier.
+
 
 
 ////

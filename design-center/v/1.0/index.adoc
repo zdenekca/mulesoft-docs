@@ -8,7 +8,7 @@ The Design Center is part of the Anypoint Platform, in order to access this tool
 image:index-5e173.png[]
 
 [NOTE]
-The first beta release of the design center only includes the Flow Designer. The API Designer will be included in coming releases.
+The first beta release of the Design Center only includes the Flow Designer. The second editor that comprises the Design Center, the API Designer, will be included in coming releases.
 
 ////
 == API Designer (beta)
@@ -24,4 +24,4 @@ From the RAML definition you can also automatically generate interactive documen
 
 The flow designer lets you create fully functional Mule applications, functioning as an on-line simplified alternative to link:/anypoint-studio[Anypoint Studio].
 
-the flow designer offers a reduced set of options, tailored to be intuitive and to the point. If you find that you require going deeper into more advanced configuration, you can always export your resulting Mule application into link:/anypoint-studio[Anypoint Studio], the desktop IDE.
+The flow designer offers a reduced set of options, tailored to be intuitive and to the point. If you find that you require going deeper into more advanced configuration, future releases will allow you to export your resulting Mule application into link:/anypoint-studio[Anypoint Studio], the desktop IDE.
