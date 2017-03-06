@@ -11,7 +11,7 @@
 +
 . In General, set Path to `/`.
 . Accept the other default listener settings, and close the connector.
-. Click + to add another component to the flow, and select HTTP, and select the Request operation.
+. Click + to add another component to the flow, select HTTP, and select the Request operation.
 . Set up the request configuration:
 +
 * Accept the default HTTP request configuration name and HTTP protocol.
@@ -28,6 +28,5 @@ The listener hears the request on port 8081, and starts the app. The requester g
 == See Also
 
 * About the HTTP Request Operation
-* About HTTP Connector Migration
 * HTTP Connector Reference
 * HTTP Connector Documentation Reference

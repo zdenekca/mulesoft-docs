@@ -30,8 +30,7 @@ The response to a request can include the following information:
 == See Also
 
 * To Make an HTTP Request
-* To Make an HTTPS Request
+* To Create an HTTPS Listener
 * HTTP Connector Reference
 * HTTP Connector Documentation Reference
-* link:/mule-user-guide/v/3.8/tls-configuration#generating-keystores-and-truststores[Generating Keystores and Truststores]
 

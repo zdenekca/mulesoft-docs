@@ -21,8 +21,10 @@ These operations return a Mule message with `HttpResponseAttributes`.
 
 == See Also
 
-* To Make an HTTP Request
 * About HTTP Connector Migration
-* HTTP Connector Reference
+* To Make an HTTP Request
+* To Create an HTTP Listener
+* To Load a Static Resource
+* To Execute Basic Security Filtering
 * HTTP Connector Documentation Reference
 
