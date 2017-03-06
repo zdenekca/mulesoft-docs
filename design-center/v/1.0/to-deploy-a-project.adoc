@@ -58,7 +58,7 @@ Click the *Promote Application* button to deploy it to a production environment.
 
 image:deploying-your-project-a675b.png[]
 
-This displays a window where you can select a name with which to deploy your application and the CloudHub link:/access-management/environments[environment] to which to deploy. When selecting a different environment, you can configure the link:/design-center/v/1.0/about-flow-designer#global-elements[global elements] in your project so that they have different settings for each of your environments.
+This displays a window where you can select a name with which to deploy your application and the CloudHub link:/access-management/environments[environment] to which to deploy. When selecting a different environment, you can configure the link:/design-center/v/1.0/to-set-up-global-configurations[Global Configurations] in your project so that they have different settings for each of your environments.
 
 image:deploying-your-project-9cee7.png[]
 
@@ -82,7 +82,7 @@ image:deploying-your-project-e2ffa.png[]
 
 The application promotion screen also allows you to set variables that may be specific to a given link:/access-management/environments[environment].
 
-The fields exposed here are those that can be set in the link:/design-center/v/1.0/about-flow-designer#global-configurations[GlobalConfigurations] of each element in your flow.
+The fields exposed here are those that can be set in the link:/design-center/v/1.0/to-set-up-global-configurations[Global Configurations] of each element in your flow.
 
 This allows you to tweak your application with values that may point to similar assets that exist in different environments, such as a staging database for your staging deployments, and a production database for your production deployments. This eliminates the need to add property placeholders.
 
