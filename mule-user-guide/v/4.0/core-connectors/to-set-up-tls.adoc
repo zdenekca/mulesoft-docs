@@ -1,4 +1,4 @@
-= To Configure TLS for Secure Connections
+= To Set Up Secure Connections over TLS
 :keywords: email, http, sockets, connector, configuration
 :toc:
 :toc-title:

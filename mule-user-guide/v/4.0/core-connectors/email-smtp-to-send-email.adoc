@@ -1,4 +1,4 @@
-= To Send Email over SMTP
+= To Send Email over SMTP(S)
 :keywords: email, connector, configuration, smtp
 :toc:
 :toc-title:

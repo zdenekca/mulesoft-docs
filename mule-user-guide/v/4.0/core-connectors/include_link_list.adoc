@@ -21,7 +21,7 @@ end::tech-ref-ftp[]
 
 // #### EMAIL CONNECTOR LINKS ####
 tag::email-connector[]
-link:email-about-the-email-connector[Email Connector]
+link:email-about-the-email-connector[About the Email Connector]
 end::email-connector[]
 
 tag::imap-set-up[]
@@ -69,7 +69,7 @@ link:email-to-set-email-body-config[To Set Up the Body of Email]
 end::set-up-email-body[]
 
 tag::ftp-connector[]
-link:ftp-about-the-ftp-connector[FTP Connector]
+link:ftp-about-the-ftp-connector[About the FTP Connector]
 end::ftp-connector[]
 
 tag::ftp-set-up[]
@@ -146,7 +146,7 @@ link:to-set-up-timeouts[To Set Connection Timeouts TODO]
 end::set-connection-timeout[]
 
 tag::set-up-tls[]
-link:to-set-up-tls[To Set Up TLS Security TODO]
+link:to-set-up-tls[To Set Up Secure Connections over TLS TODO]
 end::set-up-tls[]
 
 ////

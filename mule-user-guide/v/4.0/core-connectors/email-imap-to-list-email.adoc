@@ -1,4 +1,4 @@
-= To List Email over IMAP
+= To List Email over IMAP(S)
 :keywords: email, connector, configuration
 :toc:
 :toc-title:

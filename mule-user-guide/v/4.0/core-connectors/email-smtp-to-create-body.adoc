@@ -1,4 +1,4 @@
-= To Create the Body of an Email (SMTP)
+= To Create the Body of an SMTP(S) Email
 :keywords: email, connector, configuration, smtp
 :toc:
 :toc-title:

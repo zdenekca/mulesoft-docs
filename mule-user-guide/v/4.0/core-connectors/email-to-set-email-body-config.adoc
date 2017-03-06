@@ -1,4 +1,4 @@
-= To Set Up the Body of the Email (SMTP)
+= To Set Up the Body of SMTP(S) Email
 :keywords: email, connector, configuration, pop3
 :toc:
 :toc-title:

@@ -7,48 +7,25 @@ toc::[]
 
 For Anypoint Studio, Design Center: FTP connector
 
-link:about-ftp-connector[FTP] connectors
+Uses the *Create Directory* operation. If the directory does not exist, the operation will create it.
 
 . After adding the connector to your flow, select the operation.
 . Set up or select a *Configuration* for the connector.
 . Provide the name for the new directory with *Directory Path*, for example, `backup/march_2017`.
-
-// <file:create-directory directoryPath="backup/january_2016" />
-
+. For other settings, go to link:#see_also[See also].
 
 [[see_also]]
 == See Also
 
 include::include_link_list.adoc[tags=ftp-set-up]
 
+include::include_link_list.adoc[tags=set-data-types]
+
 include::include_link_list.adoc[tags=ftp-connector]
 
 include::include_link_list.adoc[tags=tech-ref-ftp]
 
 ////
-Parameter Name
-Required?
-Default Value
-Description
-directoryPath
-
-===== test case =====
-<spring:beans>
-    <spring:import resource="file-read-config.xml"/>
-</spring:beans>
-
-<flow name="createDirectory">
-    <file:create-directory directoryPath="#[directory]"/>
-</flow>
-
-Can also be used to create a series of chained directories. For the below example, if the folder `backup` doesn’t exist, it will be created in addition to `january_2016`.
-
-[source,xml,linenums]
-----
+_TODO: check into CHAINED directories_
 <file:create-directory directoryPath="backup/january_2016" />
-==============
-
-The path to the directory to be created
-
-The above creates a directory. Notice that it can also be used to create a series of chained directories. For example, in the example above, if the backup folder doesn’t exists, it will also be created in order to create the archive one.
 ////

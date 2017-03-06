@@ -1,4 +1,4 @@
-= To Mark Email as Deleted over IMAP
+= To Mark Email as Deleted over IMAP(S)
 :keywords: email, connector, configuration, imap
 :toc:
 :toc-title:

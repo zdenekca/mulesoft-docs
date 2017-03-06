@@ -1,6 +1,4 @@
-= To List Email over POP3
-Associated products: Anypoint Studio, Design Center
-Applicable connectors: Email
+= To List Email over POP3(S)
 :keywords: email, connector, configuration, pop3
 :toc:
 :toc-title:

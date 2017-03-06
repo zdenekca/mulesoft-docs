@@ -5,33 +5,16 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center:
-include::include_link_list.adoc[tags=file-connector]
-include::include_link_list.adoc[tags=ftp-connector]
+Anypoint Studio, Design Center: FTP connector
 
-Uses an operation's *Error Mapping* fields to map custom error messages to error types, such as the `CONNECTIVITY` or `REDELIVERY_EXHAUSTED` error types.
+Uses an operation's *Error Mapping* fields to map custom error messages to the errors that the operation can return, such as the `CONNECTIVITY` or `REDELIVERY_EXHAUSTED`.
 
-. From the *Error Mapping* tab within a connector operation (such as *Delete*) in your flow, click the Plus icon (*+*) to open the list of error types for the operation.
+. From an *Error Mapping* tab for an operation (such as *Delete*) in your flow, click the Plus icon (*+*) to open the list of error types for the operation.
 . Click one or more error types.
 . Enter your custom error message for the error type.
+//. For other settings, go to link:#see_also[See also].
 
 [[see_also]]
 == See Also
 
 include::include_link_list.adoc[tags=tech-ref-ftp]
-
-////
-===== test case =====
-<file:config name="file">
-    <file:connection workingDir="${workingDir}" />
-</file:config>
-
-<flow name="delete">
-    <file:delete path="path/to/deleteme.txt" />
-</flow>
-
-<flow name="readAndDelete">
-    <file:read path="#[delete]" />
-    <file:delete path="#[delete]"/>
-</flow>
-////

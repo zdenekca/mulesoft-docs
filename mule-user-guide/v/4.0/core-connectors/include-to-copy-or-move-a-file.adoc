@@ -7,4 +7,4 @@
 . Provide the *Target Path* for the destination for the file, such as a `backup` folder.
 . Choose whether to *Create Parent Directories* for the file if they do not exist on your file system already.
 . Choose whether to *Overwrite* an existing version of the file if you do not need it anymore.
-. For other configurations, go to link:#see_also[See also].
+. For other settings, go to link:#see_also[See also].

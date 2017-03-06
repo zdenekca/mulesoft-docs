@@ -20,19 +20,3 @@ include::include_link_list.adoc[tags=ftp-set-up]
 include::include_link_list.adoc[tags=ftp-connector]
 
 include::include_link_list.adoc[tags=tech-ref-ftp]
-
-////
-=== Example
-PROBABLY WILL REMOVE THIS
-
-....
-<spring:beans>
-    <spring:import resource="file-read-config.xml"/>
-</spring:beans>
-
-<flow name="readAndDo">
-    <file:read path="input" />
-    <file:move sourcePath="input/source.txt" targetPath="backup" overwrite="true" createParentDirectories="true"/>
-</flow>
-....
-////

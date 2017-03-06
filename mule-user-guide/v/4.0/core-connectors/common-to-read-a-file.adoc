@@ -9,20 +9,16 @@ For Anypoint Studio, Design Center: FTP connector
 
 Uses the connector's *Read* operation. Retains the file in the original location.
 
-// It does not depend on polling an inbound endpoint.
-////
-THIS HAS TO CHANGE for 4.0: https://docs.mulesoft.com/mule-user-guide/v/3.8/file-transport-reference
-* Retries: 3.8 says not supported, but reconnection attempts are supported in 4.0
-* "Read files at a regular polling interval" - polling not necessary for read to take place
-* Are the inbound and outbound elements in 4.0? <file:connector>, <file:inbound-endpoint> and/or <file:outbound-endpoint> elements
-////
-
 . After adding the connector to your flow, select the *Read* operation.
-. Set up or select a configuration for the connector (see link:to-set-up-a-file-connector-config[To set up a File connector]).
+. Set up or select a configuration for the connector.
+. Provide the *File Path* to the file that you want to read.
+. Provide any advanced settings you need, for example:
+  ** *Lock*: `true`
+  ** *Output Mime Type*: `application/xml`
+  ** *Output Encoding*: `UTF-8`
+
 . TODO, TODO. [Optional] Perform other tasks:
   ** Set *Data Types* (_TODO: USE CASE?_)
-  ** Use *Advanced* settings:
-    *** To change the *Mime Type* (for example, `application/xml`) or *Encoding* (for example, `UTF-8`) of the file output. (_TODO: USE CASES? valid encodings? valid mime types?_)
 // DataType#getEncoding()
       **** Encoding can be any accepted by your operating system. If you do not specify it, the output encoding will be the same as the input.
 // DataType#getMimeType()
@@ -58,18 +54,6 @@ include::include_link_list.adoc[tags=tech-ref-ftp]
 [[read]]
 === Read Files
 
-.Syntax
-[source,xml,linenums]
-----
-<file:read path="#[path]"
-lock="true|false"
-outputEncoding="UTF-8"
-outputMimeType="application/xml" />
-----
-
-<file:config name="file">
-    <file:connection workingDir="${workingDir}" />
-</file:config>
 
 <flow name="read">
     <logger level="ERROR" message="#[streaming]" />
@@ -104,4 +88,11 @@ outputMimeType="application/xml" />
 
 From functional spec:
 "The processor above reads the file in the path and returns a MuleMessage with an InputStream as payload and a FileAttributes instance as attributes. By default, if the file does not exist an IllegalArgumentException will be thrown."
+
+// It does not depend on polling an inbound endpoint.
+
+THIS HAS TO CHANGE for 4.0: https://docs.mulesoft.com/mule-user-guide/v/3.8/file-transport-reference
+
+* "Read files at a regular polling interval" - polling not necessary for read to take place
+* Are the inbound and outbound elements in 4.0? <file:connector>, <file:inbound-endpoint> and/or <file:outbound-endpoint> elements
 ////

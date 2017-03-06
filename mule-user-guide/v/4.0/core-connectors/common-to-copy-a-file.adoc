@@ -18,6 +18,8 @@ include::include-to-copy-or-move-a-file.adoc[]
 
 include::include_link_list.adoc[tags=move-file]
 
+include::include_link_list.adoc[tags=set-data-types]
+
 include::include_link_list.adoc[tags=ftp-connector]
 
 include::include_link_list.adoc[tags=tech-ref-ftp]
