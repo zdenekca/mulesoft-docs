@@ -1,6 +1,9 @@
 = To Load a Static Resource
 :keywords: anypoint, connectors, transports
 
+. In an empty flow, select an HTTP connector to trigger the flow.
+. Set up the listener configuration: 
++
 * In Configuration Name, accept the default name HTTP Listener. 
 * In Connection, accept the default protocol HTTP.
 * Set the host and port. For example, host = 0.0.0.0 and port = 8081. 
