@@ -33,4 +33,7 @@ As with the old module, the underlying transport can be configured. By default, 
 
 == See Also
 
-* link:/mule-user-guide/v/4.0/core-connectors/web-service-consumer[Web Service Consumer Connector].
+* link:/mule-user-guide/v/4.0/core-connectors/wsc-to-configure[To Configure]
+* link:/mule-user-guide/v/4.0/core-connectors/wsc-to-configure-security[To Configure Security]
+* link:/mule-user-guide/v/4.0/core-connectors/wsc-to-create-connection[To Create a Connection]
+* link:/mule-user-guide/v/4.0/core-connectors/wsc-to-consume[To Consume from the Connector]
