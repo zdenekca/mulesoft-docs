@@ -5,7 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center: link:email-about-the-email-connector[Email] connector
+Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
 A POP3 configuration is required for all email retrieval operations that take place over the POP3 or POP3S protocol. The POP3S configuration requires a TLS configuration for encryption. Otherwise, the setup is identical to POP3.
@@ -25,7 +25,7 @@ A POP3 configuration is required for all email retrieval operations that take pl
   ** *Password*: `somepassword`
   ** _TODO, LOOKS LIKE OTHERS ARE REQUIRED_
 
-For other configuration options, see link:see_also[see_also].
+For other configuration options, go to link:#see_also[See Also].
 
 ////
 TODO: CREATE FILES FOR THESE, SEE SEE ALSO FOR FILE NAMES
@@ -42,6 +42,16 @@ TODO: CREATE FILES FOR THESE, SEE SEE ALSO FOR FILE NAMES
 
 [[see_also]]
 == See Also
+
+include::include_link_list.adoc[tags=set-up-tls]
+
+include::include_link_list.adoc[tags=set-connection-timeout]
+
+include::include_link_list.adoc[tags=set-pooling-profile]
+
+include::include_link_list.adoc[tags=set-reconnection-config]
+
+include::include_link_list.adoc[tags=customize-email-props]
 
 include::include_link_list.adoc[tags=email-connector]
 

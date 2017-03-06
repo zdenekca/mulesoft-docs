@@ -5,9 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center:
-include::include_link_list.adoc[tags=file-connector]
-include::include_link_list.adoc[tags=ftp-connector]
+For Anypoint Studio, Design Center: FTP connector
 
 Specifies file properties (such as file name patterns, dates, locations, or size) to match
 before triggering an operation. You can configure a matcher locally on an operation, or you can reference a global matcher configuration.
@@ -21,6 +19,11 @@ Matching is useful for operations and sources (such as watchers and listeners) t
 
 [[see_also]]
 == See Also
+
+include::include_link_list.adoc[tags=ftp-set-up]
+
+include::include_link_list.adoc[tags=ftp-connector]
+
 include::include_link_list.adoc[tags=tech-ref-ftp]
 
 ////

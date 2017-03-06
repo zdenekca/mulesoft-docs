@@ -1,4 +1,4 @@
-= To Set Up the Body of the Email (SMTP)
+= To Use Custom Email Properties
 :keywords: email, connector, configuration, pop3
 :toc:
 :toc-title:
@@ -8,7 +8,7 @@ toc::[]
 Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
-_TODO_ .... body of an email for the SMTP *Send* operation ...
+_TODO_ ....
 
 [[set_up_pop3]]
 . step

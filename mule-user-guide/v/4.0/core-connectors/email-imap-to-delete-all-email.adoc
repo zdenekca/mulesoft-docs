@@ -1,11 +1,11 @@
-= To Remove Email from a Folder over IMAP
+= To Delete All Email from a Folder over IMAP
 :keywords: email, connector, configuration, imap
 :toc:
 :toc-title:
 
 toc::[]
 
-For Anypoint Studio, Design Center: link:email-about-the-email-connector[Email] connector
+Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
 Eliminates (expunges) from a mailbox folder all email that is flagged for deletion.
@@ -14,6 +14,7 @@ Eliminates (expunges) from a mailbox folder all email that is flagged for deleti
 . After adding the *Email* connector to your flow, select the *Expunge Folder* operation.
 . If you are deleting the file from a folder other than the inbox, provide the name of the folder, for example, `Trash`. _TODO, VERIFY VALID VALUES_
 
+////
 [[errors]]
 == Errors
 _TODO, error MAPPING_
@@ -21,7 +22,7 @@ _TODO, error MAPPING_
 * EMAIL:RETRY_EXHAUSTED
 * EMAIL:ACCESSING_FOLDER
 * EMAIL:CONNECTIVITY
-
+////
 
 [[see_also]]
 == See Also

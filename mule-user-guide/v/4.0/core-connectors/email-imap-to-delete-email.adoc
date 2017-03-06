@@ -5,7 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center: link:email-about-the-email-connector[Email] connector
+Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
 Deletes an email from a mailbox folder based on the ID of the email. Defaults to the inbox folder.
@@ -14,8 +14,11 @@ Deletes an email from a mailbox folder based on the ID of the email. Defaults to
 . After adding the *Email* connector to your flow, select the *Delete* operation.
 . Set up or select an IMAP or IMAPS configuration for the operation (see link:email-imap-to-set-up[To Set Up an IMAP or IMAPS Email Configuration]).
 . If you are deleting the file from a folder other than the inbox, provide the name of the folder, for example, `Drafts`. _TODO, VERIFY VALID VALUES_
-. Provide the ID of the email that you want to delete. _TODO, HOW DO THEY GET THE ID? CAN THEY AUTOMATE THIS SOMEHOW? REGEX? REALISTIC USE CASE?_
+. Provide the ID of the email that you want to delete.
+// Juani: You might get the ID by saving it from a returned email.
+//_TODO, HOW DO THEY GET THE ID? CAN THEY AUTOMATE THIS SOMEHOW? REGEX? REALISTIC USE CASE?_
 
+////
 == Errors
 _TODO, error MAPPING_
 
@@ -23,6 +26,7 @@ _TODO, error MAPPING_
 * EMAIL:ACCESSING_FOLDER
 * EMAIL:EMAIL_NOT_FOUND
 * EMAIL:CONNECTIVITY
+////
 
 [[see_also]]
 == See Also

@@ -5,7 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center
+Anypoint Studio, Design Center connector
 
 [[short_description]]
 The FTP connector handles file transfers over FTP, _[TODO: VERIFY FTPS,]_ and SFTP protocols.

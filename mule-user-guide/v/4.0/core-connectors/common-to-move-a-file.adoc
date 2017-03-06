@@ -5,9 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center:
-include::include_link_list.adoc[tags=file-connector]
-include::include_link_list.adoc[tags=ftp-connector]
+For Anypoint Studio, Design Center: FTP connector
 
 Uses the connector's *Move* operation. Deletes the file from the original location.
 
@@ -16,7 +14,11 @@ include::include-to-copy-or-move-a-file.adoc[]
 
 [[see_also]]
 == See Also
-include::include_link_list.adoc[tags=move-file]
+
+include::include_link_list.adoc[tags=ftp-set-up]
+
+include::include_link_list.adoc[tags=ftp-connector]
+
 include::include_link_list.adoc[tags=tech-ref-ftp]
 
 ////

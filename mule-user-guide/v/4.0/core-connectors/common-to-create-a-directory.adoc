@@ -5,21 +5,24 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center:
-include::include_link_list.adoc[tags=file-connector]
-include::include_link_list.adoc[tags=ftp-connector]
+For Anypoint Studio, Design Center: FTP connector
 
 link:about-ftp-connector[FTP] connectors
 
 . After adding the connector to your flow, select the operation.
-. Set up or select a configuration for the connector (see link:to-set-up-a-file-connector-config[To set up a File connector]).
-. TODO, TODO
+. Set up or select a *Configuration* for the connector.
+. Provide the name for the new directory with *Directory Path*, for example, `backup/march_2017`.
 
 // <file:create-directory directoryPath="backup/january_2016" />
 
 
 [[see_also]]
 == See Also
+
+include::include_link_list.adoc[tags=ftp-set-up]
+
+include::include_link_list.adoc[tags=ftp-connector]
+
 include::include_link_list.adoc[tags=tech-ref-ftp]
 
 ////

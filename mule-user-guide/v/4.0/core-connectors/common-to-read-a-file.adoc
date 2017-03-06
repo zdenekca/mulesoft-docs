@@ -1,13 +1,11 @@
 = To Read a File with a Connector
 :keywords: file, ftp, connector, operation
 :toc:
-:toc-title: To Copy a File
+:toc-title: To Read a File
 
 toc::[]
 
-For Anypoint Studio, Design Center:
-include::include_link_list.adoc[tags=file-connector]
-include::include_link_list.adoc[tags=ftp-connector]
+For Anypoint Studio, Design Center: FTP connector
 
 Uses the connector's *Read* operation. Retains the file in the original location.
 
@@ -48,6 +46,11 @@ From spec:
 
 [[see_also]]
 == See Also
+
+include::include_link_list.adoc[tags=ftp-set-up]
+
+include::include_link_list.adoc[tags=ftp-connector]
+
 include::include_link_list.adoc[tags=tech-ref-ftp]
 
 ////

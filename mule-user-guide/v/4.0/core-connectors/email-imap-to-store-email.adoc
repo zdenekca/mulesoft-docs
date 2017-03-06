@@ -5,7 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center: link:email-about-the-email-connector[Email] connector
+Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
 Stores an email into a specified local directory based on the ID of the email. Saves the email as a `txt` file and bases the file name on the subject.
@@ -20,12 +20,14 @@ Stores an email into a specified local directory based on the ID of the email. S
   ** Opt to provide an *Email ID* of the email that you want to store. _TODO, HOW TO GET EMAIL ID?_
   ** Use the *Should Overwrite* option if you want to overwrite a file with the same name.
 
+////
 [[errors]]
 == Errors
 _TODO_
 
 * EMAIL:RETRY_EXHAUSTED
 * EMAIL:CONNECTIVITY
+////
 
 [[see_also]]
 == See Also

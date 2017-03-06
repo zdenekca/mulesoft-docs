@@ -5,7 +5,7 @@
 
 toc::[]
 
-For Anypoint Studio, Design Center: link:email-about-the-email-connector[Email] connector
+Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
 Marks an email for read in a mailbox folder based on the ID of the email.
@@ -15,6 +15,7 @@ Marks an email for read in a mailbox folder based on the ID of the email.
 . If you are marking a file from a folder other than the inbox, provide the name of the folder. _TODO, VALID VALUES?_
 . Provide the ID of the email that you want to mark as read. _TODO, HOW DO THEY GET THE ID? CAN THEY AUTOMATE THIS SOMEHOW? REGEX? REALISTIC USE CASE?_
 
+////
 [[errors]]
 == Errors
 _TODO, error MAPPING_
@@ -23,6 +24,7 @@ _TODO, error MAPPING_
 * EMAIL:ACCESSING_FOLDER
 * EMAIL:EMAIL_NOT_FOUND
 * EMAIL:CONNECTIVITY
+////
 
 [[see_also]]
 == See Also

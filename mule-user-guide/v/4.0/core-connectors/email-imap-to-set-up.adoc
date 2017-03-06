@@ -1,11 +1,11 @@
-= To Set Up an IMAP or IMAPS Email Connector
+= To Set Up an IMAP or IMAPS Email Configuration
 :keywords: email, connector, configuration, imap
 :toc:
 :toc-title:
 
 toc::[]
 
-For Anypoint Studio, Design Center: link:email-about-the-email-connector[Email] connector
+Anypoint Studio, Design Center: *Email* connector
 
 [[short_description]]
 An IMAP configuration is required for all email retrieval operations that take place over the IMAP or IMAPS protocol. The IMAPS configuration requires a TLS configuration for encryption. Otherwise, the setup is identical to IMAP.
@@ -15,18 +15,17 @@ An IMAP configuration is required for all email retrieval operations that take p
 . Provide a *Name* for the configuration, for example, `Email IMAP configuration`.
 . Set the *Connection* to the email server:
   ** Identify which connection *Type* to use:
-    ** *IMAP*
-    ** *IMAPS*
-  ** Identify the  *Host (required)*, for example, `imap.hostname.com` or the IP address.
+    *** *IMAP*
+    *** *IMAPS*
+  ** Identify the *Host (required)*, for example, `imap.hostname.com` or the IP address.
   ** Provide any optional connection configurations, such as the *User*, *Password*, or alternative *Port* to use.
 . For IMAPS only, set up the *TLS Configuration* for security, for example:
   ** *Enabled Protocols*: `TLSv1.2,SSLv3`
   ** *Trust store*: `greenmail.jks`
   ** *Password*: `somepassword`
-  ** _TODO, LOOKS LIKE OTHERS ARE REQUIRED_
 . If you do not want emails to be marked as opened and read when they are retrieved, disable `Eagerly fetch content`. For example, you might disable it if you only want to retrieve subjects without reading the content.
 
-For other configuration options, see link:see_also[see_also].
+For other configuration options, go to link:#see_also[See Also].
 
 ////
 TODO: CREATE FILES FOR THESE, SEE SEE ALSO FOR FILE NAMES
@@ -43,7 +42,7 @@ TODO: CREATE FILES FOR THESE, SEE SEE ALSO FOR FILE NAMES
 [[see_also]]
 == See Also
 
-include::include_link_list.adoc[tags=customize-email-props]
+include::include_link_list.adoc[tags=set-up-tls]
 
 include::include_link_list.adoc[tags=set-connection-timeout]
 
@@ -51,7 +50,7 @@ include::include_link_list.adoc[tags=set-pooling-profile]
 
 include::include_link_list.adoc[tags=set-reconnection-config]
 
-include::include_link_list.adoc[tags=set-reconnection-config]
+include::include_link_list.adoc[tags=customize-email-props]
 
 include::include_link_list.adoc[tags=email-connector]
 

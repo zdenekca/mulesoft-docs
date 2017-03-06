@@ -8,15 +8,15 @@ end::links-connectors[]
 // #### TECH REF LINKS ####
 
 tag::tech-ref-email[]
-link:PLACEHOLDER[PLACEHOLDER_FOR_EMAIL_TECH_REF]
+link:PLACEHOLDER[Email Technical Reference TODO]
 end::tech-ref-email[]
 
 tag::tech-ref-file[]
-link:PLACEHOLDER[PLACEHOLDER_FOR_FILE_TECH_REF]
+link:PLACEHOLDER[File Connector Technical Reference TODO]
 end::tech-ref-file[]
 
 tag::tech-ref-ftp[]
-link:PLACEHOLDER[PLACEHOLDER_FOR_FTP_TECH_REF]
+link:PLACEHOLDER[FTP Connector Technical Reference TODO]
 end::tech-ref-ftp[]
 
 // #### EMAIL CONNECTOR LINKS ####
@@ -25,7 +25,7 @@ link:email-about-the-email-connector[Email Connector]
 end::email-connector[]
 
 tag::imap-set-up[]
-link:email-imap-to-set-up[To Set Up an IMAP Configuration]
+link:email-imap-to-set-up[To Set Up an IMAP or IMAPS Configuration]
 end::imap-set-up[]
 
 tag::imap-delete-email[]
@@ -49,7 +49,7 @@ link:email-imap-to-store-email[To Store Email]
 end::imap-store-email[]
 
 tag::pop3-set-up[]
-link:email-pop3-to-set-up[To Set Up a POP3 Configuration]
+link:email-pop3-to-set-up[To Set Up a POP3 or POP3S Configuration]
 end::pop3-set-up[]
 
 tag::pop3-list-email[]
@@ -57,7 +57,7 @@ link:email-pop3-to-list-email[To List Email]
 end::pop3-list-email[]
 
 tag::smtp-set-up[]
-link:email-smtp-to-set-up[To Set Up an SMTP Configuration]
+link:email-smtp-to-set-up[To Set Up an SMTP or SMTPS Configuration]
 end::smtp-set-up[]
 
 tag::smtp-send-email[]
@@ -122,24 +122,32 @@ end::write-to-file[]
 
 //TODO!!
 tag::poll-watermark[]
-link:PLACEHOLDER[To Poll a Directory or Tile]
-end::write-to-file[]
+link:PLACEHOLDER[To Poll a Directory or Tile TODO]
+end::poll-watermark[]
 
 tag::customize-email-props[]
-link:PLACEHOLDER[To Use Custom Email Properties]
+link:email-to-use-custom-email-properties[To Use Custom Email Properties TODO]
 end::customize-email-props[]
 
-tag::set-connection-timeout[]
-link:PLACEHOLDER[To Set Connection Timeouts]
-end::set-connection-timeout[]
-
-tag::set-reconnection-config[]
-link:PLACEHOLDER[To Set Up a Reconnection Strategy]
-end::set-reconnection-config[]
+tag::set-data-types[]
+link:to-set-data-type-io[To Set Up a Pooling Profile TODO]
+end::set-data-types[]
 
 tag::set-pooling-profile[]
-link:PLACEHOLDER[To Set Up a Pooling Profile]
+link:to-set-up-pooling[To Set Up a Pooling Profile TODO]
 end::set-pooling-profile[]
+
+tag::set-reconnection-config[]
+link:to-set-up-reconnection[To Set Up a Reconnection Strategy TODO]
+end::set-reconnection-config[]
+
+tag::set-connection-timeout[]
+link:to-set-up-timeouts[To Set Connection Timeouts TODO]
+end::set-connection-timeout[]
+
+tag::set-up-tls[]
+link:to-set-up-tls[To Set Up TLS Security TODO]
+end::set-up-tls[]
 
 ////
 link:file-about-the-file-connector[File Connector]
