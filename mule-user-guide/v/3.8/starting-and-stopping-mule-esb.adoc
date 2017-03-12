@@ -1,4 +1,4 @@
-= Starting and Stopping Mule
+= Running Mule
 :keywords: mule, esb, deploy, launch, run, terminate
 :toc: macro
 :toclevels: 3
@@ -229,9 +229,9 @@ On some systems, you can set up startup scripts for use with the `service` util
 
 == Running Mule As a Windows Service
 
-In Mule 3.8.0, the Tanuki wrapper was upgraded to a newer version, implying a change to the certificate by which the wrapper is signed. See link:/release-notes/mule-3.8.0-release-notes#enterprise-edition-library-changes[Mule 3.8.0 release notes concerning Tanuki Wrapper upgrade] for details on resolving compatibility issues. 
+In Mule 3.8.0, the Tanuki wrapper was upgraded to a newer version, implying a change to the certificate by which the wrapper is signed. See link:/release-notes/mule-3.8.0-release-notes#enterprise-edition-library-changes[Mule 3.8.0 release notes concerning Tanuki Wrapper upgrade] for details on resolving compatibility issues.
 
-To install Mule as a Windows service, go to the `$MULE_HOME/bin/` directory, then issue the following commands. 
+To install Mule as a Windows service, go to the `$MULE_HOME/bin/` directory, then issue the following commands.
 
 [source, code]
 ----
@@ -293,9 +293,9 @@ DOCS-1704 section follows:
 == Shutting Down Mule
 
 You can shut down Mule using the `mule stop` command that is run from the `MULE_HOME/bin` directory. When Mule stops,
-inbound endpoints are shut down, and in-flight Mule messages continue to process until the `shutdown.timeout` configured in `wrapper.conf` setting elapses and final shutdown occurs. 
+inbound endpoints are shut down, and in-flight Mule messages continue to process until the `shutdown.timeout` configured in `wrapper.conf` setting elapses and final shutdown occurs.
 
-You can set a timeout value to enable the current flow to complete. However, there is no built in method or utility 
+You can set a timeout value to enable the current flow to complete. However, there is no built in method or utility
 to check what messages are in flight. You can connect a profiler and see the active threads (or just a thread dump), this should provide you an overview of what's happening at the JVM level.
 
 To ensure all inflight messages are processed you can shutdown mule in two steps:
@@ -305,26 +305,26 @@ To ensure all inflight messages are processed you can shutdown mule in two steps
 
 === Timeout From wrapper.conf
 
-You can set the timeout value (in milliseconds) in `wrapper.conf` using the `wrapper.shutdown.timeout` statement where the value is in 
+You can set the timeout value (in milliseconds) in `wrapper.conf` using the `wrapper.shutdown.timeout` statement where the value is in
 seconds, for example:
 
 [source]
 wrapper.shutdown.timeout="30000"
 
-More information is available in the 
+More information is available in the
 link:http://wrapper.tanukisoftware.com/doc/english/prop-ping-timeout.html[Tanuki wrapper.shutdown.timeout] page.
 
 === Shutdown Timeout From a Flow
 
-Alternatively, you can set `shutdownTimeout` to a milliseconds value for a flow; hwoever this is not 
-a global value. 
+Alternatively, you can set `shutdownTimeout` to a milliseconds value for a flow; hwoever this is not
+a global value.
 
 Example for testing purposes:
 
 [source,xml,linenums]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" 
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:test="http://www.mulesoft.org/schema/mule/test"
       xsi:schemaLocation="
