@@ -1,0 +1,57 @@
+= S3 Connector Documentation
+
+== About the S3 Connector [concept]
+
+The Amazon S3 connector is built using the SDK for Java. The AWS SDK for Java provides a Java API for AWS infrastructure services.
+
+...
+
+[end]
+
+== To Configure the S3 Connector [task]
+
+Before you begin working with the S3 connector:
+
+* Obtain access to Amazon Web Services with the credentials in the form of IAM.
+* Install the connector through Anypoint Studio
+* Request a license to use this connector from your MuleSoft representative.
+
+...
+
+
+[end]
+
+=== Set up the Connector [section of task]
+
+. Drag the connector onto the canvas and select it using the mouse.
+. In the properties window, click the plus sign to configure.
+. Enter your credentials for the connector
+
+=== See Also [section of task]
+
+* link:/getting-started/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange]
+
+[end]
+
+
+== To Configure S3 Compatible Storage with the S3 Connector [task]
+
+When using S3 compatible storage you should set up the connector configuration to use the field *S3 Compatible Storage URL*
+
+[end]
+
+== S3 Connector Reference [reference]
+
+link:http://mulesoft.github.io/s3-connector/[S3 Reference Documentation]
+
+== Examples, Tips and Tricks using S3 Connector [examples, tips and tricks]
+
+Download the examples and import them into Anypoint Studio. Test the example flows that use the S3 Connector. You can adjust and repurpose the applications once you import them.
+
+_List and Manage S3 Bucket Objects and URIs_
+_Update S3 Policies_
+_S3 Notifications_
+_Get Object Content and Set its Content Type_
+_Use AssumeRole Operation_
+
+Observe the XML code of the applications in Studio.
