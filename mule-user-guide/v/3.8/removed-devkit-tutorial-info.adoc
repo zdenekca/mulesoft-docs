@@ -1,0 +1,98 @@
+
+== What is the Anypoint Connector DevKit?
+
+The link:/anypoint-connector-devkit/v/3.8/index[Anypoint Connector DevKit] is an essential development tool in the Anypoint Platform that makes coding Anypoint Connectors easier. DevKit is a Maven-based tool that lets you build reusable components that can be run as part of a Mule application, and can be easily configured from link:http://www.mulesoft.com/platform/mule-studio[Anypoint Studio].
+
+DevKit exposes connector developers to link:http://docs.oracle.com/javase/tutorial/java/annotations/[Java annotations] that generate code and files to interact with Mule runtime, as well as Anypoint Studio. The generated code provides the interface between the connector and Mule that would otherwise require each connector developer to include extensive boilerplate code, as well as the code and files required to interact with your connector in Anypoint Studio.
+
+== What is a Connector?
+
+An Anypoint Connector is a reusable component that interacts with Mule runtime and Anypoint Studio. A connector communicates with a target resource and conveys information between a resource and Mule, and transforms the data into a Mule message.
+
+Anypoint Connector DevKit abstracts the communication that happens between Mule and the external service or API, and generates a user interface to help simplify usage of the connector by the developer who would eventually use it in their application.
+
+A well-developed connector makes Mule app development much simpler for users when handling tasks like pagination, session expirations, and input and output metadata. This tutorial shows you how to create a well-designed connector.
+
+== Why Build a Connector Using DevKit?
+
+Here is why you might want to build your own connector:
+
+* You need to consume an API from a Mule application and you want to make sure your developers maintain consistency by employing the same connector.
+* You have an API and want to add strategic value to your business by providing developers with a connector that provides an interface into your web service.
+* You want to facilitate integration with SaaS and on-premises Web services, applications, and data sources.
+* The API you consume supports Pagination, Batch, and/or has a SQL capability.
+* The API you consume has different entity types and/or its structure changes depending on API/service operation.
+* You want to extend Mule core.
+
+
+
+
+
+=== About the Cookbook API
+
+The Cookbook service is a web service that helps chefs organize ingredients and recipes they might like to access, store or update from the web.
+
+The Cookbook API allows users to use the create, read, update, and delete (CRUD) operations for single and multiple recipes and ingredients. The API also allows you to view recently added recipes.
+
+The API is exposed as a:
+
+* SOAP Service using a  link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/resources/wsdl/IMuleCookBookService.wsdl[WSDL] file
+* REST API with a link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/api.raml[RAML] file, and
+* a Java link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/java/IMuleCookBookClient.java[SDK].
+
+
+=== About Cookbook Authentication
+
+This service supports the following authentication mechanisms:
+
+* Custom authentication with a username and password that provides a token to send with each request as part of the request.
+
+* link:http://oauth.net/2/[OAuthV2]
+
+==== Credentials
+
+===== Custom Authentication:
+[%header,cols="2*"]
+|===
+| Username
+| Password
+
+| admin
+| admin
+|===
+
+===== OAuth:
+[%header,cols="2*"]
+|===
+| Client ID
+| Client Secret
+
+| ePU9CxyEVFIXF9nMoGH16s1lUGe5JYPPzClnnVBG
+| YeKAsQCdr264tNmDdvTdJUAh9TQraJqZpwbEoTuz
+|===
+
+[[connecting-to-service]]
+=== Connecting to the Cookbook Service
+
+The web service is available online.
+
+* To consume the SOAP version and the SDK just make the request to the address: `+http://devkit-cookbook.cloudhub.io/soap+`
+
+* The rest base url is `+http://devkit-cookbook.cloudhub.io/rest+`
+
+** The OAuth Authorize url is */oauth/authorize*
+
+** The Access Token url is */oauth/accessToken*
+
+[NOTE]
+====
+You can also run it locally since we provide the source code for the servers already ready to start.
+
+The local SOAP Server can be run from the soap-server project by simply executing the com.cookbook.tutorial.service.MuleStoreServer class.
+
+By default it starts the server at address `+http://localhost:9090/cook-book+`
+
+The local REST Server can be run from the rest-server project by simply executing the com.cookbook.tutorial.Main class.
+
+By default it starts the server at address `+http://localhost/9091+`
+====
