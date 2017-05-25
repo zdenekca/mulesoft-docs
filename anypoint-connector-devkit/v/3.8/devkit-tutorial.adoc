@@ -1,4 +1,4 @@
-= Anypoint Connector DevKit Tutorial
+= Tutorial: Build a Connector
 :keywords: devkit tutorial, features, cookbook
 :imagesdir: ./_images
 :resourcesDir: resources
@@ -11,27 +11,27 @@ toc::[]
 
 Learn how to create a connector to a web service using the Anypoint Connector DevKit.
 
-This tutorial shows you how to code a connector to support authentication, connections, service operations and provides a foundation for more complex tasks. This is functionality that you as the developer expose to the Mule application developer that would use the connector.
+This tutorial shows you how to code a connector to support authentication, connections, and service operations. This tutorial provides a foundation to code more complex functionality into a connector.
+
+== Before You Begin
+
+Before developing a connector you should have a working knowledge of link:/getting-started/index[Mule], link:/anypoint-studio/v/6/download-and-launch-anypoint-studio[Anypoint Studio], Java development and the use of https://docs.oracle.com/javase/tutorial/java/annotations/basics.html[Java annotations].
+
+Perform the steps to link:/anypoint-connector-devkit/v/3.8/setting-up-your-dev-environment[Set Up Your Development Environment]
 
 == Steps to Build the Cookbook Connector
 
-To build a basic connector for the {tutorial} service, we go through this tutorial to perform the following steps:
+These are the general steps you complete in the tutorial that allow you to build a basic connector.
 
-. Install the Cookbook client code on your local machine
-. Create a Connector Project.
-. Add the dependency that contains the client we will use to connect to the service.
-. Add a configurable URL so that users can specify the URL where the service is hosted.
-. Add an operation that users can consume in Anypoint Studio.
-. Include code to manage connections.
-
-== Prerequisites
-
-* link:/anypoint-connector-devkit/v/3.8/setting-up-your-dev-environment[Setting Up Your Development Environment]
-
-Before developing a connector you should have a working knowledge of link:/getting-started/index[Mule], link:/anypoint-studio/v/6/download-and-launch-anypoint-studio[Anypoint Studio], and Java development in general, specifically the use of https://docs.oracle.com/javase/tutorial/java/annotations/basics.html[Java annotations].
+. Clone the Cookbook code on your local machine and import into Studio.
+. Create an Anypoint Connector Project in Studio.
+. Add in the Maven pom file the dependency that contains the client used to connect to the Cookbook service.
+. Define a configurable field designed for users to input the URL to start a connection.
+. Define an operation for the connector.
+. Include code that allows the connector to manage connections to the Cookbook service.
 
 [[get-cookbook]]
-== Install the Cookbook
+== Clone and Import the Cookbook Repository
 
 Install the cookbook from GitHub:
 
@@ -56,7 +56,7 @@ image::devkit-tutorial-30756.png[import existing - mule-cookbook]
 
 This should create the several folders you see on the above screen in your workspace in Studio, which is visible in the *Package Explorer*.
 
-== Create the {tutorial} Connector Project
+== Create the {tutorial} Connector Project in Studio
 
 With the `mule-cookbook` directory imported as an existing project into your workspace as instructed link:#get-cookbook[above], you can begin to create the connector project and start coding.
 
@@ -79,14 +79,17 @@ image::new-connector-3.png[width="600","new-connector-3"]
 [TIP]
 You can enable the DevKit view by clicking from the top bar *Window* > *Show View* > *Other*, and look for DevKit in the *MuleSoft* dropdown.
 
-
-.DevKit View shows a compact view of the connector.
 image::enable-view.png[width="300"]
+
+DevKit view shows a compact view of the connector configuration options and connector operations.
+
+image::devkit-tutorial-6640a.png[]
 
 
 == Specify Connector Dependencies in pom.xml
 
-. Add our client dependency so that we can use the Cookbook service in our connector. This way we can use the Java API to connect to the {tutorial}.
+. Search for your pom.xml file in your project and open it so you can add the XML dependency snippet.
+. Copy the Cookbook client dependency into the pom.xml so the Java API can be used to connect to the {tutorial}.
 +
 In your pom.xml file add:
 +
@@ -102,27 +105,36 @@ In your pom.xml file add:
 ----
 
 
-== Define a Configurable Field for URL
+== Define a Configurable Field for Connection URL
 
-In the `ConnectorConfig.java` file add the `@Configurable` annotation for the address where the {tutorial} service is hosted:
-
-. Type *conf* at the editor of your connector config and use `control` + `space` to display the templates.
+. Open the `ConnectorConfig.java` file. You can find the file from the DevKit view of the connector project.
+. Add a configurable field annotated with `@Configurable`. This is for the address where the {tutorial} service is hosted.
+Type *conf* at the editor of your connector config and use the `control` + `space` shortcut to select the option *configurable - Configurable element with default*
 +
 image::config-field.png[width="600"]
 +
-. Define a configurable field inside the `@Configuration`-annotated class with a default value for the endpoint our client connects to, for example, `+@Default("http://devkit-cookbook.cloudhub.io/soap")+`
+. Specify a default endpoint in the code `+@Default("http://devkit-cookbook.cloudhub.io/soap")+` so it looks like this.
++
+[source,java,linenums]
+----
+@Configurable
+	@Default("http://devkit-cookbook.cloudhub.io/soap")
+	private String address;
+----
++
 . Any field marked with the `@Configurable` annotation must have a getter and a setter for that field.
 +
-See full link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/java/v1/ConnectorConfig.java[Config] source code.
+See the sample getter and setter in the full link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/java/v1/ConnectorConfig.java[ConnectorConfig.java] source code.
 
 == Add Code to Initialize the Cookbook Client
 
-In your `@Connector`-annotated class in the `Connector.java` file use the `@Start` annotation on a method to initialize the client.
-
+. In your `@Connector`-annotated class in the `Connector.java` file use the `@Start` annotation on a method to initialize the client.
++
 [source,java,linenums]
 ----
 include::{resourcesDir}/java/v1/CookbookConnector.java[lines=30..35]
 ----
+. Ensure you have the same import statements at this point in the tutorial as link:http://mulesoft.github.io/mule-cookbook-tutorial/resources/java/v1/CookbookConnector.java[Connector.java] source code.
 
 [NOTE]
 ====
@@ -134,22 +146,24 @@ When a method is annotated with one of these annotations, DevKit invokes it duri
 ====
 
 [[processor]]
-== Add an Operation to the Connector
+== Code an Operation into the Connector
 
 `getRecentlyAdded` is an operation we can implement quickly to start learning how to build our connector. The `getRecentlyAdded` call doesn't require authentication.
 
-The client you are using provides a login call that initializes the token and uses it in subsequent requests.
+The Cookbook client you are using provides a login call that initializes the token and uses it in subsequent requests.
 
-. Remove the dummy `@Processor` operation from the `Connector.java` file.
+. Open the `Connector.java` file.
+. Remove the dummy operation you see annotated with `@Processor`.
 +
-. To add a processor simply type `proc` in the Studio code editor and use `ctrl` + `space` to display the templates and pick the simple processor.
+. Add a new processor in its place. Type *proc* in the Studio code editor and use the shortcut as before, `ctrl` + `space` to display the templates and choose from the dropdown *processor - a simple processor...*.
 +
 image::processor1.png[width="600"]
 +
 . Change it to reflect the `getRecentlyAdded` method signature (see example implementation link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/java/v1/CookbookConnector.java#L46[here]), and at this point you have the code in place to build your first connector, which should then be ready for testing.
-. Run the link:/anypoint-connector-devkit/v/3.8/creating-a-java-sdk-based-connector#generating-sources[Generate Sources] Action.
+. Check you have the correct import statements for the code you have added up to this point.
+. Run the Generate Sources command from the console: `mvn clean package -DskipTests -Ddevkit.studio.package.skip=true -Ddevkit.javadoc.check.skip=true -Dmaven.javadoc.skip=true` and check for any errors, especially regarding import statements.
 +
-See full link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/java/v1/CookbookConnector.java[Connector] source code.
+You can check your work and see the full link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/master/src/main/asciidoc/resources/java/v1/CookbookConnector.java[Connector] source code.
 
 [NOTE]
 Resolve any package import errors by right-clicking your connector project in the Package Explorer of Studio. *Build Path* > *Add External Archives*. Add the applicable .jar files, for example, so your project can reference the cookbook `sdk-client`. This should stop any import errors on:
@@ -172,7 +186,7 @@ Once you regenerate the sources, the errors will go away as the generated code w
 ====
 
 
-== Handle Connections
+== Enable Connection Handling
 
 The session can expire and cause the connector to make a login request again.
 
@@ -335,19 +349,16 @@ Check the full link:https://github.com/mulesoft/mule-cookbook-tutorial/blob/mast
 
 
 
-== Debugging Your Connector
+== Testing Your Connector
 
-After successfully installing your connector, you can start using your connector in a Mule application.
-You can add breakpoints in the source code of the connector to debug it.
-If your connector is a Community connector, the source code ships automatically in the installed connector.
-If your connector is an Enterprise connector, you need to manually attach the source code of your JAR.
+* You can add breakpoints in the source code of the connector to assist with debugging.
+* After installing your connector in Studio, you can test it in a Mule app.
+* To correctly debug your code, make sure that the Mule app you are running is using the latest installed version of the connector.
 
-WARNING: To correctly debug your code, take into account that the Mule app you are running is using the latest installed version, so if you make changes, and you want to debug the Mule app, you need to re-install the connector.
-
-Debugging your connector when running your test is as simple as debugging any Java class.
-
-You just need to set a breakpoint in your connector code.
 
 == See Also
 
+* link:https://github.com/mulesoft/mule-cookbook-connector[Cookbook Connector Source Code]
+* link:https://docs.mulesoft.com/anypoint-connector-devkit/v/3.8/installing-and-testing-your-connector-in-studio[Installing and Testing Your Connector]
 * link:/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors]
+* link:/anypoint-connector-devkit/v/3.8/creating-a-java-sdk-based-connector[Creating a Java SDK Based Connector]
