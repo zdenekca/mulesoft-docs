@@ -46,7 +46,67 @@ Add the Maven Facade as a repository in the distribution management section of y
 </project>
 ----
 
-Create a settings.xml file inside your ~/.m2 folder that holds the settings that the Maven client uses to run. You need to configure your credentials for the Exchange Maven Facade:
+===Deterimine the Organization ID
+You need to find the organization ID for the business group in which you want to install this asset. There are several ways to find the organization ID for a business group. You can use the REST API or anypoint-cli. Here is an example of the anypoint-cli command to find the organization ID of all child business groups. 
+[source,linenums]
+----
+$ anypoint-cli --username exchange2admin --password  TheP@ssWord --organization MuleSoft --environment Sandbox
+    _                            _       _   ____  _       _    __                      
+   / \   _ __  _   _ _ __   ___ (_)_ __ | |_|  _ \| | __ _| |_ / _| ___  _ __ _ __ ___  
+  / _ \ | '_ \| | | | '_ \ / _ \| | '_ \| __| |_) | |/ _` | __| |_ / _ \| '__| '_ ` _ \ 
+ / ___ \| | | | |_| | |_) | (_) | | | | | |_|  __/| | (_| | |_|  _| (_) | |  | | | | | |
+/_/   \_\_| |_|\__, | .__/ \___/|_|_| |_|\__|_|   |_|\__,_|\__|_|  \___/|_|  |_| |_| |_|
+               |___/|_|                                                                   CLI v2.1.0
+                                              
+
+Connecting to the Anypoint Platform...
+Connected to MuleSoft - Sandbox
+> account business-group list
+┌────────────────────────────────────────┬───────────────┬────────────────────────────────────────┐
+│ Name                                   │ Type          │ Id                                     │
+├────────────────────────────────────────┼───────────────┼────────────────────────────────────────┤
+│ MuleSoft                               │ Master        │ aa591b71-a6b2-44b3-9167-dbc4dd845d7d   │
+├────────────────────────────────────────┼───────────────┼────────────────────────────────────────┤
+│ Acme Banking                           │ Business unit │ c0d4986c-5a9b-41b0-9faf-81ebcb9928d4   │
+└────────────────────────────────────────┴───────────────┴────────────────────────────────────────┘
+> 
+----
+
+Here is an example .pom file to add a new Template assest to Exchange. 
+[source,xml,linenums]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.company</groupId>
+  <artifactId>template-application</artifactId>
+  
+  <!-- version must be 1.0.0-SNAPSHOT for the Exchange 2.0 beta -->
+  <version>1.0.0-SNAPSHOT</version>
+
+  <name>Template Application</name>
+  <description>Description of the template application</description>
+  <properties>
+  
+  <!-- type must be one of template|example|connector -->
+    <type>template</type>
+  </properties>
+
+  <distributionManagement>
+    <repository>
+      <id>PrivateExchange</id>
+      <name>Private Exchange</name>
+      <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/c0d4986c-5a9b-41b0-9faf-81ebcb9928d4/maven/</url>
+      <layout>default</layout>
+    </repository>
+  </distributionManagement>
+
+</project>
+----
+
+Create or modify the settings.xml file inside your ~/.m2 folder that holds the settings that the Maven client uses to run. You need to add a server element to configure the credentials for the Exchange Maven Facade repository:
 
 [source,xml,linenums]
 ----
