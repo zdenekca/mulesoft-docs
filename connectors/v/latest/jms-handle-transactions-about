@@ -1,0 +1,39 @@
+:toc:               left
+:toc-title:         JMS Connector
+:toclevels:         2
+:last-update-label!:
+:docinfo:
+:source-highlighter: coderay
+:icons: font
+
+== About Handling Transactions
+
+Transaction Management
+In order to activate a transactional connection, the transactionalAction has to be set in the component.
+
+If you want a JMS Listener to use a transactional session when dispatching the messages, you should use ALWAYS_BEGIN:
+	<jms:listener config-ref="config" destination="${destination}"
+transactionalAction="ALWAYS_BEGIN"/>
+
+By default, other components in the flow will not join the transaction created by the listener. In order to execute other operations using the listener’s transaction, you must declare them either with ALWAYS_JOIN, or JOIN_IF_POSSIBLE:
+
+<INSERT SCREENSHOT OF FLOW AND CONFIGURATIONS>
+
+<flow name="txSubscriberWithPublish" initialState="stopped">
+
+   <jms:listener config-ref="config" destination="${destination}"
+transactionalAction="ALWAYS_BEGIN"/>
+
+   <jms:publish config-ref="config" destination="${publishDestination}"
+transactionalAction="ALWAYS_JOIN"/>
+</flow>
+
+
+
+
+
+
+== See Also
+
+* link:/connectors/v/latest/jms-about[About JMS Connector]
+* link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

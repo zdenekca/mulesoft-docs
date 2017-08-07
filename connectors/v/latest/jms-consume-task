@@ -1,0 +1,125 @@
+:toc:               left
+:toc-title:         JMS Connector
+:toclevels:         2
+:last-update-label!:
+:docinfo:
+:source-highlighter: coderay
+:icons: font
+
+
+== To Consume Messages with JMS
+
+Messages can be consumed from Queues or from Topics. Regardless of if you're consuming from a queue or a topic, there are two different operations that allow you to consume messages: Listener and Consume.
+
+=== Consuming from a Queue
+
+Both the Listener and Consume operations consume Queues by default, requiring only a Destination.
+
+
+
+Consuming from a Topic
+
+If you want to consume a message from a Topic, then the consumer type of the processor has to be configured as a topic-consumer:
+
+<jms:consumer-type>
+<jms:topic-consumer subscriptionName="subName"/>
+</jms:consumer-type>
+
+Using the topic consumer you will be able to configure how the subscription to the Topic will be handled.
+
+Durable Subscriptions:
+For example, an application that needs to receive all the messages published on a topic, including the ones published when there is no consumer associated with it can flag the subscription as a durable subscription.
+A durable subscription is identified by a name specified by the subscriptionName, which becomes mandatory for this kind of subscription.
+
+Shared Subscriptions (JMS 2.0 Only):
+	A shared subscription is used by an application that needs to be able to share the work of receiving messages from a topic amongst multiple consumers, by assuring that each message from the subscription will be delivered to only one of the consumers on that subscription.
+A shared subscription is identified by a name specified by the subscriptionName, which becomes mandatory for this kind of subscription.
+
+Shared and Durable subscriptions can be combined, in which case both will be bounded to the same subscriptionName.
+
+<INSERT SCREENSHOT OF THE TOPIC BEING SELECTED IN AND IT’S OPTIONS>
+Consuming One Message
+In order to consume a single message from a Queue or a Topic, we’ll use the consume operation. So if we want to get a message from a Queue called demoQueue, we simply do
+
+<INSERT SCREENSHOT>
+
+<jms:consume config-ref="config" destination="demoQueue"/>
+
+This will try to get the first available Message from the Queue, waiting for up to 10 sec (which is the default for maximumWait parameter) for a message to arrive, if the Queue was empty. By default, the ackMode is NONE, so in this example, once the operation returns a result, the message will be already acknowledged unless a transaction is taking place.
+
+Besides the consumerType, other important parameters for configuring the operation are:
+Destination
+The name of the destination from which the messages will be consumed
+Maximum Wait
+Sets the maximum time to wait for a message to arrive before failing with a TIMEOUT error.
+AckMode
+NONE
+Message is acknowledged right before the consume operation produces a result
+MANUAL
+The user has to manually ACK the message (see ack operation)
+
+
+Listening for Messages (or How to Subscribe)
+
+Let’s start simple, this is what the minimal JMS Listener looks like:
+
+<INSERT SCREENSHOT>
+
+<jms:listener config-ref="config" destination="${destinationQueueName}"/>
+
+Yup, that’s it. Lots of things going on here though. This is a listener that consumes messages from a queue with the destination name resolved by the given property, using four consumers in parallel and using an AUTO ackMode for acknowledging the message.
+
+Wait, what? Let’s break it up in pieces, but first, this is the same configuration but in a much more verbose way:
+
+<jms:listener config-ref="config" destination="${incomingDestination}"
+ackMode="AUTO" numberOfConsumers="4">
+   <jms:consumer-type>
+       <jms:queue-consumer/>
+   </jms:consumer-type>
+</jms:listener>
+
+And this is what each parameter means:
+Destination: The name of the destination from which the messages will be consumed
+AckMode: Defines when the ACK will be performed, for the listener this means
+
+NONE
+ACK occurs before the Message is dispatched to the Flow
+AUTO
+ACK occurs when the processing flow is completed without errors
+DUPS_OK
+Similar to AUTO but duplicated ACK are allowed
+MANUAL
+The user has to manually ACK the message (see ack operation)
+
+Number of Consumers:
+Defines how many consumers will be waiting for messages from the Queue at the same time. This is critical for tuning the performance of your message source. The more consumers you create in parallel for the same connection, the more throughput you’ll get for dispatching events to your mule flow.
+
+Replying a Message
+In order to produce a response to the destination specified in the JMSReplyTo header of the incoming message, we’ll create a response configuration in our listener.
+
+For this example we’ll be subscribed to a topic with a shared subscription, and when the processing of the flow is completed we’ll reply with a high priority message:
+
+<INSERT SCREENSHOT SHOWING THE RESPONSE GROUP CONFIGURED>
+
+	<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply">
+   <jms:consumer-type>
+<jms:topic-consumer subscriptionName="demoSub" isShared="true"/>
+   </jms:consumer-type>
+   <jms:response priority="8" persistentDelivery="true">
+       <jms:body>#[{ bridgedData: payload}]</jms:body>
+   </jms:response>
+</jms:listener>
+
+The response configuration carries all the configuration of the publish parameters and a message builder.
+
+
+
+
+
+
+
+
+== See Also
+
+* link:/connectors/v/latest/jms-about[About JMS Connector]
+* link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

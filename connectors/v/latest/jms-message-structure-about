@@ -1,0 +1,81 @@
+:toc:               left
+:toc-title:         JMS Connector
+:toclevels:         2
+:last-update-label!:
+:docinfo:
+:source-highlighter: coderay
+:icons: font
+
+== About the JMS Message
+
+
+
+
+
+In order to create a message for being published, we’ll use the message construct, whose main parts are:
+
+Body
+	The content of the Message to be published. Defaults to payload.
+Reply To
+Sets the JMSReplyTo header information of the Destination where the Message should be replied to.
+Properties
+Map with the general properties of the Message. It may contain both user defined and broker-specific properties.
+JMSX Properties
+Configures the pre-defined JMSX properties of the Message. Full reference of this properties can be found here.
+
+
+
+
+
+
+
+JMS Consumers Result
+We’ve seen multiple ways of obtaining a message from JMS and passing it to a mule flow, but nothing has been said about the structure of this result. The resulting mule message will always be structured as:
+payload: the content of the JMS message body
+JmsAttributes:
+JmsMessageProperties: contains all the JMSX, JMS and User properties
+JmsHeaders: provides access to all the headers of the original Message
+AckId: the session Id required to ACK a message manually
+
+<INSERT SCREENSHOT SHOWING THE STRUCTURE USING DATASENSE>
+
+So for example, if you need to create a proxy with a message having the same payload but adding your own routing properties you can do something like:
+
+<INSERT SCREENSHOT OF FLOW AND CONFIGURATIONS>
+
+	<flow name="bridge">
+   <jms:consume config-ref="config" destination="#[initialDestination]"/>
+   <jms:publish config-ref="config" destination="#[finalDestination]">
+       <jms:message jmsxProperties="#[attributes.properties.jmsxProperties]">
+       <jms:properties>#[
+attributes.properties.userProperties ++ {ROUTER_ID': variables.routerId}
+       ]</jms:properties>
+       </jms:message>
+   </jms:publish>
+</flow>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+== See Also
+
+* link:/connectors/v/latest/jms-about[About JMS Connector]
+* link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

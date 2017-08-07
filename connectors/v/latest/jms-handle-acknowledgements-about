@@ -1,0 +1,36 @@
+:toc:               left
+:toc-title:         JMS Connector
+:toclevels:         2
+:last-update-label!:
+:docinfo:
+:source-highlighter: coderay
+:icons: font
+
+
+Handling Acknowledgment
+You’ve probably noticed by now that all the consumers provide an AckMode parameter, and that in all of the we are able to configure it to MANUAL mode, which means that the user has to perform the ack explicitly at some point of the flow processing, so the following two operations are provided for handling this acknowledgement of the message manually.
+Ack Operation
+Provides a way to perform the ACK on any given message based on its AckId, present in its attributes:
+
+<INSERT SCREENSHOT>
+
+<jms:ack ackId="#[attributes.ackId]"/>
+
+This operation is idempotent, so performing an ACK more than once over the same message will not break the execution of the flow
+Recover Session Operation
+Allows the user to perform a session recover when the MANUAL ackMode is elected while consuming the Message. As per JMS Spec, performing a session recover automatically will redeliver all the consumed messages that had not being acknowledged before.
+
+<INSERT SCREENSHOT>
+
+<jms:recover-session ackId="#[attributes.ackId]"/>
+
+
+
+
+
+
+
+== See Also
+
+* link:/connectors/v/latest/jms-about[About JMS Connector]
+* link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]
