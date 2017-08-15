@@ -7,16 +7,47 @@
 :icons: font
 
 
-== Doing Request-Reply with JMS using PublishConsume
+= Doing Request-Reply with JMS using PublishConsume
 
-One of the cool new things is the ability to publish a message and wait for a response in a single operation. This operation is called publishConsume.
+The publishConsume operation allows you to publish a message to a queue and wait for a response in a single operation. Note that this operation allows you to publish to queues, but not to topics.
 
-When sending a message with this operation, all the outgoing message will have a JMSReplyTo header configured. If a reply destination is parameterized in the operation, this will be the one referenced by the header, but in the case where no pre-defined destination is required in order to listen for a response, a temporary destination will be created on the fly, with the only purpose of serving as a replyTo destination where we can listen for a response.
+When using this operation, all outgoing messages have a `Reply To` header that tells the consumer of the message where to direct its response to. You can set this header to point to a permanent destination, otherwise the operation creates a temporary destination to listen for a response.
 
-We can start from a configuration like this:
+To send publish and consume messages:
 
-<INSERT SCREENSHOT>
 
+. Create a Mule application as a project.
+
+. Add and configure an HTTP Listener as a trigger for your flow, and set a Path such as this one:
++
+`/publish_message`
++
+You can use the default configuration for the Listener connection.
+
+. After the HTTP Listener, add a Publish Consume operation from the JMS connector to your flow.
+
+. Create a JMS configuration for the connection, leaving all of the fields with their default values.
+
+. Set the Destination to the name of the queue you want to publish to.
+
+. Leave the body of the message as `#[payload]`.
+
+. Leave the Reply To field as `none`.
++
+With this configuration, a temporal destination is created to listen for messages and sent as the Reply To header.
+
+. Deploy, Sync, or Run the app.
+
+. To test the app, open http://url.for.your.app:8081/publish_message from a browser or from an app such as Postman.
+
+
+
+== XML Examples
+
+The example below publishes a message to a queue, and waits for a response:
+
+[source,xml,linenums]
+----
 <jms:publish-consume config-ref="config" destination="#[destination]">
    <jms:message>
        <jms:body>#['Please reply']</jms:body>
@@ -24,20 +55,31 @@ We can start from a configuration like this:
    <jms:publish-configuration priority="6" persistentDelivery="true"/>
    <jms:consume-configuration maximumWait="1000"/>
 </jms:publish-consume>
+----
 
-In this configuration we see the four main elements of a publishConsume operation:
-Destination
-The name of the Queue destination where the Message should be sent. Is important to notice that publishConsume using Topics destination is not supported.
+This configuration involves the following:
 
-Message
-A Message Builder identical to the one found in the publish operation.
-In this case we are not specifying a replyTo destination, thus a temporary destination will be created and bounded to the message as the reply target. If a fixed, non-temporal destination is available, all you need to do is to declare its definition in the replyTo element of the message builder.
+* Destination:
++
+The name of the Queue destination where the Message should be sent.
 
-Publish Configuration
-Contains the configuration for the publishing of the outgoing message. Here we make sure it is a persistentDelivery.
+* Message
++
+The JMS message being sent consists of a body containing a string.
 
-Consume Configuration
-Contains the configuration for the consumer waiting for a response. In the example we declare that a timeout should occur after one second if a response does not arrive.
+* Reply To
++
+This example doesn't specify a property for the replyTo destination, so the default behavior is to create a temporary destination and bound it to the message as the reply target.
++
+As an alternative, you could provide a permanent destination in the replyTo element of the message builder.
+
+* Publish Configuration
++
+Contains the configuration for the publishing of the outgoing message.
+
+* Consume Configuration
++
+Contains the configuration for the consumer waiting for a response. This example waits for one second after the publishing of the message, and times out if a response doesn't arrive.
 
 
 

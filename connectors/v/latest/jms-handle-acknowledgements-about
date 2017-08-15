@@ -6,26 +6,73 @@
 :source-highlighter: coderay
 :icons: font
 
+= To Handle JMS Acks
 
-Handling Acknowledgment
-You’ve probably noticed by now that all the consumers provide an AckMode parameter, and that in all of the we are able to configure it to MANUAL mode, which means that the user has to perform the ack explicitly at some point of the flow processing, so the following two operations are provided for handling this acknowledgement of the message manually.
-Ack Operation
-Provides a way to perform the ACK on any given message based on its AckId, present in its attributes:
+== About Message Acknowledgments
 
-<INSERT SCREENSHOT>
+JMS allows you to send an acknowledgement to the publisher of a message to confirm that the message was consumed. The JMS Consume and JMS Listener operations don't send acknowledgement by default, but you can configure them so that they send acknowledgements.
 
+The JMS Consume and JMS Listener operations have an Ack Mode field that can be set to:
+
+* Automatic: an Ack is sent if the process is completed without errors.
+
+* DUPS_OK: like automatic, but duplicated Ack Ids are allowed.
+
+* Manual: requires that you create an Ack through another operation. This allows you to set the Ack Id to a specific value.
+
+
+If you set the Ack mode to Manual, you need to then add another operation on the flow to perform the Ack. This can be done by the JMS Ack operation or the JMS Recover Session operation.
+
+* Ack Operation: Performs an ACK when the AckId attribute of the Mule message matches the provided Ack Id. This operation is idempotent, so performing an ACK more than once over the same message doesn't break the execution of the flow.
+
+* Recover Session Operation: Performs a session recover. A session recover automatically redelivers all the consumed messages that have not being acknowledged.
+
+
+
+== Send an Ack Manually
+
+
+To consume messages:
+
+
+. Create a Mule application as a project.
+
+. Add a Consume operation from the JMS Connector to your flow.
+
+. Create a JMS configuration for the connection, leaving all of the fields with their default values.
+
+. Set the Destination to the name of the queue you want to publish to.
+
+. If you want to consume a Topic, change the Consumer Type to Topic.
+
+. Set the Ack Mode to `MANUAL`
+
+. Add a JMS Ack operation on any point of your flow after the JMS Connector.
+
+. In the Ack operation, set the Ack Id to a value or reference.
+
+
+
+== XML Examples
+
+The example below shows a listener that is set to handle Acks manually, followed by an Ack operation that performs these.
+
+
+[source,xml,linenums]
+----
+<jms:listener config-ref="config" destination="${incomingDestination}"
+ackMode="MANUAL"/>
 <jms:ack ackId="#[attributes.ackId]"/>
+----
 
-This operation is idempotent, so performing an ACK more than once over the same message will not break the execution of the flow
-Recover Session Operation
-Allows the user to perform a session recover when the MANUAL ackMode is elected while consuming the Message. As per JMS Spec, performing a session recover automatically will redeliver all the consumed messages that had not being acknowledged before.
+This second example shows the same listener, with its Acks being handled by a Recover Session operation.
 
-<INSERT SCREENSHOT>
-
+[source,xml,linenums]
+----
+<jms:listener config-ref="config" destination="${incomingDestination}"
+ackMode="MANUAL"/>
 <jms:recover-session ackId="#[attributes.ackId]"/>
-
-
-
+----
 
 
 

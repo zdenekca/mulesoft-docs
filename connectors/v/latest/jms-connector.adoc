@@ -2,4 +2,6 @@
 
 link:/connectors/v/latest/jms-about[About JMS Connector]
 
-link:/connectors/jms-xml-ref[JMS XML Reference]
+link:/connectors/jms-global-configuration[JMS Global Configuration]
+
+link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

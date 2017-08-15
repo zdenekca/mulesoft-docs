@@ -6,19 +6,42 @@
 :source-highlighter: coderay
 :icons: font
 
-== About Handling Transactions
+= About Handling Transactions
 
-Transaction Management
-In order to activate a transactional connection, the transactionalAction has to be set in the component.
+JMS operations can be configured to start new transactions or join existing ones. By default, their behavior doesn't use transactions, but this can be changed by setting the Transaction Action field.
 
-If you want a JMS Listener to use a transactional session when dispatching the messages, you should use ALWAYS_BEGIN:
-	<jms:listener config-ref="config" destination="${destination}"
-transactionalAction="ALWAYS_BEGIN"/>
+To have a JMS operation start a new transaction, its Transactional Action must be set to either `ALWAYS_BEGIN`.
 
-By default, other components in the flow will not join the transaction created by the listener. In order to execute other operations using the listener’s transaction, you must declare them either with ALWAYS_JOIN, or JOIN_IF_POSSIBLE:
+To have a JMS operation join an existing transaction, its Transactional Action must be set to either `ALWAYS_JOIN`, or `JOIN_IF_POSSIBLE`.
 
-<INSERT SCREENSHOT OF FLOW AND CONFIGURATIONS>
+== Start a Transaction When a Message Arrives
 
+You can configure a JMS Listener or Consumer so that the arrival of a JMS message starts a new transaction, which can involve several other components in your flow.
+
+
+. Create a Mule application as a project.
+
+. Add a JMS listener operation to your flow, set its Destination to the desired JMS queue name.
+
+. Create a JMS configuration for the connection, leaving all of the fields with their default values.
+
+. Leave the body of the message as `#[payload]`.
+
+. Open the advanced tab and in Transactional Action select `ALWAYS_BEGIN`.
+
+. On any other components in the flow that need to be a part of the same transaction, set their Transactional Action to `ALWAYS_JOIN`, or `JOIN_IF_POSSIBLE`.
+
+. Deploy, Sync, or Run the app.
+
+
+
+== XML Examples
+
+
+The example below includes a JMS Listener with its `transactionalAction` property set to `ALWAYS_BEGIN`, followed by a JMS Publish operation with its `transactionalAction` set to "ALWAYS_JOIN". The listener starts a new transaction every time it receives a message, and that same transaction also includes using the publish operation.
+
+[source,xml,linenums]
+----
 <flow name="txSubscriberWithPublish" initialState="stopped">
 
    <jms:listener config-ref="config" destination="${destination}"
@@ -27,7 +50,7 @@ transactionalAction="ALWAYS_BEGIN"/>
    <jms:publish config-ref="config" destination="${publishDestination}"
 transactionalAction="ALWAYS_JOIN"/>
 </flow>
-
+----
 
 
 

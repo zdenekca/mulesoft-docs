@@ -286,7 +286,7 @@ this Message should be replied to+++ |  | {nbsp}
 ** MINUTES
 ** HOURS
 ** DAYS |  +++Time unit to be used in the deliveryDelay configurations+++ |  | {nbsp}
-| Ack Mode a| Enumeration, one of:
+| n  Mode a| Enumeration, one of:
 
 ** AUTO
 ** MANUAL
@@ -425,86 +425,86 @@ for incoming Messages
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Max Redelivery Count a| Number | 
-| Use Secure Hash a| Boolean | 
-| Message Digest Algorithm a| String | 
-| Id Expression a| String | 
-| Object Store Ref a| String | 
+| Max Redelivery Count a| Number |
+| Use Secure Hash a| Boolean |
+| Message Digest Algorithm a| String |
+| Id Expression a| String |
+| Object Store Ref a| String |
 |======================
-    
+
 [[reconnect]]
 === Reconnect
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Frequency a| Number | 
-| Count a| Number | 
-| Blocking a| Boolean | 
+| Frequency a| Number |
+| Count a| Number |
+| Blocking a| Boolean |
 |======================
-    
+
 [[reconnect-forever]]
 === Reconnect Forever
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Frequency a| Number | 
+| Frequency a| Number |
 |======================
-    
+
 [[JmsDestination]]
 === Jms Destination
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Destination a| String | 
+| Destination a| String |
 | Destination Type a| Enumeration, one of:
 
 ** QUEUE
 ** TOPIC | QUEUE
 |======================
-    
+
 [[JmsxProperties]]
 === Jmsx Properties
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Jmsx User ID a| String | 
-| Jmsx App ID a| String | 
-| Jmsx Delivery Count a| Number | 
-| Jmsx Group ID a| String | 
-| Jmsx Group Seq a| Number | 
-| Jmsx Producer TXID a| String | 
-| Jmsx Consumer TXID a| String | 
-| Jmsx Rcv Timestamp a| Number | 
+| Jmsx User ID a| String |
+| Jmsx App ID a| String |
+| Jmsx Delivery Count a| Number |
+| Jmsx Group ID a| String |
+| Jmsx Group Seq a| Number |
+| Jmsx Producer TXID a| String |
+| Jmsx Consumer TXID a| String |
+| Jmsx Rcv Timestamp a| Number |
 |======================
-    
+
 [[PoolingProfile]]
 === Pooling Profile
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Max Active a| Number | 
-| Max Idle a| Number | 
-| Max Wait a| Number | 
-| Min Eviction Millis a| Number | 
-| Eviction Check Interval Millis a| Number | 
+| Max Active a| Number |
+| Max Idle a| Number |
+| Max Wait a| Number |
+| Min Eviction Millis a| Number |
+| Eviction Check Interval Millis a| Number |
 | Exhausted Action a| Enumeration, one of:
 
 ** WHEN_EXHAUSTED_GROW
 ** WHEN_EXHAUSTED_WAIT
-** WHEN_EXHAUSTED_FAIL | 
+** WHEN_EXHAUSTED_FAIL |
 | Initialisation Policy a| Enumeration, one of:
 
 ** INITIALISE_NONE
 ** INITIALISE_ONE
-** INITIALISE_ALL | 
-| Disabled a| Boolean | 
+** INITIALISE_ALL |
+| Disabled a| Boolean |
 |======================
-    
+
 [[ActiveMQConnectionFactoryConfiguration]]
 === Active MQ Connection Factory Configuration
 
@@ -517,7 +517,7 @@ for incoming Messages
 | Redelivery Delay a| Number | 1000
 | Max Redelivery a| Number | 0
 |======================
-    
+
 [[topic-consumer]]
 === Topic Consumer
 
@@ -527,9 +527,9 @@ for incoming Messages
 | Is Durable a| Boolean | false
 | Is Shared a| Boolean | false
 | No Local a| Boolean | false
-| Subscription Name a| String | 
+| Subscription Name a| String |
 |======================
-    
+
 [[default-caching]]
 === Default Caching
 
@@ -540,22 +540,22 @@ for incoming Messages
 | Cache Producers a| Boolean | true
 | Cache Consumers a| Boolean | true
 |======================
-    
+
 [[JndiConnectionFactory]]
 === Jndi Connection Factory
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Connection Factory Jndi Name a| String | 
+| Connection Factory Jndi Name a| String |
 | Lookup Destination a| Enumeration, one of:
 
 ** NEVER
 ** ALWAYS
 ** TRY_ALWAYS | NEVER
-| Name Resolver Provider a| <<JndiNameResolverProvider>> | 
+| Name Resolver Provider a| <<JndiNameResolverProvider>> |
 |======================
-    
+
 [[JndiNameResolverProvider]]
 === Jndi Name Resolver Provider
 
@@ -565,44 +565,41 @@ for incoming Messages
 | Custom Jndi Name Resolver a| One of:
 
 * <<SimpleJndiNameResolver>>
-* <<CachedJndiNameResolver>> | 
-| Name Resolver Builder a| <<JndiNameResolverProperties>> | 
+* <<CachedJndiNameResolver>> |
+| Name Resolver Builder a| <<JndiNameResolverProperties>> |
 |======================
-    
+
 [[JndiNameResolverProperties]]
 === Jndi Name Resolver Properties
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Jndi Initial Context Factory a| String | 
-| Jndi Provider Url a| String | 
-| Provider Properties a| Object | 
+| Jndi Initial Context Factory a| String |
+| Jndi Provider Url a| String |
+| Provider Properties a| Object |
 |======================
-    
+
 [[SimpleJndiNameResolver]]
 === Simple Jndi Name Resolver
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Context Factory a| Any | 
-| Jndi Initial Factory a| String | 
-| Jndi Provider Properties a| Object | 
-| Jndi Provider Url a| String | 
+| Context Factory a| Any |
+| Jndi Initial Factory a| String |
+| Jndi Provider Properties a| Object |
+| Jndi Provider Url a| String |
 |======================
-    
+
 [[CachedJndiNameResolver]]
 === Cached Jndi Name Resolver
 
 [cols=".^30%,.^40%,.^30%", options="header"]
 |======================
 | Field | Type | Default Value
-| Context Factory a| Any | 
-| Jndi Initial Factory a| String | 
-| Jndi Provider Properties a| Object | 
-| Jndi Provider Url a| String | 
+| Context Factory a| Any |
+| Jndi Initial Factory a| String |
+| Jndi Provider Properties a| Object |
+| Jndi Provider Url a| String |
 |======================
-    
-
-
