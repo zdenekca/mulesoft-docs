@@ -46,57 +46,32 @@ The main difference between the JMS Consume and the JMS Listener is that the Lis
 
 == Send an Acknowledgement
 
-When a message is consumed, you can notify the publisher of the message. This
+JMS sends an acknowledgement to the publisher of a message to confirm that the message was consumed. The JMS Consume and JMS Listener operations have an Ack Mode field that can be set to the following values:
+
+* NONE (default): An acknowledgement is sent to the publisher of the message when the consuming operation finishes executing.
+
+////
+In the next release, NONE mode will be renamed to IMMEDIATE  (it's a lot less confusing like that)
+////
+
+* AUTO: An acknowledgement is sent to the publisher of the message when the entire flow finishes executing without any errors.
+
+* DUPS_OK: Behaves like when set to AUTO, but duplicated Ack Ids are allowed.
+
+* MANUAL: Lets you send an acknowledgement at a time of your choosing. You must add an Ack operation or a Recover Session operation on the point of your flow where you want acknowledgements to be sent.
+
+See link:/connectors/v/latest/jms-manually-send-ack[To Manually Send a JMS Ack].
 
 
+== Send a Response
 
-You can also do this manually
-
-LINK
-
-
-
-== Send a Reply Message
-
-When using the Listener Operation, you can send a reply to the publisher of the message. The
-
-
-The Listener operation allows you to send a reply message. Incoming messag
-
-For this you might want to use the Request and Reply operation instead
-
-
-
-In order to produce a response to the destination specified in the JMSReplyTo header of the incoming message, we’ll create a response configuration in our listener.
-
-For this example we’ll be subscribed to a topic with a shared subscription, and when the processing of the flow is completed we’ll reply with a high priority message:
-
-<INSERT SCREENSHOT SHOWING THE RESPONSE GROUP CONFIGURED>
-
-	<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply">
-   <jms:consumer-type>
-<jms:topic-consumer subscriptionName="demoSub" isShared="true"/>
-   </jms:consumer-type>
-   <jms:response priority="8" persistentDelivery="true">
-       <jms:body>#[{ bridgedData: payload}]</jms:body>
-   </jms:response>
-</jms:listener>
-
-The response configuration carries all the configuration of the publish parameters and a message builder.
-
-
-
-
-
-
-
-
-
+When using the Listener Operation, you can send a reply to the publisher of the message. The publisher's address is taken from the `JMSReplyTo` header of the incoming message. Your response can include a Body, User Properties and JMSX Properties.
 
 
 
 == Durable Subscriptions:
 
+When consuming a topic, you can set a subscription to be
 
 
 For example, an application that needs to receive all the messages published on a topic, including the ones published when there is no consumer associated with it can flag the subscription as a durable subscription.
@@ -116,8 +91,7 @@ Shared and Durable subscriptions can be combined, in which case both will be bou
 == XML Example
 
 
-
-Both the Consume and Listener operations consume from Queues by default, so to consume a queue the only required field is Destination. The example below shows the simplest possible implementation of a JMS Listener.
+The example below shows the simplest possible implementation of a JMS Listener:
 
 [source,xml,linenums]
 ----
@@ -140,6 +114,25 @@ The example above tries to get the first available Message from a Queue, waiting
 
 
 
+
+
+
+In order to produce a response to the destination specified in the JMSReplyTo header of the incoming message, we’ll create a response configuration in our listener.
+
+For this example we’ll be subscribed to a topic with a shared subscription, and when the processing of the flow is completed we’ll reply with a high priority message:
+
+<INSERT SCREENSHOT SHOWING THE RESPONSE GROUP CONFIGURED>
+
+	<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply">
+   <jms:consumer-type>
+<jms:topic-consumer subscriptionName="demoSub" isShared="true"/>
+   </jms:consumer-type>
+   <jms:response priority="8" persistentDelivery="true">
+       <jms:body>#[{ bridgedData: payload}]</jms:body>
+   </jms:response>
+</jms:listener>
+
+The response configuration carries all the configuration of the publish parameters and a message builder.
 
 
 
