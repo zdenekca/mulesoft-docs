@@ -69,22 +69,42 @@ When using the Listener Operation, you can send a reply to the publisher of the 
 
 
 
-== Durable Subscriptions:
+== Durable Subscriptions to Topics
 
-When consuming a topic, you can set a subscription to be
+[NOTE]
+This option is only available when JMS 2.0 is used.
+
+By default, when you subscribe a consumer to consume a topic, it only gets the messages that were posted after the moment when it became associated to that topic. If a subscription is set to be durable, then the consumer can consume all messages that were posted, including those posted before the consumer was associated.
+
+To set a JMS Listener or Consume operation to be durable:
+
+. Set Consumer Type to *Topic consumer*.
+
+. Set Is Durable to *True*
+
+Shared and Durable subscriptions can be combined, in which case both are bounded to the same subscription name.
+
+== Shared Subscriptions to Topics
+
+[NOTE]
+This option is only available when JMS 2.0 is used.
+
+A single JMS Listener or JMS Consume operation can contain multiple consumers, this allows you to improve performance of your message source. The more consumers you create in parallel for the same connection, the more throughput you’ll get for dispatching events to your mule flow.
+
+To avoid each of these consumers from processing the same messages in parallel, you can set the operation to share a subscription amongst its various consumers. When sharing a subscription, only one consumer handles each message, leaving the others idle to handle other messages. If you have multiple consumers and the subscription is not shared, then every message is processed multiple times, once by each consumer.
 
 
-For example, an application that needs to receive all the messages published on a topic, including the ones published when there is no consumer associated with it can flag the subscription as a durable subscription.
-A durable subscription is identified by a name specified by the subscriptionName, which becomes mandatory for this kind of subscription.
+To set a JMS Listener or Consume operation to be shared by multiple consumers:
 
-Shared Subscriptions (JMS 2.0 Only):
-	A shared subscription is used by an application that needs to be able to share the work of receiving messages from a topic amongst multiple consumers, by assuring that each message from the subscription will be delivered to only one of the consumers on that subscription.
-A shared subscription is identified by a name specified by the subscriptionName, which becomes mandatory for this kind of subscription.
+. Set Consumer Type to *Topic consumer*.
 
-Shared and Durable subscriptions can be combined, in which case both will be bounded to the same subscriptionName.
+. Set Is Shared to *True*
 
+. Set Number of Consumers to a number greater than 1
 
+. Provide a name in Subscription Name. This field is required when using shared subscriptions.
 
+Shared and Durable subscriptions can be combined, in which case both are bounded to the same subscription name.
 
 
 
@@ -114,28 +134,6 @@ The example above tries to get the first available Message from a Queue, waiting
 
 
 
-
-
-
-In order to produce a response to the destination specified in the JMSReplyTo header of the incoming message, we’ll create a response configuration in our listener.
-
-For this example we’ll be subscribed to a topic with a shared subscription, and when the processing of the flow is completed we’ll reply with a high priority message:
-
-<INSERT SCREENSHOT SHOWING THE RESPONSE GROUP CONFIGURED>
-
-	<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply">
-   <jms:consumer-type>
-<jms:topic-consumer subscriptionName="demoSub" isShared="true"/>
-   </jms:consumer-type>
-   <jms:response priority="8" persistentDelivery="true">
-       <jms:body>#[{ bridgedData: payload}]</jms:body>
-   </jms:response>
-</jms:listener>
-
-The response configuration carries all the configuration of the publish parameters and a message builder.
-
-
-
 To consume a message from a Topic (with either the Consumer or Listener operation), you must add a `consumer-type` structure with a `topic-consumer` child element in it:
 
 [source,xml,linenums]
@@ -147,37 +145,52 @@ To consume a message from a Topic (with either the Consumer or Listener operatio
 </jms:listener>
 ----
 
+The table below describes other parameters for configuring the operation:
 
-consumerType, other important parameters for configuring the operation are:
-
-Destination
-The name of the destination from which the messages will be consumed
-Maximum Wait
-Sets the maximum time to wait for a message to arrive before failing with a TIMEOUT error.
-AckMode
-NONE
-Message is acknowledged right before the consume operation produces a result
-MANUAL
-The user has to manually ACK the message (see ack operation)
-
-
-And this is what each parameter means:
-Destination: The name of the destination from which the messages will be consumed
-AckMode: Defines when the ACK will be performed, for the listener this means
-
-NONE
-ACK occurs before the Message is dispatched to the Flow
-AUTO
-ACK occurs when the processing flow is completed without errors
+[%header,cols="30,70"]
+|===
+|Parameter |Description
+|Destination | The name of the destination from which the messages are consumed.
+|Maximum Wait | Sets the maximum time to wait for a message to arrive before failing with a TIMEOUT error.
+|AckMode | NONE:
+ACK occurs before the Message is dispatched to the next element in the Flow
+AUTO:
+ACK occurs when the processing of the entire flow is completed without errors
 DUPS_OK
 Similar to AUTO but duplicated ACK are allowed
 MANUAL
-The user has to manually ACK the message (see ack operation)
+Another operation needs to be added to send the ACK, it can be added on any part of the flow.
+|Number of Consumers |
+Defines how many consumers will be waiting for messages from the same topic.
+|===
 
 
-Number of Consumers:
-Defines how many consumers will be waiting for messages from the Queue at the same time. This is critical for tuning the performance of your message source. The more consumers you create in parallel for the same connection, the more throughput you’ll get for dispatching events to your mule flow.
 
+
+
+
+
+
+
+
+
+
+This example has a listener subscribed to a topic with a shared subscription, and when the processing of the flow is completed, a reply is sent with a high priority message.
+
+[source,xml,linenums]
+----
+<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply">
+   <jms:consumer-type>
+	 		<jms:topic-consumer subscriptionName="demoSub" isShared="true"/>
+   </jms:consumer-type>
+   <jms:response priority="8" persistentDelivery="true">
+       <jms:body>#[{ bridgedData: payload}]</jms:body>
+   </jms:response>
+</jms:listener>
+----
+
+
+The response configuration carries all the configuration of the publish parameters and a message builder.
 
 
 
