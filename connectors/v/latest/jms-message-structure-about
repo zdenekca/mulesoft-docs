@@ -8,55 +8,54 @@
 
 = The JMS Message
 
-All messages published and consumed via JMS follow a certain structure. The JMS connector maps the parts of this JMS structure with the parts of the Mule message to seamlessly pass information in and out of a flow.
+All messages published and consumed via JMS follow a certain structure. The JMS connector transforms the parts of the JMS message into parts of the Mule message to seamlessly pass information in and out of a flow.
 
 == Structure of a JMS Message
 
-Messages that are published to JMS can include the following parts:
+Messages that are published through JMS can include the following parts:
 
 [%header,cols="30,70"]
 |===
 |Part | Required | Description
-|Body | X | The content of the Message to be published. Defaults to the Mule message payload.
-|Reply To | | Sets the JMSReplyTo header information of the Destination where the Message should be replied to.
-|Properties | | Map with the general properties of the Message. It may contain both user defined and broker-specific properties.
+|Body | X | The content of the Message to be published.
+|Reply To Header (JMSReplyTo)| | Information of the Destination where the Message should be replied to.
+|Properties | | A list of properties that may contain both user defined and broker-specific properties.
 |JMSX Properties | | Configures the pre-defined JMSX properties of the Message.
 |===
 
 
 == Mapping JMS Messages to Mule Messages
 
-The table below shows how the parts of a JMS message map to a Mule Message. When a JMS Listener or Consumer receives a JMS message, it outputs a Mule message that can contain the properties listed below.
+The table below shows how the parts of a JMS message map to a Mule Message. This mapping describes both how a JMS message is consumed into a Mule message and how a Mule message is published into a JMS message.
 
 [%header,cols="30,70"]
 |===
 |JMS Message |Mule Message
 |JMS message Body | payload
-|JMS properties | attributes.properties.jmsProperties
-|JMSX properties | attributes.properties.jmsxProperties
-|user properties | attributes.properties.userProperties
-|JMS Headers | attributes.properties.JmsHeaders
-|Ack ID | attributes.properties.AckId
+|JMS properties | attributes.jmsProperties
+|JMSX properties | attributes.jmsxProperties
+|user properties | attributes.userProperties
+|JMS Headers | attributes.JmsHeaders
+|Ack ID | attributes.ackId
 |===
-
 
 
 
 == XML Example
 
 
-The following example receives JMS messages and publishes them to another destination. It works as a proxy, passing on the JMS body and JMSX properties but adding a ROUTER_ID property to the message it sends out:
+The following example receives JMS messages and publishes them to another destination. It serves as a proxy, passing on the JMS body and JMSX properties from the original message, and adding a new ROUTER_ID property to the message it sends out.
 
 [source,xml,linenums]
 ----
 <flow name="bridge">
    <jms:consume config-ref="config" destination="#[initialDestination]"/>
    <jms:publish config-ref="config" destination="#[finalDestination]">
-       <jms:message jmsxProperties="#[attributes.properties.jmsxProperties]">
-       <jms:properties>#[
-attributes.properties.userProperties ++ {ROUTER_ID': variables.routerId}
-       ]</jms:properties>
-       </jms:message>
+      <jms:message jmsxProperties="#[attributes.properties.jmsxProperties]">
+        <jms:properties>
+          #[attributes.properties.userProperties ++ {ROUTER_ID': variables.routerId}]
+        </jms:properties>
+      </jms:message>
    </jms:publish>
 </flow>
 ----
@@ -67,3 +66,7 @@ attributes.properties.userProperties ++ {ROUTER_ID': variables.routerId}
 
 * link:/connectors/v/latest/jms-about[About JMS Connector]
 * link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]
+
+* link:/connectors/v/latest/jms-consume-task[To Consume JMS Messages]
+
+* link:/connectors/v/latest/jms-publish-task[To Publish JMS Messages]

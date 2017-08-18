@@ -31,12 +31,18 @@ It is characterized by the following:
 
 * Multiple consumers (or none) receive the message
 
-* There is a timing dependency between publishers and subscribers. The publisher has to create a message topic for clients to subscribe.
+* There is a timing dependency between publishers and subscribers. The publisher has to create a message topic fist, before clients are able to subscribe.
 
 * The subscriber has to remain continuously active to receive messages, unless it has established a durable subscription. In that case, messages published while the subscriber is not connected redistribute when it reconnects.
 
 == See Also
 
+* link:/connectors/v/latest/jms-message-structure-about[About the JMS Message Structure]
+
 * link:/connectors/v/latest/jms-global-configuration[JMS Global Configuration]
 
 * link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]
+
+* link:/connectors/v/latest/jms-consume-task[To Consume JMS Messages]
+
+* link:/connectors/v/latest/jms-publish-task[To Publish JMS Messages]

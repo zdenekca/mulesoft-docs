@@ -9,14 +9,14 @@
 
 = To Publish Messages with JMS
 
-When publishing via JMS, the two main things to keep in mind are the message to send and its destination.
+When publishing a JMS message, the two most important things are:
 
-* Message: The message must follow the JMS structure, so it must include a Body (the Mule message payload, by default), and it can also include a Reply To, Properties and JMSX Properties
+* Message: The message must follow the JMS structure, so it must include a Body (the Mule message payload, by default), and it can also include user Properties (such as Reply To) and JMSX Properties.
 
 * Destination: You can publish to the queue of an individual receiver or to a general topic. Besides defining the type of the destination, you need to name what queue or what topic to publish to.
 
 
-To send the Mule message payload to a queue:
+To publish a message that contains the Mule message payload to a queue:
 
 
 . Create a Mule application as a project.
@@ -25,9 +25,9 @@ To send the Mule message payload to a queue:
 +
 `/publish_message`
 +
-You can use the default configuration for the Listener connection.
+You can use the default configuration for the HTTP connection.
 
-. After the HTTP Listener, add the Publish operation from the JMS connector to your flow.
+. After the HTTP Listener, add the JMS Publish operation to your flow.
 
 . Create a JMS configuration for the connection, leaving all of the fields with their default values.
 
@@ -35,10 +35,9 @@ You can use the default configuration for the Listener connection.
 
 . Leave the body of the message as `#[payload]`.
 
-
 . Deploy, Sync, or Run the app.
 
-. To test the app, open http://url.for.your.app:8081/publish_message from a browser or from an app such as Postman.
+. To test the app, send HTTP requests to http://url.for.your.app:8081/publish_message an app such as Postman, including an HTTP body.
 
 
 
@@ -46,30 +45,14 @@ You can use the default configuration for the Listener connection.
 == XML Examples
 
 
-The example below sets the payload as the message, and sends it to a Queue named “myQueue”.
-
-[source,xml,linenums]
-----
-<jms:publish config-ref="config" destination="#[destination]" destinationType="QUEUE">
-   <jms:message>
-       <jms:body>#[payload]</jms:body>
-   </jms:message>
-</jms:publish>
-----
-
-Since by default the destinationType is a queue and the message body set as the payload, the same can be expressed through the shorter sample below.
+The example below shows the simplest possible implementation of a JMS Publish operation. It sends a message to a Queue named "myQueue", containing the Mule message payload as the JMS body. This example leaves several fields undefined and set as their default values.
 
 [source,xml,linenums]
 ----
 <jms:publish config-ref="config" destination="#[destination]"/>
 ----
 
-
-
 The example below modifies the payload and publishes it to a Topic. It also adds a property that flags the message as a demo.
-
-
-<INSERT SCREENSHOT>
 
 [source,xml,linenums]
 ----
@@ -87,26 +70,11 @@ The example below modifies the payload and publishes it to a Topic. It also adds
 ----
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 == See Also
 
 * link:/connectors/v/latest/jms-message-structure-about[About the JMS Message Structure]
 
-
+* link:/connectors/v/latest/jms-request-reply-task[To Do Request-Reply with JMS]
 
 * link:/connectors/v/latest/jms-about[About JMS Connector]
 * link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

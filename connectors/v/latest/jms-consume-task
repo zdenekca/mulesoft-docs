@@ -9,11 +9,11 @@
 
 = To Consume Messages with JMS
 
-Messages can be consumed from message Queues or from Topics. The Consume Operation and the Listener Operation both allow you to consume messages from Queues and Topics.
+Messages can be consumed from message Queues or from Topics. The Consume Operation and the Listener Operation both allow you to consume messages from Queues or Topics.
 
-The main difference between the JMS Consume and the JMS Listener is that the Listener operation triggers the new execution of a flow every time a message arrives, instead the Consume operation is not a trigger, so it checks for new messages when the flow it's in is triggered by something else.
+The main difference between the JMS Listener and the JMS Consume operations is that the Listener operation triggers the new execution of a flow every time a message arrives, the Consume operation on the other hand is not a trigger, so it checks for new messages only when activated by something else.
 
-== Consume messages with a Listener
+== Consume messages with a Listener Operation
 
 
 . Create a Mule application as a project.
@@ -46,7 +46,7 @@ The main difference between the JMS Consume and the JMS Listener is that the Lis
 
 == Send an Acknowledgement
 
-JMS sends an acknowledgement to the publisher of a message to confirm that the message was consumed. The JMS Consume and JMS Listener operations have an Ack Mode field that can be set to the following values:
+JMS sends an acknowledgement to the publisher of a message to confirm that the message was consumed. The JMS Consume and JMS Listener operations include an Ack Mode field that can be set to the following values:
 
 * NONE (default): An acknowledgement is sent to the publisher of the message when the consuming operation finishes executing.
 
@@ -111,34 +111,19 @@ Shared and Durable subscriptions can be combined, in which case both are bounded
 == XML Example
 
 
-The example below shows the simplest possible implementation of a JMS Listener:
+The example below shows the simplest possible implementation of a JMS Listener. This example leaves several fields undefined and set as their default values.
 
 [source,xml,linenums]
 ----
 <jms:listener config-ref="config" destination="${destinationQueueName}"/>
 ----
 
-The expression above leaves several fields undefined and set as their default values. The expression below sets these fields explicitly:
-
-[source,xml,linenums]
-----
-<jms:listener config-ref="config" destination="${incomingDestination}"
-ackMode="NONE" numberOfConsumers="4">
-   <jms:consumer-type>
-       <jms:queue-consumer/>
-   </jms:consumer-type>
-</jms:listener>
-----
-
-The example above tries to get the first available Message from a Queue, waiting for up to 10 sec (the default for the `maximumWait` parameter from the configuration element) for a message to arrive. By default, `ackMode` is NONE, so in this example, once the operation returns a result, the message will be already acknowledged unless a transaction is taking place.
-
-
 
 To consume a message from a Topic (with either the Consumer or Listener operation), you must add a `consumer-type` structure with a `topic-consumer` child element in it:
 
 [source,xml,linenums]
 ----
-<jms:listener config-ref="config" destination="${incomingDestination}">
+<jms:listener config-ref="config" destination="${incomingDestination}" ackMode="NONE" numberOfConsumers="1">
 	<jms:consumer-type>
 		<jms:topic-consumer subscriptionName="subName"/>
 	</jms:consumer-type>
@@ -156,30 +141,20 @@ The table below describes other parameters for configuring the operation:
 ACK occurs before the Message is dispatched to the next element in the Flow
 AUTO:
 ACK occurs when the processing of the entire flow is completed without errors
-DUPS_OK
+DUPS_OK:
 Similar to AUTO but duplicated ACK are allowed
-MANUAL
+MANUAL:
 Another operation needs to be added to send the ACK, it can be added on any part of the flow.
 |Number of Consumers |
 Defines how many consumers will be waiting for messages from the same topic.
 |===
 
 
-
-
-
-
-
-
-
-
-
-
-This example has a listener subscribed to a topic with a shared subscription, and when the processing of the flow is completed, a reply is sent with a high priority message.
+The example below includes a listener operation that includes 4 consumers that are subscribed to a topic with a shared subscription. When the processing of the flow is completed, a reply is sent with a message that's flagged as high priority.
 
 [source,xml,linenums]
 ----
-<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply">
+<jms:listener config-ref="config"  destination="topicListenerDestinationWithReply" numberOfConsumers="4">
    <jms:consumer-type>
 	 		<jms:topic-consumer subscriptionName="demoSub" isShared="true"/>
    </jms:consumer-type>
@@ -190,13 +165,12 @@ This example has a listener subscribed to a topic with a shared subscription, an
 ----
 
 
-The response configuration carries all the configuration of the publish parameters and a message builder.
-
-
-
-
-
 == See Also
 
+* link:/connectors/v/latest/jms-request-reply-task[To Do Request-Reply with JMS]
+
+* link:/connectors/v/latest/jms-manually-send-ack[To Manually Send a JMS Ack]
+
 * link:/connectors/v/latest/jms-about[About JMS Connector]
+
 * link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

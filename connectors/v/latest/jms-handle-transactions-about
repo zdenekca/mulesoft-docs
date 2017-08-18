@@ -6,30 +6,30 @@
 :source-highlighter: coderay
 :icons: font
 
-= About Handling Transactions
+= To Handle Transactions With JMS Operations
 
 JMS operations can be configured to start new transactions or join existing ones. By default, their behavior doesn't use transactions, but this can be changed by setting the Transaction Action field.
 
-To have a JMS operation start a new transaction, its Transactional Action must be set to either `ALWAYS_BEGIN`.
+To have a JMS operation start a new transaction, its Transactional Action must be set to `ALWAYS_BEGIN`.
 
 To have a JMS operation join an existing transaction, its Transactional Action must be set to either `ALWAYS_JOIN`, or `JOIN_IF_POSSIBLE`.
 
-== Start a Transaction When a Message Arrives
+== Start a New Transaction When a Message Arrives
 
-You can configure a JMS Listener or Consumer so that the arrival of a JMS message starts a new transaction, which can involve several other components in your flow.
+You can configure a JMS Listener or Consumer so that the arrival of a JMS message starts a new transaction. You can then configure other components from the same flow so that they form part of the same transaction.
 
 
-. Create a Mule application as a project.
+. Create a Mule application project.
 
-. Add a JMS listener operation to your flow, set its Destination to the desired JMS queue name.
+. Add a JMS Listener operation to your flow, set its Destination to the desired JMS queue name.
 
 . Create a JMS configuration for the connection, leaving all of the fields with their default values.
 
 . Leave the body of the message as `#[payload]`.
 
-. Open the advanced tab and in Transactional Action select `ALWAYS_BEGIN`.
+. Open the advanced tab and in Transactional Action select *ALWAYS_BEGIN*.
 
-. On any other components in the flow that need to be a part of the same transaction, set their Transactional Action to `ALWAYS_JOIN`, or `JOIN_IF_POSSIBLE`.
+. If you need other components from the same flow to be part of the same transaction, set their Transactional Action to `ALWAYS_JOIN`, or `JOIN_IF_POSSIBLE`.
 
 . Deploy, Sync, or Run the app.
 
@@ -38,7 +38,7 @@ You can configure a JMS Listener or Consumer so that the arrival of a JMS messag
 == XML Examples
 
 
-The example below includes a JMS Listener with its `transactionalAction` property set to `ALWAYS_BEGIN`, followed by a JMS Publish operation with its `transactionalAction` set to "ALWAYS_JOIN". The listener starts a new transaction every time it receives a message, and that same transaction also includes using the publish operation.
+The example below includes a JMS Listener with its `transactionalAction` property set to `ALWAYS_BEGIN`, followed by a JMS Publish operation with its `transactionalAction` set to "ALWAYS_JOIN". The JMS Listener starts a new transaction every time it receives a message, and the transaction isn't completed until the Publish operation is successfully completed.
 
 [source,xml,linenums]
 ----
@@ -57,6 +57,14 @@ transactionalAction="ALWAYS_JOIN"/>
 
 
 == See Also
+
+* link:/connectors/v/latest/jms-consume-task[To Consume JMS Messages]
+
+* link:/connectors/v/latest/jms-publish-task[To Publish JMS Messages]
+
+* link:/connectors/v/latest/jms-request-reply-task[To Do Request-Reply with JMS]
+
+* link:/connectors/v/latest/jms-manually-send-ack[To Manually Send a JMS Ack]
 
 * link:/connectors/v/latest/jms-about[About JMS Connector]
 * link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]

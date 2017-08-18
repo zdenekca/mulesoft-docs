@@ -1,7 +1,19 @@
 = JMS Connector
 
-link:/connectors/v/latest/jms-about[About JMS Connector]
+* link:/connectors/v/latest/jms-about[About JMS Connector]
 
-link:/connectors/jms-global-configuration[JMS Global Configuration]
+* link:/connectors/jms-global-configuration[JMS Global Configuration]
 
-link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]
+* link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]
+
+* link:/connectors/v/latest/jms-message-structure-about[About the JMS Message Structure]
+
+* link:/connectors/v/latest/jms-consume-task[To Consume JMS Messages]
+
+* link:/connectors/v/latest/jms-publish-task[To Publish JMS Messages]
+
+* link:/connectors/v/latest/jms-request-reply-task[To Do Request-Reply with JMS]
+
+* link:/connectors/v/latest/jms-manually-send-ack[To Manually Send a JMS Ack]
+
+* link:/connectors/v/latest/jms-handle-transactions-about[To Handle Transactions With JMS Operations]

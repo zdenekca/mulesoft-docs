@@ -10,9 +10,9 @@
 
 == About Message Acknowledgments
 
-JMS sends an acknowledgement to the publisher of a message to confirm that the message was consumed. The sending of acknowledgements can be handled by the JMS Listener or JMS Consume operation that receives the message, or you can configure these so that this action is carried out "manually" by a separate operation on the same flow.
+The consumer of a JMS message sends an acknowledgement to the publisher of that message to confirm that the message has been consumed. The sending of acknowledgements can be handled by the JMS Listener or JMS Consume operation that receives the message, or you can configure these so that this action is carried out "manually" by a separate operation on the same flow.
 
-The manual sending of message acknowledgements can be carried by either of these JMS operations:
+The manual sending of message acknowledgements can be carried by any of these two JMS operations:
 
 * Ack Operation: Performs a single ACK for the message that's being processed. This operation is idempotent, so performing an ACK more than once over the same message doesn't break the execution of the flow.
 
@@ -35,22 +35,22 @@ To send an acknowledgement responding a message:
 +
 If you want to consume a Topic, change the Consumer Type to Topic.
 
-. Set the Ack Mode to `MANUAL`
+. Set the Ack Mode to *MANUAL*.
 
-. Add a JMS Ack operation on any point of your flow after the JMS Connector.
+. Add a JMS Ack operation on any point of your flow after the JMS Listener.
 
 +
-In this way, the acknowledgement is sent only if the flow reaches that point of your flow.
+An acknowledgement is sent only if the flow executes successfully up until the point where you place this Ack operation.
 +
-You can add a Recover Session operation instead of an Ack operation to send acknowledgements for all consumed messages that havent been acknowledged.
+You can add a Recover Session operation instead of an Ack operation to send acknowledgements for all consumed messages that haven't been acknowledged.
 
-. In the Ack operation, set the Ack Id to reference where this value exists in the incoming Mule message. By default, this is in an attribute named ackId, which can be referenced through the expression `#[attributes.ackId]`.
+. In the Ack operation, set Ack Id to reference where the Ack Id value exists in the incoming Mule message. By default, the Ack Id is in an attribute named ackId, which can be referenced through the expression `#[attributes.ackId]`.
 
 
 
 == XML Examples
 
-The example below shows a listener that is set to handle Acks manually, followed by an Ack operation that performs the sending of the acknowledgement.
+The example below shows a listener that is set to handle acknowledgements manually, followed by an Ack operation that performs the sending of the acknowledgement.
 
 
 [source,xml,linenums]
@@ -60,7 +60,7 @@ ackMode="MANUAL"/>
 <jms:ack ackId="#[attributes.ackId]"/>
 ----
 
-This second example shows the same listener, with its Acks being handled by a Recover Session operation.
+This second example shows the same listener, with acknowledgements handled by a Recover Session operation instead of an Ack operation.
 
 [source,xml,linenums]
 ----
@@ -73,6 +73,10 @@ ackMode="MANUAL"/>
 
 
 == See Also
+
+* link:/connectors/v/latest/jms-consume-task[To Consume JMS Messages]
+
+* link:/connectors/v/latest/jms-handle-transactions-about[To Handle Transactions With JMS Operations]
 
 * link:/connectors/v/latest/jms-about[About JMS Connector]
 * link:/connectors/v/latest/jms-technical-ref[JMS Connector Technical Reference]
