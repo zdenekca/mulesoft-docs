@@ -12,8 +12,102 @@
 
 Every JMS operation that consumes or publishes messages must reference a JMS Config element that handles its general configuration.
 
-When creating a new configuration, the default settings
+When creating a new configuration, the default settings create an Active MQ connection that allows you to messages publish messages and consume messages using an in memory, non-persistent ActiveMQ broker running on `vm://localhost`.
 
+== Global MediaType Configurations
+
+Default values for contentType and encoding can be provided in the General tab. These properties can be overridden by those in specific operations.
+
+Encoding: Defines the encoding of the Message body. Uses Mule’s encoding by default
+Content Type: The content type of the Message body.
+
+
+== Connecting to a Broker
+
+An in-memory connection is provided by default, but for real-world applications you'll likely want to configure something more robust by using the ActiveMQ connection builder, or by providing a fully customizable Generic connection.
+
+=== Common Connection Parameters
+
+[%header,cols="30,70"]
+|===
+|Field |Description
+|Username and Password | The credentials to be used while creating the connection.
+|ClientId |The client ID to assign to the connection.
+|Caching Strategy | Sets how the Session and Connections created by the factory are handled. Here you can configure the default-caching strategy or disable caching by setting up a no-caching strategy.
+|Specification | Which JMS specification to use.
+|===
+
+
+All three JMS specifications (1.0.2b, 1.1 or 2.0) are supported by the connector. Make sure that the underlying broker and client implementations support the selected specification. All other aspects of configuring the connector are identical regardless of what specification you choose, but keep in mind that some other configurations like deliveryDelay are only supported when using the latest version of the specification.
+
+
+
+=== Setting up an ActiveMQ Connection
+
+The connector provides a standard way to configure your ActiveMQ connections for the JMS 1.0.2b and 1.1 specifications. For using the 2.0 specification with Apache Artemis, you must set up a Generic Connection.
+
+An ActiveMQ connection supports two mutually exclusive ways of configuring its Connection Factory.
+
+* *Factory Configuration*:
++
+This is the method, uses an ActiveMQConnectionFactory or ActiveMQXAConnectionFactory connection.
+
+* *Connection Factory*: (Available in Studio Only)
++
+This method allows you to provide a customized connection factory, it uses the generic connection-factory parameter. If you want to use a different ActiveMQ ConnectionFactory, like an ActiveMQSslConnectionFactory, then you can do so by passing in a reference to your custom factory.
+
+
+
+== Set up a Generic JMS Connection Provider
+
+If you don’t want to use ActiveMQ, or you want to use a JMS 2.0 feature, then you can configure a custom connection to the broker using the generic-connection. This connection also supports the same common connection parameters, but has a mandatory connection-factory that can be configured in two fashions:
+
+* Use a JNDI based Connection Factory
++
+Through this you can use ActiveMQ 2.0.
+
+* Use bean references
++
+Any valid javax.jms.ConnectionFactory reference is a valid connectionFactory for your generic connection. All you need to do is to provide a reference to the factory instance.
+
+
+
+
+== Customizing the Consumer global parameters
+
+In the Consumer tab you can set default values to be used on consuming operations. All the properties in the Consumer tab can be overridden by those in specific operations.
+
+For example, you may want to may want to set up your configuration so that all message consuming operations that reference this configuration use the same durable subscription and that they only consume messages flagged with JMSType='DEMO'.
+
+
+== Customizing the Producer global parameters
+
+In the Producer tab you can set default values to be used on producing operations. All the properties in the Producer tab can be overridden by those in specific operations.
+
+For example, you may want to may want to set up your configuration so that all message producing operations that reference this configuration use persistent delivery.
+
+
+
+
+
+== Connection Pooling and Caching
+
+Session caching is important for improving the performance of the connection handling, since the creation of sessions, consumers and producers is expensive in terms of processing power for the JMS client.
+
+
+=== Caching configuration
+
+Connection Factories are wrapped by a default CachingConnectionFactory. If you are providing a custom connection factory that is already performing caching on its own, you should disable caching by setting the Caching Strategy to "No Caching". Otherwise, it’s highly recommended to use the default CachingConnectionFactory.
+
+The caching strategy can be used for caching consumers, producers or both, with a maximum sessionCacheSize.
+This session cache size defines the maximum amount of sessions that can be in the pool per session acknowledgement type, so if you want a maximum of 2 sessions to be cached, and you are using Ack modes of AUTO and CLIENT, then up to 4 session can be present in the cache.
+
+
+
+== XML Examples
+
+
+=== Minimal Setup
 
 The example below shows the simplest possible configuration for the JMS Config element.
 
@@ -24,83 +118,55 @@ The example below shows the simplest possible configuration for the JMS Config e
 </jms:config>
 ----
 
-This configuration allows you to publish and consume messages using an in memory, non-persistent ActiveMQ broker running on `vm://localhost`.
+This configuration allows you to publish and
 
 
-== Customizing the Consumer global parameters
+=== Consumer Configuration
 
-The JMS Consumer Config allows you to setup the default values to be used when consuming a message. This can be used for filtering messages, changing the default consumer type and so on. Anything that is defined here can be overridden by any operation upon declaration, and will only work as a fallback. See the consumer config reference for the full spec.
+The example below includes a `consumer-config`, which adds default settings for all consuming operations that use this configuration.
 
 So for example, if you want to create an application that consumes only the messages flagged with JMSType='DEMO' and always using the same durable subscription for all the consumers, we can add that global behaviour in our config:
 
-
-
+[source,xml,linenums]
+----
+<jms:config name="config">
    <jms:consumer-config selector="JMSType='DEMO'">
        <jms:consumer-type>
-<jms:topic-consumer subscriptionName="GlobalSubscription"
-isDurable="true"/>
+          <jms:topic-consumer subscriptionName="GlobalSubscription" isDurable="true"/>
        </jms:consumer-type>
    </jms:consumer-config>
+</jms:config>
+----
 
+=== Producer Configuration
 
-== Customizing the Producer global parameters
+The example below includes a `produces-config`, which adds default settings for all producing operations that use this configuration.
 
-The JMS Producer Config works as a provider of default values for each operation that requires sending a message, as long as no override is provided in the operation level. Message priority, delivery type and a global TTL are some of the values that can be configured. See the producer config reference for the full spec.
+Every published message using this configuration is handled by the broker as a persistent message. For performance reasons, it also disables the messageID for all the messages produced:
 
-In the following example we want to make sure that every published message using this configuration is handled by the broker as a persistent message. For performance reasons we will also disable the messageID for all the messages produced:
-
-
-
+[source,xml,linenums]
+----
 <jms:config name="config">
    <jms:active-mq-connection/>
    <jms:producer-config disableMessageId="true" persistentDelivery="true"/>
 </jms:config>
+----
 
+==== Factory Configuration
 
-
-Global MediaType Configurations
-
-Default values for contentType and encoding can be provided in the config root, working as a global default for the connector:
-Encoding: Defines the encoding of the Message body. Uses mule’s encoding by default
-Content Type: The content type of the Message body.
-
-Connecting to a Broker
-Of course, the default in-memory connection falls short quickly, thus more complex connections can be created using the ActiveMQ connection builder, or by providing a fully customizable Generic connection.
-
-== Common Connection Parameters
-
-Before jumping to the examples of how to configure each of them let’s review the common parameters that will be available for any connection:
-Specification:
-	All three JMS specifications are supported by the connector, so you are able to choose between 1.0.2b, 1.1 or 2.0 definitions. This is the only time the spec being used will matter to you, but keep in mind that the underlying broker and client implementations should support the selected spec, and that some configurations like deliveryDelay are only supported in the latest version of the spec.
-
-ClientId: The client ID that will be assigned to the connection.
-Username and Password: The credentials to be used while creating the connection.
-Caching Strategy:
-Allows to configure how the Session and Connections created by the factory will be handled. Here you can configure the default-caching strategy or disable caching by setting up a no-caching strategy. See more of how to configure connection caching.
-
-
-== Setting up your ActiveMQ Connection
-
-Ok, let’s start with ActiveMQ. Out of the box, the connector provides a simple way to configure your ActiveMQ connections for JMS 1.0.2b and 1.1. For using the 2.0 spec with Apache Artemis, please refer to How to set up a Generic Connection
-Besides all the common connection parameters, an ActiveMQ connection supports two mutually exclusive ways of configuring its Connection Factory.
-
-Factory Configuration
-
-The first and most simple way is to create a factory-configuration using some basic connection data:
-
+[source,xml,linenums]
+----
 <jms:config name="config">
    <jms:active-mq-connection clientId="myConsumerClient">
-     <jms:factory-configuration brokerUrl="vm://localhost?broker.useJmx=false"
-    maxRedelivery="3" />
+     <jms:factory-configuration brokerUrl="vm://localhost?broker.useJmx=false" maxRedelivery="3" />
    </jms:active-mq-connection>
 </jms:config>
+----
 
-Based on this factory-configuration, an ActiveMQConnectionFactory or ActiveMQXAConnectionFactory will be used. See the full list of parameters for the factory configuration here.
+==== Generic ActiveMQ Connection Factory (Available in Studio Only)
 
-Generic ActiveMQ Connection Factory (Available in Studio Only)
-
-The second way to provide a customized connection factory, is by using the generic connection-factory parameter. If you want to use a different ActiveMQ ConnectionFactory, like an ActiveMQSslConnectionFactory, then you can do so by passing in a reference to your custom factory:
-
+[source,xml,linenums]
+----
 <bean id="sslConnectionFactory"
 class="org.apache.activemq.ActiveMQSslConnectionFactory">
    <property name="trustStore" value="/path/to/truststore.ts" />
@@ -115,23 +181,19 @@ class="org.apache.activemq.ActiveMQSslConnectionFactory">
 <jms:config name="config">
     <jms:active-mq-connection connectionFactory="sslConnectionFactory">
 </jms:config>
+----
 
-== Set up a Generic JMS Connection Provider
+=== Using a JNDI based Connection Factory (or How to setup ActiveMQ 2.0)
 
-If you don’t want to use ActiveMQ, or want to use a JMS2.0 feature, then you can easily configure a connection to the broker that fulfills your needs using the generic-connection. This connection also supports the same common connection parameters, but has a mandatory connection-factory that can be configured in two fashions:
+This example creates a custom ActiveMQ connection factory with JMS 2.0 support using Apache Artemis.
 
-Using a JNDI based Connection Factory (or How to setup ActiveMQ 2.0)
-For this example we’ll create an ActiveMQ factory with JMS 2.0 support using Apache Artemis. Details on how to configure your JNDI factory can be found here.
-
-
+[source,xml,linenums]
+----
 <jms:config name="config">
    <jms:generic-connection specification="JMS_2_0">
        <jms:connection-factory>
-           <jms:jndi-connection-factory connectionFactoryJndiName="ConnectionFactory"
-lookupDestination="ALWAYS">
-               <jms:name-resolver-builder
-
-jndiInitialContextFactory="org.apache.activemq.artemis.ActiveMQInitialContextFactory"                       jndiProviderUrl="vm://localhost?broker.persistent=false&amp;broker.useJmx=false">
+           <jms:jndi-connection-factory connectionFactoryJndiName="ConnectionFactory" lookupDestination="ALWAYS">
+               <jms:name-resolver-builder jndiInitialContextFactory="org.apache.activemq.artemis.ActiveMQInitialContextFactory"                   jndiProviderUrl="vm://localhost?broker.persistent=false&amp;broker.useJmx=false">
                    <jms:provider-properties>
                        <jms:provider-property key="queue.jndi-queue-in" value="in.queue"/>
                        <jms:provider-property key="topic.jndi-topic-in" value="in.topic"/>
@@ -141,53 +203,21 @@ jndiInitialContextFactory="org.apache.activemq.artemis.ActiveMQInitialContextFac
        </jms:connection-factory>
    </jms:generic-connection>
 </jms:config>
+----
 
-== Full connection freedom with bean references
-
-Any valid javax.jms.ConnectionFactory reference will be a valid connectionFactory for your generic connection. All you need to do is to provide a reference to the factory instance.
+=== Disable Caching
 
 
-== Connection Pooling and Caching
+This example sets the Cache Strategy to "No Caching".
 
-All the connections that you saw previously are subject to Mule’s standard Connection Pooling, and all the configurations related to it. Also, the Caching Strategy we talked about earlier will impact in how the connection factories are used.
-
-Session caching is important when for improving the performance of the connection handling, since the creation of sessions, consumers and producers is expensive for the JMS client.
-
-== Caching configuration
-
-Any connection factory that is provided will be wrapped by a default CachingConnectionFactory.
-If you are providing a custom connection factory that is already performing caching on its own, caching should be disabled. Otherwise, it’s highly recommended to use the caching provided by mule.
-
-The caching strategy can be used for caching consumers, producers or both, with a maximum sessionCacheSize.
-This session cache size defines the maximum amount of sessions that can be in the pool per session acknowledgement type, so if you want a maximum of 2 sessions to be cached, and you are using ack modes of AUTO and CLIENT, then up to 4 session can be present in the cache.
-
-== Disable Caching
-
-In order to disable caching for any of your connections, just setup “No Caching” as your strategy:
-
-<INSERT SCREENSHOT OF DROPDOWN>
-
-<jms:active-mq-connection>
-   <jms:caching-strategy>
-       <jms:no-caching/>
-   </jms:caching-strategy>
-</jms:active-mq-connection>
+[source,xml,linenums]
+----
 <jms:generic-connection>
    <jms:caching-strategy>
        <jms:no-caching/>
    </jms:caching-strategy>
 </jms:generic-connection>
-
-
-
-
-
-
-
-
-
-
-
+----
 
 == See Also
 
