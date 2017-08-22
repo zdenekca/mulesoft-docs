@@ -1,11 +1,11 @@
 = About the JMS Connector
 
-JMS (Java Message Service) is a widely-used API for Message Oriented Middleware. It allows communication between different components of a distributed application to be loosely coupled, reliable, and asynchronous.
+JMS (Java Message Service) is a widely-used API for Message Oriented Middleware. It allows the communication between different components of a distributed application to be loosely coupled, reliable, and asynchronous.
 
 
 JMS supports two models for messaging:
 
-* Queues - Point-to-point
+* Queues - Point to point
 
 * Topics - Publish and subscribe
 
@@ -15,25 +15,25 @@ The JMS connector lets you send and receive messages to queues and topics for an
 
 In the point-to-point or queuing model, a sender posts messages to a particular queue and a receiver reads messages from the queue. Here, the sender knows the destination of the message and posts the message directly to the receiver’s queue.
 
-It is characterized by the following:
+It's characterized by the following:
 
-* Only one consumer gets the message
+* Each message is sent to only one consumer.
 
-* The sender does not have to be running at the time the consumer consumes the message, nor does the consumer need to be running at the time the message is sent
+* The sender does't need to be active at the time the consumer consumes the message, nor does the consumer need to be active at the time the message is sent.
 
-* Every message successfully processed is acknowledged by the consumer
+* For every message that is successfully processed is by the consumer is acknowledged to the producer.
 
 == Topics - Publish and subscribe
 
-The publish/subscribe model supports publishing messages to a particular message topic. Subscribers may register interest in receiving messages on a particular message topic. In this model, neither the publisher nor the subscriber know about each other. A good analogy for this is an anonymous bulletin board.
+The publish/subscribe model supports publishing messages to a particular message topic. Subscribers may register interest in receiving messages on a particular message topic. In this model, neither the publisher nor the subscriber need to know about each other. As an analogy, think of an anonymous bulletin board.
 
 It is characterized by the following:
 
-* Multiple consumers (or none) receive the message
+* Each message is consumed by multiple consumers (or none).
 
-* There is a timing dependency between publishers and subscribers. The publisher has to create a message topic fist, before clients are able to subscribe.
+* There's a timing dependency between publishers and subscribers: the publisher must first create a message topic before clients can subscribe to it.
 
-* The subscriber has to remain continuously active to receive messages, unless it has established a durable subscription. In that case, messages published while the subscriber is not connected redistribute when it reconnects.
+* A subscriber must remain continuously active to receive messages, unless it has established a Durable Subscription. In that case, messages published while the subscriber is not active redistribute when it reconnects.
 
 == See Also
 

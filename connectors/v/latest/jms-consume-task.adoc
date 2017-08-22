@@ -9,9 +9,9 @@
 
 = To Consume Messages with JMS
 
-Messages can be consumed from message Queues or from Topics. The Consume Operation and the Listener Operation both allow you to consume messages from Queues or Topics.
+Messages can be consumed from message Queues or from Topics. The JMS Consume Operation and the JMS Listener Operation both allow you to consume messages from Queues or Topics.
 
-The main difference between the JMS Listener and the JMS Consume operations is that the Listener operation triggers the new execution of a flow every time a message arrives, the Consume operation on the other hand is not a trigger, so it checks for new messages only when activated by something else.
+The main difference between the JMS Listener and the JMS Consume operations is that the Listener operation triggers the new execution of a flow every time a message arrives, the Consume operation on the other hand, is not a trigger, so it checks for new messages only when activated by something else.
 
 == Consume messages with a Listener Operation
 
