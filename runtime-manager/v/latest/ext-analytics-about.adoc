@@ -1,16 +1,7 @@
-= About Sending Data to External Analytics Tools
+= About Analyzing API Data with External Tools
+*This topic only applies to hybrid deployment scenarios.*
 
 This topic describes the prerequisites for sending data from Anypoint Platform to external data analytics tools. It also provides a general discussion of the architecture.
-
-== Prerequisites
-
-Please make sure you have one of the following runtimes installed:
-
-* Mule ESB – Version 3.6 or above
-* API Gateway Standalone – Version 2.1.0 or above  (optional in case you want to deal with apps that are built with the API Gateway Runtime)
-
-[NOTE]
-Runtime Manager Agent 1.2.0 or above is required, the steps to install and configure it are provided below.
 
 
 == Basic Architecture

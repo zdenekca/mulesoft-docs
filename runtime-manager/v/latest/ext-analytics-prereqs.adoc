@@ -1,0 +1,2 @@
+= To Configure Prequisites for Sending Data to External Analytics Tools
+
