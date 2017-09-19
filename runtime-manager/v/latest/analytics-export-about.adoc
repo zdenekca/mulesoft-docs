@@ -1,0 +1,34 @@
+= About Sending Data to External Analytics Tools
+
+This topic describes the prerequisites for sending data from Anypoint Platform to external data analytics tools. It also provides a general discussion of the architecture.
+
+== Prerequisites
+
+Please make sure you have one of the following runtimes installed:
+
+* Mule ESB – Version 3.6 or above
+* API Gateway Standalone – Version 2.1.0 or above  (optional in case you want to deal with apps that are built with the API Gateway Runtime)
+
+[NOTE]
+Runtime Manager Agent 1.2.0 or above is required, the steps to install and configure it are provided below.
+
+
+== Basic Architecture
+
+The Runtime Manager exists as:
+
+* a component of the link:/getting-started/index[Anypoint Platform]
+* a component of the Anypoint Platform Private Cloud Edition that you can install on-premises
+
+Anypoint Platform Private Cloud Edition has a Runtime Manager that handles only applications that are deployed on-premises. The cloud-based version of Anypoint Platform has a Runtime Manager that allows you manage applications deployed to link:/runtime-manager/index[CloudHub] as well as applications that are deployed on-premises and to your own cloud servers. When using whichever version of the Runtime Manager, there's always a way to monitor your applications. Applications deployed to CloudHub can use link:/runtime-manager/insight[Insight]: MuleSoft’s Analytics & Monitoring feature. Applications that you deploy on-premises or to your own cloud servers can be integrated into third-party analytics applications, which is what this document describes.
+
+If you deploy apps from Runtime Manager to customer-managed Mule servers, you can send your Mule app event and analytics data to third party analytics software such as *Elk* and *Splunk*.
+
+[NOTE]
+Sending data to third party software is not currently available for applications on link:/runtime-manager/cloudhub[CloudHub]. See link:/runtime-manager/deployment-strategies[Deployment Strategies] for more details.
+
+Integration between Runtime Manager and third-party analytics software looks like this:
+
+image:amc_onprem_diagram_detail.jpg[image]
+
+The link:/runtime-manager/runtime-manager-agent[Runtime Manager Agent] acts in between Runtime Manager and the third party software. The agent enables integration and sends event notifications to your third party analytics tool.
