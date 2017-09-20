@@ -2,7 +2,7 @@
 
 This topic describes recommendations on scaling the number of deployments and servers you have in a hybrid deployment scenario.
 
-To ensure platform stability and performance, Anypoint Platform has the following recommended limits on the number of deployments and servers. These recommendations are specific to an environment in a business group. 
+To ensure platform performance, Anypoint Platform has the following recommended limits on the number of deployments and servers. These recommendations are specific to an environment in a business group. 
 
 If you need to create additional deployments or servers beyond these recommended limits, you can use different accounts, environments or business groups. If you need to exceed the recommended limits within the same environment, contact your customer success representative.
 
@@ -10,7 +10,7 @@ The following table lists the recommended limits on the number of deployments an
 
 [%header%autowidth.spread]
 |===
-| Component | Recommended Limit
+| Component | Recommended Limit (per environment)
 | Maximum number of deployments | 1000
 | Maximum deployments per target | 100
 | Maximum deployment size | 200
