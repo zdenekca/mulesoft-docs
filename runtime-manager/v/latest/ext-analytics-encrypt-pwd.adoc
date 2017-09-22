@@ -1,0 +1,46 @@
+= To Encrypt Passwords when Exporting API Data
+
+It's recommended that you assign a master password to your Mule runtime instance or your API Gateway Standalone instance when launching these. If you don't, then when setting up your credentials for external applications via the Runtime Manager UI, these will be stored as plain text in the `conf/mule-agent.yml` file. This is not recommendable for security reasons.
+
+Instead, what you should do is launch Mule runtime or API Gateway runtime with an extra argument that is then used to encrypt these passwords when storing them in this .yaml file.
+
+
+[tabs]
+------
+[tab,title="Mule runtime"]
+....
+
+[source]
+----
+{MULE_HOME}/bin/mule -M-Dmule.agent.configuration.password=myMasterPassword
+----
+
+or on Windows:
+
+[source]
+----
+{MULE_HOME}\bin\mule.bat -M-Dmule.agent.configuration.password=myMasterPassword
+----
+
+
+....
+[tab,title="API Gateway runtime - deprecated"]
+....
+
+[source]
+----
+{MULE_HOME}/bin/gateway -M-Dmule.agent.configuration.password=myMasterPassword
+----
+
+or on windows:
+
+[source]
+----
+{MULE_HOME}\bin\gateway.bat -M-Dmule.agent.configuration.password=myMasterPassword
+----
+
+....
+------
+
+Note that, in order to have access to these encrypted passwords when you restart Mule runtime or API Gateway runtime, you must assign the same master password you used when generating them.
+In the case that you decide to change the master password or you omitted it when you launched the runtime, you have to reassign your passwords through the Runtime Manager UI to keep the third party integrations working.

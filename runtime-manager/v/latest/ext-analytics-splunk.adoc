@@ -1,1 +1,225 @@
 = To Configure Splunk to Use API Analytics
+
+==== Integrating with Splunk
+
+With link:http://www.splunk.com/[Splunk] you can capture and index Mule event notification data into a searchable repository from which you can then generate graphs, reports, alerts, dashboards and visualizations.
+
+image:amc_onprem_diagram_detail_splunk.jpg[image]
+
+===== Configuring your Splunk Account
+
+In order to achieve this you must configure a new source type on your Splunk instance that will have the correct configuration to parse the HTTP Events sent from the Mule API Gateway.
+To do this, you have to append the following source type to the $SPLUNK_HOME/opt/splunk/etc/system/local/props.conf
+file.
+
+....
+[mule]
+TRUNCATE = 0
+LINE_BREAKER = ([\r\n]+)
+SHOULD_LINEMERGE = false
+INDEXED_EXTRACTIONS = JSON
+KV_MODE = JSON
+category = Mule Splunk Integration
+description = Mule Agent event information
+....
+
+[NOTE]
+If this file doesn't exist yet, you must create it.
+
+After making these changes, you must restart your Splunk instance for them to take effect.
+
+
+*Configurable fields:*
+
+|===
+|Field|Data Type|Description|Type|Default Value
+
+|user
+|String
+|Username to connect to Splunk.
+|Required
+|
+
+|pass
+|String
+|The password of the Splunk user.
+|Required
+|
+
+|host
+|String
+|IP or hostname of the server where Splunk is running.
+|Required
+|
+
+|port
+|int
+|Splunk management port.
+|Optional
+|8089
+
+|scheme
+|String
+|Scheme of connection to the Splunk management port. Possible values: http, https.
+|Optional
+|https
+
+|sslSecurityProtocol
+|String
+|SSL Security Protocol to use in the https connection. Possible values: TLSv1_2, TLSv1_1, TLSv1, SSLv3.
+|Optional
+|TLSv1_2
+
+|splunkIndexName
+|String
+|Splunk index name where all the events must be sent. If the user has the rights,
+and the index doesn't exist, then the internal handler will create it.
+|Optional
+|main
+
+|splunkSource
+|String
+|The source used on the events sent to Splunk.
+|Optional
+|mule
+
+|splunkSourceType
+|String
+|The sourcetype used on the events sent to Splunk.
+|Optional
+|mule
+
+|dateFormatPattern
+|String
+|Date format used to format the timestamp.
+|Optional
+|yyyy-MM-dd'T'HH:mm:ssSZ
+
+|===
+
+*Configuration Example*
+
+[source,yaml]
+.Splunk Internal Handler minimum Configuration
+....
+---
+  mule.agent.gw.http.handler.splunk:
+    host: 192.168.61.131
+    user: admin
+    pass: test
+....
+
+*Configuring your Runtime Manager Account**
+
+There are three different ways you can configure the Runtime Manager Agent to direct information to your Splunk account:
+
+[tabs]
+------
+[tab,title="Rest API"]
+....
+This feature requires the 1.2.0 agent version or newer.
+
+[NOTE]
+This feature requires Runtime Manager Agent version 1.2.0 or newer.
+
+. Select the server who's information you want to send out
+. In the menu on the right, click *Manage Server* to access the Server's settings
++
+image::sending-data-from-arm-to-external-monitoring-software-manage-server.png[]
+
+. Select the *Plugins* tab:
++
+image::sending-data-from-arm-to-external-monitoring-software-plugins.png[]
+
+. Select the kind of information that you want to send out in the *Level* dropdown menu
++
+image::sending-data-from-arm-to-external-monitoring-software-level.png[]
+
+. On the *Event Tracking* region, activate the *Splunk* switch, this will open a pop up menu where you can provide your Splunk user and password data, as well as the host and port for the connection.
++
+image::sending-data-from-arm-to-external-monitoring-software-splunk.png[]
+
+. Optionally, you can open the advanced menu and set up certain formatting properties of the data that will be sent out
++
+image:agent-to-splunk-restapi-advanced.png[splunk]
+
+....
+[tab,title="HTTP Event Collector"]
+....
+This feature require 1.3.1 agent version or newer.
+
+[NOTE]
+This feature requires Runtime Manager Agent version 1.3.1 or newer.
+
+. First you must obtain a token from Splunk. To do so:
+.. Sign in to your Splunk account
+.. Navigate to *Settings* -> *Data Inputs*
+.. Among the different options, you can find the *HTTP Event Collector*, click the *Add New* link next to it
++
+image:splunk-datainput-setup.png[splunk settings]
+.. Follow the steps of the wizard to set up a data input and obtain the token for it
+
+. Back in the Runtime Manager, select the server who's information you want to send out
+. In the menu on the right, click *Manage Server* to access the Server's settings
++
+image::sending-data-from-arm-to-external-monitoring-software-manage-server.png[]
+
+. Select the *Plugins* tab:
++
+image::sending-data-from-arm-to-external-monitoring-software-plugins.png[]
+
+. Select the kind of information that you want to send out in the *Level* dropdown menu
++
+image::sending-data-from-arm-to-external-monitoring-software-level.png[]
+
+. On the *Event Tracking* region, activate the *Splunk* switch. This will open a pop up menu where you can provide your Splunk user and password data, as well as the host and port for the connection.
++
+image::sending-data-from-arm-to-external-monitoring-software-splunk.png[]
+
++
+image:agent-to-splunk-httpevent.png[splunk]
+
+. Select the *HTTP Event Collector* option and then paste the token that Splunk gave you
+. Optionally, you can open the advanced menu and set up certain formatting properties of the data that will be sent out
++
+image:agent-to-splunk-httpevent-advanced.png[splunk]
+
+[NOTE]
+Although you can set values for the Splunk Index, Splunk Source and Splunk Source type when registering your Data Input in your Splunk account, these will be overwritten by the values you configure for these fields in the Advanced section of the Agent Plugins menu.
+
+....
+[tab,title="TCP"]
+....
+This feature require 1.3.1 agent version or newer.
+
+. First you must enable the input source in Splunk. To do so:
+.. Sign in to your Splunk account
+.. Navigate to *Settings* -> *Data Inputs*
+.. Among the different options, you can find the *TCP* option, next to it is an *Add New* link. Click the one you want.
++
+image:splunk-datainput-setup-tcp.png[splunk settings]
+.. Follow the steps of the wizard to set up a data input
+
+. Back in the Runtime Manager, select the server who's information you want to send out
+. In the menu on the right, click *Manage Server* to access the Server's settings
++
+image::sending-data-from-arm-to-external-monitoring-software-manage-server.png[]
+
+. Select the *Plugins* tab:
++
+image::sending-data-from-arm-to-external-monitoring-software-plugins.png[]
+
+. Select the kind of information that you want to send out in the *Level* dropdown menu
++
+image::sending-data-from-arm-to-external-monitoring-software-level.png[]
+
+. On the *Event Tracking* region, activate the *Splunk* switch. This will open a pop up menu where you can provide your Splunk user and password data, as well as the host and port for the connection.
++
+image::sending-data-from-arm-to-external-monitoring-software-splunk.png[]
+
+. Activate the *Splunk* switch, this will open a pop up menu. In the Dropdown pick *TCP*, then provide the host and port for the connection.
++
+image:agent-to-splunk-tcp.png[splunk]
+
+....
+------

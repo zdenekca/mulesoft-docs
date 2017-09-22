@@ -1,1 +1,44 @@
 = To Configure API Analytics with External Analytics Tools
+
+=== Configure API Analytics
+
+Before you can set up the connection to external software through the Runtime Manager UI, you must first make some changes to the API Gateway to prepare it for this.
+
+. In your API Gateway Standalone directory, look for the `conf/wrapper.conf` file
+. In it find the following line and make sure that the property is set to "true"
++
+[source,java,linenums]
+----
+wrapper.java.additional.<n>=-Danypoint.platform.analytics_enabled=true
+----
+
+. Look for this other line:
++
+[source,java,linenums]
+----
+wrapper.java.additional.<n>=-Danypoint.platform.analytics_base_uri=https://analytics-ingest.anypoint.mulesoft.com
+----
+. Remove the URL in it, so that it looks like this:
++
+[source,java,linenums]
+----
+wrapper.java.additional.<n>=-Danypoint.platform.analytics_base_uri=
+----
+. When using Anypoint Platform Private Cloud Edition, there's one more parameter you need to change:
++
+[source,java,linenums]
+----
+wrapper.java.additional.<n>=-Danypoint.platform.on_prem=true
+----
++
+`anypoint.platfrom.on_prem` is set to `false` by default. To manage it through Anypoint Platform Private Cloud Edition, you must set it to `true`. To manage it through the Runtime Manager in the cloud, leave it as `false`.
+
+[TIP]
+Note that in the above code snippets, when lines that contain `.<n>`, that should be replaced with an integer number that is unique within the wrapper.
+
+Once you have set up your Stand Alone API Gateway, the steps for connecting to Splunk and ELK are identical to those when dealing with Mule Custom Events, except that you should set them up via the corresponding switches.
+
+image::sending-data-from-arm-to-external-monitoring-software-api-analytics.png[]
+
+[WARNING]
+If you modify your `wrapper.conf` file as described above but don't assign an external destination for your data (as you can do via the Runtime Manager UI), then this analytics data will be stored in a queue in the server where the API Gateway is being run and could pile up to the point of crashing the system.

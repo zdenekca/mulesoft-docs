@@ -1,1 +1,13 @@
 = To Integrate External Analytics Tools with Runtime Manager
+
+== Integrating API Analytics with Splunk and ELK
+
+Once you've configured your API Gateway, you can now return to Runtime Manager and see that your servers have some additional options in their menu.
+
+image::sending-data-from-arm-to-external-monitoring-software-api-analytics.png[]
+
+You can now set up the sending of API analytics to both Splunk and ELK, you configure exactly in the same way as you do when sending business events to them. See <<Integrating with an ELK Stack, Integrating with an ELK Stack>> and <<Integrating with Splunk, Integrating with Splunk>>.
+
+== Payload Formats
+
+If you inted to export your payload's contents to be logged, keep in mind that not all formats can be exported. See link:/runtime-manager/about-logging-of-payload-formats[About Logging of Payload Formats] for a full reference.
