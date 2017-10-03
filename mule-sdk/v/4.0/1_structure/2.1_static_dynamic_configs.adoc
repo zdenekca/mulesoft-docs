@@ -12,7 +12,7 @@ Quite often users have the need to use expressions in a configuration parameter.
 
 A configuration is configured static when none of its parameters were assigned an expression (even if those parameters do support expressions). For example:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <ftp:config name="ftp" defaultWriteEncoding="UTF-8">
   <ftp:connection username="foo" password="mySecret" />
@@ -28,7 +28,7 @@ Notice that there’s a difference between a parameter being assigned to a non e
 
 Dynamic configurations are the ones in which at least one parameter has an expression:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <ftp:config name="ftp" defaultWriteEncoding="#[attributes.queryParams.encoding]">
   <ftp:connection username="foo" password="mySecret" />
@@ -39,7 +39,7 @@ This configuration is dynamic in the sense that the encoding parameter can poten
 
 The following is also a dynamic configuration:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <ftp:config name="ftp" defaultWriteEncoding="UTF-8">
   <ftp:connection username="#[ftpUser]" password="#[ftpPassword]" />
@@ -67,7 +67,7 @@ By inactivity we actually mean that no operation has started _nor finished_ in t
 
 SDK based modules also support specifying custom timeouts for specific config definitions. This is something that the module user would do to fine tune his application in particular cases where the default timeout is known to be too short or too long. The following example lowers the timeout to 30 seconds:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <ftp:config name="ftp" defaultWriteEncoding="UTF-8">
   <expiration-policy maxIdleTime="30" timeUnit="SECONDS" />
@@ -80,7 +80,7 @@ No particular action is required from the module developer for the `<expiration-
 
 It is also possible to configure the global default at an application level, so that any dynamic configuration has a different default. This is done through the `<configuration>` element in the Mule DSL:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <mule>
   <configuration>
@@ -93,7 +93,7 @@ It is also possible to configure the global default at an application level, so 
 
 Finally, it is also possible to tweak how often will the runtime evaluate which configurations are eligible for expiration and execute the actual disposal (default is 5 minutes). This cannot be done on a config by config basis but only at an application level. The following example not only sets the default expiration time to 30 SECONDS, it also makes the runtime check every 1 minute.
 
-[source, xml]
+[source, xml, linenums]
 ----
 <mule>
   <configuration>

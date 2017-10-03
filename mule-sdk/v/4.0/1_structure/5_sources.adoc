@@ -66,7 +66,6 @@ Some parameters are to be defined using fields. These are the fields which are u
 
 Other parameters, are defined in methods annotated with @OnSuccess and @OnError, which we’ll explain next.
 
-
 == Sending a response
 
 One of the main properties of a Source is whether they generate a response or not.
