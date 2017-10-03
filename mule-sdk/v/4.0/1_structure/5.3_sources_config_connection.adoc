@@ -1,0 +1,156 @@
+[[_source_config_connection]]
+= Obtaining config and connection in a Message Source
+:keywords: mule, sdk, sources, listener, triggers, config, connection
+
+== Obtaining the Config object
+
+Just like operations, a source might reference a configuration to obtain parameters about its behavior. To obtain such 
+configuration, a field is to be annotated with the `@Config` annotation (the same used in operations arguments):
+
+[source, java]
+----
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
+ 
+ @Config
+ private HttpListenerConfig config;
+----
+
+== Obtaining a Connection
+
+If the source requires a connection (99% of connectors will, unless you’re implementing a scheduler), then you need to obtain 
+a connection. Just like with operations, the `@Connection` annotation is used for that, but with two big differences:
+
+* It is used in a field instead of a method argument
+* Instead of the connection object, a ConnectionProvider will be injected
+* The connection has to be bound 
+
+[source, java]
+----
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
+
+    @Config
+    private HttpListenerConfig config;
+
+    @Connection
+    private ConnectionProvider<HttpServer> serverProvider;
+
+----
+
+== Connection Patterns
+
+Depending on the source nature, you may find yourself using the connection in different ways. This is easier to 
+understand by categorizing the sources depending on how they obtain the messages
+
+=== Push sources
+
+This is the case of a source on which messages are pushed into. This is for example the case of a source such 
+as the http listener. This kind of sources usually only require one single connection. This would be something 
+similar to this:
+
+[source, java]
+----
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
+
+    @Config
+    private HttpListenerConfig config;
+
+    @Connection
+    private ConnectionProvider<HttpServer> serverProvider;
+
+    @Parameter
+    @Optional(defaultValue = "/")
+    private String path;
+
+    private HttpServer httpServer;
+
+    @Override
+    public void onStart(SourceCallback<InputStream, HttpRequestAttributes> sourceCallback) throws MuleException {
+        SourceCallbackContext ctx = sourceCallback.createContext();
+        httpServer = serverProvider.connect(); // <1>
+        
+        server.listen(path).onRequest(request -> { // <2>
+            processRequest(request, sourceCallback); // <3>
+        }); 
+    }
+
+    @Override
+    public void onStop() {
+        if (httpServer != null) { // <4>
+            serverProvider.disconnect(httpServer); // <5>
+        }
+    }
+}
+----
+
+<1>  We use the ConnectionProvider to obtain an HttpServer. The connection provider has most likely already 
+configured the server with the proper host and port. Notice that this one single `HttpServer` instance is 
+enough to serve all requests.
+<2> Http requests are pushed into the server by the remote clients and the  `HttpServer` component will
+notify the source of every request. The source then uses the sourceCallback to push the message into the flow
+<3> The processRequest method is one the Source should define to transform the http request into a message that 
+can actually be pushed to the flow. We'll show how to do that later on, but for now assume this works in order to 
+keep the example simple.
+<4> In the `onStop()` method we need to release resources, in this case the `HttpServer`. We check for null 
+in case the `onStart()` method fail before the server could be created
+<5> We use the `disconnect()` method of the `ConnectionProvider` to release the server.
+
+[TIP]
+The example above is just pseudo-code, an oversimplification of the real Http connector in order to keep the 
+example clear and concise.
+
+=== Consumers based Source
+
+There's another patther which connectors like JMS or VM use, in which the Source starts a series of parallel 
+consumers, each one running on their own thread and blocking until a message is obtained. Once they do, 
+they push the message into the Flow and block to listen once again.
+
+In this type of sources, each consumer will need to have its own connection:
+
+[source, java]
+----
+public class VMListener extends Source<Serializable, VMAttributes> {
+
+    @Connection
+    private ConnectionProvider<QueueSession> sessionProvider;
+
+    @Parameter
+    @Optional(defaultValue = "4")
+    private int numberOfConsumers;
+
+    private List<Consumer> consumers = new LinkedList<>();
+
+    @Override
+    public void onStart(SourceCallback<Serializable, VMAttributes> sourceCallback) throws MuleException {
+        for (int i = 0; i < numberOfConsumers; i++) {
+            SourceCallbackContext ctx = sourceCallback.createContext(); // <1>
+            QueueSession session = sessionProvider.connect(); // <2>
+            ctx.bindConnection(session); // <3>
+            consumers.add(new Consumer(session, ctx, sourceCallback)); // <4>
+        }
+    }
+
+    @Override
+    public void onStop() {
+        consumers.forEach(c -> {
+            try {
+                c.stop();
+            } finally {
+                sessionProvider.disconnect(c.getSession()); // <5>
+            }
+        });
+    }
+
+    private class Consumer {
+        
+    }
+}
+----
+
+Again, this example is an oversimplification but the difference with the Http one are clear, 
+but you can see that:
+
+<1> Create a source callback context. Because each consumer 
+<1> One connection (in this case a `QueueSession` object) is obtained from the provider per each consumer
+<2> In the `onStop()` method, we make sure not only that the consumer is stopped, but the session is disconnected
+
+
