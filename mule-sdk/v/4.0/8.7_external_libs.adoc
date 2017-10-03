@@ -1,2 +1,30 @@
 [[_external_libs]]
 = External Libraries
+
+It's not strange to depend on a library which is not packaged with the module we are developing. A great example of this situation is the Database Connector which doesn't 
+bundle the drivers needed to operate with the different types of databases but still needs those drivers in order to connect and interact with the databases, so how can we solve this?
+
+Annotating a component with `@ExternalLib` indicates that an external dependecy is needed in order to work properly, and it will specify all the information needed to validate we are receving the right kind of depedency at runtime.
+
+Note: The element annotated with `@ExternalLib` should be an <<_structure, Extension>>, a <<_configs, Configuration>> or a <<connections, Connection Provider>>.
+
+Let's see an example:
+
+[source, java]
+----
+@ExternalLib(name ="Foo Driver", nameRegexpMatcher = "(.*)\\.jar", requiredClassName = "bar.foo.FooDriver", type = JAR)
+public class Foo {
+}
+----
+
+Here we configured `@ExternalLib` using some of its attributes. Now we will explain what those attributes are and what will you get by configuring them:
+
+* name: just a friendly name to be displayed in the UI 
+* nameRegexpMatcher: a regexp that is used to match the name of the library's file. 
+* requiredClassName: if provided, the library should contain a class of the given name (use the fully qualified name of the class here). 
+* type: 
+** NATIVE: Native library dependency
+** JAR: Jar file dependency
+** DEPENDENCY: External dependency
+* coordinates: if provided, suggests Maven coordinates where the required library can be found. They should follow Maven's convention `groupId:artifactId:packaging:classifier:version`.
+* optional: whether the library is not required for the basic functioning of the component.
