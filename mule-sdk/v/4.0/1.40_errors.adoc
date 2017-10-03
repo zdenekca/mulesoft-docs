@@ -1,2 +1,123 @@
 [[_errors]]
 = Errors
+
+Errors at Mule are a way of communicating that something wen't wrong while also providing meaninfull 
+information to take corrective actions depending on the kind of error that was thrown.
+
+== Defining all the possible errors
+
+First of all, let see how we define all the errors that can happen in our module.
+
+To do that we need an `enum` that enumerates all the possible errors.
+
+Example:
+
+[source, java]
+----
+public enum FooError implements ErrorTypeDefinition<FooError> {
+
+  FOO_ERROR,
+
+  BAR_ERROR,
+
+  CHILD_FOO_ERROR(FOO_ERROR),
+
+  FOO_DOESNT_EXIST(MuleErrors.CONNECTIVITY)
+}
+----
+
+And now, let's annotate the extension class with `@ErrorTypes(FooError.class)` to inform that 
+our module can throw all the errors that were declared in the `FooError` class.
+A few observations:
+
+* Errors can indeed have a parent, this allows to create a hierarchy of errors just like we would
+do if we were coding Java exceptions. Moreover, catching a parent error will also catch all of its childs.
+* Mule has already defined a set of standard errors to be extended by each modules.
+
+
+=== Specifying which errors could be thrown
+
+After we declared all the possible errors in our domain, we need to provide the information that
+binds the errors with the components that can actually throw them. 
+
+To do that we need to define `Error Providers`, which are classes that simply comunicate the errors that can be thrown.
+
+Let's define a provider for all the *foo errors*.
+
+[source, java]
+----
+public class FooErrorTypeProvider implements ErrorTypeProvider {
+
+  @Override
+  public Set<ErrorTypeDefinition> getErrorTypes() {
+    return ImmutableSet.<ErrorTypeDefinition>builder()
+        .add(FOO_ERROR)
+        .add(CHILD_FOO_ERROR)
+        .build();
+  }
+}
+----
+
+Now we just need to mark all the things that can throw a *foo error*.
+
+=== Adding errors to operations
+
+To mark that a certain <<_operations, operation>> can throw a certain group of errors, we just need to
+add the `@Throws` annotation to the operation method informing the apropiate `ErrorTypeProvider`.
+
+For example:
+
+[source, java]
+----
+@Throws(FooErrorTypeProvider.class)
+public void fooOperation(){
+    // Operation body  
+}
+----
+
+`@Throws` annotation can be used at three levels:
+
+* Annotating an operation's method 
+* Annotating an operation class to mark that all the operations contained share the same `ErrorTypeProvider`.
+* Annotating the extension class to mark that all the extension's operation use the same `ErrorTypeProvider`.
+
+=== Errors on sources
+
+There are some Mule errors that are automatically added to all the module <<_sources, Sources>>. 
+This different errors inform the stage in which the problem ocurred (this can be dispatching a new message, generating the response, etc).
+For more information, please check all the Mule Errors defined in // TODO: JDOC to org.mule.runtime.extension.api.error.MuleErrors
+
+=== Throwing an error
+
+There are 2 ways of throwing a Mule Error.
+
+The first one is defining your own `Exception` that extends `ModuleException`, specifying 
+in the constructor to which error the exception maps to.
+
+
+[source, java]
+----
+public final class FooErrorException extends ModuleException {
+
+  public FooErrorException(String message) {
+    super(message, FOO_ERROR);
+  }
+}
+----
+
+The other way is just throwing a `ModuleException`
+
+[source, java]
+----
+try {
+    // code that can fail due to an error with Foo
+} catch (Exception e){
+    throw new ModuleException(FOO_ERROR, e);
+}
+----
+
+In this case, we are enriching the caught exception with a `FOO_ERROR` error type.
+
+=== More information
+
+To see how you can catch errors and take actions within your flows, please head to Mule Error Handling // TODO add link to mule error handlers

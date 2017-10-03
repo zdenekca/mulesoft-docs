@@ -1,2 +1,311 @@
 [[_parameters]]
 = Parameters
+
+=== What are they?
+
+Parameters are configurable arguments that belong to an entity that ownes them. 
+Their purpose is to provide the information needed by an entity in order to work properly.
+
+Example:
+
+[source, java]
+----
+@Parameter
+private String foo;
+----
+
+Each parameter contains the following information:
+
+* A type that restricts the kind of value the parameter can have. 
+* An `ExpressionSupport` that describes the parameter’s relationship with DataWeave expression values. 
+
+There’re three possible values:
+
+* `REQUIRED`: The parameter only accepts expressions.
+* `SUPPORTED` (default): The parameter can handle both expressions and simple values. 
+* `NOT_SUPPORTED`: The parameter requires static values. Expressions are not supported.
+
+This values can be simply configured just by adding the `@Expression` annotation.
+
+
+=== Optionality
+
+Parameters can be either required or optionals. 
+
+Sometimes a parameter specifies information that is crucial to what we are trying to do (like the host name while doing an HTTP Request),
+and sometimes we can manage to operate without that information or just using a default value (assuming that a port would be 80 in an HTTP listener).
+
+A parameter is required by default, but we can easily change that by annotating it with `@Optional`.
+
+Example.
+
+[source, java]
+----
+@Parameter
+@Optional(defaultValue="80")
+private Integer port;
+----
+
+Take into account that `@Optional` only accepts *Strings* as a value, but the SDK will autoconvert it to your parameter's type.
+
+If and only if the parameter is not required, it can also have a default value. Additionally if the parameter supports expressions, this default value might be a DataWeave expression.
+
+=== Operation's parameters
+
+An operation's parameter is just another argument of the operation's method. 
+
+It doesn't need to be annotated with `@Parameter`, like *bar* in the example below.
+
+Example
+
+[source, java]
+----
+public void foo(String bar){}
+----
+
+=== @Alias 
+
+The name of each parameter will be the name given to the field in which it's defined. We can override this name by using the @Alias annotation.
+
+Example:
+
+----
+@Parameter
+@Optional
+@Alias("class")
+private String clazz;
+----
+
+== Using complex types
+
+Now, let's move to more complex parameters instead of using simple types (like integers and strings).
+
+[source, java]
+----
+@Parameter
+@Optional
+private Options options;
+----
+
+Where Options is defined as:
+
+[source, java]
+----
+public class Options {
+
+    @Parameter
+    public String color;
+
+    @Parameter
+    @Optional
+    public String mode;
+
+    public String getColor(){
+        return color;
+    }
+
+    public void setColor(String color){
+        this.color = color;
+    }
+
+    public String getMode(){
+        return mode;
+    }
+
+    public void setMode(String mode){
+        this.mode = mode;
+    }
+}
+----
+
+A few notes about this example:
+
+* The entire parameter Options is optional, but if you decide to use it you need to fullfil that all the required parameters inside Options have a value assigned.
+* If *options* is not configured, it value will be *null* (see <<_null_safe, NullSafe>>).
+* Options parameters must be Java bean properties (ie it needs to have setters and getters matching the field name).
+
+== Configuring the UI 
+
+There are some annotations used for configuring how the parameters are shown in the UI, respecting to how are they ordered, how are they grouped, etc.
+
+As you see, by using `@Alias` we can name the parameter as a Java reserverd word (that would be possible just naming the field with the reserved word).
+
+=== @DisplayName
+
+Specifies a custom label for the element and/or field to be used in the UI.
+
+=== @Example
+
+Sometimes it is handy to provide a simple example regarding the values a parameter can take.
+
+=== @Summary
+
+A short description about the parameter's purpose.
+
+=== @Placement
+
+This annotation enable us to configure two things:
+
+* A relative order within the group in which the parameter is defined. The value is relative meaning that the element with order 10 is on top than one with value 25.
+
+* A tab is a logical way to group parameters together. This attribute specifies the name of the tab in which the parameter should be displayed. If no tab is specified then a default tab is assumed. To display more than one parameter or field in the same the tab then this value should be exactly the same for all of them.
+
+In the following example, *foo* and *bar* will be grouped into the same tab named *Advanced*, and *foobar* will be the only parameter in the default tab.
+
+[source, java]
+----
+  @Parameter
+  @Placement(order = 1, tab="Advanced")
+  private String foo;
+
+  @Parameter
+  @Placement(order = 2, tab="Advanced")
+  private String bar;
+
+  @Parameter
+  private String foobar;
+----
+
+=== @Text
+
+Marks a parameter as one that supports a multi line string input in the UI. This annotation should only be used in parameters of *String* type.
+
+=== @Path
+
+Marks a parameter as a path to either a file or a directory. This parameter will be displayed in the UI as a file-picker field. This annotation should only be used in parameters of *String* type.
+
+This annotation carry information about:
+
+* type: Whether the path points to a directory, a file, or any of those.
+* acceptsUrls: Whether the path parameter supports urls.
+* acceptedFileExtensions: A list of file extensions this parameter can handle.
+
+Example:
+
+[source, java]
+----
+  @Parameter
+  @Path(type = FILE, acceptedFileExtensions = "wsdl", acceptsUrls = true)
+  private String resourcePath;
+----
+
+=== @Password
+
+Marks that the parameter needs masking when it is populated from the UI. This annotation should only be used in parameters of *String* type.
+
+==== Putting all together
+
+Now, let's see an example using some of the features explained above.
+
+[source, java]
+----
+  @Parameter
+  @Placement(order = 3, tab="Additional information")
+  @Example("My name is Max the Mule and I love MuleSoft!")
+  @DisplayName("User biography")
+  @Summary("Information related to the user\'s life")
+  @Text
+  private String biography;
+----
+
+= Parameter Groups
+
+=== What are they?
+
+The @ParameterGroup annotation allows to define a group of parameters which share some kind of special relationship and thus makes sense for them to belong to the same group. 
+How do we spot them? The parameters that should go inside a @ParameterGroup are the oness that *travell together* all the times. 
+
+An example:
+
+[source, java]
+----
+@ParameterGroup("Fancy foo")
+private Foo foo;
+----
+
+Where Options is defined as:
+ 
+[source, java]
+----
+public class Foo {
+
+    @Parameter
+    public String host;
+
+    @Parameter
+    @Optional(defaultValue="80")
+    public Integer port;
+
+    public String getHost(){
+        return host;
+    }
+
+    public void setHost(String host){
+        this.host = host;
+    }
+
+    public Integer getPort(){
+        return port;
+    }
+
+    public void setPort(Integer port){
+        this.port = port;
+    }
+}
+----
+
+The class defining the options parameter group will not have a parameter named *foo*. 
+Instead, it will contain the parameters defined inside Foo. Those are:
+
+* A required parameter named host
+* An optional parameter named port
+
+In other words, the class defining the parameter group is augmented with this extra parameters will have the parameters defined inside of Options and all the other parameters it have declared.
+
+Take into account that each field annotated with `@ParameterGroup` must be a Java bean property (i.e: it needs to have setters and getters matching the field name).
+
+
+==== Parameter Groups as Operation parameters
+Parameter Groups can also be used as parameters defined as arguments of an <<_operations, Operation>>. 
+
+For example:
+
+[source, java]
+----
+public void hello(String message, @ParameterGroup Foo options) {
+}
+----
+
+Operation *hello* will have three parameters: message, host and port.
+
+== POJO vs Parameter Group
+
+`@ParameterGroup` can be configured so it can be written as a child element in the DSL instead of being spread around the component that declared it.
+In other words:
+
+Our hello example from above will look like this in the DSL:
+
+[source, xml]
+----
+<example:hello message="Example message!" host="localhost" port="8080">
+----
+
+But if we configured the parameter group using `@ParameterGroup(showInDsl=true)` instead, the DSL would look like:
+
+[source, xml]
+----
+<example:hello message="Example message!">
+    <example:options host="localhost" port="8080"/>
+</example:hello>
+----
+
+This leads to the following question: When should you use a POJO instead POJO annotated with `@ParameterGroup`?
+
+There are some subtle differences between this two concepts. 
+You should definitely use a POJO if you care about the type as a whole and the structure it provides.
+
+When we defined Foo above, we just wanted to keep two parameters that are always configured togheter but they don't represent an entity in our domain.
+It was only a handy way of keeping things that are related indeed, but don't me anything in particular.
+
+But if we talk about or Options POJO defined above, we do care about the object per se, not only the parameters it contains.
+For example, it would make sense to have a list of Options, because each object is something on its own (talking in OOP style). 

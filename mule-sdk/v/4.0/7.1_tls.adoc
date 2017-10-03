@@ -1,2 +1,27 @@
 [[_tls]]
 = TLS Authentication
+
+Adding support for TLS configuration in your module is as simple declaring a parameter of type `TlsContextFactory`
+
+Just take a look at the following example:
+
+[source, java]
+----
+@Parameter
+@Optional
+private TlsContextFactory tlsContextFactory;
+----
+  
+This will automatically generate support for this XML setting:
+
+[source, xml, linenums]
+----
+<tls:context enabledProtocols="TLSv1.2,SSLv3">
+    <tls:trust-store path="ssltest-cacerts.jks" password="changeit"/>
+    <tls:key-store path="ssltest-keystore.jks" keyPassword="changeit" password="changeit"/>
+</tls:context> 
+----
+
+Take into consideration that a TLS context can also be defined as a global element of your application so you can reference it by its name anywhere you need it.
+
+To see how to correctly configure TLS context and all the parameters that you can set please head to the reference for Mule TLS Context. // TODO link a mule TLS
