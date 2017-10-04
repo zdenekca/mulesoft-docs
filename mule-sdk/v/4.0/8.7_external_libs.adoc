@@ -1,5 +1,6 @@
 [[_external_libs]]
 = External Libraries
+:keywords: mule, sdk, library, dependency, external, jar, maven
 
 It's not strange to depend on a library which is not packaged with the module we are developing. A great example of this situation is the Database Connector which doesn't 
 bundle the drivers needed to operate with the different types of databases but still needs those drivers in order to connect and interact with the databases, so how can we solve this?
@@ -17,14 +18,19 @@ public class Foo {
 }
 ----
 
-Here we configured `@ExternalLib` using some of its attributes. Now we will explain what those attributes are and what will you get by configuring them:
+Here we configured the `@ExternalLib` using some of its attributes. 
+Now we will explain what those attributes are and what will you get by configuring them:
 
 * name: just a friendly name to be displayed in the UI 
+* description: a short explanation about the needed library
 * nameRegexpMatcher: a regexp that is used to match the name of the library's file. 
 * requiredClassName: if provided, the library should contain a class of the given name (use the fully qualified name of the class here). 
 * type: 
 ** NATIVE: Native library dependency
 ** JAR: Jar file dependency
-** DEPENDENCY: External dependency
+** DEPENDENCY: External dependency (for example, a dependency obtained that is specified in the `pom.xml` if you are using Maven)
 * coordinates: if provided, suggests Maven coordinates where the required library can be found. They should follow Maven's convention `groupId:artifactId:packaging:classifier:version`.
 * optional: whether the library is not required for the basic functioning of the component.
+
+Take into consideration that if you depened on more than just one library, you can annotate your component multiple times 
+with one annotation for each library.
