@@ -5,7 +5,8 @@
 It's not strange to depend on a library which is not packaged with the module we are developing. A great example of this situation is the Database Connector which doesn't 
 bundle the drivers needed to operate with the different types of databases but still needs those drivers in order to connect and interact with the databases, so how can we solve this?
 
-Annotating a component with `@ExternalLib` indicates that an external dependecy is needed in order to work properly, and it will specify all the information needed to validate we are receving the right kind of depedency at runtime.
+Annotating a component with `@ExternalLib` indicates that an external dependecy is needed in order to work properly, 
+and it will specify all the information needed to validate we are receving the right kind of depedency while designing an application.
 
 Note: The element annotated with `@ExternalLib` should be an <<_structure, Extension>>, a <<_configs, Configuration>> or a <<connections, Connection Provider>>.
 
@@ -34,3 +35,5 @@ Now we will explain what those attributes are and what will you get by configuri
 
 Take into consideration that if you depened on more than just one library, you can annotate your component multiple times 
 with one annotation for each library.
+
+// TODO @estebanwasing will add an example to clarify this

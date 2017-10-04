@@ -1,14 +1,17 @@
 [[_errors]]
 = Errors
 
-Errors at Mule are a way of communicating that something wen't wrong while also providing meaninfull 
+Errors at Mule are a way of communicating that something wen't wrong while also providing meaningful 
 information to take corrective actions depending on the kind of error that was thrown.
+
+// TODO add link to mule error handling docs
+For more information about how does error handling works in Mule, please refer to the Error handling mule's documentation 
 
 == Defining all the possible errors
 
 First of all, let see how we define all the errors that can happen in our module.
 
-To do that we need an `enum` that enumerates all the possible errors.
+To do that we need an `Enum` that enumerates all the possible errors.
 
 Example:
 
@@ -28,6 +31,7 @@ public enum FooError implements ErrorTypeDefinition<FooError> {
 
 And now, let's annotate the extension class with `@ErrorTypes(FooError.class)` to inform that 
 our module can throw all the errors that were declared in the `FooError` class.
+
 A few observations:
 
 * Errors can indeed have a parent, this allows to create a hierarchy of errors just like we would

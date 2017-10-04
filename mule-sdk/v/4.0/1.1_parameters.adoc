@@ -2,14 +2,14 @@
 = Parameters
 :keywords: mule, sdk, parameter
 
-=== What are they?
+== What are they?
 
 Parameters are configurable arguments that belong to a given entity. 
 Their purpose is to provide the information needed by the entity in order be configured so it can work properly.
 
 Let's see an example which is as easy as you can get:
 
-[source, java]
+[source, java, linenums]
 ----
 @Parameter
 private String foo;
@@ -18,7 +18,16 @@ private String foo;
 Each parameter contains the following information:
 
 * A type that restricts the kind of value the parameter can have. 
-* An `ExpressionSupport` that describes the parameter’s relationship with DataWeave expression values. 
+* A name that identifies it
+
+== Modifiers
+
+Parameters are highly customizable according to your needs, so let's see
+a few modifiers you can use while defining a parameter to specify the right kind of behaviour or restrictions for it.
+
+==== Expression Support
+
+An `ExpressionSupport` describes the parameter’s relationship with DataWeave expression values. 
 
 There’re three possible values:
 
@@ -28,10 +37,17 @@ There’re three possible values:
 
 This values can be simply configured just by adding the `@Expression` annotation.
 
-So, in the example above we defined a parameter named *foo* of type *String* which is *required* and 
-can have either a static value (like "bar") or an expression (like "\#[vars.foo]").
+[source, java, linenums]
+----
+@Parameter
+@Expression(SUPPORTED)
+private String foo;
+----
 
-=== Optionality
+So, in the example above we defined a parameter named `foo` of type `String` that
+can have either a static value (like `"bar"`) or an expression (like `"\#[vars.foo]"`).
+
+==== Optionality
 
 Parameters can be either required or optionals. 
 
@@ -50,27 +66,14 @@ Let's look at a simple example.
 private Integer port;
 ----
 
-Take into account that `@Optional` only accepts *Strings* as a value, but the SDK will autoconvert it to your parameter's type.
+Take into account that `@Optional` only accepts `String` values, but the SDK will autoconvert it to your parameter's type.
 
 If and only if the parameter is not required, it can also have a default value. 
 Additionally if the parameter supports expressions, this default value might be a DataWeave expression.
 
-=== Operation's parameters
+=== Using @Alias 
 
-An operation's parameter is just another argument of the operation's method. 
-
-It doesn't need to be annotated with `@Parameter`, like *bar* in the example below.
-
-Example
-
-[source, java]
-----
-public void foo(String bar){}
-----
-
-=== @Alias 
-
-The name of each parameter will be the name given to the field in which it's defined. We can override this name by using the @Alias annotation.
+The name of each parameter will be the name given to the field in which it's defined. We can override this name by using the `@Alias` annotation.
 
 Example:
 
@@ -83,6 +86,18 @@ private String clazz;
 
 As you see, by using `@Alias` we can name the parameter as a Java reserverd word, something that wouldn't be possible by 
 just naming the field as the reserved word.
+
+== Operation's parameters
+
+An operation's parameter is just another argument of the operation's method. 
+
+It doesn't need to be annotated with `@Parameter`, just look at `foo` in the example below.
+
+[source, java]
+----
+public void method(String foo){}
+----
+
 
 == Using complex types
 
@@ -235,15 +250,15 @@ An example:
 
 [source, java]
 ----
-@ParameterGroup("Fancy foo")
-private Foo foo;
+@ParameterGroup("Fancy Group")
+private ConnectionProperties properties;
 ----
 
 Where `Foo` is defined as:
  
 [source, java]
 ----
-public class Foo {
+public class ConnectionProperties {
 
     @Parameter
     public String host;
@@ -270,13 +285,13 @@ public class Foo {
 }
 ----
 
-The class defining the options parameter group will not have a parameter named *foo*. 
-Instead, it will contain the parameters that are defined inside `Foo`. Those are:
+The class defining the options parameter group will not have a parameter named *properties*. 
+Instead, it will contain the parameters that are defined inside `ConnectionProperties`. Those are:
 
 * A required parameter named host
 * An optional parameter named port
 
-In other words, the class defining the parameter group is augmented with this extra parameters and will contain the parameters defined inside of `Foo` plus all the other parameters it have declared.
+In other words, the class defining the parameter group is augmented with this extra parameters and will contain the parameters defined inside of `ConnectionProperties` plus all the other parameters it have declared.
 
 Take into account that each field annotated with `@ParameterGroup` must be a Java bean property (i.e: it needs to have setters and getters matching the field name).
 
@@ -288,11 +303,11 @@ For example:
 
 [source, java]
 ----
-public void hello(String message, @ParameterGroup Foo options) {
+public void hello(String message, @ParameterGroup ConnectionProperties properties) {
 }
 ----
 
-Operation *hello* will have three parameters: message, host and port.
+Operation `hello` will have three parameters: message, host and port.
 
 == POJO vs Parameter Group
 
