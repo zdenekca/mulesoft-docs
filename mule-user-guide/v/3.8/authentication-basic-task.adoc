@@ -1,0 +1,98 @@
+= To Make a Request Using Basic Authentication
+
+This procedure describes how to build and run an app in Studio that sends a request to the Github API for user information. The Github API accepts requests for user information on port 443 to `+https://api.github.com/user+`. To comply with the basic authentication requirements, the app provides the Github user name and password. You configure the HTTP Request Connector to provide these credentials.
+
+This procedure requires that you have a Github account.
+
+. In Studio, create a new Mule project: *File* > *New* > *Mule Project*. Drag an HTTP component from the palette to the Source section of the flow, and set the following options:
++
+* In the properties editor, accept the default *Path* `/`.
+* Set *Allowed Methods* to GET.
+* In Connector Configuration, click image:Add-16x16.png[Add-16x16], and then click OK to accept the following options and then save:
++
+** Name: HTTP_Listen_Configuration
+** Protocol: HTTP
+** Host: 0.0.0.0
+** Port: 8081
++
+The error indicator disappears.
++
+. Drag another HTTP connector from the palette, and drop it in the Process area of the flow and set the following options:
++
+* In the properties editor, in Connector Configuration, click image:Add-16x16.png[Add-16x16].
+* In  HTTP Request Configuration, set the following HTTP Request Configuration options:
++
+** Name: Accept `HTTP_Request_Configuration`.
+** Protocol: *HTTPS*
+** Host: `api.github.com`
+** Port: `443`
++
+* On the *Authentication* tab, select *Basic* protocol.
+* In Username, type your Github user name.
+* In Password, type either your Github password or a link:https://github.com/settings/tokens[personal access token].
+* Check the *Preemptive* check box, and click OK.
++
+The pre-emptive option passes the user name and password without waiting for a prompt from the server.
++
+. In the properties editor, set the following options for the HTTP Request connector, and then save:
+* *Path*: `/user`
++
+* *Method*: Select GET from the drop-down.
++
+. Format the output in JSON:
++
+* Drag a Transform Message component from the palette to the right of the HTTP request component.
+* In the properties editor, change the output of the payload as follows:
++
+----
+%dw 1.0
+%output application/json
+---
+  payload
+----
+
+After performing this procedure, you can run the app.
+
+
+*Finally, run the app:*
+
+. Right-click the project name in project explorer, and call the app using the following URL in a browser: `+http://localhost:8081/+`
++
+The Github API returns your user information.
++
+----
+{
+    "login":"kahn",
+    "id":16xxx343,"avatar_url":"https://avatars.githubusercontent.com/u/16xxx343?v=3"`
+    ...
+}
+----
+
+== XML Code
+
+[source, xml, linenums]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+
+...
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" host="api.github.com" port="443" doc:name="HTTP Request Configuration">
+        <http:basic-authentication username="kahn" password="7e5....921" preemptive="true"/>
+    </http:request-config>
+    <flow name="myprojectFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/user" method="GET" doc:name="HTTP"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+  payload]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+</mule>
+
+----
+
+== See Also
+
+* link:https://developer.github.com/v3[Github API]

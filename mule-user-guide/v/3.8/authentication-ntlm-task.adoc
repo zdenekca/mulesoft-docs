@@ -1,0 +1,28 @@
+= To Make a Request Using NTLM Authentication
+
+NT LAN Manager (NTLM) authentication replaces the authentication protocol in Microsoft LAN Manager (LANMAN), an older Microsoft product. NTLM is available in Mule 3.7 and later.
+
+In this example, a GET request is sent to `+http://www.example.com/test+`, adding an "Authorization" header with the provided username and password.
+
+. Drag an HTTP Connector to the canvas, and create a new Connector Configuration element for it.
+. Select Authentication.
+. In the Protocol dropdown menu, select NTLM.
+. Provide your Username and Password (or references to properties that contain them), also optionally your Domain and Workstation
+
+== XML Code
+
+NTML authentication is configured in the same way as Basic Authentication, just provide username and password in the attributes of the child element. The only difference is that the child element is differently named: "ntml-authentication" and that you can optionally add domain and workstation attributes.
+
+[source, xml, linenums]
+----
+<http:request-config name="HTTP_Request_Configuration" host="example.com" port="8081" doc:name="HTTP Request Configuration">
+        <http:ntlm-authentication username="myuser" password="mypass" domain="mydomain"/>
+</http:request-config>
+
+<flow name="digest_flow">
+    ...
+    <http:request config-ref="HTTP_Request_Configuration" path="test" method="GET" />
+
+</flow>
+----
+

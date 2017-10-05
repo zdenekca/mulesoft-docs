@@ -1,0 +1,26 @@
+= To Make a Request Using Digest Authentication
+
+. Drag an HTTP Connector to your canvas, create a new Connector Configuration element for it.
+. Select Authentication.
+. In the Protocol dropdown menu, pick Digest.
+. Provide your Username and Password (or references to properties that contain them)
+
+== XML Code
+
+Digest authentication is configured in the same way as Basic Authentication, just provide username and password in the attributes of the child element. The only difference is that the child element is differently named: "digest-authentication".
+
+[source, code, linenums]
+----
+
+<http:request-config name="HTTP_Request_Configuration" host="example.com" port="8081" doc:name="HTTP Request Configuration">
+        <http:digest-authentication username="myuser" password="mypass"/>
+    </http:request-config>
+
+<flow name="digest_flow">
+    ...
+    <http:request config-ref="HTTP_Request_Configuration" path="test" method="GET" />
+
+</flow>
+----
+
+In this example, a GET request is sent to ++http://www.example.com/test++, adding an "Authorization" header with the provided username and password.
