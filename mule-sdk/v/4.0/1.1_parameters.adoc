@@ -2,10 +2,14 @@
 = Parameters
 :keywords: mule, sdk, parameter
 
-== What are they?
+== What is a parameter?
 
-Parameters are configurable arguments that belong to a given entity. 
-Their purpose is to provide the information needed by the entity in order be configured so it can work properly.
+Parameters are configurable arguments that belong to a given component.
+<<_configs, Configurations>>, <<_operations, Operations>>, <<_sources, Sources>> and <<_connections, Connection Providers>> 
+are the components which we refer as being _parameterizables_, because
+they are the ones that can be configured through their parameters.
+
+The purpose of the parameters is to provide the information needed by the component so it can be configured in order work properly.
 
 Let's see an example which is as easy as you can get:
 
@@ -15,19 +19,33 @@ Let's see an example which is as easy as you can get:
 private String foo;
 ----
 
+A parameter can be defined as a field of a class or as a method's argument,
+depending on the kind of component you are dealing with.
+
+For example, an <<_operations, operation>> parameter is defined as just any argument of the method that declares the operation.
+It doesn't need to be annotated with `@Parameter`.
+
+Just take a look at `foo` below.
+
+[source, java, linenums]
+----
+public void method(String foo){}
+----
+
+== Structure of a parameter
 Each parameter contains the following information:
 
 * A type that restricts the kind of value the parameter can have. 
-* A name that identifies it
+* A name that uniquely identifies it.
 
 == Modifiers
 
 Parameters are highly customizable according to your needs, so let's see
 a few modifiers you can use while defining a parameter to specify the right kind of behaviour or restrictions for it.
 
-==== Expression Support
+=== Expression Support
 
-An `ExpressionSupport` describes the parameter’s relationship with DataWeave expression values. 
+An `ExpressionSupport` describes the parameter’s behaviour when the value configured is a DataWeave expression. 
 
 There’re three possible values:
 
@@ -47,9 +65,9 @@ private String foo;
 So, in the example above we defined a parameter named `foo` of type `String` that
 can have either a static value (like `"bar"`) or an expression (like `"\#[vars.foo]"`).
 
-==== Optionality
+=== Optionality
 
-Parameters can be either required or optionals. 
+Parameters can be either required or optionals.
 
 Sometimes a parameter specifies information that is crucial to what we are trying to do (like the host name while doing an HTTP Request) 
 that there is no way in which we can continue without it being set,
@@ -59,7 +77,7 @@ A parameter is required by default, but we can easily change that by annotating 
 
 Let's look at a simple example.
 
-[source, java]
+[source, java, linenums]
 ----
 @Parameter
 @Optional(defaultValue="80")
@@ -67,9 +85,10 @@ private Integer port;
 ----
 
 Take into account that `@Optional` only accepts `String` values, but the SDK will autoconvert it to your parameter's type.
+Additionally, if the parameter supports expressions you can use one as the default value.
 
-If and only if the parameter is not required, it can also have a default value. 
-Additionally if the parameter supports expressions, this default value might be a DataWeave expression.
+Optional parameters can have a default value.
+
 
 === Using @Alias 
 
@@ -87,18 +106,6 @@ private String clazz;
 As you see, by using `@Alias` we can name the parameter as a Java reserverd word, something that wouldn't be possible by 
 just naming the field as the reserved word.
 
-== Operation's parameters
-
-An operation's parameter is just another argument of the operation's method. 
-
-It doesn't need to be annotated with `@Parameter`, just look at `foo` in the example below.
-
-[source, java]
-----
-public void method(String foo){}
-----
-
-
 == Using complex types
 
 Now, let's move to more complex parameters instead of using simple types like strings and integers.
@@ -110,7 +117,7 @@ Now, let's move to more complex parameters instead of using simple types like st
 private Options options;
 ----
 
-Where `Options` is an Object defined by us as:
+Where `Options` is an `Object` defined by us as:
 
 [source, java]
 ----
@@ -144,13 +151,12 @@ public class Options {
 A few notes about this example:
 
 * The entire parameter `Options` is used as an optional parameter, so if you decide to use it you need to fullfil that all the required parameters inside `Options` have been set.
-* If *options* is not configured, it value will be *null* (see <<_null_safe, NullSafe>> for altering this behaviour).
+* If `options` is not configured, it value will be `null` (see <<_null_safe, NullSafe>> for altering this behaviour).
 * `Options` parameters must be Java bean properties (i.e. they need to have setters and getters matching the fields names).
 
-== Configuring the UI 
+== Customizing the UI 
 
-There are some annotations used for configuring how the parameters are shown in the UI, 
-respecting to how are they ordered, how are they grouped, and other properties that are detailed below.
+There are some annotations used for customizing many aspects of the UI and UX.
 
 === @DisplayName
 
@@ -162,7 +168,11 @@ Sometimes it is handy to provide a simple example regarding the values a paramet
 
 === @Summary
 
-A short description about the parameter's purpose.
+A short description about the parameter's purpose. 
+
+For example, it will be used in Flow Designer as the text to be displayed while hovering
+over the parameter.
+
 
 === @Placement
 
@@ -170,9 +180,11 @@ This annotation enables us to configure two things:
 
 * A relative order within the group in which the parameter is defined. The value is relative meaning that the element with order 10 is on top than one with value 25.
 
-* A tab is a logical way to group parameters together. This attribute specifies the name of the tab in which the parameter should be displayed. If no tab is specified then a default tab is assumed. To display more than one parameter or field in the same the tab then this value should be exactly the same for all of them.
+* A tab, which is a graphical way to group parameters together. 
+This attribute specifies the name of the tab in which the parameter should be displayed, using the default "General" tab is none is specified.
+To display more than one parameter or field in the same the tab then this value should be exactly the same for all of them.
 
-In the following example, *foo* and *bar* will be grouped into the same tab named *Advanced* while *foobar* will be the only parameter in the default tab.
+In the following example, `foo` and `bar` will be grouped into the same tab named `Advanced` while `foobar` will be the only parameter in the default tab.
 
 [source, java]
 ----
@@ -191,6 +203,7 @@ In the following example, *foo* and *bar* will be grouped into the same tab name
 === @Text
 
 Marks a parameter as one that supports a multi line string input in the UI. 
+This annotation also affects the DSL, making the annotated parameter a child element with the text as the content of the element.
 
 Note: This annotation should only be used in parameters of *String* type.
 
@@ -200,7 +213,7 @@ Marks a parameter as a path to either a file or a directory. This parameter will
 
 Note: This annotation should only be used in parameters of *String* type.
 
-This annotation carry information about:
+This annotation carries information about:
 
 * type: Whether the path points to a directory, a file, or any of those.
 * acceptsUrls: Whether the path parameter supports urls.
@@ -208,7 +221,7 @@ This annotation carry information about:
 
 Example:
 
-[source, java]
+[source, java, lineums]
 ----
   @Parameter
   @Path(type = FILE, acceptedFileExtensions = "wsdl", acceptsUrls = true)
@@ -222,11 +235,11 @@ Marks that the parameter needs masking when it is populated from the UI.
 Note: This annotation should only be used in parameters of *String* type.
 
 
-==== Putting all together
+=== Putting all together
 
 Now, let's see an example using some of the features explained above.
 
-[source, java]
+[source, java, lineums]
 ----
   @Parameter
   @Placement(order = 3, tab="Additional information")
@@ -248,7 +261,7 @@ In other words, you never need just one of them. You need both of them present o
 
 An example:
 
-[source, java]
+[source, java, lineums]
 ----
 @ParameterGroup("Fancy Group")
 private ConnectionProperties properties;
@@ -256,7 +269,7 @@ private ConnectionProperties properties;
 
 Where `Foo` is defined as:
  
-[source, java]
+[source, java, lineums]
 ----
 public class ConnectionProperties {
 
@@ -301,7 +314,7 @@ Parameter Groups can also be used as parameters defined as arguments of an <<_op
 
 For example:
 
-[source, java]
+[source, java, lineums]
 ----
 public void hello(String message, @ParameterGroup ConnectionProperties properties) {
 }
