@@ -10,7 +10,7 @@ be used to replace an expired access token with a fresh one, without the need to
 Unfortunatelly, there's no enforced standard that the SDK can use to automatically detect a token expiration scenario and obtain a new 
 one. Different APIs communicate that in different ways. That is why the `AccessTokenExpiredException` exception exists.
 
-[source, java]
+[source, java, linenums]
 ----
 public void someOperation(@Connection SalesforceRestClient client) { // <1>
     Response response = client.performSomeOperation(); // <2>

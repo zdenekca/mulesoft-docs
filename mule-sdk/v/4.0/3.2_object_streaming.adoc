@@ -12,7 +12,7 @@ repeatable, random and concurrent access.
 
 Let's see an example of how to use this feature, through an oversimplified select operation from the Database connector:
 
-[source, java]
+[source, java, linenums]
 ----
 public PagingProvider<DbConnection, Map<String, Object>> list(@Text String sql) { // <1>
     return new PagingProvider<DbConnection, Map<String, Object>>() { 
@@ -73,7 +73,7 @@ This was impossible to do with Devkit.
 In the new SDK, we added what we call sticky connections, which is a way to signal that the Runtime must guarantee that the 
 `getPage()` method is always invoked with the same transaction. This is as easy as this:
 
-[source, java]
+[source, java, linenums]
 ----
 public PagingProvider<DbConnection, Map<String, Object>> list(String sql) {
     return new PagingProvider<DbConnection, Map<String, Object>>() { 

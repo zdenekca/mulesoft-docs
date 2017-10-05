@@ -5,7 +5,7 @@
 Once the source generates a piece of information that needs to be sent to the flow, it will do it through 
 the `SourceCallback`. Going back to the minimalistic Http listener example:
 
-[source, java]
+[source, java, linenums]
 ----
 public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 

@@ -46,7 +46,7 @@ model defined for operations.
 Sources are required to extend the Source class which takes two generics: one for the type of the generated event payload
 and another one for the type of the Attributes:
 
-[source, java]
+[source, java, linenums]
 ----
 @Alias("listener")
 @EmitsResponse

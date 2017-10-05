@@ -11,7 +11,7 @@ etc.,
 //TODO: add references to the annotations
 For example:
 
-[source, java]
+[source, java, linenums]
 ----
 @EmitsResponse
 public class HttpListener extends Source<InputStream, HttpRequestAttributes> {

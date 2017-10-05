@@ -13,7 +13,7 @@ the connection implements `XATransactionalConnection`.
 
 For example:
 
-[source, java]
+[source, java, linenums]
 ----
 public class TransactionalSource extends Source<Serializable, Void> {
 
@@ -49,7 +49,7 @@ serving two different transactions at the same time.
 This requires a model different from that of the Http Listener example we've been working with. So let's consider 
 another oversimplified example, the `<vm:listener />` from the VM Connector:
 
-[source, java]
+[source, java, linenums]
 ----
 public VMListener extends Source<Serializable, VMMessageAttributes> {
 	
@@ -109,7 +109,7 @@ then the response would never reach it's destination.
 
 Example:
 
-[source, java]
+[source, java, linenums]
 ----
 
   @OnError

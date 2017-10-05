@@ -12,7 +12,7 @@ scalability of gateway proxies. Any connector consuming a REST API can also bene
 
 Let’s see how the SDK allows you to develop non blocking operations looking at an overly simplified http request operation:
 
-[source, java]
+[source, java, linenums]
 ----
 public void request(String url, @Connection HttpClient client, @Content String body, // <1>
     CompletionCallback<InputStream, HttpAttributes> callback ) { // <2>
@@ -51,7 +51,7 @@ object as message attributes.
 It’s also possible to have a void non blocking operation. The use case for that is an IO operation which doesn’t return 
 anything, such as writing to a file:
 
-[source, java]
+[source, java, linenums]
 ----
 public void write(String path, @Content byte[] bytes, CompletionCallback<Void, Void> callback) {
  writeAsync(result -> callback.success());
@@ -64,7 +64,7 @@ As you can see here, you can use java's `Void` type to indicate that the operaet
 
 You can also have an operation with sets the payload but *NOT* the attributes like this:
 
-[source, java]
+[source, java, linenums]
 ----
 public void foo(CompletionCallback<String, Void> callback) {
  ...
@@ -110,7 +110,7 @@ specify it.
 For cases in which the best guess described is not enough, you can manually specify an operation’s execution type 
 through the `@Execution` annotation:
 
-[source, java]
+[source, java, linenums]
 ----
 @Execution(CPU_INTENSIVE)
 public void computeFlightPlan() { .. }

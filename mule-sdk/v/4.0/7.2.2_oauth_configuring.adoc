@@ -13,6 +13,7 @@ in order to use the module.
 On top of everything that was explicitly defined in that Connection Provider, the SDK will automatically add some extra 
 parameters automatically and will also inject the proper behavior for them.
 
+[options="header"]
 |===
 |Parameter Name|Required|Expressions|Default Value|Description
 |resourceOwnerId
@@ -119,7 +120,7 @@ as using expressions in a regular parameter: it will turn the configuration into
 
 This is how the generated DSL  would look like:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <sfdc:config name="salesforce">
     <sfdc:oauth-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
@@ -156,7 +157,7 @@ These optional parameters should be used to specify the name of a `<flow>` to be
 The before flow will be executed just before the OAuth dance is started. The payload of the event sent to that flow will be an instance of 
 `AuthorizationCodeRequest`, which is an immutable pojo that looks like this:
 
-[source, java]
+[source, java, linenums]
 ----
 public interface AuthCodeRequest {
 

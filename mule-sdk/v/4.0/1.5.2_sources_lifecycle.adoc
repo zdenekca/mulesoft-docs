@@ -11,7 +11,7 @@ To support that, The `Source` class forces you to implement two methods, `onStar
 
 Let's look at an example from the VM connector to see how the `onStart()` method actually looks like:
 
-[source, java]
+[source, java, linenums]
 ----
 @Override
 public void onStart(SourceCallback<Serializable, VMMessageAttributes> sourceCallback) throws MuleException {

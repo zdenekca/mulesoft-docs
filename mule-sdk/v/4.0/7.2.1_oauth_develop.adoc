@@ -5,7 +5,7 @@ OAuth support is added at the `ConnectionProvider` level by adding the `@Authori
 
 Let's explain it through an oversimplified `ConnectionProvider` for the Salesforce connector:
 
-[source, java]
+[source, java, linenums]
 ----
 @AuthorizationCode(
     authorizationUrl = "https://login.salesforce.com/services/oauth2/authorize",
@@ -42,7 +42,6 @@ public class SalesforceOAuthConnectionProvider<C> implements ConnectionProvider<
   @OAuthCallbackValue(expression = "#[payload.id]")
   private String userId;
 
-
   private AuthorizationCodeState state;
 
   @Override
@@ -59,7 +58,7 @@ public class SalesforceOAuthConnectionProvider<C> implements ConnectionProvider<
   }
 
   public void disconnect(SalesforceClient connection) {
-
+    connection.close();
   }
 
   @Override
@@ -81,7 +80,7 @@ This annotation indicates that this connection provider requires an OAuth dance 
 
 This annotation has the following attributes:
 
-[source, java]
+[source, java, linenums]
 ----
 public @interface AuthorizationCode {
 
@@ -177,7 +176,7 @@ Every `ConnectionProvider` annotated with `AuthorizationCode` *MUST* contain one
 It’s a simple immutable pojo which contains information regarding the outcome of the OAuth dance. It contains the following 
 information:
 
-[source, java]
+[source, java, linenums]
 ----
 public interface AuthorizationCodeState {
 

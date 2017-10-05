@@ -7,7 +7,7 @@
 Just like operations, a source might reference a configuration to obtain parameters about its behavior. To obtain such 
 configuration, a field is to be annotated with the `@Config` annotation (the same used in operations arguments):
 
-[source, java]
+[source, java, linenums]
 ----
 public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
  
@@ -23,7 +23,7 @@ a connection. Just like with operations, the `@Connection` annotation is used fo
 * It is used in a field instead of a method argument
 * Instead of the connection object, a `ConnectionProvider` will be injected
 
-[source, java]
+[source, java, linenums]
 ----
 public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 

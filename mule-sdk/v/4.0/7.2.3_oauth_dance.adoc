@@ -21,7 +21,7 @@ following http path: `/authorize?resourceOwnerId=sdk_demo`.
 After the dance is compelted, you'll want to execute an operation using the access token that was obtained for that user. You will 
 do that by using an expressions on the `resourceOwnerId` parameter of your module's config. A complete example would be this:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <sfdc:config name="salesforce">
     <sfdc:oauth-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
@@ -46,7 +46,7 @@ token information to be deleted.
 To do this, the SDK automatically adds an operation called `unauthorize` to every OAuth enabled module. Resuming the example above, 
 you could invalidate the obtained token with any of the following statements:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <sfdc:unauthorize resourceOwnerId="sdk_demo" config-ref="salesforce" />
 <!-- or -->

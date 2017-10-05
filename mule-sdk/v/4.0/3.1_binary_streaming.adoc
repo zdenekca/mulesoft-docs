@@ -14,7 +14,7 @@ Operations can receive stream parameters, return streams or both.
 
 An example of an operation which operates over a stream can be a write operation in a File connector:
 
-[source, java]
+[source, java, linenums]
 ----
 public class FileOperations {
 
@@ -30,7 +30,7 @@ is).
 
 Another posibility is that your operation _returns_ a binary stream instead. This would be the case of a read operation: 
 
-[source, java]
+[source, java, linenums]
 ----
 public class FileOperations {
 

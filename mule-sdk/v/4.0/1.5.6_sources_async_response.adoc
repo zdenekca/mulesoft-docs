@@ -25,7 +25,7 @@ Notice this is a very strong contract. A source which requests a `SourceCompleti
 properly notifies it is one likely to eventually freeze the entire runtime!.
 
 Let's see a quick example:
-[source, java]
+[source, java, linenums]
 ----
 @OnSuccess
    public void onSuccess(@Content String response, SourceCompletionCallback callback) {
