@@ -171,8 +171,19 @@ Sometimes it is handy to provide a simple example regarding the values a paramet
 A short description about the parameter's purpose. 
 
 For example, it will be used in Flow Designer as the text to be displayed while hovering
-over the parameter.
+over the parameter. Just take a look at `connectionTimeoutUnit` below:
 
+[source, java, linenums]
+----
+@Parameter
+@Optional(defaultValue = "SECONDS")
+@Summary("Time unit to be used in the Connection Timeout")
+private TimeUnit connectionTimeoutUnit;
+----
+
+That parameter will be renderized as:
+
+image::parameters/summary.png[Summary tooltip]
 
 === @Placement
 
@@ -186,18 +197,18 @@ To display more than one parameter or field in the same the tab then this value 
 
 In the following example, `foo` and `bar` will be grouped into the same tab named `Advanced` while `foobar` will be the only parameter in the default tab.
 
-[source, java]
+[source, java, linenums]
 ----
-  @Parameter
-  @Placement(order = 1, tab="Advanced")
-  private String foo;
+@Parameter
+@Placement(order = 1, tab="Advanced")
+private String foo;
 
-  @Parameter
-  @Placement(order = 2, tab="Advanced")
-  private String bar;
+@Parameter
+@Placement(order = 2, tab="Advanced")
+private String bar;
 
-  @Parameter
-  private String foobar;
+@Parameter
+private String foobar;
 ----
 
 === @Text
@@ -206,6 +217,21 @@ Marks a parameter as one that supports a multi line string input in the UI.
 This annotation also affects the DSL, making the annotated parameter a child element with the text as the content of the element.
 
 Note: This annotation should only be used in parameters of *String* type.
+
+To see how `@Text` will be rendered in Flow Designer let's look at this example:
+
+[source, java, linenums]
+----
+  @Parameter
+  @Optional
+  @Text
+  @DisplayName("SQL Query Text")
+  private String sql;
+----
+
+Will be look like:
+
+image::parameters/text.png[Text large input]
 
 === @Path
 
@@ -234,6 +260,9 @@ Marks that the parameter needs masking when it is populated from the UI.
 
 Note: This annotation should only be used in parameters of *String* type.
 
+This will be visualized as:
+
+image::parameters/password.png[Password input]
 
 === Putting all together
 
@@ -269,7 +298,7 @@ private ConnectionProperties properties;
 
 Where `Foo` is defined as:
  
-[source, java, lineums]
+[source, java, linenums]
 ----
 public class ConnectionProperties {
 
@@ -329,14 +358,14 @@ In other words:
 
 Our hello example from above will look like this in the DSL:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <example:hello message="Example message!" host="localhost" port="8080">
 ----
 
 But if we configured the parameter group using `@ParameterGroup(showInDsl=true)` instead, the DSL would look like:
 
-[source, xml]
+[source, xml, linenums]
 ----
 <example:hello message="Example message!">
     <example:options host="localhost" port="8080"/>
