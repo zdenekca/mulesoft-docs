@@ -1,2 +1,49 @@
 [[_input_metadata]]
 = Input Metadata
+
+We refer as input Metadata to the type resolution for the Parameters of a Component.
+Each Parameter can provide either Static or Dynamic Metadata isolated from what kind of Metadata do other Parameters of the same Component expose.
+Only Operations and Sources can have Parameters with dynamic metadata,
+while Configurations and Connections will always have static metadata.
+
+
+== Declaring an InputTypeResolver
+
+.EntityKeysResolver.java
+[source,java,linenums]
+----
+public class InputEntityResolver implements InputTypeResolver<String> {
+
+  @Override
+  public String getCategoryName() {
+    return "DocEntities";
+  }
+
+  @Override
+  public MetadataType getInputMetadata(MetadataContext context, String key)
+      throws MetadataResolvingException, ConnectionException {
+
+      final ObjectTypeBuilder objectBuilder = context.getTypeBuilder().objectType();
+
+      switch (key) {
+        case "Author_id":
+          objectBuilder.addField().key(TIRES).value().numberType();
+          objectBuilder.addField().key(BRAND).value().stringType();
+          break;
+        case "BookList_id":
+          objectBuilder.addField().key(DIRECTION).value().stringType();
+          objectBuilder.addField().key(SIZE).value().numberType();
+          break;
+        case "Book_id":
+          objectBuilder.addField().key(NAME).value().stringType();
+          objectBuilder.addField().key(AGE).value().numberType();
+          break;
+        default:
+          throw new MetadataResolvingException("Unknown key:" + key, INVALID_METADATA_KEY);
+      }
+
+      return objectBuilder.build();
+  }
+
+}
+----
