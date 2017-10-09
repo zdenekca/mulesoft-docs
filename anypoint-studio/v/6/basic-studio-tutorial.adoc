@@ -106,7 +106,7 @@ image:add-http.png[add-http]
 +
 image:set+payload.png[set+payload]
 +
-. In General Settings, click the green plus sign to the right of *Connector Configuration*:
+. In the canvas select the Http connector. In HTTP property tab below canvas go to General Settings, click the green plus sign to the right of *Connector Configuration*:
 +
 image:basic-t-http-cfg.png[basic-t-http-cfg]
 +
