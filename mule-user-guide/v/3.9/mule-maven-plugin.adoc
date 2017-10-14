@@ -260,7 +260,7 @@ One of the most important uses for the plugin is to run integration tests on you
 
 To run integration tests, the basic steps are the following:
 
-* Configure the `maven-mule-plugin` to pack your project in the Mule app format
+* Configure the `mule-app-maven-plugin` to pack your project in the Mule app format
 * Configure `maven-failsafe-plugin` to run integration tests and report
 * Configure `mule-maven-plugin` to deploy the project's packaged application to a new Mule server downloaded from a Maven repository.
 
