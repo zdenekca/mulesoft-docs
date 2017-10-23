@@ -3,6 +3,8 @@
 
 Use a *Flow Reference* component in a flow to direct Mule to send a message to another flow for processing. When a message reaches a flow reference component in a flow, Mule sends the message to another flow according to the configuration of the `flow-ref` attributes.
 
+Message processing will continue in the referenced flow before returning. Message processing inside the referenced 'flow' will occur within the context of the referenced flow and will therefore use its exception strategy etc.
+
 [NOTE]
 When Mule passes a message to another flow via a flow reference, the message is not carried via a transport. Thus, any outbound properties on the message remain outbound properties rather than being converted into inbound properties (as they would be if the message crossed the transport barrier.)
 
