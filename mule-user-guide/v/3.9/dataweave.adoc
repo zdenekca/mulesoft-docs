@@ -5,6 +5,8 @@
 
 == Overview
 
+DataWeave is a data transformation engine. It enables transformations, for example, in the Transform Message Component, using its DataWeave language.
+
 The link:/mule-user-guide/v/3.9/dataweave-language-introduction[DataWeave Language] is a simple, powerful tool used to query and transform data inside of Mule. It can be implemented to:
 
 * graphically map fields by dragging one attribute to another, just like you were able to with the now deprecated link:/anypoint-studio/v/6/datamapper-user-guide-and-reference[DataMapper], or
