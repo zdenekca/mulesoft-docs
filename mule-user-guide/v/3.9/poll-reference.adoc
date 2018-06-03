@@ -268,10 +268,10 @@ image:watermark_enable.png[watermark_enable]
 [%header,cols="20a,80a"]
 |===
 |Attribute |Description
-|*Fixed Frequency Scheduler* |Run the Poll every 1000 milliseconds.
+|*Fixed Frequency Scheduler* |Run the Poll every 1000 time units (default is milliseconds).
 
 *Value*: `1000`
-|*Start Delay* |Delays polling by 0 milliseconds.
+|*Start Delay* |Delays polling by 0 time units (default is milliseconds).
 
 *Value*: `0`
 |*Time Unit* |Use milliseconds as unit for the frequency and delay settings.
